@@ -12,7 +12,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse
+namespace Sliders.Unused
 {
     public enum GameState { menu, editor, playing }
 

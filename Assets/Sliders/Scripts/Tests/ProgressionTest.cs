@@ -1,4 +1,4 @@
-﻿using Impulse;
+﻿using Sliders;
 using UnityEngine;
 
 public class ProgressionTest : MonoBehaviour

@@ -1,4 +1,4 @@
-﻿using Impulse.Models;
+﻿using Sliders.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace Sliders.UI
 {
     public class UILevelEditor : MonoBehaviour
     {

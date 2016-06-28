@@ -1,8 +1,8 @@
-﻿using Impulse;
+﻿using Sliders;
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse
+namespace Sliders
 {
     public class CameraMovement : MonoBehaviour
     {
@@ -39,7 +39,7 @@ namespace Impulse
         private void Start()
         {
             Vector3 PlayerPOS = player.transform.transform.position;
-            Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Manager.CameraDistanceToPlayer, Camera.main.transform.position.z);
+            Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
         }
 
         //Smooth camera Transitions, calls Transition()
@@ -47,7 +47,7 @@ namespace Impulse
         {
             cameraMove = true;
             target = t;
-            target.z = Manager.lockedCameraZ;
+            target.z = Constants.cameraY;
             transitionDuration = d;
 
             StartCoroutine(Transition());
@@ -81,7 +81,7 @@ namespace Impulse
                 Vector3 PlayerPOS = player.transform.transform.position;
 
                 //35 wegen der Ballhöhe (455) minus der Camerahöhe (420), die im BallMovement und BTN_PLAY gesetzt werden.
-                Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Manager.CameraDistanceToPlayer, Camera.main.transform.position.z);
+                Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
             }
         }
     }

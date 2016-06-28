@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Impulse.Models
+namespace Sliders.Models
 {
     [Serializable]
     public class LevelProgressionModel : BaseModel

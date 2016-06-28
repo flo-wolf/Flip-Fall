@@ -1,9 +1,9 @@
-﻿using Impulse.Models;
+﻿using Sliders.Models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Impulse
+namespace Sliders
 {
     public class LevelManager : MonoBehaviour
     {

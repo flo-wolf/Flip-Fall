@@ -1,9 +1,9 @@
-﻿using Impulse.Models;
+﻿using Sliders.Models;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Impulse.Models
+namespace Sliders.Models
 {
     [Serializable]
     public class LevelDataModel : MonoBehaviour

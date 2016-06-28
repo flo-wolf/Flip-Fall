@@ -1,14 +1,13 @@
-﻿using Impulse.UI;
+﻿using Sliders.UI;
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse
+namespace Sliders
 {
     public class Player : MonoBehaviour
     {
         public CameraMovement cm;
         public LayerMask collisionMask;
-
         public GameObject trail;
         public UITimer timer;
 
@@ -86,7 +85,7 @@ namespace Impulse
             transform.position = new Vector3(spawnPosition.x, spawnPosition.y, lockedPlayerZ);
 
             CameraMovement.cameraFollow = false;
-            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Manager.CameraDistanceToPlayer, transform.position.z), respawnTime);
+            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
         }
 
         //X-Achsen-Spiegelung der Figurenflugbahn

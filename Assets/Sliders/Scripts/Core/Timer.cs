@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace Sliders.UI
 {
     public static class Timer
     {

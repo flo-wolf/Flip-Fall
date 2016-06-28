@@ -1,6 +1,6 @@
 ﻿#define AllowDoubles //Allow double entries in data?
 
-using Impulse.Models;
+using Sliders.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-namespace Impulse
+namespace Sliders
 {
     public static class Progression
     {

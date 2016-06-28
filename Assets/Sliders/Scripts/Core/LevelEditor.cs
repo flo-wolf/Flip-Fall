@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Impulse
+namespace Sliders
 {
     public class LevelEditor : MonoBehaviour
     {

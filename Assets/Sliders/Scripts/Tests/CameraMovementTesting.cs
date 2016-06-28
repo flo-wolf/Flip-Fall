@@ -1,8 +1,8 @@
-﻿using Impulse;
+﻿using Sliders;
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse
+namespace Sliders
 {
     public class CameraMovementTesting : MonoBehaviour
     {
@@ -16,7 +16,7 @@ namespace Impulse
 
         private void testDrive()
         {
-            Vector3 testPosition = new Vector3(testGoal.x, testGoal.y, Manager.lockedCameraZ);
+            Vector3 testPosition = new Vector3(testGoal.x, testGoal.y, Constants.cameraY);
             testLastPosition = transform.position;
             c.moveCamTo(testPosition, testDriveTime);
         }
@@ -29,7 +29,7 @@ namespace Impulse
             }
             else
             {
-                Vector3 testPosition = new Vector3(testStart.x, testStart.y, Manager.lockedCameraZ);
+                Vector3 testPosition = new Vector3(testStart.x, testStart.y, Constants.cameraY);
                 testLastPosition = transform.position;
                 c.moveCamTo(testPosition, testDriveTime);
             }

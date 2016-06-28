@@ -1,10 +1,10 @@
-﻿using Impulse;
-using Impulse.Models;
-using Impulse.UI;
+﻿using Sliders;
+using Sliders.Models;
+using Sliders.UI;
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse
+namespace Sliders
 {
     public class Game : MonoBehaviour
     {

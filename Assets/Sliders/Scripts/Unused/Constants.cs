@@ -1,8 +1,8 @@
-﻿namespace Impulse
+﻿namespace Sliders
 {
-    public static class Constants
+    public class Constants
     {
         public const byte starAmount = 3;
-        public const int cameraY = 10;
+        public const float cameraY = -40f;
     }
 }
