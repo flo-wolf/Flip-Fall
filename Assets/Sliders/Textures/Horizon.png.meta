@@ -1,0 +1,355 @@
+fileFormatVersion: 2
+guid: 6f3140944b3852c439f30a650d15cb6b
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Horizon_0
+    21300002: Horizon_1
+    21300004: Horizon_2
+    21300006: Horizon_3
+    21300008: Horizon_4
+    21300010: Horizon_5
+    21300012: Horizon_6
+    21300014: Horizon_7
+    21300016: Horizon_8
+    21300018: Horizon_9
+    21300020: Horizon_10
+    21300022: Horizon_11
+    21300024: Horizon_12
+    21300026: Horizon_13
+    21300028: Horizon_14
+    21300030: Horizon_15
+    21300032: Horizon_16
+    21300034: Horizon_17
+    21300036: Horizon_18
+    21300038: Horizon_19
+    21300040: Horizon_20
+    21300042: Horizon_21
+    21300044: Horizon_22
+    21300046: Horizon_23
+    21300048: Horizon_24
+    21300050: Horizon_25
+    21300052: Horizon_26
+    21300054: Horizon_27
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 1
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 1
+  alphaIsTransparency: 0
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Horizon_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 955
+        width: 400
+        height: 36
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 919
+        width: 400
+        height: 34
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 881
+        width: 400
+        height: 36
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 851
+        width: 400
+        height: 28
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 815
+        width: 400
+        height: 34
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 783
+        width: 400
+        height: 30
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 750
+        width: 400
+        height: 31
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 715
+        width: 400
+        height: 33
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 674
+        width: 400
+        height: 39
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 637
+        width: 400
+        height: 35
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 601
+        width: 400
+        height: 34
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 567
+        width: 400
+        height: 32
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 534
+        width: 400
+        height: 31
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 501
+        width: 400
+        height: 31
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_14
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 463
+        width: 400
+        height: 36
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 423
+        width: 400
+        height: 38
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 385
+        width: 400
+        height: 36
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_17
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 349
+        width: 400
+        height: 34
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 311
+        width: 400
+        height: 36
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_19
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 274
+        width: 400
+        height: 35
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 241
+        width: 400
+        height: 31
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 211
+        width: 400
+        height: 28
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_22
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 175
+        width: 400
+        height: 34
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 143
+        width: 400
+        height: 30
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 110
+        width: 400
+        height: 31
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 75
+        width: 400
+        height: 33
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_26
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 34
+        width: 400
+        height: 39
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Horizon_27
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2
+        width: 400
+        height: 30
+      alignment: 2
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
