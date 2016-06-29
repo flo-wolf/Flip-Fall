@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Sliders
 {
-    public static class Progression
+    public static class ProgressManager
     {
         public const string SavePath = "save.dat";
         private static List<LevelProgressionModel> _ProgressData = new List<LevelProgressionModel>();

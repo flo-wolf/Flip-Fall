@@ -22,7 +22,7 @@ namespace Sliders
         public float respawnTime = 1f;
 
         public Vector2 spawnPosition = new Vector2(0f, 478.5f);
-        public static Quaternion spawnRotaion;
+        public static Quaternion spawnRotaion = new Quaternion(90, 0, 0, 0);
 
         public static float lockedPlayerZ = -1f;
         public static bool leftMovement = true;
@@ -133,8 +133,9 @@ namespace Sliders
             if (alive)
             {
                 Vector2 velocity = transform.GetComponent<Rigidbody2D>().velocity;
-                float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                //  float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+                //    Quaternion quad = Quaternion.AngleAxis(angle, Vector3.forward);
+                //  transform.rotation = quad;
 
                 if (charging && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) < maxChargeVelocity)
                 {

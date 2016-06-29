@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Sliders
+namespace Sliders.Tests
 {
     public class CameraMovementTesting : MonoBehaviour
     {
