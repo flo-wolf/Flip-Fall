@@ -1,15 +1,20 @@
 ﻿using Sliders.UI;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Sliders
 {
     public class Player : MonoBehaviour
     {
+        public enum PlayerState { alive, ready, dead };
+
+        public PlayerState playerState;
         public CameraMovement cm;
         public LayerMask collisionMask;
         public GameObject trail;
         public UITimer timer;
+        public Text text;
 
         public float gravity = 15F;
         public float maxChargeVelocity;
@@ -40,7 +45,15 @@ namespace Sliders
         {
         }
 
-        private void spawn()
+        public bool IsAlive()
+        {
+            if (playerState == PlayerState.alive)
+                return true;
+            else
+                return false;
+        }
+
+        private void Spawn()
         {
             Debug.Log("spawn");
             CameraMovement.cameraFollow = true;
@@ -61,11 +74,11 @@ namespace Sliders
         {
             if (1 << collider.gameObject.layer == collisionMask.value && alive)
             {
-                death();
+                Death();
             }
         }
 
-        private void death()
+        private void Death()
         {
             Debug.Log("death");
             alive = false;
@@ -89,7 +102,7 @@ namespace Sliders
         }
 
         //X-Achsen-Spiegelung der Figurenflugbahn
-        private void reflect()
+        private void Reflect()
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * (-1), GetComponent<Rigidbody2D>().velocity.y);
 
@@ -100,7 +113,7 @@ namespace Sliders
         }
 
         //Gravitationsabbruch, FIgur wird auf der Ebene gehalten und beschleunigt
-        private void charge()
+        private void Charge()
         {
             GetComponent<Rigidbody2D>().gravityScale = 0f;
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, 0f);
@@ -108,7 +121,7 @@ namespace Sliders
         }
 
         //Erneutes Hinzufügen der Gravitation
-        private void decharge()
+        private void Decharge()
         {
             charging = false;
             GetComponent<Rigidbody2D>().gravityScale = gravity;
@@ -146,19 +159,19 @@ namespace Sliders
                 //Keyboard
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    death();
+                    Death();
                 }
                 if (Input.GetKeyDown(KeyCode.M))
                 {
-                    reflect();
+                    Reflect();
                 }
                 if (Input.GetKeyDown(KeyCode.Y) && !charging)
                 {
-                    charge();
+                    Charge();
                 }
                 else if (Input.GetKeyUp(KeyCode.Y) && charging)
                 {
-                    decharge();
+                    Decharge();
                 }
 
                 //Touch
@@ -168,18 +181,18 @@ namespace Sliders
 
                     //Right Touch
                     if (position.x >= Camera.main.pixelWidth / 2 && touch.phase == TouchPhase.Began && firstChargeDone)
-                        reflect();
+                        Reflect();
 
                     //Left Touch
                     else if (position.x < Camera.main.pixelWidth / 2)
                     {
                         if (touch.phase == TouchPhase.Began && !charging)
                         {
-                            charge();
+                            Charge();
                             firstChargeDone = true;
                         }
                         else if (touch.phase == TouchPhase.Ended && touch.phase != TouchPhase.Canceled && charging)
-                            decharge();
+                            Decharge();
                     }
                 }
             }
@@ -187,7 +200,7 @@ namespace Sliders
             {
                 if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Escape))
                 {
-                    spawn();
+                    Spawn();
                 }
             }
         }

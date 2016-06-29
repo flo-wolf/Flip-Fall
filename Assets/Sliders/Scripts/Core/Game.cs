@@ -8,7 +8,7 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { menu, editor, playing }
+        public enum GameState { editor, playing, ready }
 
         public LevelDataModel currentLevel;
         public UITimer timer;

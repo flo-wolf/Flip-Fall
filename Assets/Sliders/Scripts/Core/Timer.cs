@@ -91,8 +91,7 @@ namespace Sliders.UI
                 var time = TimeSpan.FromSeconds(PassedTime);
                 try
                 {
-                    TextObject.text = string.Format(Format ?? DefaultFormat,
-                                                      time.Minutes,
+                    TextObject.text = string.Format("{0:D1},{1:D2}",
                                                       time.Seconds,
                                                       time.Milliseconds / 10);
                 }
