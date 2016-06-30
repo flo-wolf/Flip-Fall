@@ -6,7 +6,7 @@ namespace Sliders.Tests
 {
     public class CameraMovementTesting : MonoBehaviour
     {
-        public CameraMovement c;
+        public CameraMovement cm;
         public float testDriveTime = 0.7F;
         public Vector2 testStart = new Vector2(0, 100);
         public Vector2 testGoal = new Vector2(0, 450);
@@ -18,34 +18,37 @@ namespace Sliders.Tests
         {
             Vector3 testPosition = new Vector3(testGoal.x, testGoal.y, Constants.cameraY);
             testLastPosition = transform.position;
-            c.moveCamTo(testPosition, testDriveTime);
+            cm.moveCamTo(testPosition, testDriveTime);
         }
 
         private void testDriveBack()
         {
             if (testStartToCurrentPos)
             {
-                c.moveCamTo(testLastPosition, testDriveTime);
+                cm.moveCamTo(testLastPosition, testDriveTime);
             }
             else
             {
                 Vector3 testPosition = new Vector3(testStart.x, testStart.y, Constants.cameraY);
                 testLastPosition = transform.position;
-                c.moveCamTo(testPosition, testDriveTime);
+                cm.moveCamTo(testPosition, testDriveTime);
             }
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0) && !testDriveController && !CameraMovement.cameraMove)
+            if (CameraMovement.IsResting())
             {
-                testDrive();
-                testDriveController = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.Mouse0) && testDriveController && !CameraMovement.cameraMove)
-            {
-                testDriveBack();
-                testDriveController = false;
+                if (Input.GetKeyDown(KeyCode.Mouse0) && !testDriveController)
+                {
+                    testDrive();
+                    testDriveController = true;
+                }
+                else if (Input.GetKeyDown(KeyCode.Mouse0) && testDriveController)
+                {
+                    testDriveBack();
+                    testDriveController = false;
+                }
             }
         }
     }

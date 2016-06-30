@@ -58,7 +58,7 @@ public class LayeredDepthPerception : MonoBehaviour
                         addedRigidBody.gravityScale = 0f;
                         addedRigidBody.velocity = parentObject.GetComponent<Rigidbody2D>().velocity * distances[i];
                     }
-                    else if (Player.alive)
+                    else if (Player.IsAlive())
                     {
                         gameObjects[i].GetComponent<Rigidbody2D>().gravityScale = 0f;
                         gameObjects[i].GetComponent<Rigidbody2D>().velocity = parentObject.GetComponent<Rigidbody2D>().velocity * distances[i];

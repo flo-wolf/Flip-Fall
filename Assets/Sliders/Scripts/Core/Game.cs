@@ -9,22 +9,36 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { editor, playing, ready }
+        public enum GameState { editor, playing, menu, ready }
 
-        public LevelDataModel currentLevel;
+        public static GameState gameState;
+        public static LevelDataModel currentLevel;
+        public static CameraMovement cm;
         public UITimer timer;
         public Player player;
-        public GameState gamestate;
 
         private bool _firsttime;
 
         private void Start()
         {
-            player.onPlayerStateChange.AddListener(PlayerStateChanged);
-
+            SetGameState(GameState.ready);
+            Player.onPlayerStateChange.AddListener(PlayerStateChanged);
+            CameraMovement.onCameraStateChange.AddListener(CameraStateChanged);
             //load progress -> set firsttime
             //firsttime? -> load tutorial
             //load last played level -> get value from "progress"
+        }
+
+        public static void SetGameState(GameState gs)
+        {
+            gameState = gs;
+            //Invoke Gamsteate event
+        }
+
+        public void CloseGame()
+        {
+            //save
+            Application.Quit();
         }
 
         public void LoadLevel(int levelID)
@@ -50,9 +64,15 @@ namespace Sliders
             switch (newPlayerState)
             {
                 case Player.PlayerState.alive:
+                    timer.Run();
+                    timer.Reset();
+                    timer.Continue();
                     break;
 
                 case Player.PlayerState.dead:
+                    timer.Pause();
+                    CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
+                    //display scoreboard
                     break;
 
                 case Player.PlayerState.ready:
@@ -60,6 +80,25 @@ namespace Sliders
 
                 default:
                     Debug.LogError("Incorrect PlayerState");
+                    break;
+            }
+        }
+
+        public void CameraStateChanged(CameraMovement.CameraState newCameraState)
+        {
+            switch (newCameraState)
+            {
+                case CameraMovement.CameraState.following:
+                    break;
+
+                case CameraMovement.CameraState.transitioning:
+                    break;
+
+                case CameraMovement.CameraState.resting:
+                    break;
+
+                default:
+                    Debug.LogError("Incorrect CameraState");
                     break;
             }
         }

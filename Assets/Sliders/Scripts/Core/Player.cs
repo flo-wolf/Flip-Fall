@@ -1,4 +1,5 @@
 ﻿using Sliders.UI;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,15 +11,14 @@ namespace Sliders
     {
         public enum PlayerState { alive, ready, dead };
 
-        public PlayerState playerState;
+        public static PlayerState playerState;
 
-        public PlayerStateEvent onPlayerStateChange = new PlayerStateEvent();
+        public static PlayerStateEvent onPlayerStateChange = new PlayerStateEvent();
 
         public CameraMovement cm;
         public LayerMask finishMask;
         public LayerMask killMask;
         public GameObject trail;
-        public UITimer timer;
         public Text text;
 
         public float gravity = 15F;
@@ -33,7 +33,6 @@ namespace Sliders
 
         public static float _playerZ;
         public static bool leftMovement = true;
-        public static bool alive = false;
 
         private bool charging = false;
         private Vector2 chargeVelocity;
@@ -47,14 +46,13 @@ namespace Sliders
 
         private void Awake()
         {
+            //swapnrotation, spawnposition = LevelManager.GetLevelSpawn();
+            SetPlayerState(PlayerState.ready);
             _playerZ = Constants.playerY;
             MoveToSpawn();
-            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-            GetComponent<Rigidbody2D>().gravityScale = 0f;
-            GetComponent<Rigidbody2D>().Sleep();
         }
 
-        public bool IsAlive()
+        public static bool IsAlive()
         {
             if (playerState == PlayerState.alive)
                 return true;
@@ -62,10 +60,18 @@ namespace Sliders
                 return false;
         }
 
+        public static bool IsReady()
+        {
+            if (playerState == PlayerState.ready)
+                return true;
+            else
+                return false;
+        }
+
         private void Spawn()
         {
-            Debug.Log("spawn");
-            CameraMovement.cameraFollow = true;
+            SetPlayerState(PlayerState.alive);
+            CameraMovement.SetCameraState(CameraMovement.CameraState.following);
 
             trail.GetComponent<TrailRenderer>().time = 0.5f;
             trail.GetComponent<TrailRenderer>().enabled = true;
@@ -73,20 +79,15 @@ namespace Sliders
             GetComponent<Rigidbody2D>().gravityScale = gravity;
             GetComponent<Rigidbody2D>().WakeUp();
             GetComponent<Rigidbody2D>().velocity = new Vector3(0f, -0.00001f, 0f);
-            alive = true;
-            timer.Run();
-            timer.Reset();
-            timer.Continue();
         }
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (1 << collider.gameObject.layer == killMask.value && alive)
+            if (1 << collider.gameObject.layer == killMask.value && IsAlive())
             {
-                Death();
-                //Fail();
+                Fail();
             }
-            else if (1 << collider.gameObject.layer == finishMask.value && alive)
+            else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
                 Finish();
             }
@@ -94,70 +95,34 @@ namespace Sliders
 
         private void Fail()
         {
-            playerState = PlayerState.dead;
-
-            Debug.Log("death");
-            alive = false;
+            SetPlayerState(PlayerState.dead);
             charging = false;
             leftMovement = true;
             firstChargeDone = false;
-            timer.Pause();
-
-            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-            GetComponent<Rigidbody2D>().gravityScale = 0f;
-            GetComponent<Rigidbody2D>().Sleep();
 
             trail.GetComponent<TrailRenderer>().time = 0.0f;
             trail.GetComponent<TrailRenderer>().enabled = false;
 
-            MoveToSpawn();
-
-            CameraMovement.cameraFollow = false;
             cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
 
-            playerState = PlayerState.ready;
+            MoveToSpawn();
         }
 
         private void MoveToSpawn()
         {
+            //Vector3 spawnPos = LevelManager.GetSpawn();
             transform.rotation = spawnRotaion;
             transform.position = spawnPosition;
-        }
-
-        private void Death()
-        {
-            playerState = PlayerState.dead;
-
-            Debug.Log("death");
-            alive = false;
-            charging = false;
-            leftMovement = true;
-            firstChargeDone = false;
-            timer.Pause();
 
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;
             GetComponent<Rigidbody2D>().Sleep();
 
-            trail.GetComponent<TrailRenderer>().time = 0.0f;
-            trail.GetComponent<TrailRenderer>().enabled = false;
-
-            transform.rotation = spawnRotaion;
-            transform.position = new Vector3(spawnPosition.x, spawnPosition.y, _playerZ);
-
-            CameraMovement.cameraFollow = false;
-            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
-
-            playerState = PlayerState.ready;
+            SetPlayerState(PlayerState.ready);
         }
 
         public void Finish()
         {
-        }
-
-        public void BackToSpawn()
-        {
-            //Vector2 spawnPos = LevelManager.GetSpawn();
         }
 
         //X-Achsen-Spiegelung der Figurenflugbahn
@@ -189,7 +154,7 @@ namespace Sliders
         //Geschwindigkeitszuwachs während die Figur gehalten wird
         private void FixedUpdate()
         {
-            if (alive)
+            if (IsAlive())
             {
                 Vector2 velocity = transform.GetComponent<Rigidbody2D>().velocity;
                 //  float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
@@ -214,12 +179,12 @@ namespace Sliders
         //Inputs, alles in den Input Manager!
         private void Update()
         {
-            if (alive && CameraMovement.cameraFollow && !CameraMovement.cameraMove)
+            if (Player.IsAlive() && CameraMovement.IsFollowing())
             {
                 //Keyboard
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    Death();
+                    Fail();
                 }
                 if (Input.GetKeyDown(KeyCode.M))
                 {
@@ -256,7 +221,7 @@ namespace Sliders
                     }
                 }
             }
-            else if (!alive && !CameraMovement.cameraFollow && !CameraMovement.cameraMove)
+            else if (!IsAlive() && CameraMovement.IsResting())
             {
                 if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Escape))
                 {

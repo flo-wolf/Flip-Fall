@@ -1,55 +1,41 @@
 ﻿using Sliders;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Sliders
 {
     public class CameraMovement : MonoBehaviour
     {
+        public enum CameraState { following, transitioning, resting }
+
         //Spielfigur für Berechnung der relativen Kameraposition
         public GameObject player;
+
+        public static CameraState cameraState;
+
+        public static CameraStateEvent onCameraStateChange = new CameraStateEvent();
 
         //variables transmitted by an outside function
         private static Vector3 target;
 
         private static float transitionDuration;
 
-        //Die Kamera wird flüssig von A nach B bewegt
-        public static bool cameraMove = false;
-
-        //Die Kamera folgt der Spielfigur
-        public static bool cameraFollow = false;
-
-        //camera info
-        public float getCamHeight()
-        {
-            return 2f * Camera.main.orthographicSize;
-        }
-
-        public float getCamWidth()
-        {
-            return getCamHeight() * Camera.main.aspect;
-        }
-
-        public Vector3 getCamPos()
-        {
-            return Camera.main.transform.position;
-        }
-
         private void Start()
         {
+            cameraState = CameraState.resting;
             Vector3 PlayerPOS = player.transform.transform.position;
             Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
         }
 
         //Smooth camera Transitions, calls Transition()
-        public void moveCamTo(Vector3 t, float d)
+        public void moveCamTo(Vector2 t, float d)
         {
-            cameraMove = true;
             target = t;
             target.z = Constants.cameraY;
             transitionDuration = d;
 
+            SetCameraState(CameraState.transitioning);
             StartCoroutine(Transition());
         }
 
@@ -68,15 +54,22 @@ namespace Sliders
                 Camera.main.transform.position = Vector3.Lerp(startingPos, target, accelTime);
                 yield return 0;
             }
+            SetCameraState(CameraState.resting);
+        }
 
-            cameraMove = false;
-            Debug.Log("Camera Transition completed.");
+        /// <summary>
+        //Only change the CameraState through this void, it'll invoke the CameraStateEvent
+        /// </summary>
+        public static void SetCameraState(CameraState cs)
+        {
+            cameraState = cs;
+            onCameraStateChange.Invoke(cameraState);
         }
 
         //instead of using transforms rather use joints and only transform one
         private void Update()
         {
-            if (cameraFollow && !cameraMove)
+            if (cameraState == CameraState.following)
             {
                 Vector3 PlayerPOS = player.transform.transform.position;
 
@@ -84,5 +77,47 @@ namespace Sliders
                 Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
             }
         }
+
+        //camera info
+        public float GetCamHeight()
+        {
+            return 2f * Camera.main.orthographicSize;
+        }
+
+        public float GetCamWidth()
+        {
+            return GetCamHeight() * Camera.main.aspect;
+        }
+
+        public Vector3 GetCamPos()
+        {
+            return Camera.main.transform.position;
+        }
+
+        public static bool IsFollowing()
+        {
+            if (cameraState == CameraState.following)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool IsResting()
+        {
+            if (cameraState == CameraState.resting)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool IsTransitioning()
+        {
+            if (cameraState == CameraState.transitioning)
+                return true;
+            else
+                return false;
+        }
+
+        public class CameraStateEvent : UnityEvent<CameraState> { }
     }
 }
