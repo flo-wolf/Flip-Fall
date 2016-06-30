@@ -7,8 +7,6 @@ namespace Sliders.UI
 {
     public static class Timer
     {
-        public const string DefaultFormat = "{0:0}:{1:00}:{2:00}";
-
         #region Properties
 
         public static string Format { get; set; }

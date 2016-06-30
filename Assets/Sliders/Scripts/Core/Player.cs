@@ -29,7 +29,7 @@ namespace Sliders
         //get these from current leveldatamodel
         public Vector3 spawnPosition = new Vector3(0f, 490f, 10);
 
-        public Quaternion spawnRotaion = new Quaternion(0, 0, 90, 0);
+        public Quaternion spawnRotaion;
 
         public static float _playerZ;
         public static bool leftMovement = true;
@@ -46,10 +46,14 @@ namespace Sliders
 
         private void Awake()
         {
-            //swapnrotation, spawnposition = LevelManager.GetLevelSpawn();
-            SetPlayerState(PlayerState.ready);
+            spawnRotaion = transform.rotation;
+            //swapnrotation, spawnposition = LevelManager.GetLevelSpawn()
             _playerZ = Constants.playerY;
             MoveToSpawn();
+        }
+
+        private void Start()
+        {
         }
 
         public static bool IsAlive()
@@ -68,6 +72,19 @@ namespace Sliders
                 return false;
         }
 
+        private void MoveToSpawn()
+        {
+            //Vector3 spawnPos = LevelManager.GetSpawn();
+            transform.rotation = spawnRotaion;
+            transform.position = spawnPosition;
+
+            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            GetComponent<Rigidbody2D>().gravityScale = 0f;
+            GetComponent<Rigidbody2D>().Sleep();
+
+            SetPlayerState(PlayerState.ready);
+        }
+
         private void Spawn()
         {
             SetPlayerState(PlayerState.alive);
@@ -77,8 +94,8 @@ namespace Sliders
             trail.GetComponent<TrailRenderer>().enabled = true;
 
             GetComponent<Rigidbody2D>().gravityScale = gravity;
-            GetComponent<Rigidbody2D>().WakeUp();
             GetComponent<Rigidbody2D>().velocity = new Vector3(0f, -0.00001f, 0f);
+            GetComponent<Rigidbody2D>().WakeUp();
         }
 
         private void OnTriggerEnter2D(Collider2D collider)
@@ -103,26 +120,15 @@ namespace Sliders
             trail.GetComponent<TrailRenderer>().time = 0.0f;
             trail.GetComponent<TrailRenderer>().enabled = false;
 
+            //to game
             cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
 
             MoveToSpawn();
         }
 
-        private void MoveToSpawn()
-        {
-            //Vector3 spawnPos = LevelManager.GetSpawn();
-            transform.rotation = spawnRotaion;
-            transform.position = spawnPosition;
-
-            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-            GetComponent<Rigidbody2D>().gravityScale = 0f;
-            GetComponent<Rigidbody2D>().Sleep();
-
-            SetPlayerState(PlayerState.ready);
-        }
-
         public void Finish()
         {
+            Debug.Log("finish");
         }
 
         //X-Achsen-Spiegelung der Figurenflugbahn
@@ -157,9 +163,9 @@ namespace Sliders
             if (IsAlive())
             {
                 Vector2 velocity = transform.GetComponent<Rigidbody2D>().velocity;
-                //  float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-                //    Quaternion quad = Quaternion.AngleAxis(angle, Vector3.forward);
-                //  transform.rotation = quad;
+                //float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+                //Quaternion quad = Quaternion.AngleAxis(angle, Vector3.forward);
+                //transform.rotation = quad;
 
                 if (charging && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) < maxChargeVelocity)
                 {
@@ -179,18 +185,18 @@ namespace Sliders
         //Inputs, alles in den Input Manager!
         private void Update()
         {
-            if (Player.IsAlive() && CameraMovement.IsFollowing())
+            if (IsAlive() && CameraMovement.IsFollowing())
             {
                 //Keyboard
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
                     Fail();
                 }
-                if (Input.GetKeyDown(KeyCode.M))
+                else if (Input.GetKeyDown(KeyCode.M))
                 {
                     Reflect();
                 }
-                if (Input.GetKeyDown(KeyCode.Y) && !charging)
+                else if (Input.GetKeyDown(KeyCode.Y) && !charging)
                 {
                     Charge();
                 }
@@ -198,7 +204,7 @@ namespace Sliders
                 {
                     Decharge();
                 }
-
+                /*
                 //Touch
                 foreach (Touch touch in Input.touches)
                 {
@@ -220,6 +226,7 @@ namespace Sliders
                             Decharge();
                     }
                 }
+                */
             }
             else if (!IsAlive() && CameraMovement.IsResting())
             {
@@ -233,8 +240,3 @@ namespace Sliders
         public class PlayerStateEvent : UnityEvent<PlayerState> { }
     }
 }
-
-/*
- *
- *
-*/
