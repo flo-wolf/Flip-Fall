@@ -23,6 +23,8 @@ namespace Sliders.UI
 
         public static void Start(MonoBehaviour mono, Text textObject = null)
         {
+            IsPaused = true;
+            Debug.Log("T - Start");
             if (mono == null)
             {
                 Debug.LogError("Behaviour may not be null!");
@@ -47,7 +49,6 @@ namespace Sliders.UI
                 PassedTime = 0;
                 TextObject = textObject;
                 IsStarted = true;
-                IsPaused = false;
                 TextObject = textObject;
                 Behaviour = mono;
                 Behaviour.StartCoroutine(WaitForTimerUpdate());
@@ -60,22 +61,26 @@ namespace Sliders.UI
 
         public static void Pause()
         {
+            Debug.Log("T - Pause");
             IsPaused = true;
         }
 
         public static void Reset()
         {
+            Debug.Log("T - Pause");
             PassedTime = 0;
         }
 
         public static void Continue()
         {
+            Debug.Log("T - Pause");
             IsPaused = false;
             Behaviour.StartCoroutine(WaitForTimerUpdate());
         }
 
         public static void Stop()
         {
+            Debug.Log("T - Pause");
             IsStarted = false;
         }
 
@@ -83,8 +88,10 @@ namespace Sliders.UI
 
         private static IEnumerator WaitForTimerUpdate()
         {
+            Debug.Log("T - Num - Enter");
             while (!IsPaused && IsStarted)
             {
+                Debug.Log("T - Num - While");
                 PassedTime += Time.fixedDeltaTime;
                 var time = TimeSpan.FromSeconds(PassedTime);
                 try
