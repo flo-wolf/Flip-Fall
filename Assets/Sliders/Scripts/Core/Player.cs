@@ -1,6 +1,7 @@
 ﻿using Sliders.UI;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Sliders
@@ -10,8 +11,12 @@ namespace Sliders
         public enum PlayerState { alive, ready, dead };
 
         public PlayerState playerState;
+
+        public PlayerStateEvent onPlayerStateChange = new PlayerStateEvent();
+
         public CameraMovement cm;
-        public LayerMask collisionMask;
+        public LayerMask finishMask;
+        public LayerMask killMask;
         public GameObject trail;
         public UITimer timer;
         public Text text;
@@ -32,6 +37,12 @@ namespace Sliders
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
 
+        public void SetPlayerState(PlayerState ps)
+        {
+            playerState = ps;
+            onPlayerStateChange.Invoke(playerState);
+        }
+
         private void Awake()
         {
             transform.position = new Vector3(spawnPosition.x, spawnPosition.y, lockedPlayerZ);
@@ -39,10 +50,6 @@ namespace Sliders
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;
             GetComponent<Rigidbody2D>().Sleep();
-        }
-
-        private void Start()
-        {
         }
 
         public bool IsAlive()
@@ -72,14 +79,21 @@ namespace Sliders
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (1 << collider.gameObject.layer == collisionMask.value && alive)
+            if (1 << collider.gameObject.layer == killMask.value && alive)
             {
                 Death();
+                //Fail();
+            }
+            else if (1 << collider.gameObject.layer == finishMask.value && alive)
+            {
+                Finish();
             }
         }
 
-        private void Death()
+        private void Fail()
         {
+            playerState = PlayerState.dead;
+
             Debug.Log("death");
             alive = false;
             charging = false;
@@ -99,6 +113,44 @@ namespace Sliders
 
             CameraMovement.cameraFollow = false;
             cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
+
+            playerState = PlayerState.ready;
+        }
+
+        private void Death()
+        {
+            playerState = PlayerState.dead;
+
+            Debug.Log("death");
+            alive = false;
+            charging = false;
+            leftMovement = true;
+            firstChargeDone = false;
+            timer.Pause();
+
+            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            GetComponent<Rigidbody2D>().gravityScale = 0f;
+            GetComponent<Rigidbody2D>().Sleep();
+
+            trail.GetComponent<TrailRenderer>().time = 0.0f;
+            trail.GetComponent<TrailRenderer>().enabled = false;
+
+            transform.rotation = spawnRotaion;
+            transform.position = new Vector3(spawnPosition.x, spawnPosition.y, lockedPlayerZ);
+
+            CameraMovement.cameraFollow = false;
+            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
+
+            playerState = PlayerState.ready;
+        }
+
+        public void Finish()
+        {
+        }
+
+        public void BackToSpawn()
+        {
+            //Vector2 spawnPos = LevelManager.GetSpawn();
         }
 
         //X-Achsen-Spiegelung der Figurenflugbahn
@@ -205,6 +257,8 @@ namespace Sliders
                 }
             }
         }
+
+        public class PlayerStateEvent : UnityEvent<PlayerState> { }
     }
 }
 

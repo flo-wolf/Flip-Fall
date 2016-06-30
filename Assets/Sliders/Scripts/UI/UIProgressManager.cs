@@ -1,5 +1,6 @@
 ﻿using Sliders;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Sliders.UI
 {
