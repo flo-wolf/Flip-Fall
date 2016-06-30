@@ -29,6 +29,7 @@ namespace Sliders
 
         public void LoadLevel(int levelID)
         {
+            //player.
             //currentlevel = levelloader.load(levelID);
         }
 
@@ -63,5 +64,4 @@ namespace Sliders
             }
         }
     }
-}
 }

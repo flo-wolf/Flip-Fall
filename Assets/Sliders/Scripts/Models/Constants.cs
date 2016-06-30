@@ -4,5 +4,6 @@
     {
         public const byte starAmount = 3;
         public const float cameraY = -40f;
+        public const float playerY = -10f;
     }
 }

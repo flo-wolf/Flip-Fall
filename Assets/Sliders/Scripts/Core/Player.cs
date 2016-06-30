@@ -26,10 +26,12 @@ namespace Sliders
         public float chargeForcePerTick;
         public float respawnTime = 1f;
 
-        public Vector2 spawnPosition = new Vector2(0f, 478.5f);
-        public static Quaternion spawnRotaion = new Quaternion(90, 0, 0, 0);
+        //get these from current leveldatamodel
+        public Vector3 spawnPosition = new Vector3(0f, 490f, 10);
 
-        public static float lockedPlayerZ = -1f;
+        public Quaternion spawnRotaion = new Quaternion(0, 0, 90, 0);
+
+        public static float _playerZ;
         public static bool leftMovement = true;
         public static bool alive = false;
 
@@ -45,8 +47,8 @@ namespace Sliders
 
         private void Awake()
         {
-            transform.position = new Vector3(spawnPosition.x, spawnPosition.y, lockedPlayerZ);
-            spawnRotaion = transform.rotation;
+            _playerZ = Constants.playerY;
+            MoveToSpawn();
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;
             GetComponent<Rigidbody2D>().Sleep();
@@ -108,13 +110,18 @@ namespace Sliders
             trail.GetComponent<TrailRenderer>().time = 0.0f;
             trail.GetComponent<TrailRenderer>().enabled = false;
 
-            transform.rotation = spawnRotaion;
-            transform.position = new Vector3(spawnPosition.x, spawnPosition.y, lockedPlayerZ);
+            MoveToSpawn();
 
             CameraMovement.cameraFollow = false;
             cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
 
             playerState = PlayerState.ready;
+        }
+
+        private void MoveToSpawn()
+        {
+            transform.rotation = spawnRotaion;
+            transform.position = spawnPosition;
         }
 
         private void Death()
@@ -136,7 +143,7 @@ namespace Sliders
             trail.GetComponent<TrailRenderer>().enabled = false;
 
             transform.rotation = spawnRotaion;
-            transform.position = new Vector3(spawnPosition.x, spawnPosition.y, lockedPlayerZ);
+            transform.position = new Vector3(spawnPosition.x, spawnPosition.y, _playerZ);
 
             CameraMovement.cameraFollow = false;
             cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
