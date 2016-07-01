@@ -5,17 +5,23 @@ using UnityEngine;
 
 namespace Sliders
 {
+    [SerializeField]
     public class LevelManager : MonoBehaviour
     {
-        public static List<LevelDataModel> levels = new List<LevelDataModel>();
+        //if 0 - infinite
+        public int maxLevelObjects;
+
+        public static List<Level> _levels = new List<Level>();
 
         // Use this for initialization
-        private void Start()
+        private void LoadLevel()
         {
+            //ProgressManager.pr
+            //load levels from file, one of them is marked as lastPlayed
         }
 
         // Update is called once per frame
-        private void Update()
+        private void SaveLevel()
         {
         }
     }

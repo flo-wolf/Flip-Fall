@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 //LevelObjects can either be logic items (triggers, start, end), shapes (custom mesh, boxes, triangles, circles), or enemies(spikes, chainsaws, lasers)
@@ -7,7 +8,7 @@ namespace Sliders
 {
     public class LevelObject : MonoBehaviour
     {
-        public GameObject levelObject; //can we just use ".this" to get the game object or do we have to drag it into the public variable in the inspector? Fix
+        public GameObject go; //can we just use ".this" to get the game object or do we have to drag it into the public variable in the inspector? Fix
         public static Mesh mesh = new Mesh();
         public static Vector3[] shapeVertices;
         public static int[] shapeTriangles;
@@ -19,15 +20,8 @@ namespace Sliders
         {
         }
 
-        public void OnEnable()
+        public void UpdateMesh()
         {
-        }
-
-        public void Instanciate()
-        {
-            Vector3 pos = new Vector3(1, 1, 1);
-            Quaternion rot = new Quaternion(1, 1, 1, 1);
-            Instantiate(levelObject, pos, rot);
         }
 
         //Draw triangle shape

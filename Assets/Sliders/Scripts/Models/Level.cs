@@ -6,11 +6,13 @@ using UnityEngine;
 namespace Sliders.Models
 {
     [Serializable]
-    public class LevelDataModel : MonoBehaviour
+    public class Level : MonoBehaviour
     {
         public int id { get; set; }
-        public string name { get; set; }
-        public double timeTop { get; set; }
+        public string title { get; set; }
+        public double timeGold { get; set; }
+        public double timeSilver { get; set; }
+        public double timeBronze { get; set; }
         public DateTime created { get; set; }
         public DateTime updated { get; set; }
         public static List<LevelObject> levelObjects { get; set; }

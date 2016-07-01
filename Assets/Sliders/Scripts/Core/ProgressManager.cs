@@ -1,6 +1,7 @@
 ﻿#define AllowDoubles //Allow double entries in data?
 
 using Sliders.Models;
+using Sliders.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,15 +15,14 @@ namespace Sliders
     public static class ProgressManager
     {
         public const string SavePath = "save.dat";
-        private static List<LevelProgressionModel> _ProgressData = new List<LevelProgressionModel>();
-        public static bool AllowOverriteBeforeFirstRead { get; set; }
+        private static ProgressData progress;
         public static bool IsLoaded { get; private set; }
 
-        public static List<LevelProgressionModel> LevelData
+        public static ProgressData ProgressdData
         {
             get
             {
-                return _ProgressData;
+                return progress;
             }
         }
 
@@ -34,7 +34,7 @@ namespace Sliders
                 try
                 {
                     var bf = new BinaryFormatter();
-                    _ProgressData = bf.Deserialize(fs) as List<LevelProgressionModel>;
+                    progress = bf.Deserialize(fs) as ProgressData;
                 }
                 catch (SerializationException e)
                 {
@@ -64,14 +64,14 @@ namespace Sliders
                 }
 
                 var bf = new BinaryFormatter();
-                bf.Serialize(file, _ProgressData);
+                bf.Serialize(file, progress);
                 file.Close();
             }
         }
 
-        public static void AddLevelProgress(int _id, double _time, bool _completed)
+        public static void SaveLevelTime(Level level, double _time)
         {
-            if (_ProgressData.Any(x => x.id == _id))
+            if (ProgressData.scoreboards.Any(x => x.id == level.id))
             {
                 var model = new LevelProgressionModel
                 {

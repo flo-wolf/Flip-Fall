@@ -4,7 +4,11 @@ using UnityEngine;
 public class TODO : MonoBehaviour
 {
     /*
-    +
+    + v1.2 01.07.2016
+    *
+    *
+    *
+    *
      * v1.1
      * TODO-Liste des Spiels; In welcher jedes der zukünftigen Spielelemente als Stichpukt plus Erläuterug aufgelistet ist.
      * Dabei gilt folgende Regel: Erst das aufs grundlegende reduzierte Game, dann das Hauptmenü und die Story planen.
@@ -14,6 +18,8 @@ public class TODO : MonoBehaviour
      * Wenn wir jetzt alles stückweise, erst nach und nach perfektionieren und dann erst weiterplanen,
      * dann verlieren wir die Objektivität auf unser Projekkt,
      * wodurch das Gesammtbild und die Möglichkeit auf dessen Erweiterung verloren geht.
+
+    - Levelselection animieren
 
     - Datenspeicherung verstehen und einsetzen
 

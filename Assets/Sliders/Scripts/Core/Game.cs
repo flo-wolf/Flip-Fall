@@ -9,18 +9,20 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { editor, playing, menu, ready }
+        public enum GameState { editor, playing, menu, ready, respawning, finish }
 
         public static GameState gameState;
-        public static LevelDataModel currentLevel;
+        public static Level level;
         public static CameraMovement cm;
         public UITimer timer;
+        public Scoreboard scoreboard;
         public Player player;
 
         private bool _firsttime;
 
         private void Start()
         {
+            level = LevelManager;
             SetGameState(GameState.ready);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
             CameraMovement.onCameraStateChange.AddListener(CameraStateChanged);
