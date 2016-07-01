@@ -7,38 +7,36 @@ using UnityEngine;
 namespace Sliders
 {
     [SerializeField]
-    public class LevelManager
+    public static class LevelManager
     {
-        //if 0 - infinite
-        public int maxLevelObjects;
-
         public static List<Level> levels = new List<Level>();
-        public static Level level;
+        public static Level level = new Level();
 
         // Use this for initialization
-        public void LoadLevels()
+        public static void LoadLevels()
         {
+            level.id = 99;
             //ProgressManager.pr
             //load levels from file, one of them is marked as lastPlayed
         }
 
-        public void SaveLevels()
+        public static void SaveLevels()
         {
         }
 
-        public Level GetLevel(int _id)
+        public static Level GetLevel(int _id)
         {
             var model = levels[_id];
             return model;
         }
 
-        public void SetLevel(int _id, Level _level)
+        public static void SetLevel(int _id, Level _level)
         {
             var model = levels.FirstOrDefault(x => x.id == _id);
             //not done!
         }
 
-        public void NewLevel()
+        public static void NewLevel()
         {
             int newID = levels.Count;
             if (levels.Any(x => x.id != newID))
@@ -52,7 +50,7 @@ namespace Sliders
             levels.Add(level);
         }
 
-        public void RemoveLevel()
+        public static void RemoveLevel()
         {
             if (levels.Contains(level))
             {
@@ -71,7 +69,7 @@ namespace Sliders
             }
         }
 
-        public void RemoveLevelAt(int _id)
+        public static void RemoveLevelAt(int _id)
         {
             if (levels.Any(x => x.id == _id))
             {

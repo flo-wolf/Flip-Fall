@@ -41,6 +41,7 @@ namespace Sliders.Models
 
         public void TryPlacingTime(double newTime)
         {
+            Debug.Log("1");
             ScoreboardElement newElement = new ScoreboardElement();
 
             //list filled? not wking, else works
@@ -60,8 +61,8 @@ namespace Sliders.Models
             }
             else
             {
-                Debug.Log("New ScoreboardElement (" + newElement.time + ") added to Scoreboard " + levelId);
                 newElement.time = newTime;
+                Debug.Log("New ScoreboardElement (" + newElement.time + ") added to Scoreboard " + levelId);
                 elements.Add(newElement);
             }
         }

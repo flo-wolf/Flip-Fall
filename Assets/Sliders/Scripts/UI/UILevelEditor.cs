@@ -16,7 +16,6 @@ namespace Sliders.UI
     {
         public Text levelInfoText;
         public Dropdown dropdown;
-        public LevelManager lm;
         public Level editorLevel;
 
         #region Public Methods
@@ -41,7 +40,7 @@ namespace Sliders.UI
 
         public void LoadLevels()
         {
-            lm.LoadLevels();
+            LevelManager.LoadLevels();
             UpdateDropdown();
         }
 

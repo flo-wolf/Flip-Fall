@@ -9,7 +9,7 @@ namespace Sliders
 {
     public class Player : MonoBehaviour
     {
-        public enum PlayerState { alive, ready, dead };
+        public enum PlayerState { alive, ready, dead, finish };
 
         public static PlayerState playerState;
 
@@ -128,6 +128,7 @@ namespace Sliders
 
         public void Finish()
         {
+            Game.FinishLevel();
             Debug.Log("finish");
         }
 

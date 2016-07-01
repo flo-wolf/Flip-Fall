@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Sliders.Models
 {
@@ -20,26 +21,34 @@ namespace Sliders.Models
             scoreboards = new List<Scoreboard>();
         }
 
-        public void NewScoreboard(int id)
+        public Scoreboard NewScoreboard(int id)
         {
-            if (scoreboards.Any(x => x.levelId == id))
-            {
-                Scoreboard sc = new Scoreboard();
-                sc.levelId = id;
-                scoreboards.Add(sc);
-            }
+            Scoreboard sc = new Scoreboard();
+            sc.levelId = id;
+            scoreboards.Add(sc);
+            return sc;
         }
 
         public Scoreboard GetScoreboard(int id)
         {
-            foreach (Scoreboard s in scoreboards)
+            Debug.Log("1");
+            if (scoreboards.Count < 1 || scoreboards.Any(x => x.levelId != id))
             {
-                if (s.levelId == id)
+                Debug.Log("3");
+                return NewScoreboard(id);
+            }
+            else
+            {
+                foreach (Scoreboard s in scoreboards)
                 {
-                    //Scoreboard found
-                    return s;
+                    if (s.levelId == id)
+                    {
+                        //Scoreboard found
+                        return s;
+                    }
                 }
             }
+            Debug.Log("2");
             return null;
         }
     }

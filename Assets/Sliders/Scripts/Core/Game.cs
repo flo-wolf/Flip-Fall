@@ -14,16 +14,18 @@ namespace Sliders
         public static GameState gameState;
         public static CameraMovement cm;
         public UITimer timer;
-        public Scoreboard scoreboard;
+        public UIScoreboard scoreboard;
         public Player player;
 
         private bool _firsttime;
 
         private void Start()
         {
+            ProgressManager.ClearProgress();
             SetGameState(GameState.ready);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
             CameraMovement.onCameraStateChange.AddListener(CameraStateChanged);
+            LevelManager.LoadLevels();
             //load progress -> set firsttime
             //firsttime? -> load tutorial
             //load last played level -> get value from "progress"
@@ -47,12 +49,12 @@ namespace Sliders
             //currentlevel = levelloader.load(levelID);
         }
 
-        public void FinishLevel()
+        public static void FinishLevel()
         {
             //save progress
         }
 
-        public void RestartLevel()
+        public static void RestartLevel()
         {
             //cam to beginning
             //player to beginning
@@ -64,6 +66,7 @@ namespace Sliders
             switch (newPlayerState)
             {
                 case Player.PlayerState.alive:
+                    scoreboard.Hide();
                     timer.Run();
                     timer.Reset();
                     timer.Continue();
@@ -71,11 +74,16 @@ namespace Sliders
 
                 case Player.PlayerState.dead:
                     timer.Pause();
+                    scoreboard.Show(timer.GetTime());
                     CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     //display scoreboard
                     break;
 
                 case Player.PlayerState.ready:
+                    break;
+
+                case Player.PlayerState.finish:
+
                     break;
 
                 default:
