@@ -14,11 +14,10 @@ namespace Sliders.UI
 {
     public class UILevelEditor : MonoBehaviour
     {
-        public static List<LevelDataModel> levels = new List<LevelDataModel>();
         public Text levelInfoText;
         public Dropdown dropdown;
-
-        private LevelDataModel level;
+        public LevelManager lm;
+        public Level editorLevel;
 
         #region Public Methods
 
@@ -36,83 +35,35 @@ namespace Sliders.UI
         private void dropdownValueChangedHandler(Dropdown target)
         {
             Debug.Log("selected: " + target.value);
-            level = levels[target.value];
-            levelInfoText.text = "Level - " + level.id.ToString();
+            LevelManager.level = LevelManager.levels[target.value];
+            levelInfoText.text = "Level - " + LevelManager.level.id.ToString();
         }
 
         public void LoadLevels()
         {
-            List<LevelDataModel> loadedLevels = new List<LevelDataModel>();
-            levels = loadedLevels;
+            lm.LoadLevels();
             UpdateDropdown();
         }
 
         public void SaveLevels()
         {
+            //LevelManager.save();
         }
 
         public void NewLevel()
         {
-            level = new LevelDataModel();
-
-            int newID = levels.Count;
-            if (levels.Any(x => x.id != newID))
-            {
-                level.id = levels[levels.Count - 1].id + 1;
-            }
-            else
-            {
-                level.id = levels.Count + 1;
-            }
-            levels.Add(level);
             UpdateDropdown();
         }
 
         public void RemoveLevel()
         {
-            if (levels.Contains(level))
-            {
-                int newID = levels.Count;
-                if (newID > 0)
-                {
-                    Debug.Log(levels[level.id - 1].id);
-                    levels.Remove(level);
-                    level = levels[levels.Count - 1];
-                }
-                else if (levels.Count - 1 <= 0)
-                {
-                    levels.Remove(level);
-                    NewLevel();
-                }
-            }
             UpdateDropdown();
-        }
-
-        public LevelDataModel GetLevel(int _id)
-        {
-            var model = levels[_id];
-            return model;
-        }
-
-        public void SetLevel(int _id, LevelDataModel _level)
-        {
-            //Add a check if the id can be allocated to a level, if not, dont create a progress entry for a level that doesnt exist
-            if (levels.Any(x => x.id == _id))
-            {
-                var model = levels.FirstOrDefault(x => x.id == _id);
-                model = _level;
-                model.updated = DateTime.UtcNow;
-            }
-            else
-            {
-                levels.Add(_level);
-            }
         }
 
         public void UpdateDropdown()
         {
             List<Dropdown.OptionData> optionDataList = new List<Dropdown.OptionData>();
-            foreach (LevelDataModel _level in levels)
+            foreach (Level _level in LevelManager.levels)
             {
                 Dropdown.OptionData od = new Dropdown.OptionData();
                 od.text = _level.id.ToString();
@@ -122,28 +73,9 @@ namespace Sliders.UI
             if (optionDataList.Count != 0)
             {
                 dropdown.AddOptions(optionDataList);
-                dropdown.value = level.id;
+                dropdown.value = LevelManager.level.id;
             }
             dropdown.RefreshShownValue();
-        }
-
-        public void RemoveLevelAt(int _id)
-        {
-            if (levels.Any(x => x.id == _id))
-            {
-                var model = levels.FirstOrDefault(x => x.id == _id);
-                levels.Remove(model);
-            }
-        }
-
-        public void SetTime(Double time)
-        {
-            level.SetTime(time);
-        }
-
-        public void SetName(String name)
-        {
-            level.SetName(name);
         }
 
         #endregion Public Methods

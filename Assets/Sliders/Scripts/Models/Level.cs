@@ -15,7 +15,7 @@ namespace Sliders.Models
         public double timeBronze { get; set; }
         public DateTime created { get; set; }
         public DateTime updated { get; set; }
-        public static List<LevelObject> levelObjects { get; set; }
+        public List<LevelObject> levelObjects { get; set; }
 
         public void AddObject(LevelObject obj)
         {
@@ -32,9 +32,19 @@ namespace Sliders.Models
             return name;
         }
 
-        public void SetTime(double newTime)
+        public void SetGoldTime(double newTime)
         {
-            timeTop = newTime;
+            timeGold = newTime;
+        }
+
+        public void SetSilverTime(double newTime)
+        {
+            timeSilver = newTime;
+        }
+
+        public void SetBronzeTime(double newTime)
+        {
+            timeBronze = newTime;
         }
 
         public void RemoveLevelObject(int index)

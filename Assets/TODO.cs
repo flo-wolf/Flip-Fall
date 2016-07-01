@@ -19,6 +19,8 @@ public class TODO : MonoBehaviour
      * dann verlieren wir die Objektivität auf unser Projekkt,
      * wodurch das Gesammtbild und die Möglichkeit auf dessen Erweiterung verloren geht.
 
+    - kamera herein/herauszoomen je nach gravitation. smoothe übergänge beim zoomen, auch beim aprupten stoppen
+
     - Levelselection animieren
 
     - Datenspeicherung verstehen und einsetzen

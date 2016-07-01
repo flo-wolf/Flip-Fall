@@ -22,9 +22,8 @@ namespace Sliders.UI
             ProgressManager.SaveProgressData();
         }
 
-        public void CreateEntry()
+        public void CreateScoreboard()
         {
-            ProgressManager.SetLevelProgress(1, 2D, true);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Sliders
         public const string SavePath = "save.dat";
         private static ProgressData progress;
         public static bool IsLoaded { get; private set; }
+        public static bool AllowOverriteBeforeFirstRead { get; private set; }
 
         public static ProgressData ProgressdData
         {
@@ -69,75 +70,63 @@ namespace Sliders
             }
         }
 
-        public static void SaveLevelTime(Level level, double _time)
+        public static void SaveTime(double time)
         {
-            if (ProgressData.scoreboards.Any(x => x.id == level.id))
+            //Scoreboard doesnt exist
+            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.level.id))
             {
-                var model = new LevelProgressionModel
-                {
-                    created = DateTime.UtcNow,
-                    //id = _ProgressData.Count,
-                    id = _id,
-                    time = _time,
-                    completed = _completed,
-                    updated = DateTime.UtcNow
-                };
-                _ProgressData.Add(model);
-            }
-            else
-            {
-                Debug.LogError("PlayerProgression: Could not add level progress, it already exists");
-            }
-        }
+                //create new
+                Scoreboard scoreboard = new Scoreboard();
+                scoreboard.levelId = LevelManager.level.id;
+                scoreboard.created = DateTime.UtcNow;
+                scoreboard.updated = DateTime.UtcNow;
+                scoreboard.TryPlacingTime(time);
 
-        public static void SetLevelProgress(int _id, double _time, bool _completed)
-        {
-            //Add a check if the id can be allocated to a level, if not, dont create a progress entry for a level that doesnt exist
-            if (_ProgressData.Any(x => x.id == _id))
-            {
-                var model = _ProgressData.FirstOrDefault(x => x.id == _id);
-                model.time = _time;
-                model.completed = _completed;
-                model.updated = DateTime.UtcNow;
+                progress.scoreboards.Add(scoreboard);
+
+                //sort time into elements, while only allowing 10 items.
+                //scoreboard.elements
             }
+            //Scoreboard exists already
             else
             {
-                AddLevelProgress(_id, _time, _completed);
+                Scoreboard scoreboard = progress.GetScoreboard(LevelManager.level.id);
+                scoreboard.TryPlacingTime(time);
+                scoreboard.updated = DateTime.UtcNow;
+                Debug.LogError("PlayerProgression: Could not add level progress, it already exists");
             }
         }
 
         public static void ClearProgress()
         {
-            _ProgressData = new List<LevelProgressionModel>();
+            progress = new ProgressData();
         }
 
-        public static void ClearLevelProgress(int _id)
+        public static void ClearLevelScores(int _id)
         {
-            if (_ProgressData.Any(x => x.id == _id))
+            if (progress.scoreboards.Any(x => x.levelId == _id))
             {
-                var model = _ProgressData.FirstOrDefault(x => x.id == _id);
-                _ProgressData.Remove(model);
+                var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == _id);
+                progress.scoreboards.Remove(model);
             }
         }
 
         public static bool IsLevelFinished(int _id)
         {
-            return _ProgressData.Any(x => x.id == _id);
+            return progress.scoreboards.Any(x => x.finished);
         }
 
-        public static double GetLevelFinishTime(int _id)
+        public static double GetBestTime(int _id)
         {
-            double finishTime;
-            if (_ProgressData.Any(x => x.id == _id))
+            if (progress.scoreboards.Any(x => x.levelId == _id))
             {
-                var model = _ProgressData.FirstOrDefault(x => x.id == _id);
-                finishTime = model.time;
-                _ProgressData.Remove(model);
-                return finishTime;
+                var model = progress.scoreboards.FirstOrDefault(x => x.levelId == _id);
+                return model.elements[0].time;
             }
             return -1D;
         }
 
+        /*
         public static void FinishLevel(int _id, double _time)
         {
 #if AllowDoubles
@@ -158,5 +147,6 @@ namespace Sliders
             }
 #endif
         }
+        */
     }
 }

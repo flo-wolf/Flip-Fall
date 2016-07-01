@@ -8,16 +8,16 @@ namespace Sliders
 {
     public class LevelObject : MonoBehaviour
     {
-        public GameObject go; //can we just use ".this" to get the game object or do we have to drag it into the public variable in the inspector? Fix
-        public static Mesh mesh = new Mesh();
-        public static Vector3[] shapeVertices;
-        public static int[] shapeTriangles;
-        public static int numCorners { get; set; }
+        public Mesh mesh = new Mesh();
+        public Vector3[] shapeVertices;
+        public int[] shapeTriangles;
+        public int numCorners { get; set; }
 
-        private static int prevNumCorners;
+        private int prevNumCorners;
 
         public void Start()
         {
+            //gameObject.
         }
 
         public void UpdateMesh()
@@ -25,7 +25,7 @@ namespace Sliders
         }
 
         //Draw triangle shape
-        public static void createShape()
+        public void createShape()
         {
             // We need at least three corners
             if (numCorners < 3)
