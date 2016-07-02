@@ -34,7 +34,7 @@ namespace Sliders.Models
             Debug.Log("1");
             if (scoreboards.Count < 1 || scoreboards.Any(x => x.levelId != id))
             {
-                Debug.Log("3");
+                Debug.Log("2");
                 return NewScoreboard(id);
             }
             else
@@ -48,7 +48,7 @@ namespace Sliders.Models
                     }
                 }
             }
-            Debug.Log("2");
+            Debug.Log("null");
             return null;
         }
     }

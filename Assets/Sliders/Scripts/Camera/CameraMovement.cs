@@ -28,6 +28,12 @@ namespace Sliders
             Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
         }
 
+        public static void SetCameraState(CameraState cs)
+        {
+            cameraState = cs;
+            onCameraStateChange.Invoke(cameraState);
+        }
+
         //Smooth camera Transitions, calls Transition()
         public void moveCamTo(Vector2 t, float d)
         {
@@ -60,11 +66,6 @@ namespace Sliders
         /// <summary>
         //Only change the CameraState through this void, it'll invoke the CameraStateEvent
         /// </summary>
-        public static void SetCameraState(CameraState cs)
-        {
-            cameraState = cs;
-            onCameraStateChange.Invoke(cameraState);
-        }
 
         //instead of using transforms rather use joints and only transform one
         private void Update()
