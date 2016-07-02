@@ -16,7 +16,7 @@ namespace Sliders.Models
         public ScoreboardElement()
         {
             scoreType = ScoreType.normal;
-            time = -1f;
+            time = -2f;
         }
     }
 }

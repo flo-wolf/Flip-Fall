@@ -50,10 +50,11 @@ namespace Sliders.Models
                 {
                     if (newTime < s.time)
                     {
+                        Debug.Log("lockaaa");
                         //ScoreboardElement e = elements.Find(s);
                         newElement = s;
                         newElement.time = newTime;
-                        //elements.Insert(elements.FindIndex(s), newElement);
+                        elements.Insert(elements.IndexOf(s), newElement);
                         break;
                     }
                 }
@@ -61,7 +62,7 @@ namespace Sliders.Models
             else
             {
                 newElement.time = newTime;
-                Debug.Log("New ScoreboardElement with time: (" + newElement.time + ") added to Scoreboard of Level: (" + levelId + ") at position: (" + elements.FindIndex(x => x == newElement) + ")");
+                Debug.Log("New ScoreboardElement with time: (" + newElement.time + ") added to Scoreboard of Level: (" + levelId + ") at position: (" + elements.IndexOf(newElement) + ")");
                 elements.Add(newElement);
             }
         }

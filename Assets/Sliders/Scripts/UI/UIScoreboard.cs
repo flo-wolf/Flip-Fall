@@ -38,7 +38,6 @@ namespace Sliders.UI
         private void UpdateTexts()
         {
             int count = scoreboard.elements.Count;
-            Debug.Log("UT- count: " + count);
             if (count > 0)
             {
                 string empty = "-,-";
