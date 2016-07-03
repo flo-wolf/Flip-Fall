@@ -17,6 +17,8 @@ namespace Sliders
 
         public void Start()
         {
+            // Add meshrenderer
+            // add
             //gameObject.
         }
 

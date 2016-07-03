@@ -16,6 +16,9 @@ namespace Sliders
         public static void LoadLevels()
         {
             level.id = 99;
+            //levels = LevelLoader.Load();
+            //level = LevelLoader.Last();
+
             //ProgressManager.pr
             //load levels from file, one of them is marked as lastPlayed
         }
@@ -24,7 +27,7 @@ namespace Sliders
         {
         }
 
-        public static Level GetLevel(int _id)
+        public static Level GetLevelAt(int _id)
         {
             var model = levels[_id];
             return model;
