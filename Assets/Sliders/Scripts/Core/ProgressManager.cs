@@ -14,7 +14,7 @@ namespace Sliders
 {
     public static class ProgressManager
     {
-        public const string SavePath = "save.dat";
+        public const string SavePath = "ProgressSave.dat";
         public static ProgressData progress;
         public static bool IsLoaded { get; private set; }
         public static bool AllowOverriteBeforeFirstRead { get; private set; }
