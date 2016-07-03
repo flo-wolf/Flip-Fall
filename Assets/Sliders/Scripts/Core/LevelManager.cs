@@ -16,6 +16,7 @@ namespace Sliders
         public static void LoadLevels()
         {
             level.id = 99;
+            levels = LevelLoader.Load();
             //ProgressManager.pr
             //load levels from file, one of them is marked as lastPlayed
         }
