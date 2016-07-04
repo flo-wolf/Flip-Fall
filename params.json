@@ -1,6 +1,6 @@
 {
   "name": "Sliders",
-  "tagline": "Manipulate Gravity - Android Arcade",
+  "tagline": "Manipulate Gravity - Android Arcade Project",
   "body": "# Sliders\r\n### Gameplay\r\nManipulate and toggle gravity! A round player object has to be raced through a chain of levels, while avoiding all kinds of danger.\r\nA tap and hold onto the left half of the screen stops the downwards pull of gravitation.\r\nWhen the tap breaks up, gravity gets activated again, the balls velocity however also gets reset, stealing a lot of its downwards potential. \r\nA tap onto the right half of the screen switches the horizontal orientations of velocity, making the ball e.g. fall in a curve to the right instead of a curve to the left.\r\n\r\n### Rules\r\nFinish a level to unlock the next one.\r\nEarn medals by beating a level within time.\r\nMore medals unlock new usable items for the level editor.\r\nAvoid everything that is not round.\r\nCollect everything that is round.\r\n\r\n### Features\r\n50 Free levels, easy to Learn, hard to master.\r\nDifficulty and enemy appearances rise in each next level.\r\nInbuilt Level Editing.\r\nDistribute your own levels and play community content.",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
