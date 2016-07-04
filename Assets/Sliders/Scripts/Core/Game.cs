@@ -3,6 +3,7 @@ using Sliders.Models;
 using Sliders.UI;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Sliders
@@ -12,6 +13,10 @@ namespace Sliders
         public enum GameState { editor, playing, menu, ready, respawning, finish }
 
         public static GameState gameState;
+        public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
+
+        public class GameStateChangeEvent : UnityEvent<Player.PlayerState> { }
+
         public static CameraMovement cm;
         public UITimer timer;
         public UIScoreboard scoreboard;
@@ -66,6 +71,7 @@ namespace Sliders
             switch (newPlayerState)
             {
                 case Player.PlayerState.alive:
+                    SetGameState(GameState.playing);
                     scoreboard.Hide();
                     timer.Run();
                     timer.Reset();
