@@ -10,12 +10,12 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { editor, playing, menu, ready, respawning, finish }
+        public enum GameState { editor, playing, deathscreen, menu, ready, respawning, finishscreen }
 
         public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
 
-        public class GameStateChangeEvent : UnityEvent<Player.PlayerState> { }
+        public class GameStateChangeEvent : UnityEvent<GameState> { }
 
         public static CameraMovement cm;
         public UITimer timer;
@@ -42,9 +42,18 @@ namespace Sliders
             //Invoke Gamsteate event
         }
 
+        public void Play()
+        {
+            SetGameState(GameState.playing);
+        }
+
+        public void Edit()
+        {
+            SetGameState(GameState.editor);
+        }
+
         public void CloseGame()
         {
-            //save
             Application.Quit();
         }
 

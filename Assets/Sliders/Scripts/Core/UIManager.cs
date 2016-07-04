@@ -2,66 +2,101 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+namespace Sliders.UI
 {
-    /*
-    This class controls all UI Elements like
-    Scoreboards, Levelselection, Playbuttons, Instructions, Timers,..
-    depending on the current gamestate, called by listeners
-    */
-
-    public GameObject scoreboard;
-    public Text levelInfo;
-    public Button next;
-    public Button last;
-    public Button play;
-
-    private void Start()
+    public class UIManager : MonoBehaviour
     {
-    }
+        /*
+        This class controls all UI Elements like
+        Scoreboards, Levelselection, Playbuttons, Instructions, Timers,..
+        depending on the current gamestate, called by listeners
+        */
 
-    public void HideTimer()
-    {
-    }
+        public UIScoreboard scoreboard;
+        public UITimer timer;
+        public Text levelInfo;
+        public Button next;
+        public Button last;
+        public Button play;
 
-    public void ShowTimer()
-    {
-    }
+        private void Start()
+        {
+            Game.onGameStateChange.AddListener(GameStateChanged);
+        }
 
-    public void HideScoreboard()
-    {
-    }
+        private void GameStateChanged(Game.GameState gameState)
+        {
+            switch (gameState)
+            {
+                case Game.GameState.playing:
+                    scoreboard.Hide();
+                    timer.Run();
+                    timer.Reset();
+                    timer.Continue();
+                    break;
 
-    public void ShowScoreboard()
-    {
-    }
+                case Game.GameState.deathscreen:
+                    timer.Pause();
+                    scoreboard.Show(timer.GetTime());
+                    CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
+                    //display scoreboard
+                    break;
 
-    public void HideLevelInfo()
-    {
-    }
+                case Game.GameState.ready:
+                    break;
 
-    public void ShowLevelInfo()
-    {
-    }
+                case Game.GameState.finishscreen:
+                    break;
 
-    public void HideNext()
-    {
-    }
+                default:
+                    Debug.LogError("Incorrect PlayerState");
+                    break;
+            }
+        }
 
-    public void ShowNext()
-    {
-    }
+        public void HideTimer()
+        {
+        }
 
-    public void HideLast()
-    {
-    }
+        public void ShowTimer()
+        {
+        }
 
-    public void ShowLast()
-    {
-    }
+        public void HideScoreboard()
+        {
+        }
 
-    // Update is called once per frame
-    private void Update()
-    {
+        public void ShowScoreboard()
+        {
+        }
+
+        public void HideLevelInfo()
+        {
+        }
+
+        public void ShowLevelInfo()
+        {
+        }
+
+        public void HideNext()
+        {
+        }
+
+        public void ShowNext()
+        {
+        }
+
+        public void HideLast()
+        {
+        }
+
+        public void ShowLast()
+        {
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+        }
     }
 }
