@@ -9,9 +9,12 @@ namespace Sliders
     {
         public enum CameraState { following, transitioning, resting }
 
-        //Spielfigur für Berechnung der relativen Kameraposition
-        public GameObject player;
+        public enum TransitionType { smoothstep, linear, resting }
 
+        //Spielfigur für Berechnung der relativen Kameraposition
+        public Player player;
+
+        public TransitionType transitionType;
         public static CameraState cameraState;
 
         public static CameraStateEvent onCameraStateChange = new CameraStateEvent();
@@ -62,10 +65,6 @@ namespace Sliders
             }
             SetCameraState(CameraState.resting);
         }
-
-        /// <summary>
-        //Only change the CameraState through this void, it'll invoke the CameraStateEvent
-        /// </summary>
 
         //instead of using transforms rather use joints and only transform one
         private void Update()

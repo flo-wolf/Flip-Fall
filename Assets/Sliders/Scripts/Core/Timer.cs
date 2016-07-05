@@ -9,11 +9,15 @@ namespace Sliders.UI
     {
         #region Properties
 
-        public static string Format { get; set; }
-        public static bool IsPaused { get; private set; }
-        public static bool IsStarted { get; private set; }
-        public static Text TextObject { get; private set; }
-        public static double PassedTime { get; private set; }
+        public enum TimerState { running, paused };
+
+        public static string format { get; set; }
+        public static bool isPaused { get; private set; }
+        public static bool isStarted { get; private set; }
+        public static Text textObjectS { get; private set; }
+        public static Text textObjectM { get; private set; }
+        public static double passedTime { get; private set; }
+        public static double pauseTime;
 
         private static MonoBehaviour Behaviour { get; set; }
 
@@ -21,77 +25,65 @@ namespace Sliders.UI
 
         #region Public Methods
 
-        public static void Start(MonoBehaviour mono, Text textObject = null)
+        public static void Start(MonoBehaviour mono, Text _textObjectS = null, Text _textObjectM = null)
         {
-            IsPaused = true;
+            isPaused = false;
+            Reset();
             if (mono == null)
             {
                 Debug.LogError("Behaviour may not be null!");
                 return;
             }
 
-            if (textObject != null)
+            if (_textObjectS != null && _textObjectM != null)
             {
-                TextObject = textObject;
+                textObjectM = _textObjectM;
+                textObjectS = _textObjectS;
             }
             else
             {
-                if (TextObject == null)
-                {
-                    Debug.LogError("No Text object!");
-                    return;
-                }
+                Debug.LogError("No Text object!");
+                return;
             }
-
-            if (!IsStarted)
-            {
-                PassedTime = 0;
-                TextObject = textObject;
-                IsStarted = true;
-                TextObject = textObject;
-                Behaviour = mono;
-                Behaviour.StartCoroutine(WaitForTimerUpdate());
-            }
-            else
-            {
-                Debug.Log("Timer already started");
-            }
+            Behaviour = mono;
+            Behaviour.StartCoroutine(WaitForTimerUpdate());
+            isStarted = true;
         }
 
         public static void Pause()
         {
-            IsPaused = true;
+            pauseTime = passedTime;
+            isPaused = true;
         }
 
         public static void Reset()
         {
-            PassedTime = 0;
+            passedTime = 0;
         }
 
         public static void Continue()
         {
-            IsPaused = false;
+            isPaused = false;
             Behaviour.StartCoroutine(WaitForTimerUpdate());
         }
 
         public static void Stop()
         {
-            IsStarted = false;
+            isStarted = false;
         }
 
         #endregion Public Methods
 
         private static IEnumerator WaitForTimerUpdate()
         {
-            while (!IsPaused && IsStarted)
+            while (!isPaused)
             {
-                PassedTime += Time.fixedDeltaTime;
-                var time = TimeSpan.FromSeconds(PassedTime);
+                passedTime += Time.fixedDeltaTime;
+                var time = TimeSpan.FromSeconds(passedTime);
                 try
                 {
-                    TextObject.text = string.Format("{0:D1},{1:D2}",
-                                                      time.Seconds,
-                                                      time.Milliseconds / 10);
+                    textObjectS.text = string.Format("{0}", time.Seconds);
+                    textObjectM.text = string.Format("{0:D2}", time.Milliseconds / 10);
                 }
                 catch (ArgumentNullException anex)
                 {

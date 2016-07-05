@@ -70,27 +70,24 @@ namespace Sliders
             }
         }
 
-        public static void SaveTime(double time)
+        public static void SaveTime()
         {
+            double time = Timer.pauseTime;
             //Scoreboard doesnt exist
-            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.level.id))
+            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.currentLevel))
             {
                 //create new
                 Scoreboard scoreboard = new Scoreboard();
-                scoreboard.levelId = LevelManager.level.id;
+                scoreboard.levelId = LevelManager.currentLevel;
                 scoreboard.created = DateTime.UtcNow;
                 scoreboard.updated = DateTime.UtcNow;
                 scoreboard.TryPlacingTime(time);
-
                 progress.scoreboards.Add(scoreboard);
-
-                //sort time into elements, while only allowing 10 items.
-                //scoreboard.elements
             }
             //Scoreboard exists already
             else
             {
-                Scoreboard scoreboard = progress.GetScoreboard(LevelManager.level.id);
+                Scoreboard scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.currentLevel);
                 scoreboard.TryPlacingTime(time);
                 scoreboard.updated = DateTime.UtcNow;
                 Debug.LogError("PlayerProgression: Could not add level progress, it already exists");
@@ -129,9 +126,7 @@ namespace Sliders
         /*
         public static void FinishLevel(int _id, double _time)
         {
-#if AllowDoubles
             AddLevelProgress(_id, _time, true);
-#else
             //Update
             if (_ProgressData.Any(x => x.id == _id))
             {
@@ -141,11 +136,16 @@ namespace Sliders
                     model.time = _time;
                 }
                 model.updated = DateTime.UtcNow;
-            } else
+            }
+            else
             {
                 AddProgressData(_id, _time, true);
             }
-#endif
+        }
+
+        public static void TryFinishLevel()
+        {
+            Level l = levels.Find(x => x.id == LevelManager.currentLevel);
         }
         */
     }
