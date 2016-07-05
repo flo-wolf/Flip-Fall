@@ -12,7 +12,7 @@ namespace Sliders.Models
         public int levelId;
         public bool finished;
         public bool unlocked;
-        public List<ScoreboardElement> elements;
+        public List<Highscore> elements;
         public DateTime created { get; set; }
         public DateTime updated { get; set; }
 
@@ -20,12 +20,12 @@ namespace Sliders.Models
 
         public Scoreboard()
         {
-            elements = new List<ScoreboardElement>();
+            elements = new List<Highscore>();
             created = DateTime.UtcNow;
             updated = DateTime.UtcNow;
         }
 
-        public ScoreboardElement Top()
+        public Highscore Top()
         {
             if (elements.Count > 0)
                 return elements[0];
@@ -34,24 +34,24 @@ namespace Sliders.Models
 
         public void AddTime(double t)
         {
-            ScoreboardElement se = new ScoreboardElement();
+            Highscore se = new Highscore();
             se.time = t;
             elements.Add(se);
         }
 
         public void TryPlacingTime(double newTime)
         {
-            ScoreboardElement newElement = new ScoreboardElement();
+            Highscore newElement = new Highscore();
 
             //list filled? not wking, else works
             if (elements.Count > 0)
             {
-                foreach (ScoreboardElement s in elements)
+                foreach (Highscore s in elements)
                 {
                     if (newTime < s.time)
                     {
                         Debug.Log("lockaaa");
-                        //ScoreboardElement e = elements.Find(s);
+                        //Highscore e = elements.Find(s);
                         newElement = s;
                         newElement.time = newTime;
                         elements.Insert(elements.IndexOf(s), newElement);
@@ -62,14 +62,14 @@ namespace Sliders.Models
             else
             {
                 newElement.time = newTime;
-                Debug.Log("New ScoreboardElement with time: (" + newElement.time + ") added to Scoreboard of Level: (" + levelId + ") at position: (" + elements.IndexOf(newElement) + ")");
+                Debug.Log("New Highscore with time: (" + newElement.time + ") added to Scoreboard of Level: (" + levelId + ") at position: (" + elements.IndexOf(newElement) + ")");
                 elements.Add(newElement);
             }
         }
 
         public bool IsPlacingTimePossible(double t)
         {
-            foreach (ScoreboardElement s in elements)
+            foreach (Highscore s in elements)
             {
                 if (s.time < t)
                 {

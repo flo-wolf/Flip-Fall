@@ -74,11 +74,11 @@ namespace Sliders
         {
             double time = Timer.pauseTime;
             //Scoreboard doesnt exist
-            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.currentLevel))
+            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.activeLevel.id))
             {
                 //create new
                 Scoreboard scoreboard = new Scoreboard();
-                scoreboard.levelId = LevelManager.currentLevel;
+                scoreboard.levelId = LevelManager.activeLevel.id;
                 scoreboard.created = DateTime.UtcNow;
                 scoreboard.updated = DateTime.UtcNow;
                 scoreboard.TryPlacingTime(time);
@@ -87,7 +87,7 @@ namespace Sliders
             //Scoreboard exists already
             else
             {
-                Scoreboard scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.currentLevel);
+                Scoreboard scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.activeLevel.id);
                 scoreboard.TryPlacingTime(time);
                 scoreboard.updated = DateTime.UtcNow;
                 Debug.LogError("PlayerProgression: Could not add level progress, it already exists");
@@ -121,6 +121,16 @@ namespace Sliders
                 return model.elements[0].time;
             }
             return -1D;
+        }
+
+        public static int GetLastPlayedLevel()
+        {
+            return progress.lastPlayedLevelID;
+        }
+
+        public static void SetLastPlayedLevel(int id)
+        {
+            progress.lastPlayedLevelID = id;
         }
 
         /*

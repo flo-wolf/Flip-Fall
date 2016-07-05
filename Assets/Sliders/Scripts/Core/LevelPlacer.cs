@@ -9,27 +9,28 @@ public class LevelPlacer : MonoBehaviour
 {
     private static Transform t;
 
-    private static void Place(Level level)
+    public static Level Place(Level level)
     {
         Debug.Log("Try to Place Level: " + level.id);
-        Level l = LevelManager.levels.Find(x => x == level);
-        t = (Transform)(Instantiate(l, new Vector3(-8.0f, -2.0f, 7.8f), Quaternion.identity));
-        LevelManager.levels.Add(l);
-        Debug.Log("Level Added to Levels: " + LevelManager.levels.Any(x => x == level));
+        Level l = LevelManager.loadedLevels.Find(x => x == level);
+        t = (Transform)(Instantiate(l.gameObject, new Vector3(-8.0f, -2.0f, 7.8f), Quaternion.identity));
+        LevelManager.loadedLevels.Add(l);
+        Debug.Log("Level Added to loadedLevels: " + LevelManager.loadedLevels.Any(x => x == level));
+        return l;
     }
 
-    private static void Remove(Level level)
+    public static void Remove(Level level)
     {
-        Level l = LevelManager.levels.Find(x => x == level);
-        LevelManager.levels.Remove(l);
+        Level l = LevelManager.loadedLevels.Find(x => x == level);
+        LevelManager.loadedLevels.Remove(l);
         Debug.Log("Try to remove Level: " + l.id);
         Transform t = (Transform)(Instantiate(level, new Vector3(-8.0f, -2.0f, 7.8f), Quaternion.identity));
         GameObject go = t.gameObject;
-        LevelManager.levels.Add(level);
-        Debug.Log("Level Added to Levels: " + LevelManager.levels.Any(x => x == level));
+        LevelManager.loadedLevels.Add(level);
+        Debug.Log("Level Added to loadedLevels: " + LevelManager.loadedLevels.Any(x => x == level));
     }
 
-    private static void Replace(Level levelOld, Level levelNew)
+    public static void Replace(Level levelOld, Level levelNew)
     {
     }
 }

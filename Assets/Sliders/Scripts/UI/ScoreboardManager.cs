@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Sliders.UI
 {
-    public class UIScoreboard : MonoBehaviour
+    public class ScoreboardManager : MonoBehaviour
     {
         public static Scoreboard scoreboard;
         public Text text1;
@@ -17,8 +17,8 @@ namespace Sliders.UI
 
         private void Start()
         {
-            UpdateTexts();
             scoreboard = new Scoreboard();
+            UpdateTexts();
         }
 
         public void Hide()
@@ -27,9 +27,9 @@ namespace Sliders.UI
         }
 
         //works, but its unclean.
-        public void Show(double time)
+        public void ShowAndUpdate(double time)
         {
-            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.level.id);
+            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.activeLevel.id);
             scoreboard.TryPlacingTime(time);
             Debug.Log(scoreboard.elements[0].time);
             UpdateTexts();
@@ -47,7 +47,7 @@ namespace Sliders.UI
                 text3.text = empty;
                 text4.text = empty;
                 text5.text = empty;
-                foreach (ScoreboardElement se in scoreboard.elements)
+                foreach (Highscore se in scoreboard.elements)
                 {
                     double t = se.time;
                     int secs = (int)t;

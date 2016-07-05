@@ -10,14 +10,14 @@ namespace Sliders.Models
     public class ProgressData
     {
         public List<Scoreboard> scoreboards = new List<Scoreboard>();
-        public static int lastPlayedLevelID;
-        public static int coins;
+        public int lastPlayedLevelID;
+        public int coins;
         //add: unlocks, achievements, stats etc...
 
         public ProgressData()
         {
             coins = -1;
-            lastPlayedLevelID = 1;
+            lastPlayedLevelID = 5;
             scoreboards = new List<Scoreboard>();
         }
 
