@@ -13,7 +13,7 @@ namespace Sliders.UI
         */
 
         public UIScoreboard scoreboard;
-        public UITimer timer;
+        public UITimer uiTimer;
         public Text levelID;
         public GameObject deathscreen;
         public Button next;
@@ -34,13 +34,13 @@ namespace Sliders.UI
                     scoreboard.Hide();
                     deathscreen.SetActive(false);
                     play.gameObject.SetActive(false);
-                    timer.Run();
+                    uiTimer.Run();
                     break;
 
                 case Game.GameState.deathscreen:
-                    timer.Pause();
+                    uiTimer.Pause();
                     deathscreen.SetActive(true);
-                    scoreboard.Show(timer.GetTime());
+                    scoreboard.Show(uiTimer.GetTime());
                     CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     //display scoreboard
                     break;

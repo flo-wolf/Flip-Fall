@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/*
+* This class manages all incoming calls of other game components regarding leveldata modification and saving.
+* Levels are serializable and saved to a file.
+*/
+
 namespace Sliders
 {
-    [SerializeField]
     public static class LevelManager
     {
         public static List<Level> levels = new List<Level>();

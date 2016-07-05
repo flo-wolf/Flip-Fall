@@ -17,6 +17,7 @@ namespace Sliders.UI
 
         private void Start()
         {
+            UpdateTexts();
             scoreboard = new Scoreboard();
         }
 
@@ -40,7 +41,7 @@ namespace Sliders.UI
             int count = scoreboard.elements.Count;
             if (count > 0)
             {
-                string empty = "-,-";
+                string empty = "-.-";
                 text1.text = empty;
                 text2.text = empty;
                 text3.text = empty;
