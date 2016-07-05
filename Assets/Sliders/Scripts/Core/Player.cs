@@ -9,11 +9,11 @@ namespace Sliders
 {
     public class Player : MonoBehaviour
     {
-        public enum PlayerState { alive, ready, dead, finish };
+        public enum PlayerState { alive, ready, dead };
 
         public static PlayerState playerState;
 
-        public static PlayerStateEvent onPlayerStateChange = new PlayerStateEvent();
+        public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
 
         public CameraMovement cm;
         public LayerMask finishMask;
@@ -38,12 +38,6 @@ namespace Sliders
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
 
-        public void SetPlayerState(PlayerState ps)
-        {
-            playerState = ps;
-            onPlayerStateChange.Invoke(playerState);
-        }
-
         private void Awake()
         {
             spawnRotaion = transform.rotation;
@@ -54,22 +48,37 @@ namespace Sliders
 
         private void Start()
         {
+            Game.onGameStateChange.AddListener(GameStateChanged);
         }
 
-        public static bool IsAlive()
+        private void GameStateChanged(Game.GameState gameState)
         {
-            if (playerState == PlayerState.alive)
-                return true;
-            else
-                return false;
+            Debug.Log("GameState changed to: " + gameState);
+            switch (gameState)
+            {
+                case Game.GameState.playing:
+                    Spawn();
+                    break;
+
+                case Game.GameState.deathscreen:
+                    Fail();
+                    break;
+
+                default:
+                    break;
+            }
         }
 
-        public static bool IsReady()
+        private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (playerState == PlayerState.ready)
-                return true;
-            else
-                return false;
+            if (1 << collider.gameObject.layer == killMask.value && IsAlive())
+            {
+                Game.SetGameState(Game.GameState.deathscreen);
+            }
+            else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
+            {
+                Game.FinishLevel();
+            }
         }
 
         private void MoveToSpawn()
@@ -98,18 +107,6 @@ namespace Sliders
             GetComponent<Rigidbody2D>().WakeUp();
         }
 
-        private void OnTriggerEnter2D(Collider2D collider)
-        {
-            if (1 << collider.gameObject.layer == killMask.value && IsAlive())
-            {
-                Fail();
-            }
-            else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
-            {
-                Finish();
-            }
-        }
-
         private void Fail()
         {
             SetPlayerState(PlayerState.dead);
@@ -124,12 +121,6 @@ namespace Sliders
             cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
 
             MoveToSpawn();
-        }
-
-        public void Finish()
-        {
-            Game.FinishLevel();
-            Debug.Log("finish");
         }
 
         //X-Achsen-Spiegelung der Figurenflugbahn
@@ -186,7 +177,7 @@ namespace Sliders
         //Inputs, alles in den Input Manager!
         private void Update()
         {
-            if (IsAlive() && CameraMovement.IsFollowing())
+            if (IsAlive())
             {
                 //Keyboard
                 if (Input.GetKeyDown(KeyCode.Return))
@@ -229,15 +220,30 @@ namespace Sliders
                 }
                 */
             }
-            else if (!IsAlive() && CameraMovement.IsResting())
-            {
-                if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Escape))
-                {
-                    Spawn();
-                }
-            }
         }
 
-        public class PlayerStateEvent : UnityEvent<PlayerState> { }
+        public void SetPlayerState(PlayerState ps)
+        {
+            playerState = ps;
+            onPlayerStateChange.Invoke(playerState);
+        }
+
+        public static bool IsAlive()
+        {
+            if (playerState == PlayerState.alive)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool IsReady()
+        {
+            if (playerState == PlayerState.ready)
+                return true;
+            else
+                return false;
+        }
+
+        public class PlayerStateChangeEvent : UnityEvent<PlayerState> { }
     }
 }

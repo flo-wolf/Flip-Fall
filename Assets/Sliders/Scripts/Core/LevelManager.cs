@@ -10,6 +10,7 @@ namespace Sliders
     public static class LevelManager
     {
         public static List<Level> levels = new List<Level>();
+        public static int currentLevel = 99;
         public static Level level = new Level();
 
         // Use this for initialization

@@ -31,7 +31,7 @@ namespace Sliders
                 }
                 catch (SerializationException e)
                 {
-                    Debug.LogError("Failed to deserialize. Reason: " + e.Message);
+                    Debug.Log("Failed to deserialize. Reason: " + e.Message);
                     throw;
                 }
                 finally

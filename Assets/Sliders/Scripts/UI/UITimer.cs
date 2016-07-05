@@ -5,13 +5,13 @@ namespace Sliders.UI
 {
     public class UITimer : MonoBehaviour
     {
-        [SerializeField]
-        private Text text;
+        public Text textSec;
+        public Text textMil;
 
         // Use this for initialization
         public void Run()
         {
-            Sliders.UI.Timer.Start(this, text);
+            Sliders.UI.Timer.Start(this, textSec, textMil);
         }
 
         public void Pause()
@@ -36,7 +36,7 @@ namespace Sliders.UI
 
         public double GetTime()
         {
-            double time = Sliders.UI.Timer.PassedTime;
+            double time = Sliders.UI.Timer.pauseTime;
             return time;
         }
     }

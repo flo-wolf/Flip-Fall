@@ -10,7 +10,7 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { editor, playing, deathscreen, menu, ready, respawning, finishscreen }
+        public enum GameState { editor, playing, deathscreen, menu, ready, finishscreen }
 
         public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
@@ -29,7 +29,6 @@ namespace Sliders
             ProgressManager.ClearProgress();
             SetGameState(GameState.ready);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
-            CameraMovement.onCameraStateChange.AddListener(CameraStateChanged);
             LevelManager.LoadLevels();
             //load progress -> set firsttime
             //firsttime? -> load tutorial
@@ -39,12 +38,13 @@ namespace Sliders
         public static void SetGameState(GameState gs)
         {
             gameState = gs;
-            //Invoke Gamsteate event
-        }
-
-        public void Play()
-        {
-            SetGameState(GameState.playing);
+            onGameStateChange.Invoke(gameState);
+            if (gameState == GameState.deathscreen)
+            {
+                //start coroutine (wait 3 secs, blink times, them switch to ready -> playbtn will apear)
+                SetGameState(GameState.ready);
+            }
+            //Debug.Log(gameState);
         }
 
         public void Edit()
@@ -65,6 +65,8 @@ namespace Sliders
 
         public static void FinishLevel()
         {
+            SetGameState(GameState.finishscreen);
+            ProgressManager.SaveTime();
             //save progress
         }
 
@@ -77,6 +79,7 @@ namespace Sliders
 
         public void PlayerStateChanged(Player.PlayerState newPlayerState)
         {
+            /*
             switch (newPlayerState)
             {
                 case Player.PlayerState.alive:
@@ -89,7 +92,7 @@ namespace Sliders
 
                 case Player.PlayerState.dead:
                     timer.Pause();
-                    scoreboard.Show(timer.GetTime());
+
                     CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     //display scoreboard
                     break;
@@ -97,33 +100,11 @@ namespace Sliders
                 case Player.PlayerState.ready:
                     break;
 
-                case Player.PlayerState.finish:
-
-                    break;
-
                 default:
                     Debug.LogError("Incorrect PlayerState");
                     break;
             }
-        }
-
-        public void CameraStateChanged(CameraMovement.CameraState newCameraState)
-        {
-            switch (newCameraState)
-            {
-                case CameraMovement.CameraState.following:
-                    break;
-
-                case CameraMovement.CameraState.transitioning:
-                    break;
-
-                case CameraMovement.CameraState.resting:
-                    break;
-
-                default:
-                    Debug.LogError("Incorrect CameraState");
-                    break;
-            }
+            */
         }
     }
 }
