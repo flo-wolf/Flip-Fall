@@ -31,7 +31,7 @@ namespace Sliders.UI
             switch (gameState)
             {
                 case Game.GameState.playing:
-                    scoreboardManager.Hide();
+                    scoreboardManager.Hide(); //add fancy fadeouts, save
                     deathscreen.SetActive(false);
                     play.gameObject.SetActive(false);
                     uiTimer.Run();
@@ -40,7 +40,7 @@ namespace Sliders.UI
                 case Game.GameState.deathscreen:
                     uiTimer.Pause();
                     deathscreen.SetActive(true);
-                    scoreboardManager.ShowAndUpdate(uiTimer.GetTime());
+                    scoreboardManager.ShowAndUpdate(uiTimer.GetTime()); //add fancy fadeouts
                     CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     //display scoreboard
                     break;
