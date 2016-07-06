@@ -10,7 +10,7 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { editor, playing, deathscreen, menu, ready, finishscreen }
+        public enum GameState { editor, playing, deathscreen, settings, ready, finishscreen, levelswitch }
 
         public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
@@ -18,8 +18,7 @@ namespace Sliders
         public class GameStateChangeEvent : UnityEvent<GameState> { }
 
         public static CameraMovement cm;
-        public UITimer timer;
-        public UIScoreboard scoreboard;
+        public ScoreboardManager scoreboardManager;
         public Player player;
 
         private bool _firsttime;
@@ -29,7 +28,8 @@ namespace Sliders
             ProgressManager.ClearProgress();
             SetGameState(GameState.ready);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
-            LevelManager.LoadLevels();
+            LevelManager.PlaceActiveLevel();
+
             //load progress -> set firsttime
             //firsttime? -> load tutorial
             //load last played level -> get value from "progress"
@@ -42,7 +42,6 @@ namespace Sliders
             if (gameState == GameState.deathscreen)
             {
                 //start coroutine (wait 3 secs, blink times, them switch to ready -> playbtn will apear)
-                SetGameState(GameState.ready);
             }
             //Debug.Log(gameState);
         }
@@ -54,6 +53,7 @@ namespace Sliders
 
         public void CloseGame()
         {
+            ProgressManager.SaveProgressData();
             Application.Quit();
         }
 

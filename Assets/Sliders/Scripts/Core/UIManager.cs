@@ -12,8 +12,8 @@ namespace Sliders.UI
         depending on the current gamestate, called by listeners
         */
 
-        public UIScoreboard scoreboard;
-        public UITimer timer;
+        public ScoreboardManager scoreboardManager;
+        public UITimer uiTimer;
         public Text levelID;
         public GameObject deathscreen;
         public Button next;
@@ -22,7 +22,7 @@ namespace Sliders.UI
 
         private void Start()
         {
-            levelID.text = LevelManager.currentLevel.ToString();
+            levelID.text = LevelManager.activeLevel.id.ToString();
             Game.onGameStateChange.AddListener(GameStateChanged);
         }
 
@@ -31,16 +31,16 @@ namespace Sliders.UI
             switch (gameState)
             {
                 case Game.GameState.playing:
-                    scoreboard.Hide();
+                    scoreboardManager.Hide();
                     deathscreen.SetActive(false);
                     play.gameObject.SetActive(false);
-                    timer.Run();
+                    uiTimer.Run();
                     break;
 
                 case Game.GameState.deathscreen:
-                    timer.Pause();
+                    uiTimer.Pause();
                     deathscreen.SetActive(true);
-                    scoreboard.Show(timer.GetTime());
+                    scoreboardManager.ShowAndUpdate(uiTimer.GetTime());
                     CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     //display scoreboard
                     break;
@@ -62,6 +62,14 @@ namespace Sliders.UI
         {
             Game.SetGameState(Game.GameState.playing);
             play.gameObject.SetActive(false);
+        }
+
+        public void NextBtn()
+        {
+        }
+
+        public void LastBtn()
+        {
         }
     }
 }

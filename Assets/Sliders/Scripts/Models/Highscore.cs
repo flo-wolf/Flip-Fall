@@ -6,14 +6,14 @@ using UnityEngine.UI;
 namespace Sliders.Models
 {
     [SerializeField]
-    public class ScoreboardElement
+    public class Highscore
     {
         public enum ScoreType { gold, silver, bronze, normal, unranked }
 
         public ScoreType scoreType { get; set; }
         public double time { get; set; }
 
-        public ScoreboardElement()
+        public Highscore()
         {
             scoreType = ScoreType.normal;
             time = -2f;

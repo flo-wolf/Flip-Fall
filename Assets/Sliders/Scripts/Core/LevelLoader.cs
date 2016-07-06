@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -10,24 +11,31 @@ namespace Sliders
 {
     public class LevelLoader : MonoBehaviour
     {
+        public static Level defaultLevel;
         public LevelPlacer levelPlacer;
-        private static List<Level> levelsLoading;
-        private static Level currentLevel;
 
-        public const string SavePath = "LevelsSave.dat";
-        public static ProgressData progress;
+        public const string SavePath = "Levels.dat";
         public static bool IsLoaded { get; private set; }
         public static bool AllowOverriteBeforeFirstRead { get; private set; }
 
-        public static List<Level> Load()
+        private static List<Level> levelsLoading;
+
+        private void Start()
         {
+            ReloadAll();
+        }
+
+        public static List<Level> ReloadAll()
+        {
+            Debug.Log("levelLoader - ReloadALl");
             if (File.Exists(SavePath))
             {
                 var fs = new FileStream(SavePath, FileMode.Open);
                 try
                 {
                     var bf = new BinaryFormatter();
-                    progress = bf.Deserialize(fs) as ProgressData;
+                    levelsLoading = bf.Deserialize(fs) as List<Level>;
+                    return levelsLoading;
                 }
                 catch (SerializationException e)
                 {
@@ -43,9 +51,20 @@ namespace Sliders
             return levelsLoading;
         }
 
-        public static Level Last()
+        public static Level Reload(int id)
         {
-            return currentLevel;
+            //Level already known
+            if (LevelManager.loadedLevels.Any(x => x.id == id))
+            {
+                Level l = LevelManager.loadedLevels.Find(y => y.id == id);
+                Debug.Log("LevelLoader.Load - 1");
+                return levelsLoading.Find(x => x.id == id);
+            }
+            else
+            {
+                Debug.Log("LevelLoader.Load - 2");
+                return LevelPlacer.Place(defaultLevel);
+            }
         }
     }
 }

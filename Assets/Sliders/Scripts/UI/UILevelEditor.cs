@@ -33,14 +33,12 @@ namespace Sliders.UI
 
         private void dropdownValueChangedHandler(Dropdown target)
         {
-            Debug.Log("selected: " + target.value);
-            LevelManager.level = LevelManager.levels[target.value];
-            levelInfoText.text = "Level - " + LevelManager.level.id.ToString();
+            LevelManager.SetActiveLevel(target.value);
         }
 
         public void LoadLevels()
         {
-            LevelManager.LoadLevels();
+            LevelManager.PlaceActiveLevel();
             UpdateDropdown();
         }
 
@@ -62,7 +60,7 @@ namespace Sliders.UI
         public void UpdateDropdown()
         {
             List<Dropdown.OptionData> optionDataList = new List<Dropdown.OptionData>();
-            foreach (Level _level in LevelManager.levels)
+            foreach (Level _level in LevelManager.loadedLevels)
             {
                 Dropdown.OptionData od = new Dropdown.OptionData();
                 od.text = _level.id.ToString();
@@ -72,7 +70,7 @@ namespace Sliders.UI
             if (optionDataList.Count != 0)
             {
                 dropdown.AddOptions(optionDataList);
-                dropdown.value = LevelManager.level.id;
+                dropdown.value = LevelManager.activeLevel.id;
             }
             dropdown.RefreshShownValue();
         }

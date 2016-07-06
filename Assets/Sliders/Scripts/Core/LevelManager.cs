@@ -3,55 +3,86 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
+
+/*
+* This class manages all incoming calls of other game components regarding leveldata modification and saving.
+* Levels are serializable and saved to a file.
+*/
 
 namespace Sliders
 {
-    [SerializeField]
-    public static class LevelManager
+    public class LevelManager : MonoBehaviour
     {
-        public static List<Level> levels = new List<Level>();
-        public static int currentLevel = 99;
-        public static Level level = new Level();
+        public Level emptyLevelPrefab;
+        public static Level activeLevel;
+        public static List<Level> loadedLevels = new List<Level>();
+
+        public static LevelChangeEvent onLevelChange = new LevelChangeEvent();
+
+        public class LevelChangeEvent : UnityEvent<Level> { }
+
+        private void Start()
+        {
+            activeLevel = emptyLevelPrefab;
+            loadedLevels = LevelLoader.ReloadAll();
+            Debug.Log(loadedLevels);
+            if (loadedLevels != null)
+            {
+                if (loadedLevels.Find(x => x == activeLevel) != null)
+                {
+                    loadedLevels.Add(activeLevel);
+                }
+            }
+        }
+
+        public static int GetActiveId()
+        {
+            return activeLevel.id;
+        }
+
+        public static void PlaceActiveLevel()
+        {
+            if (activeLevel.id == 5)
+            {
+                ProgressManager.SetLastPlayedLevel(activeLevel.id);
+                LevelPlacer.Place(activeLevel);
+            }
+        }
 
         // Use this for initialization
-        public static void LoadLevels()
+        public static void LoadAndPlace(int id)
         {
-            levels = LevelLoader.Load();
             //level = LevelLoader.Last();
-            level.id = 99;
-
             //ProgressManager.pr
             //load levels from file, one of them is marked as lastPlayed
         }
 
-        public static void SaveLevels()
-        {
-        }
-
         public static Level GetLevelAt(int _id)
         {
-            var model = levels[_id];
+            var model = loadedLevels[_id];
             return model;
         }
 
-        public static void SetLevel(int _id, Level _level)
+        public static void SetActiveLevel(int nextlevelId)
         {
-            var model = levels.FirstOrDefault(x => x.id == _id);
-            //not done!
+            activeLevel = LevelManager.loadedLevels.Find(x => x.id == nextlevelId);
+            onLevelChange.Invoke(activeLevel);
         }
 
+        /*
         public static void NewLevel()
         {
-            int newID = levels.Count;
-            if (levels.Any(x => x.id != newID))
+            int newID = loadedLevels.Count;
+            if (loadedLevels.Any(x => x.id != newID))
             {
-                level.id = levels[levels.Count - 1].id + 1;
+                loadedLevels.id = loadedLevels[loadedLevels.Count - 1].id + 1;
             }
             else
             {
-                level.id = levels.Count + 1;
+                activeLevel.id = loadedLevels.Count + 1;
             }
-            levels.Add(level);
+            levels.Add(activeLevel);
         }
 
         public static void RemoveLevel()
@@ -81,5 +112,6 @@ namespace Sliders
                 levels.Remove(model);
             }
         }
+        */
     }
 }

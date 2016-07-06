@@ -8,28 +8,35 @@ namespace Sliders.Models
     [Serializable]
     public class Level : MonoBehaviour
     {
-        public int id { get; set; }
+        public GameObject levelGameObject;
+        public int id;
         public string title { get; set; }
-        public double timeGold { get; set; }
-        public double timeSilver { get; set; }
-        public double timeBronze { get; set; }
+        private double timeGold { get; set; }
+        private double timeSilver { get; set; }
+        private double timeBronze { get; set; }
         public DateTime created { get; set; }
         public DateTime updated { get; set; }
         public List<LevelObject> levelObjects { get; set; }
+
+        public void Start()
+        {
+            timeSilver = 1;
+            id = 5;
+        }
 
         public void AddObject(LevelObject obj)
         {
             levelObjects.Add(obj);
         }
 
-        public void SetName(String newName)
+        public void SetName(String newTitle)
         {
-            name = newName;
+            title = newTitle;
         }
 
         public string GetName()
         {
-            return name;
+            return title;
         }
 
         public void SetGoldTime(double newTime)
