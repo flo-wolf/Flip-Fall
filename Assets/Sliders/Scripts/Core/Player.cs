@@ -69,6 +69,11 @@ namespace Sliders
             }
         }
 
+        private void SetLeftMovement(bool lMove)
+        {
+            //Invoke(onMovementDirectionChange, lMove);
+        }
+
         private void OnTriggerEnter2D(Collider2D collider)
         {
             if (1 << collider.gameObject.layer == killMask.value && IsAlive())
