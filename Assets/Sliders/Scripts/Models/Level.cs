@@ -21,7 +21,7 @@ namespace Sliders.Models
         public void Start()
         {
             timeSilver = 1;
-            id = LevelManager.loadedLevels.Count;
+            id = 5;
         }
 
         public void AddObject(LevelObject obj)

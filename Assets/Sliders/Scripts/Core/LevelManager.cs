@@ -28,9 +28,14 @@ namespace Sliders
             loadedLevels = LevelLoader.ReloadAll();
         }
 
+        public static int GetActiveId()
+        {
+            return activeLevel.id;
+        }
+
         public static void PlaceActiveLevel()
         {
-            if (activeLevel != null && loadedLevels.Count > 0)
+            if (activeLevel.id == 5)
             {
                 ProgressManager.SetLastPlayedLevel(activeLevel.id);
                 LevelPlacer.Place(activeLevel);

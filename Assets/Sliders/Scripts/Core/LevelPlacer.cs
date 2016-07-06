@@ -7,16 +7,13 @@ using UnityEngine;
 
 public class LevelPlacer : MonoBehaviour
 {
-    private static Transform t;
-
     public static Level Place(Level level)
     {
         Debug.Log("Try to Place Level: " + level.id);
-        Level l = LevelManager.loadedLevels.Find(x => x == level);
-        t = (Transform)(Instantiate(l.gameObject, new Vector3(-8.0f, -2.0f, 7.8f), Quaternion.identity));
-        LevelManager.loadedLevels.Add(l);
+        Level t = (Level)Instantiate(level, new Vector3(-8.0f, -2.0f, 7.8f), Quaternion.identity);
+        LevelManager.loadedLevels.Add(t);
         Debug.Log("Level Added to loadedLevels: " + LevelManager.loadedLevels.Any(x => x == level));
-        return l;
+        return level;
     }
 
     public static void Remove(Level level)
