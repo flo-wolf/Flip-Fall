@@ -24,6 +24,7 @@ namespace Sliders.UI
         public void Hide()
         {
             gameObject.SetActive(false);
+            ProgressManager.SaveProgressData();
         }
 
         //works, but its unclean.
