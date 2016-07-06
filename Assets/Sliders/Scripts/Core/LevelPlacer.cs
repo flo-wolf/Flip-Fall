@@ -11,9 +11,7 @@ public class LevelPlacer : MonoBehaviour
     {
         Debug.Log("Try to Place Level: " + level.id);
         Level t = (Level)Instantiate(level, new Vector3(-8.0f, -2.0f, 7.8f), Quaternion.identity);
-        LevelManager.loadedLevels.Add(t);
-        Debug.Log("Level Added to loadedLevels: " + LevelManager.loadedLevels.Any(x => x == level));
-        return level;
+        return t;
     }
 
     public static void Remove(Level level)

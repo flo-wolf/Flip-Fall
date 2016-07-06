@@ -26,6 +26,14 @@ namespace Sliders
         {
             activeLevel = emptyLevelPrefab;
             loadedLevels = LevelLoader.ReloadAll();
+            Debug.Log(loadedLevels);
+            if (loadedLevels != null)
+            {
+                if (loadedLevels.Find(x => x == activeLevel) != null)
+                {
+                    loadedLevels.Add(activeLevel);
+                }
+            }
         }
 
         public static int GetActiveId()
@@ -40,7 +48,6 @@ namespace Sliders
                 ProgressManager.SetLastPlayedLevel(activeLevel.id);
                 LevelPlacer.Place(activeLevel);
             }
-            loadedLevels.Insert(activeLevel.id, activeLevel);
         }
 
         // Use this for initialization
