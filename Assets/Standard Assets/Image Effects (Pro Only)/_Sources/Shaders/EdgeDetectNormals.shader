@@ -73,18 +73,18 @@ Shader "Hidden/EdgeDetect" {
 		// difference in normals
 		// do not bother decoding normals - there's no need here
 		half2 diff = abs(centerNormal - theSample.xy) * _Sensitivity.y;
-		half isSameNormal = (diff.x + diff.y) * _Sensitivity.y < 0.1;
+		int isSameNormal = (diff.x + diff.y) * _Sensitivity.y < 0.1;
 		// difference in depth
 		float sampleDepth = DecodeFloatRG (theSample.zw);
 		float zdiff = abs(centerDepth-sampleDepth);
 		// scale the required threshold by the distance
-		half isSameDepth = zdiff * _Sensitivity.x < 0.09 * centerDepth;
+		int isSameDepth = zdiff * _Sensitivity.x < 0.09 * centerDepth;
 	
 		// return:
 		// 1 - if normals and depth are similar enough
 		// 0 - otherwise
 		
-		return isSameNormal * isSameDepth;
+		return isSameNormal * isSameDepth ? 1.0 : 0.0;
 	}	
 		
 	v2f vertRobert( appdata_img v ) 
@@ -277,7 +277,6 @@ Shader "Hidden/EdgeDetect" {
 Subshader {
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
       #pragma vertex vertThin
@@ -286,7 +285,6 @@ Subshader {
   }
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
       #pragma vertex vertRobert
@@ -295,7 +293,6 @@ Subshader {
   }
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }   
 
       CGPROGRAM
 	  #pragma target 3.0   
@@ -305,7 +302,6 @@ Subshader {
   }
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }   
 
       CGPROGRAM
 	  #pragma target 3.0   
@@ -315,7 +311,6 @@ Subshader {
   }
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }   
 
       CGPROGRAM
 	  #pragma target 3.0   

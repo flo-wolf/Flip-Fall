@@ -183,13 +183,11 @@ Subshader {
 	// pass 0
 	Pass {
 		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }      
 
 		CGPROGRAM
 		#pragma target 5.0
 		#pragma vertex vert
 		#pragma fragment TileMax
-		#pragma fragmentoption ARB_precision_hint_fastest
 
 		ENDCG
 	}
@@ -197,13 +195,11 @@ Subshader {
 	// pass 1
 	Pass {
 		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }      
 
 		CGPROGRAM
 		#pragma target 5.0
 		#pragma vertex vert
 		#pragma fragment NeighbourMax
-		#pragma fragmentoption ARB_precision_hint_fastest
 
 		ENDCG
 	}
@@ -211,13 +207,11 @@ Subshader {
 	// pass 2
 	Pass {
 		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }      
 
 		CGPROGRAM
 		#pragma target 5.0
 		#pragma vertex vert 
 		#pragma fragment ReconstructFilterBlur
-		#pragma fragmentoption ARB_precision_hint_fastest
 
 		ENDCG
 	}

@@ -24,16 +24,19 @@ namespace Sliders
 
         private void Start()
         {
+            int lastID = ProgressManager.progress.lastPlayedLevelID;
+
             activeLevel = emptyLevelPrefab;
             loadedLevels = LevelLoader.ReloadAll();
             Debug.Log(loadedLevels);
-            if (loadedLevels != null)
+            loadedLevels.Add(activeLevel);
+
+            if (loadedLevels == null)
             {
-                if (loadedLevels.Find(x => x == activeLevel) != null)
-                {
-                    loadedLevels.Add(activeLevel);
-                }
+                loadedLevels.Add(activeLevel);
             }
+            else if (loadedLevels.Any(x => x.id == lastID))
+                activeLevel = loadedLevels.Find(x => x.id == ProgressManager.progress.lastPlayedLevelID);
         }
 
         public static int GetActiveId()
@@ -67,6 +70,7 @@ namespace Sliders
         public static void SetActiveLevel(int nextlevelId)
         {
             activeLevel = LevelManager.loadedLevels.Find(x => x.id == nextlevelId);
+            ProgressManager.progress.lastPlayedLevelID = activeLevel.id;
             onLevelChange.Invoke(activeLevel);
         }
 

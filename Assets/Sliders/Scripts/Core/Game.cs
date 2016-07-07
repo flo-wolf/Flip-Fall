@@ -23,9 +23,10 @@ namespace Sliders
 
         private bool _firsttime;
 
-        private void Start()
+        private void Awake()
         {
             ProgressManager.ClearProgress();
+            ProgressManager.LoadProgressData();
             SetGameState(GameState.ready);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
             LevelManager.PlaceActiveLevel();

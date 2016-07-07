@@ -10,17 +10,28 @@ CGINCLUDE
 	uniform sampler2D _MainTex;
 	uniform sampler2D_float _CameraDepthTexture;
 	
-	uniform float _GlobalDensity;
-	uniform float4 _FogColor;
-	uniform float4 _StartDistance;
-	uniform float4 _Y;
+	// x = fog height
+	// y = FdotC (CameraY-FogHeight)
+	// z = k (FdotC > 0.0)
+	// w = a/2
+	uniform float4 _HeightParams;
+	
+	// x = start distance
+	uniform float4 _DistanceParams;
+	
+	int4 _SceneFogMode; // x = fog mode, y = use radial flag
+	float4 _SceneFogParams;
+	#ifndef UNITY_APPLY_FOG
+	half4 unity_FogColor;
+	half4 unity_FogDensity;
+	#endif	
+
 	uniform float4 _MainTex_TexelSize;
 	
 	// for fast world space reconstruction
-	
 	uniform float4x4 _FrustumCornersWS;
 	uniform float4 _CameraWS;
-	 
+
 	struct v2f {
 		float4 pos : SV_POSITION;
 		float2 uv : TEXCOORD0;
@@ -28,7 +39,7 @@ CGINCLUDE
 		float4 interpolatedRay : TEXCOORD2;
 	};
 	
-	v2f vert( appdata_img v )
+	v2f vert (appdata_img v)
 	{
 		v2f o;
 		half index = v.vertex.z;
@@ -48,103 +59,124 @@ CGINCLUDE
 		return o;
 	}
 	
-	float ComputeFogForYAndDistance (in float3 camDir, in float3 wsPos) 
+	// Applies one of standard fog formulas, given fog coordinate (i.e. distance)
+	half ComputeFogFactor (float coord)
 	{
-		float fogInt = saturate(length(camDir) * _StartDistance.x-1.0) * _StartDistance.y;	
-		float fogVert = max(0.0, (wsPos.y-_Y.x) * _Y.y);
-		fogVert *= fogVert; 
-		return  (1-exp(-_GlobalDensity*fogInt)) * exp (-fogVert);
+		float fogFac = 0.0;
+		if (_SceneFogMode.x == 1) // linear
+		{
+			// factor = (end-z)/(end-start) = z * (-1/(end-start)) + (end/(end-start))
+			fogFac = coord * _SceneFogParams.z + _SceneFogParams.w;
+		}
+		if (_SceneFogMode.x == 2) // exp
+		{
+			// factor = exp(-density*z)
+			fogFac = _SceneFogParams.y * coord; fogFac = exp2(-fogFac);
+		}
+		if (_SceneFogMode.x == 3) // exp2
+		{
+			// factor = exp(-(density*z)^2)
+			fogFac = _SceneFogParams.x * coord; fogFac = exp2(-fogFac*fogFac);
+		}
+		return saturate(fogFac);
 	}
-	
-	half4 fragAbsoluteYAndDistance (v2f i) : SV_Target
+
+	// Distance-based fog
+	float ComputeDistance (float3 camDir, float zdepth)
 	{
-		float dpth = Linear01Depth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture,i.uv_depth));
+		float dist; 
+		if (_SceneFogMode.y == 1)
+			dist = length(camDir);
+		else
+			dist = zdepth * _ProjectionParams.z;
+		// Built-in fog starts at near plane, so match that by
+		// subtracting the near value. Not a perfect approximation
+		// if near plane is very large, but good enough.
+		dist -= _ProjectionParams.y;
+		return dist;
+	}
+
+	// Linear half-space fog, from https://www.terathon.com/lengyel/Lengyel-UnifiedFog.pdf
+	float ComputeHalfSpace (float3 wsDir)
+	{
+		float3 wpos = _CameraWS + wsDir;
+		float FH = _HeightParams.x;
+		float3 C = _CameraWS;
+		float3 V = wsDir;
+		float3 P = wpos;
+		float3 aV = _HeightParams.w * V;
+		float FdotC = _HeightParams.y;
+		float k = _HeightParams.z;
+		float FdotP = P.y-FH;
+		float FdotV = wsDir.y;
+		float c1 = k * (FdotP + FdotC);
+		float c2 = (1-2*k) * FdotP;
+		float g = min(c2, 0.0);
+		g = -length(aV) * (c1 - g * g / abs(FdotV+1.0e-5f));
+		return g;
+	}
+
+	half4 ComputeFog (v2f i, bool distance, bool height) : SV_Target
+	{
+		half4 sceneColor = tex2D(_MainTex, i.uv);
+		
+		// Reconstruct world space position & direction
+		// towards this screen pixel.
+		float rawDepth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture,i.uv_depth);
+		float dpth = Linear01Depth(rawDepth);
 		float4 wsDir = dpth * i.interpolatedRay;
 		float4 wsPos = _CameraWS + wsDir;
-		return lerp(tex2D(_MainTex, i.uv), _FogColor, ComputeFogForYAndDistance(wsDir.xyz,wsPos.xyz));
-	}
 
-	half4 fragRelativeYAndDistance (v2f i) : SV_Target
-	{
-		float dpth = Linear01Depth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture,i.uv_depth));
-		float4 wsDir = dpth * i.interpolatedRay;
-		return lerp(tex2D(_MainTex, i.uv), _FogColor, ComputeFogForYAndDistance(wsDir.xyz, wsDir.xyz));
-	}
+		// Compute fog distance
+		float g = _DistanceParams.x;
+		if (distance)
+			g += ComputeDistance (wsDir, dpth);
+		if (height)
+			g += ComputeHalfSpace (wsDir);
 
-	half4 fragAbsoluteY (v2f i) : SV_Target
-	{
-		float dpth = Linear01Depth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture,i.uv_depth));
-		float4 wsPos = (_CameraWS + dpth * i.interpolatedRay);
-		float fogVert = max(0.0, (wsPos.y-_Y.x) * _Y.y);
-		fogVert *= fogVert; 
-		fogVert = (exp (-fogVert));
-		return lerp(tex2D( _MainTex, i.uv ), _FogColor, fogVert);				
-	}
-
-	half4 fragDistance (v2f i) : SV_Target
-	{
-		float dpth = Linear01Depth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture,i.uv_depth));		
-		float4 camDir = ( /*_CameraWS  + */ dpth * i.interpolatedRay);
-		float fogInt = saturate(length( camDir ) * _StartDistance.x - 1.0) * _StartDistance.y;	
-		return lerp(_FogColor, tex2D(_MainTex, i.uv), exp(-_GlobalDensity*fogInt));				
+		// Compute fog amount
+		half fogFac = ComputeFogFactor (max(0.0,g));
+		// Do not fog skybox
+		if (rawDepth == _DistanceParams.y)
+			fogFac = 1.0;
+		//return fogFac; // for debugging
+		
+		// Lerp between fog color & original scene color
+		// by fog amount
+		return lerp (unity_FogColor, sceneColor, fogFac);
 	}
 
 ENDCG
 
-SubShader {
-	Pass {
-		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }
+SubShader
+{
+	ZTest Always Cull Off ZWrite Off Fog { Mode Off }
 
+	// 0: distance + height
+	Pass
+	{
 		CGPROGRAM
-
 		#pragma vertex vert
-		#pragma fragment fragAbsoluteYAndDistance
-		#pragma fragmentoption ARB_precision_hint_fastest 
-		#pragma exclude_renderers flash
-		
+		#pragma fragment frag
+		half4 frag (v2f i) : SV_Target { return ComputeFog (i, true, true); }
 		ENDCG
 	}
-
-	Pass {
-		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }
-
+	// 1: distance
+	Pass
+	{
 		CGPROGRAM
-
 		#pragma vertex vert
-		#pragma fragment fragAbsoluteY
-		#pragma fragmentoption ARB_precision_hint_fastest 
-		#pragma exclude_renderers flash
-		
+		#pragma fragment frag
+		half4 frag (v2f i) : SV_Target { return ComputeFog (i, true, false); }
 		ENDCG
 	}
-
-	Pass {
-		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }
-
+	// 2: height
+	Pass
+	{
 		CGPROGRAM
-
 		#pragma vertex vert
-		#pragma fragment fragDistance
-		#pragma fragmentoption ARB_precision_hint_fastest 
-		#pragma exclude_renderers flash
-		
-		ENDCG
-	}
-
-	Pass {
-		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }
-
-		CGPROGRAM
-
-		#pragma vertex vert
-		#pragma fragment fragRelativeYAndDistance
-		#pragma fragmentoption ARB_precision_hint_fastest 
-		#pragma exclude_renderers flash
-		
+		#pragma fragment frag
+		half4 frag (v2f i) : SV_Target { return ComputeFog (i, false, true); }
 		ENDCG
 	}
 }

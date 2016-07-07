@@ -303,47 +303,37 @@ ENDCG
 SubShader {
 	Pass {
 		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }
 	
 		CGPROGRAM
 	
 		#pragma vertex vert
 		#pragma fragment fragFirst
-		//#pragma fragmentoption ARB_precision_hint_fastest 
         #pragma exclude_renderers d3d11_9x
-        #pragma glsl
 		
 		ENDCG
 	}
 	
 	Pass {
 		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }
 	
 		CGPROGRAM
 	
 		#pragma vertex vert
 		#pragma fragment fragSecond
-		//#pragma fragmentoption ARB_precision_hint_fastest 
 		#pragma target 3.0
         #pragma exclude_renderers d3d11_9x
-        #pragma glsl
 		
 		ENDCG
 	}
 
 	Pass {
 		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }
 	
 		CGPROGRAM
 	
 		#pragma vertex vert
 		#pragma fragment fragThird
-		//#pragma fragmentoption ARB_precision_hint_fastest 
 		#pragma target 3.0
-        #pragma exclude_renderers d3d11_9x
-        #pragma glsl
 		
 		ENDCG
 	}	

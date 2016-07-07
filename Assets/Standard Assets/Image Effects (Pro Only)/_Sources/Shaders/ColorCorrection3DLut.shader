@@ -50,7 +50,6 @@ Subshader
 	Pass 
 	{
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
       #pragma vertex vert
@@ -62,7 +61,6 @@ Subshader
 	Pass 
 	{
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
       #pragma vertex vert

@@ -7,12 +7,10 @@ Properties {
 SubShader {
 	Pass {
 		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }
 
 CGPROGRAM
 #pragma vertex vert_img
 #pragma fragment frag
-#pragma fragmentoption ARB_precision_hint_fastest
 #include "UnityCG.cginc"
 
 uniform sampler2D _MainTex;
@@ -22,9 +20,9 @@ fixed4 frag (v2f_img i) : SV_Target
 {
 	fixed4 orig = tex2D(_MainTex, i.uv);
 	
-	fixed rr = tex2D(_RampTex, orig.rr).r + 0.00001; // numbers to workaround Cg's bug at D3D code generation :(
-	fixed gg = tex2D(_RampTex, orig.gg).g + 0.00002;
-	fixed bb = tex2D(_RampTex, orig.bb).b + 0.00003;
+	fixed rr = tex2D(_RampTex, orig.rr).r;
+	fixed gg = tex2D(_RampTex, orig.gg).g;
+	fixed bb = tex2D(_RampTex, orig.bb).b;
 	
 	fixed4 color = fixed4(rr, gg, bb, orig.a);
 
