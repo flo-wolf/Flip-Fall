@@ -65,6 +65,7 @@ namespace Sliders.UI
                         text4.text = format;
                     else if (text5.text == empty)
                         text5.text = format;
+                    else return;
                 }
             }
         }

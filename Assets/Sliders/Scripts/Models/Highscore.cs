@@ -12,11 +12,13 @@ namespace Sliders.Models
 
         public ScoreType scoreType { get; set; }
         public double time { get; set; }
+        public int ranking { get; set; }
 
         public Highscore()
         {
             scoreType = ScoreType.normal;
             time = -2f;
+            ranking = 3;
         }
     }
 }
