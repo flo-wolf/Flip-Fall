@@ -26,14 +26,17 @@ namespace Sliders
         private void Awake()
         {
             ProgressManager.ClearProgress();
-            ProgressManager.LoadProgressData();
             SetGameState(GameState.ready);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
-            LevelManager.PlaceActiveLevel();
 
             //load progress -> set firsttime
             //firsttime? -> load tutorial
             //load last played level -> get value from "progress"
+        }
+
+        private void Start()
+        {
+            LevelManager.PlaceActiveLevel();
         }
 
         public static void SetGameState(GameState gs)

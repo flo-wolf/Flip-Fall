@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Sliders.Models
 {
-    [SerializeField]
+    [Serializable]
     public class Highscore
     {
         public enum ScoreType { gold, silver, bronze, normal, unranked }

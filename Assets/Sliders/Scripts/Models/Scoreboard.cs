@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Sliders.Models
 {
-    [SerializeField]
+    [Serializable]
     public class Scoreboard
     {
         public int levelId;
@@ -60,9 +60,7 @@ namespace Sliders.Models
                         AddTimeAt(elements.FindIndex(x => x == s), newTime);
                         //elements.Insert(elements.FindIndex(x => x == s), newElement);
                         //elements.Add(newElement);
-
                         return;
-                        break;
                     }
                 }
             }

@@ -9,6 +9,7 @@ namespace Sliders.UI
     public class ScoreboardManager : MonoBehaviour
     {
         public static Scoreboard scoreboard;
+        public static ScoreboardManager scoreboardManager;
         public Text text1;
         public Text text2;
         public Text text3;
@@ -17,7 +18,9 @@ namespace Sliders.UI
 
         private void Start()
         {
-            scoreboard = new Scoreboard();
+            scoreboardManager = this;
+            ProgressManager.LoadProgressData();
+            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.activeLevel.id);
             UpdateTexts();
         }
 
@@ -32,13 +35,15 @@ namespace Sliders.UI
         {
             scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.activeLevel.id);
             scoreboard.TryPlacingTime(time);
-            Debug.Log(scoreboard.elements[0].time);
             UpdateTexts();
             gameObject.SetActive(true);
         }
 
-        private void UpdateTexts()
+        public void UpdateTexts()
         {
+            Debug.Log("Updating texts!");
+
+            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.activeLevel.id);
             int count = scoreboard.elements.Count;
             if (count > 0)
             {

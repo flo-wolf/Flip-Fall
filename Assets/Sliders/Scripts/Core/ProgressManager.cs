@@ -9,33 +9,44 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Sliders
 {
     public static class ProgressManager
     {
         public const string SavePath = "ProgressSave.dat";
-        public static ProgressData progress;
+
+        [SerializeField]
+        public static ProgressData progress = new ProgressData();
+
+        public static ProgressChangeEvent onProgressChange = new ProgressChangeEvent();
+
+        public class ProgressChangeEvent : UnityEvent<ProgressData> { }
+
         public static bool IsLoaded { get; private set; }
         public static bool AllowOverriteBeforeFirstRead { get; private set; }
 
-        public static ProgressData ProgressdData
+        public static void SetProgress(ProgressData pd)
         {
-            get
-            {
-                return progress;
-            }
+            progress = pd;
+            onProgressChange.Invoke(progress);
         }
 
         public static void LoadProgressData()
         {
+            Debug.Log("LoadProgressData");
+
             if (File.Exists(SavePath))
             {
                 var fs = new FileStream(SavePath, FileMode.Open);
                 try
                 {
                     var bf = new BinaryFormatter();
-                    progress = bf.Deserialize(fs) as ProgressData;
+                    SetProgress(bf.Deserialize(fs) as ProgressData);
+                    if (progress.scoreboards.Count > 0)
+                        Debug.Log(progress.scoreboards[0].elements.Count);
+                    ScoreboardManager.scoreboardManager.UpdateTexts();
                 }
                 catch (SerializationException e)
                 {
@@ -52,22 +63,22 @@ namespace Sliders
 
         public static void SaveProgressData()
         {
-            if (IsLoaded || AllowOverriteBeforeFirstRead || !File.Exists(SavePath))
+            Debug.Log("SaveProgressData");
+            FileStream file;
+            if (!File.Exists(SavePath))
             {
-                FileStream file;
-                if (!File.Exists(SavePath))
-                {
-                    file = File.Create(SavePath);
-                }
-                else
-                {
-                    file = new FileStream(SavePath, FileMode.Open);
-                }
-
-                var bf = new BinaryFormatter();
-                bf.Serialize(file, progress);
-                file.Close();
+                file = File.Create(SavePath);
             }
+            else
+            {
+                file = new FileStream(SavePath, FileMode.Open);
+            }
+
+            var bf = new BinaryFormatter();
+            if (progress.scoreboards.Count > 0)
+                Debug.Log(progress.scoreboards[0].elements.Count);
+            bf.Serialize(file, progress);
+            file.Close();
         }
 
         public static void SaveTime()
@@ -82,7 +93,10 @@ namespace Sliders
                 scoreboard.created = DateTime.UtcNow;
                 scoreboard.updated = DateTime.UtcNow;
                 scoreboard.TryPlacingTime(time);
-                progress.scoreboards.Add(scoreboard);
+
+                ProgressData p = progress;
+                p.scoreboards.Add(scoreboard);
+                SetProgress(p);
             }
             //Scoreboard exists already
             else
