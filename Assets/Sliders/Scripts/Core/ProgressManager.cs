@@ -63,6 +63,10 @@ namespace Sliders
                 }
                 IsLoaded = true;
             }
+            else
+            {
+                SaveProgressData();
+            }
         }
 
         public static void SaveProgressData()

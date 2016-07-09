@@ -17,7 +17,9 @@ namespace Sliders.Models
         public ProgressData()
         {
             coins = -1;
-            lastPlayedLevelID = 5;
+            if (LevelLoader.IsLoaded)
+                lastPlayedLevelID = LevelManager.activeLevel.id;
+            else lastPlayedLevelID = 1;
             scoreboards = new List<Scoreboard>();
         }
 
