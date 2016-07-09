@@ -17,7 +17,7 @@ namespace Sliders.Models
         public ProgressData()
         {
             coins = -1;
-            lastPlayedLevelID = 5;
+            lastPlayedLevelID = -24;
             scoreboards = new List<Scoreboard>();
         }
 

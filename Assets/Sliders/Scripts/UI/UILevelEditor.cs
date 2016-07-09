@@ -32,7 +32,7 @@ namespace Sliders.UI
 
         private void dropdownValueChangedHandler(Dropdown target)
         {
-            LevelManager.SetActiveLevel(target.value);
+            LevelManager.SetLevel(target.value);
         }
 
         public void LoadLevels()

@@ -12,6 +12,10 @@ namespace Sliders.UI
         depending on the current gamestate, called by listeners
         */
 
+        public static UIManager uiManager;
+
+        public UIDeathscreen uiDeathscreen;
+        public UIScoreboard uiScoreboard;
         public UITimer uiTimer;
         public Text levelID;
         public GameObject deathscreen;
@@ -21,6 +25,7 @@ namespace Sliders.UI
 
         private void Start()
         {
+            uiManager = this;
             levelID.text = LevelManager.activeLevel.id.ToString();
             Game.onGameStateChange.AddListener(GameStateChanged);
         }

@@ -14,6 +14,7 @@ namespace Sliders
 {
     public class LevelManager : MonoBehaviour
     {
+        public static LevelManager levelManager;
         public Level emptyLevelPrefab;
         public static Level activeLevel;
         public static List<Level> loadedLevels = new List<Level>();
@@ -22,24 +23,34 @@ namespace Sliders
 
         public class LevelChangeEvent : UnityEvent<Level> { }
 
-        private void Start()
+        private void Awake()
         {
-            int lastID = ProgressManager.progress.lastPlayedLevelID;
-
-            activeLevel = emptyLevelPrefab;
-            loadedLevels = LevelLoader.ReloadAll();
-            Debug.Log(loadedLevels);
-            loadedLevels.Add(activeLevel);
-
-            if (loadedLevels == null)
-            {
-                loadedLevels.Add(activeLevel);
-            }
-            else if (loadedLevels.Any(x => x.id == lastID))
-                activeLevel = loadedLevels.Find(x => x.id == ProgressManager.progress.lastPlayedLevelID);
+            levelManager = this;
         }
 
-        public static int GetActiveId()
+        private void Start()
+        {
+            ReloadAll();
+            LevelPlacer.Place(activeLevel);
+        }
+
+        public void ReloadAll()
+        {
+            int lastID = ProgressManager.progress.lastPlayedLevelID;
+            loadedLevels = LevelLoader.LoadLevels();
+
+            if (loadedLevels.Any(x => x.id == lastID))
+                activeLevel = loadedLevels.Find(x => x.id == lastID);
+            else
+            {
+                activeLevel = emptyLevelPrefab;
+                ProgressManager.SetLastPlayedLevel(activeLevel.id);
+            }
+
+            loadedLevels.Add(activeLevel);
+        }
+
+        public static int GetLevelID()
         {
             return activeLevel.id;
         }
@@ -67,7 +78,7 @@ namespace Sliders
             return model;
         }
 
-        public static void SetActiveLevel(int nextlevelId)
+        public static void SetLevel(int nextlevelId)
         {
             activeLevel = LevelManager.loadedLevels.Find(x => x.id == nextlevelId);
             ProgressManager.progress.lastPlayedLevelID = activeLevel.id;

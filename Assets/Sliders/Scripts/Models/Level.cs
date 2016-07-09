@@ -11,6 +11,8 @@ namespace Sliders.Models
         public GameObject levelGameObject;
         public int id;
         public string title { get; set; }
+        public Vector2 spawn { get; set; }
+        public Vector2 Finish { get; set; }
         private double timeGold { get; set; }
         private double timeSilver { get; set; }
         private double timeBronze { get; set; }

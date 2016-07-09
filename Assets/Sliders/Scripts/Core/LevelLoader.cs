@@ -9,23 +9,14 @@ using UnityEngine;
 
 namespace Sliders
 {
-    public class LevelLoader : MonoBehaviour
+    public static class LevelLoader
     {
-        public static Level defaultLevel;
-        public LevelPlacer levelPlacer;
-
         public const string SavePath = "Levels.dat";
         public static bool IsLoaded { get; private set; }
-        public static bool AllowOverriteBeforeFirstRead { get; private set; }
 
         private static List<Level> levelsLoading;
 
-        private void Start()
-        {
-            ReloadAll();
-        }
-
-        public static List<Level> ReloadAll()
+        public static List<Level> LoadLevels()
         {
             Debug.Log("levelLoader - ReloadALl");
             if (File.Exists(SavePath))
@@ -53,38 +44,19 @@ namespace Sliders
 
         public static void SaveLevels()
         {
-            if (IsLoaded || AllowOverriteBeforeFirstRead || !File.Exists(SavePath))
+            FileStream file;
+            if (!File.Exists(SavePath))
             {
-                FileStream file;
-                if (!File.Exists(SavePath))
-                {
-                    file = File.Create(SavePath);
-                }
-                else
-                {
-                    file = new FileStream(SavePath, FileMode.Open);
-                }
-
-                var bf = new BinaryFormatter();
-                bf.Serialize(file, LevelManager.loadedLevels);
-                file.Close();
-            }
-        }
-
-        public static Level Reload(int id)
-        {
-            //Level already known
-            if (LevelManager.loadedLevels.Any(x => x.id == id))
-            {
-                Level l = LevelManager.loadedLevels.Find(y => y.id == id);
-                Debug.Log("LevelLoader.Load - 1");
-                return levelsLoading.Find(x => x.id == id);
+                file = File.Create(SavePath);
             }
             else
             {
-                Debug.Log("LevelLoader.Load - 2");
-                return LevelPlacer.Place(defaultLevel);
+                file = new FileStream(SavePath, FileMode.Open);
             }
+
+            var bf = new BinaryFormatter();
+            bf.Serialize(file, LevelManager.loadedLevels);
+            file.Close();
         }
     }
 }

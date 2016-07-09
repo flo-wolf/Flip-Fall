@@ -10,7 +10,7 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { editor, playing, deathscreen, settings, ready, finishscreen, levelswitch }
+        public enum GameState { titlescreen, settingsscreen, ready, playing, deathscreen, finishscreen, editor }
 
         public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
@@ -32,7 +32,6 @@ namespace Sliders
 
         private void Start()
         {
-            LevelManager.PlaceActiveLevel();
             UIScoreboard.uiScoreboard.UpdateTexts();
         }
 
