@@ -39,6 +39,11 @@ namespace Sliders
                 }
                 IsLoaded = true;
             }
+            else
+            {
+                SaveLevels();
+                return LoadLevels();
+            }
             return levelsLoading;
         }
 

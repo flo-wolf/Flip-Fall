@@ -31,7 +31,7 @@ namespace Sliders
         private void Start()
         {
             ReloadAll();
-            LevelPlacer.Place(activeLevel);
+            PlaceActiveLevel();
         }
 
         public void ReloadAll()
@@ -57,7 +57,7 @@ namespace Sliders
 
         public static void PlaceActiveLevel()
         {
-            if (activeLevel.id == 5)
+            if (activeLevel.id > 0)
             {
                 ProgressManager.SetLastPlayedLevel(activeLevel.id);
                 LevelPlacer.Place(activeLevel);
