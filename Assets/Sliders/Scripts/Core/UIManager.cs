@@ -12,7 +12,6 @@ namespace Sliders.UI
         depending on the current gamestate, called by listeners
         */
 
-        public ScoreboardManager scoreboardManager;
         public UITimer uiTimer;
         public Text levelID;
         public GameObject deathscreen;
@@ -31,7 +30,7 @@ namespace Sliders.UI
             switch (gameState)
             {
                 case Game.GameState.playing:
-                    scoreboardManager.Hide(); //add fancy fadeouts, save
+                    UIScoreboard.uiScoreboard.Hide(); //add fancy fadeouts, save
                     deathscreen.SetActive(false);
                     play.gameObject.SetActive(false);
                     uiTimer.Run();
@@ -40,7 +39,7 @@ namespace Sliders.UI
                 case Game.GameState.deathscreen:
                     uiTimer.Pause();
                     deathscreen.SetActive(true);
-                    scoreboardManager.ShowAndUpdate(uiTimer.GetTime()); //add fancy fadeouts
+                    UIScoreboard.uiScoreboard.ShowAndUpdate(uiTimer.GetTime()); //add fancy fadeouts
                     CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     //display scoreboard
                     break;

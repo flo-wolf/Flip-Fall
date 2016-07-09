@@ -38,15 +38,11 @@ Shader "Hidden/FXAA III (Console)" {
 	SubShader {
 		Pass {
 			ZTest Always Cull Off ZWrite Off
-			Fog { Mode off }
 		
 		CGPROGRAM
 		#pragma vertex vert
 		#pragma fragment frag
-		#pragma glsl
-		#pragma fragmentoption ARB_precision_hint_fastest
 		#pragma target 3.0
-		#pragma exclude_renderers d3d11_9x
 		
 		#include "UnityCG.cginc"
 

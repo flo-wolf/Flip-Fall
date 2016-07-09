@@ -62,14 +62,9 @@ SubShader {
 		Blend OneMinusDstColor One 
 		ZTest Always Cull Off ZWrite Off
 
-				Fog { Mode off }
-
 		CGPROGRAM
 		
-		#pragma glsl
-		#pragma target 3.0
-		#pragma exclude_renderers d3d11_9x
-		
+		#pragma target 3.0		
 		#pragma vertex vert
 		#pragma fragment frag
 		

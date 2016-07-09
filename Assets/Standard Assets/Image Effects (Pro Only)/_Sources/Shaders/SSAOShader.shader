@@ -5,12 +5,11 @@ Properties {
 	_SSAO ("", 2D) = "" {}
 }
 Subshader {
-	ZTest Always Cull Off ZWrite Off Fog { Mode Off }
+	ZTest Always Cull Off ZWrite Off
 
 CGINCLUDE
 // Common code used by several SSAO passes below
 #include "UnityCG.cginc"
-#pragma exclude_renderers gles
 struct v2f_ao {
 	float4 pos : SV_POSITION;
 	float2 uv : TEXCOORD0;
@@ -66,7 +65,6 @@ CGPROGRAM
 #pragma vertex vert_ao
 #pragma fragment frag
 #pragma target 3.0
-#pragma fragmentoption ARB_precision_hint_fastest
 
 
 half4 frag (v2f_ao i) : SV_Target
@@ -95,7 +93,6 @@ CGPROGRAM
 #pragma vertex vert_ao
 #pragma fragment frag
 #pragma target 3.0
-#pragma fragmentoption ARB_precision_hint_fastest
 
 
 half4 frag (v2f_ao i) : SV_Target
@@ -130,7 +127,6 @@ CGPROGRAM
 #pragma vertex vert_ao
 #pragma fragment frag
 #pragma target 3.0
-#pragma fragmentoption ARB_precision_hint_fastest
 
 
 half4 frag (v2f_ao i) : SV_Target
@@ -176,7 +172,6 @@ CGPROGRAM
 #pragma vertex vert
 #pragma fragment frag
 #pragma target 3.0
-#pragma fragmentoption ARB_precision_hint_fastest
 #include "UnityCG.cginc"
 
 struct v2f {
@@ -248,7 +243,6 @@ ENDCG
 CGPROGRAM
 #pragma vertex vert
 #pragma fragment frag
-#pragma fragmentoption ARB_precision_hint_fastest
 #include "UnityCG.cginc"
 
 struct v2f {

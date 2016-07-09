@@ -6,15 +6,12 @@ Properties {
 SubShader {
 	Pass {
 		ZTest Always Cull Off ZWrite Off
-		Fog { Mode off }
 
 CGPROGRAM
 #pragma vertex vert
 #pragma fragment frag
 #include "UnityCG.cginc"
 #pragma target 3.0
-#pragma glsl
-#pragma exclude_renderers d3d11_9x
 
 // doesn't make sense to have this on consoles, it'll fallback to FXAA2
 #pragma exclude_renderers xbox360 ps3 gles

@@ -72,7 +72,6 @@ Shader "Hidden/PrepareSunShaftsBlur" {
 Subshader {
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
       
@@ -83,7 +82,6 @@ Subshader {
   }
   Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
       

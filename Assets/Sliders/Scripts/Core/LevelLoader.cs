@@ -51,6 +51,26 @@ namespace Sliders
             return levelsLoading;
         }
 
+        public static void SaveLevels()
+        {
+            if (IsLoaded || AllowOverriteBeforeFirstRead || !File.Exists(SavePath))
+            {
+                FileStream file;
+                if (!File.Exists(SavePath))
+                {
+                    file = File.Create(SavePath);
+                }
+                else
+                {
+                    file = new FileStream(SavePath, FileMode.Open);
+                }
+
+                var bf = new BinaryFormatter();
+                bf.Serialize(file, LevelManager.loadedLevels);
+                file.Close();
+            }
+        }
+
         public static Level Reload(int id)
         {
             //Level already known

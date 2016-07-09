@@ -19,6 +19,7 @@ namespace Sliders
         public LayerMask finishMask;
         public LayerMask killMask;
         public GameObject trail;
+        public GameObject trail2;
         public Text text;
 
         public float gravity = 15F;
@@ -69,6 +70,11 @@ namespace Sliders
             }
         }
 
+        private void SetLeftMovement(bool lMove)
+        {
+            //Invoke(onMovementDirectionChange, lMove);
+        }
+
         private void OnTriggerEnter2D(Collider2D collider)
         {
             if (1 << collider.gameObject.layer == killMask.value && IsAlive())
@@ -77,7 +83,7 @@ namespace Sliders
             }
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
-                Game.FinishLevel();
+                Game.SetGameState(Game.GameState.finishscreen);
             }
         }
 
@@ -101,6 +107,8 @@ namespace Sliders
 
             trail.GetComponent<TrailRenderer>().time = 0.5f;
             trail.GetComponent<TrailRenderer>().enabled = true;
+            trail2.GetComponent<TrailRenderer>().time = 1f;
+            trail2.GetComponent<TrailRenderer>().enabled = true;
 
             GetComponent<Rigidbody2D>().gravityScale = gravity;
             GetComponent<Rigidbody2D>().velocity = new Vector3(0f, -0.00001f, 0f);
@@ -116,6 +124,8 @@ namespace Sliders
 
             trail.GetComponent<TrailRenderer>().time = 0.0f;
             trail.GetComponent<TrailRenderer>().enabled = false;
+            trail2.GetComponent<TrailRenderer>().time = 0.0f;
+            trail2.GetComponent<TrailRenderer>().enabled = false;
 
             //to game
             cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);

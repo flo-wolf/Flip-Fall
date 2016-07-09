@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Sliders.Models
 {
-    [SerializeField]
+    [Serializable]
     public class Scoreboard
     {
         public int levelId;
@@ -15,8 +15,6 @@ namespace Sliders.Models
         public List<Highscore> elements;
         public DateTime created { get; set; }
         public DateTime updated { get; set; }
-
-        //scoreboards = LevelManager.level.getScores();
 
         public Scoreboard()
         {
@@ -34,36 +32,41 @@ namespace Sliders.Models
 
         public void AddTime(double t)
         {
-            Highscore se = new Highscore();
-            se.time = t;
-            elements.Add(se);
+            Highscore h = new Highscore();
+            h.time = t;
+            elements.Add(h);
+
+            Debug.Log("First Highscore Add - Time: " + h.time + " - Placed in Scoreboard of Level: " + levelId + " - At position: " + elements.FindIndex(x => x == h));
+        }
+
+        public void AddTimeAt(int location, double t)
+        {
+            Highscore h = new Highscore();
+            h.time = t;
+            elements.Insert(location, h);
+
+            Debug.Log("highscore Insertion - Time: " + h.time + " - Placed in Scoreboard of Level: " + levelId + " - At position: " + elements.FindIndex(x => x == h));
         }
 
         public void TryPlacingTime(double newTime)
         {
-            Highscore newElement = new Highscore();
-
-            //list filled? not wking, else works
             if (elements.Count > 0)
             {
                 foreach (Highscore s in elements)
                 {
                     if (newTime < s.time)
                     {
-                        Debug.Log("lockaaa");
                         //Highscore e = elements.Find(s);
-                        newElement = s;
-                        newElement.time = newTime;
-                        elements.Insert(elements.IndexOf(s), newElement);
-                        break;
+                        AddTimeAt(elements.FindIndex(x => x == s), newTime);
+                        //elements.Insert(elements.FindIndex(x => x == s), newElement);
+                        //elements.Add(newElement);
+                        return;
                     }
                 }
             }
             else
             {
-                newElement.time = newTime;
-                Debug.Log("New Highscore with time: (" + newElement.time + ") added to Scoreboard of Level: (" + levelId + ") at position: (" + elements.IndexOf(newElement) + ")");
-                elements.Add(newElement);
+                AddTime(newTime);
             }
         }
 
@@ -77,22 +80,6 @@ namespace Sliders.Models
                 }
             }
             return false;
-        }
-
-        private void UpdateLevelTime(double t)
-        {
-            //scoreboards = LevelManager.level.getScores();
-        }
-
-        public void Display()
-        {
-        }
-
-        public void UpdateScoreboards()
-        {
-            //foreach (Scoreboard ls in _elements)
-            //{
-            //}
         }
     }
 }

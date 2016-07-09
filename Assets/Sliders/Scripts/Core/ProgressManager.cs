@@ -9,33 +9,48 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Sliders
 {
     public static class ProgressManager
     {
         public const string SavePath = "ProgressSave.dat";
-        public static ProgressData progress;
+
+        [SerializeField]
+        public static ProgressData progress = new ProgressData();
+
+        public static ProgressChangeEvent onProgressChange = new ProgressChangeEvent();
+
+        public class ProgressChangeEvent : UnityEvent<ProgressData> { }
+
         public static bool IsLoaded { get; private set; }
         public static bool AllowOverriteBeforeFirstRead { get; private set; }
 
-        public static ProgressData ProgressdData
+        public static void SetProgress(ProgressData pd)
         {
-            get
-            {
-                return progress;
-            }
+            progress = pd;
+            onProgressChange.Invoke(progress);
+        }
+
+        public static ProgressData GetProgress()
+        {
+            return progress;
         }
 
         public static void LoadProgressData()
         {
+            Debug.Log("LoadProgressData");
+
             if (File.Exists(SavePath))
             {
                 var fs = new FileStream(SavePath, FileMode.Open);
                 try
                 {
                     var bf = new BinaryFormatter();
-                    progress = bf.Deserialize(fs) as ProgressData;
+                    SetProgress(bf.Deserialize(fs) as ProgressData);
+                    if (progress.scoreboards.Count > 0)
+                        Debug.Log(progress.scoreboards[0].elements.Count);
                 }
                 catch (SerializationException e)
                 {
@@ -52,51 +67,64 @@ namespace Sliders
 
         public static void SaveProgressData()
         {
-            if (IsLoaded || AllowOverriteBeforeFirstRead || !File.Exists(SavePath))
+            Debug.Log("SaveProgressData");
+            FileStream file;
+            if (!File.Exists(SavePath))
             {
-                FileStream file;
-                if (!File.Exists(SavePath))
-                {
-                    file = File.Create(SavePath);
-                }
-                else
-                {
-                    file = new FileStream(SavePath, FileMode.Open);
-                }
-
-                var bf = new BinaryFormatter();
-                bf.Serialize(file, progress);
-                file.Close();
+                file = File.Create(SavePath);
             }
+            else
+            {
+                file = new FileStream(SavePath, FileMode.Open);
+            }
+
+            var bf = new BinaryFormatter();
+            if (progress.scoreboards.Count > 0)
+                Debug.Log(progress.scoreboards[0].elements.Count);
+            bf.Serialize(file, progress);
+            file.Close();
         }
 
         public static void SaveTime()
         {
             double time = Timer.pauseTime;
+            ProgressData p = progress;
+            Scoreboard scoreboard = new Scoreboard();
+
             //Scoreboard doesnt exist
             if (!progress.scoreboards.Any(x => x.levelId == LevelManager.activeLevel.id))
             {
                 //create new
-                Scoreboard scoreboard = new Scoreboard();
+
                 scoreboard.levelId = LevelManager.activeLevel.id;
                 scoreboard.created = DateTime.UtcNow;
                 scoreboard.updated = DateTime.UtcNow;
                 scoreboard.TryPlacingTime(time);
-                progress.scoreboards.Add(scoreboard);
             }
             //Scoreboard exists already
             else
             {
-                Scoreboard scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.activeLevel.id);
+                scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.activeLevel.id);
                 scoreboard.TryPlacingTime(time);
                 scoreboard.updated = DateTime.UtcNow;
-                Debug.LogError("PlayerProgression: Could not add level progress, it already exists");
             }
+            p.scoreboards.Add(scoreboard);
+            SetProgress(p);
         }
 
         public static void ClearProgress()
         {
-            progress = new ProgressData();
+            Debug.Log("Clear Progress");
+            SetProgress(new ProgressData());
+        }
+
+        public static void ClearScores()
+        {
+            if (progress.scoreboards.Any(x => x.levelId == progress.lastPlayedLevelID))
+            {
+                var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == progress.lastPlayedLevelID);
+                progress.scoreboards.Remove(model);
+            }
         }
 
         public static void ClearLevelScores(int _id)
@@ -111,6 +139,11 @@ namespace Sliders
         public static bool IsLevelFinished(int _id)
         {
             return progress.scoreboards.Any(x => x.finished);
+        }
+
+        public static void FinishLevel()
+        {
+            SaveTime();
         }
 
         public static double GetBestTime(int _id)

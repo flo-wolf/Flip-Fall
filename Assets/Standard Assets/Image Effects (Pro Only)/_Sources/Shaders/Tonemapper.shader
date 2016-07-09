@@ -35,14 +35,14 @@ Shader "Hidden/Tonemapper" {
 
 	float4 fragLog(v2f i) : SV_Target 
 	{
-		const float DELTA = 0.0001f;
+		const float EPSILON = 1e-4h;
  
 		float fLogLumSum = 0.0f;
  
-		fLogLumSum += log( Luminance(tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * float2(-1,-1)).rgb) + DELTA);		
-		fLogLumSum += log( Luminance(tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * float2(1,1)).rgb) + DELTA);		
-		fLogLumSum += log( Luminance(tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * float2(-1,1)).rgb) + DELTA);		
-		fLogLumSum += log( Luminance(tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * float2(1,-1)).rgb) + DELTA);		
+		fLogLumSum += log( max( EPSILON, Luminance(tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * float2(-1,-1)).rgb)));		
+		fLogLumSum += log( max( EPSILON, Luminance(tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * float2(1,1)).rgb)));		
+		fLogLumSum += log( max( EPSILON, Luminance(tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * float2(-1,1)).rgb)));		
+		fLogLumSum += log( max( EPSILON, Luminance(tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * float2(1,-1)).rgb)));		
 
 		float avg = fLogLumSum / 4.0;
 		return float4(avg, avg, avg, avg);
@@ -240,10 +240,8 @@ Subshader {
  // adaptive reinhhard apply
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragAdaptive
       ENDCG
@@ -252,10 +250,8 @@ Subshader {
   // 1
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragLog
       ENDCG
@@ -263,11 +259,9 @@ Subshader {
   // 2
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
-		Blend SrcAlpha OneMinusSrcAlpha
+	  Blend SrcAlpha OneMinusSrcAlpha
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragExp
       ENDCG
@@ -275,12 +269,10 @@ Subshader {
   // 3 
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }
 
 	  Blend Off   
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragExp
       ENDCG
@@ -289,10 +281,8 @@ Subshader {
   // 4 user controllable tonemap curve
   Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragCurve
       ENDCG
@@ -301,10 +291,8 @@ Subshader {
   // 5 tonemapping in uncharted
   Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragHable
       ENDCG
@@ -313,10 +301,8 @@ Subshader {
   // 6 simple tonemapping based reinhard
   Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragSimpleReinhard
       ENDCG
@@ -325,10 +311,8 @@ Subshader {
   // 7 OptimizedHejiDawson
   Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragOptimizedHejiDawson
       ENDCG
@@ -337,10 +321,8 @@ Subshader {
   // 8 Photographic
   Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragPhotographic
       ENDCG
@@ -349,10 +331,8 @@ Subshader {
   // 9 Downsample with auto white detection
   Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragDownsample
       ENDCG
@@ -361,10 +341,8 @@ Subshader {
  // 10 adaptive reinhhard apply with auto white
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma fragmentoption ARB_precision_hint_fastest 
       #pragma vertex vert
       #pragma fragment fragAdaptiveAutoWhite
       ENDCG
