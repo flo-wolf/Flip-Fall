@@ -18,25 +18,23 @@ namespace Sliders
         public class GameStateChangeEvent : UnityEvent<GameState> { }
 
         public static CameraMovement cm;
-        public ScoreboardManager scoreboardManager;
-        public Player player;
-
         private bool _firsttime;
 
         private void Awake()
         {
             ProgressManager.ClearProgress();
+            ProgressManager.LoadProgressData();
             SetGameState(GameState.ready);
-            Player.onPlayerStateChange.AddListener(PlayerStateChanged);
 
-            //load progress -> set firsttime
             //firsttime? -> load tutorial
             //load last played level -> get value from "progress"
         }
 
         private void Start()
         {
+            ProgressManager.LoadProgressData();
             LevelManager.PlaceActiveLevel();
+            UIScoreboard.uiScoreboard.UpdateTexts();
         }
 
         public static void SetGameState(GameState gs)
@@ -79,36 +77,6 @@ namespace Sliders
             //cam to beginning
             //player to beginning
             //restart timer
-        }
-
-        public void PlayerStateChanged(Player.PlayerState newPlayerState)
-        {
-            /*
-            switch (newPlayerState)
-            {
-                case Player.PlayerState.alive:
-                    SetGameState(GameState.playing);
-                    scoreboard.Hide();
-                    timer.Run();
-                    timer.Reset();
-                    timer.Continue();
-                    break;
-
-                case Player.PlayerState.dead:
-                    timer.Pause();
-
-                    CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
-                    //display scoreboard
-                    break;
-
-                case Player.PlayerState.ready:
-                    break;
-
-                default:
-                    Debug.LogError("Incorrect PlayerState");
-                    break;
-            }
-            */
         }
     }
 }

@@ -33,6 +33,11 @@ namespace Sliders
             onProgressChange.Invoke(progress);
         }
 
+        public static ProgressData GetProgress()
+        {
+            return progress;
+        }
+
         public static void LoadProgressData()
         {
             Debug.Log("LoadProgressData");
@@ -46,7 +51,6 @@ namespace Sliders
                     SetProgress(bf.Deserialize(fs) as ProgressData);
                     if (progress.scoreboards.Count > 0)
                         Debug.Log(progress.scoreboards[0].elements.Count);
-                    ScoreboardManager.scoreboardManager.UpdateTexts();
                 }
                 catch (SerializationException e)
                 {
@@ -84,28 +88,31 @@ namespace Sliders
         public static void SaveTime()
         {
             double time = Timer.pauseTime;
+            ProgressData p = progress;
+            Scoreboard scoreboard = new Scoreboard();
+
             //Scoreboard doesnt exist
             if (!progress.scoreboards.Any(x => x.levelId == LevelManager.activeLevel.id))
             {
                 //create new
-                Scoreboard scoreboard = new Scoreboard();
+
                 scoreboard.levelId = LevelManager.activeLevel.id;
                 scoreboard.created = DateTime.UtcNow;
                 scoreboard.updated = DateTime.UtcNow;
                 scoreboard.TryPlacingTime(time);
 
-                ProgressData p = progress;
                 p.scoreboards.Add(scoreboard);
                 SetProgress(p);
             }
             //Scoreboard exists already
             else
             {
-                Scoreboard scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.activeLevel.id);
+                scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.activeLevel.id);
                 scoreboard.TryPlacingTime(time);
                 scoreboard.updated = DateTime.UtcNow;
-                Debug.LogError("PlayerProgression: Could not add level progress, it already exists");
             }
+            p.scoreboards.Add(scoreboard);
+            SetProgress(p);
         }
 
         public static void ClearProgress()

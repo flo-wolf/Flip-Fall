@@ -6,19 +6,23 @@ using UnityEngine.UI;
 
 namespace Sliders.UI
 {
-    public class ScoreboardManager : MonoBehaviour
+    public class UIScoreboard : MonoBehaviour
     {
+        public static UIScoreboard uiScoreboard;
         public static Scoreboard scoreboard;
-        public static ScoreboardManager scoreboardManager;
         public Text text1;
         public Text text2;
         public Text text3;
         public Text text4;
         public Text text5;
 
+        private void Awake()
+        {
+            uiScoreboard = this;
+        }
+
         private void Start()
         {
-            scoreboardManager = this;
             ProgressManager.LoadProgressData();
             scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.activeLevel.id);
             UpdateTexts();
@@ -42,8 +46,7 @@ namespace Sliders.UI
         public void UpdateTexts()
         {
             Debug.Log("Updating texts!");
-
-            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.activeLevel.id);
+            scoreboard = ProgressManager.GetProgress().GetScoreboard(LevelManager.activeLevel.id);
             int count = scoreboard.elements.Count;
             if (count > 0)
             {

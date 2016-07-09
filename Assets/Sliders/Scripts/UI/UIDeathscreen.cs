@@ -1,15 +1,26 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
-public class UIDeathscreen : MonoBehaviour {
+public class UIDeathscreen : MonoBehaviour
+{
+    public static UIDeathscreen uiDeathscren;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public void Awake()
+    {
+        uiDeathscren = this;
+    }
+
+    private void Start()
+    {
+    }
+
+    public void Appear()
+    {
+        uiDeathscren.gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        uiDeathscren.gameObject.SetActive(true);
+    }
 }
