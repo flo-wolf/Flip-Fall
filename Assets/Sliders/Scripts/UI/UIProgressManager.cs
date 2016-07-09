@@ -18,8 +18,7 @@ namespace Sliders.UI
 
         public void Clear()
         {
-            ProgressManager.ClearProgress();
-            ProgressManager.SaveProgressData();
+            ProgressManager.ClearScores();
         }
 
         public void CreateScoreboard()

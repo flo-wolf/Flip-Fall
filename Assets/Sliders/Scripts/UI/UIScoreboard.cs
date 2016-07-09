@@ -23,7 +23,6 @@ namespace Sliders.UI
 
         private void Start()
         {
-            ProgressManager.LoadProgressData();
             scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.activeLevel.id);
             UpdateTexts();
         }
@@ -48,14 +47,15 @@ namespace Sliders.UI
             Debug.Log("Updating texts!");
             scoreboard = ProgressManager.GetProgress().GetScoreboard(LevelManager.activeLevel.id);
             int count = scoreboard.elements.Count;
+            string empty = "-.-";
+            text1.text = empty;
+            text2.text = empty;
+            text3.text = empty;
+            text4.text = empty;
+            text5.text = empty;
+
             if (count > 0)
             {
-                string empty = "-.-";
-                text1.text = empty;
-                text2.text = empty;
-                text3.text = empty;
-                text4.text = empty;
-                text5.text = empty;
                 foreach (Highscore se in scoreboard.elements)
                 {
                     double t = se.time;

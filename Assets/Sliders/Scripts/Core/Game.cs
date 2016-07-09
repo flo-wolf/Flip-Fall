@@ -32,7 +32,6 @@ namespace Sliders
 
         private void Start()
         {
-            ProgressManager.LoadProgressData();
             LevelManager.PlaceActiveLevel();
             UIScoreboard.uiScoreboard.UpdateTexts();
         }
@@ -41,11 +40,15 @@ namespace Sliders
         {
             gameState = gs;
             onGameStateChange.Invoke(gameState);
-            if (gameState == GameState.deathscreen)
+            switch (gs)
             {
-                //start coroutine (wait 3 secs, blink times, them switch to ready -> playbtn will apear)
+                case GameState.deathscreen: //start coroutine (wait 3 secs, blink times, them switch to ready -> playbtn will apear)
+                    break;
+
+                case GameState.finishscreen:
+                    ProgressManager.FinishLevel();
+                    break;
             }
-            //Debug.Log(gameState);
         }
 
         public void Edit()
@@ -63,13 +66,6 @@ namespace Sliders
         {
             //player.
             //currentlevel = levelloader.load(levelID);
-        }
-
-        public static void FinishLevel()
-        {
-            SetGameState(GameState.finishscreen);
-            ProgressManager.SaveTime();
-            //save progress
         }
 
         public static void RestartLevel()

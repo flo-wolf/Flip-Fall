@@ -100,9 +100,6 @@ namespace Sliders
                 scoreboard.created = DateTime.UtcNow;
                 scoreboard.updated = DateTime.UtcNow;
                 scoreboard.TryPlacingTime(time);
-
-                p.scoreboards.Add(scoreboard);
-                SetProgress(p);
             }
             //Scoreboard exists already
             else
@@ -117,7 +114,17 @@ namespace Sliders
 
         public static void ClearProgress()
         {
-            progress = new ProgressData();
+            Debug.Log("Clear Progress");
+            SetProgress(new ProgressData());
+        }
+
+        public static void ClearScores()
+        {
+            if (progress.scoreboards.Any(x => x.levelId == progress.lastPlayedLevelID))
+            {
+                var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == progress.lastPlayedLevelID);
+                progress.scoreboards.Remove(model);
+            }
         }
 
         public static void ClearLevelScores(int _id)
@@ -132,6 +139,11 @@ namespace Sliders
         public static bool IsLevelFinished(int _id)
         {
             return progress.scoreboards.Any(x => x.finished);
+        }
+
+        public static void FinishLevel()
+        {
+            SaveTime();
         }
 
         public static double GetBestTime(int _id)

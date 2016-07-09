@@ -83,7 +83,7 @@ namespace Sliders
             }
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
-                Game.FinishLevel();
+                Game.SetGameState(Game.GameState.finishscreen);
             }
         }
 
