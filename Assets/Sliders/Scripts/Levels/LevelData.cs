@@ -2,15 +2,20 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Sliders.Models
 {
     [Serializable]
-    public class Level : MonoBehaviour
+    public class LevelData : MonoBehaviour
     {
+        public static LevelUpdateEvent onGameStateChange = new LevelUpdateEvent();
+
+        public class LevelUpdateEvent : UnityEvent<LevelData> { }
+
         public GameObject levelGameObject;
         public int id;
-        public string title { get; set; }
+        public string title;
         public Vector2 spawn { get; set; }
         public Vector2 Finish { get; set; }
         private double timeGold { get; set; }
@@ -23,7 +28,7 @@ namespace Sliders.Models
         public void Start()
         {
             timeSilver = 1;
-            id = 5;
+            id = LevelManager.activeLevel.id;
         }
 
         public void AddObject(LevelObject obj)

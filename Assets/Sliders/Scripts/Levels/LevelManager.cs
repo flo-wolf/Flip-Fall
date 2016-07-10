@@ -15,13 +15,13 @@ namespace Sliders
     public class LevelManager : MonoBehaviour
     {
         public static LevelManager levelManager;
-        public Level emptyLevelPrefab;
-        public static Level activeLevel;
-        public static List<Level> loadedLevels = new List<Level>();
+        public LevelData emptyLevelPrefab;
+        public static LevelData activeLevel;
+        public static List<LevelData> loadedLevels = new List<LevelData>();
 
         public static LevelChangeEvent onLevelChange = new LevelChangeEvent();
 
-        public class LevelChangeEvent : UnityEvent<Level> { }
+        public class LevelChangeEvent : UnityEvent<LevelData> { }
 
         private void Awake()
         {
@@ -72,7 +72,7 @@ namespace Sliders
             //load levels from file, one of them is marked as lastPlayed
         }
 
-        public static Level GetLevelAt(int _id)
+        public static LevelData GetLevelAt(int _id)
         {
             var model = loadedLevels[_id];
             return model;
@@ -83,6 +83,19 @@ namespace Sliders
             activeLevel = LevelManager.loadedLevels.Find(x => x.id == nextlevelId);
             ProgressManager.progress.lastPlayedLevelID = activeLevel.id;
             onLevelChange.Invoke(activeLevel);
+        }
+
+        public static Vector2 GetSpawn()
+        {
+            //Placeholder, get spawnlocation from the current level.
+            Vector2 spawnlocation = new Vector2();
+            return spawnlocation;
+        }
+
+        public static Vector2 GetFinish()
+        {
+            Vector2 finishlocation = new Vector2();
+            return finishlocation;
         }
 
         /*

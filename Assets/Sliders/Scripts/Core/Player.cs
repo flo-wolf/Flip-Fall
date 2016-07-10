@@ -44,11 +44,11 @@ namespace Sliders
             spawnRotaion = transform.rotation;
             //swapnrotation, spawnposition = LevelManager.GetLevelSpawn()
             _playerZ = Constants.playerY;
-            MoveToSpawn();
         }
 
         private void Start()
         {
+            MoveToSpawn();
             Game.onGameStateChange.AddListener(GameStateChanged);
         }
 
@@ -72,7 +72,7 @@ namespace Sliders
 
         private void SetLeftMovement(bool lMove)
         {
-            //Invoke(onMovementDirectionChange, lMove);
+            leftMovement = lMove;
         }
 
         private void OnTriggerEnter2D(Collider2D collider)

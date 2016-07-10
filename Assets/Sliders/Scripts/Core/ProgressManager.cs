@@ -192,7 +192,7 @@ namespace Sliders
 
         public static void TryFinishLevel()
         {
-            Level l = levels.Find(x => x.id == LevelManager.currentLevel);
+            LevelData l = levels.Find(x => x.id == LevelManager.currentLevel);
         }
         */
     }

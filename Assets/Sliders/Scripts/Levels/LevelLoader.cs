@@ -14,9 +14,9 @@ namespace Sliders
         public const string SavePath = "Levels.dat";
         public static bool IsLoaded { get; private set; }
 
-        private static List<Level> levelsLoading;
+        private static List<LevelData> levelsLoading;
 
-        public static List<Level> LoadLevels()
+        public static List<LevelData> LoadLevels()
         {
             Debug.Log("levelLoader - ReloadALl");
             if (File.Exists(SavePath))
@@ -25,7 +25,7 @@ namespace Sliders
                 try
                 {
                     var bf = new BinaryFormatter();
-                    levelsLoading = bf.Deserialize(fs) as List<Level>;
+                    levelsLoading = bf.Deserialize(fs) as List<LevelData>;
                     return levelsLoading;
                 }
                 catch (SerializationException e)

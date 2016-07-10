@@ -15,7 +15,7 @@ namespace Sliders.UI
     {
         public Text levelInfoText;
         public Dropdown dropdown;
-        public Level editorLevel;
+        public LevelData editorLevel;
 
         #region Public Methods
 
@@ -59,7 +59,7 @@ namespace Sliders.UI
         public void UpdateDropdown()
         {
             List<Dropdown.OptionData> optionDataList = new List<Dropdown.OptionData>();
-            foreach (Level _level in LevelManager.loadedLevels)
+            foreach (LevelData _level in LevelManager.loadedLevels)
             {
                 Dropdown.OptionData od = new Dropdown.OptionData();
                 od.text = _level.id.ToString();
