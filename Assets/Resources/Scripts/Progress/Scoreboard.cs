@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Sliders.Levels;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Sliders.Models
+namespace Sliders.Progress
 {
     [Serializable]
     public class Scoreboard

@@ -1,4 +1,5 @@
 ﻿using Sliders;
+using Sliders.Progress;
 using UnityEngine;
 using UnityEngine.UI;
 

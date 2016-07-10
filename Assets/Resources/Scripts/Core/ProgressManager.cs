@@ -1,6 +1,6 @@
 ﻿#define AllowDoubles //Allow double entries in data?
 
-using Sliders.Models;
+using Sliders.Levels;
 using Sliders.UI;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Sliders
+namespace Sliders.Progress
 {
     public static class ProgressManager
     {

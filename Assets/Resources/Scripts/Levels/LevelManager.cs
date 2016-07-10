@@ -1,4 +1,4 @@
-﻿using Sliders.Models;
+﻿using Sliders.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using UnityEngine.Events;
 * Levels are serializable and saved to a file.
 */
 
-namespace Sliders
+namespace Sliders.Levels
 {
     public class LevelManager : MonoBehaviour
     {
@@ -37,6 +37,8 @@ namespace Sliders
         public void ReloadAll()
         {
             int lastID = ProgressManager.progress.lastPlayedLevelID;
+
+            //CHANGE TO NEW PREFABLOADER
             loadedLevels = LevelLoader.LoadLevels();
 
             if (loadedLevels.Any(x => x.id == lastID))

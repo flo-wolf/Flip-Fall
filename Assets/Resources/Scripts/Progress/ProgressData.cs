@@ -1,10 +1,10 @@
-﻿using Sliders.UI;
+﻿using Sliders.Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Sliders.Models
+namespace Sliders.Progress
 {
     [Serializable]
     public class ProgressData

@@ -1,10 +1,10 @@
-﻿using Sliders.Models;
+﻿using Sliders.Progress;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Sliders.Models
+namespace Sliders.Levels
 {
     [Serializable]
     public class LevelData : MonoBehaviour
@@ -28,7 +28,7 @@ namespace Sliders.Models
         public void Start()
         {
             timeSilver = 1;
-            id = LevelManager.activeLevel.id;
+            id = ProgressManager.progress.lastPlayedLevelID;
         }
 
         public void AddObject(LevelObject obj)

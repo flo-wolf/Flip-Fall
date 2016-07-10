@@ -1,4 +1,5 @@
-﻿using Sliders.Models;
+﻿using Sliders.Levels;
+using Sliders.Progress;
 using System;
 using System.Collections;
 using UnityEngine;

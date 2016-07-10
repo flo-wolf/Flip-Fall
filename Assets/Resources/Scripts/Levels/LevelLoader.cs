@@ -1,4 +1,4 @@
-﻿using Sliders.Models;
+﻿using Sliders.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-namespace Sliders
+namespace Sliders.Levels
 {
     public static class LevelLoader
     {
