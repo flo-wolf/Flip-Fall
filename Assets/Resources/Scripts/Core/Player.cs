@@ -10,7 +10,7 @@ namespace Sliders
 {
     public class Player : MonoBehaviour
     {
-        public enum PlayerState { alive, ready, dead };
+        public enum PlayerState { alive, dead, ready, waiting };
 
         public static PlayerState playerState;
 
@@ -45,19 +45,19 @@ namespace Sliders
 
         private void Start()
         {
-            spawn = LevelManager.GetSpawn();
+            spawn = LevelManager.levelManager.activeLevel.spawn;
             transform.position = spawn.position;
             spawnRotaion = transform.rotation;
             facingLeft = spawn.facingLeftOnSpawn;
 
-            Debug.Log("Spawnpos: " + spawn.position + " Rot: " + spawnRotaion);
+            Debug.Log("[Player]: Spawnpos: " + spawn.position + " Rot: " + spawnRotaion);
             MoveToSpawn();
             Game.onGameStateChange.AddListener(GameStateChanged);
         }
 
         private void GameStateChanged(Game.GameState gameState)
         {
-            Debug.Log("GameState changed to: " + gameState);
+            Debug.Log("[Player]: GameState changed to: " + gameState);
             switch (gameState)
             {
                 case Game.GameState.playing:
@@ -66,6 +66,10 @@ namespace Sliders
 
                 case Game.GameState.deathscreen:
                     Fail();
+                    break;
+
+                case Game.GameState.finishscreen:
+                    Finish();
                     break;
 
                 default:
@@ -87,6 +91,7 @@ namespace Sliders
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
                 Game.SetGameState(Game.GameState.finishscreen);
+                SetPlayerState(PlayerState.waiting);
             }
         }
 
@@ -119,6 +124,24 @@ namespace Sliders
         }
 
         private void Fail()
+        {
+            SetPlayerState(PlayerState.dead);
+            charging = false;
+            facingLeft = true;
+            firstChargeDone = false;
+
+            trail.GetComponent<TrailRenderer>().time = 0.0f;
+            trail.GetComponent<TrailRenderer>().enabled = false;
+            trail2.GetComponent<TrailRenderer>().time = 0.0f;
+            trail2.GetComponent<TrailRenderer>().enabled = false;
+
+            //to game
+            cm.moveCamTo(new Vector3(spawn.position.x, spawn.position.y + Constants.cameraY, transform.position.z), respawnTime);
+
+            MoveToSpawn();
+        }
+
+        public void Finish()
         {
             SetPlayerState(PlayerState.dead);
             charging = false;

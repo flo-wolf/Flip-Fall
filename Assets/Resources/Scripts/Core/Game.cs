@@ -33,7 +33,6 @@ namespace Sliders
 
         private void Start()
         {
-            UIScoreboard.uiScoreboard.UpdateTexts();
         }
 
         public static void SetGameState(GameState gs)
@@ -47,6 +46,9 @@ namespace Sliders
 
                 case GameState.finishscreen:
                     ProgressManager.FinishLevel();
+                    break;
+
+                case GameState.playing:
                     break;
             }
         }

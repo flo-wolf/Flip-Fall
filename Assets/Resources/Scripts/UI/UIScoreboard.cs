@@ -30,7 +30,7 @@ namespace Sliders.UI
 
         public void Hide()
         {
-            Debug.Log("Hide Scoreboards");
+            Debug.Log("[UIScoreboard]: Hide()");
             gameObject.SetActive(false);
             ProgressManager.SaveProgressData();
         }
@@ -38,7 +38,7 @@ namespace Sliders.UI
         //works, but its unclean.
         public void ShowAndUpdate(double time)
         {
-            Debug.Log("Display Scoreboards");
+            Debug.Log("[UIScoreboard]: ShowAndUpdate() time: " + time);
             scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.levelManager.GetID());
             scoreboard.TryPlacingTime(time);
             UpdateTexts();
@@ -47,7 +47,7 @@ namespace Sliders.UI
 
         public void UpdateTexts()
         {
-            Debug.Log("Updating texts!");
+            Debug.Log("[UIScoreboard]: UpdateTexts()");
             scoreboard = ProgressManager.GetProgress().GetScoreboard(LevelManager.levelManager.GetID());
             int count = scoreboard.elements.Count;
             string empty = "-.-";

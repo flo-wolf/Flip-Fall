@@ -9,7 +9,7 @@ namespace Sliders.Levels
         public bool facingLeftOnSpawn;
 
         // Use this for initialization
-        private void Awake()
+        private void OnEnable()
         {
             position = transform.position;
         }

@@ -10,7 +10,7 @@ namespace Sliders.Levels
     {
         public static Level Place(Level level)
         {
-            Debug.Log("Try to Place Level: " + level.id);
+            Debug.Log("[LevelPlacer]: Try to place Level: " + level.id);
             Level t = new Level();
             t = (Level)Instantiate(level, new Vector3(-0f, -2.0f, 7.8f), Quaternion.identity);
             t.gameObject.transform.parent = LevelManager.levelManager.gameObject.transform;

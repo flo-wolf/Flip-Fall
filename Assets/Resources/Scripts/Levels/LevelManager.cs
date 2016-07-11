@@ -37,7 +37,7 @@ namespace Sliders.Levels
         public void Reload()
         {
             int lastID = ProgressManager.progress.lastPlayedLevelID;
-            Debug.Log("S1: lastID: " + lastID);
+            Debug.Log("[LevelManager]: Reload() lastID: " + lastID);
             activeLevel = LevelLoader.LoadLevel(lastID);
         }
 
@@ -46,13 +46,13 @@ namespace Sliders.Levels
             return levelManager.activeLevel.id;
         }
 
-        public static void PlaceActiveLevel()
+        public void PlaceActiveLevel()
         {
-            Debug.Log(levelManager.activeLevel);
+            Debug.Log("[LevelManager]: PlaceActiveLevel() activelevel: " + levelManager.activeLevel.id);
             if (levelManager.activeLevel.id >= 0)
             {
                 ProgressManager.SetLastPlayedLevel(levelManager.GetID());
-                LevelPlacer.Place(levelManager.activeLevel);
+                activeLevel = LevelPlacer.Place(levelManager.activeLevel);
             }
         }
 

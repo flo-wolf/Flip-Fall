@@ -40,7 +40,7 @@ namespace Sliders.Progress
 
         public static void LoadProgressData()
         {
-            Debug.Log("LoadProgressData");
+            Debug.Log("[ProgressManager]: LoadProgressData()");
 
             if (File.Exists(SavePath))
             {
@@ -50,11 +50,14 @@ namespace Sliders.Progress
                     var bf = new BinaryFormatter();
                     SetProgress(bf.Deserialize(fs) as ProgressData);
                     if (progress.scoreboards.Count > 0)
-                        Debug.Log(progress.scoreboards[0].elements.Count);
+                    {
+                        Debug.Log("[ProgressManager]: LoadProgressData() element count in first scoreboard: " + progress.scoreboards[0].elements.Count);
+                        Debug.Log("[ProgressManager]: LoadProgressData() id of first scoreboard: " + progress.scoreboards[0].levelId);
+                    }
                 }
                 catch (SerializationException e)
                 {
-                    Debug.LogError("Failed to deserialize. Reason: " + e.Message);
+                    Debug.LogError("[ProgressManager]: Failed to deserialize. Reason: " + e.Message);
                     throw;
                 }
                 finally
@@ -71,7 +74,7 @@ namespace Sliders.Progress
 
         public static void SaveProgressData()
         {
-            Debug.Log("SaveProgressData");
+            Debug.Log("[ProgressManager]: SaveProgressData");
             FileStream file;
             if (!File.Exists(SavePath))
             {
@@ -84,7 +87,7 @@ namespace Sliders.Progress
 
             var bf = new BinaryFormatter();
             if (progress.scoreboards.Count > 0)
-                Debug.Log(progress.scoreboards[0].elements.Count);
+                Debug.Log("[ProgressManager]: SaveProgressData() id of first scoreboard: " + progress.scoreboards[0].levelId);
             bf.Serialize(file, progress);
             file.Close();
         }
@@ -118,7 +121,7 @@ namespace Sliders.Progress
 
         public static void ClearProgress()
         {
-            Debug.Log("Clear Progress");
+            Debug.Log("[ProgressManager]: Clear Progress");
             SetProgress(new ProgressData());
         }
 
@@ -147,6 +150,7 @@ namespace Sliders.Progress
 
         public static void FinishLevel()
         {
+            Debug.Log("[ProgressManager]: FinishLevel()");
             SaveTime();
         }
 
