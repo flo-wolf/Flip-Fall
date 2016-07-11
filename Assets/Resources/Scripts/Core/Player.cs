@@ -47,6 +47,7 @@ namespace Sliders
 
         private void Start()
         {
+            //these just return null, even though the spawn scripts in the inspector show correct values.
             spawnRotaion = LevelManager.GetSpawn().spawnRotation;
             spawnPosition = LevelManager.GetSpawn().spawnLocation;
             Debug.Log("Spawnpos: " + spawnPosition + " Rot: " + spawnRotaion);
