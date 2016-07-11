@@ -7,11 +7,11 @@ using UnityEngine.Events;
 namespace Sliders.Levels
 {
     [Serializable]
-    public class LevelData : MonoBehaviour
+    public class Level : MonoBehaviour
     {
         public static LevelUpdateEvent onGameStateChange = new LevelUpdateEvent();
 
-        public class LevelUpdateEvent : UnityEvent<LevelData> { }
+        public class LevelUpdateEvent : UnityEvent<Level> { }
 
         public GameObject levelGameObject;
         public int id;

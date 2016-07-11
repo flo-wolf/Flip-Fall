@@ -53,14 +53,16 @@ namespace Sliders.Progress
         {
             if (elements.Count > 0)
             {
+                for (int i = 0; i < Constants.scoreboardSize; i++)
+                {
+                    //int
+                    //S if()
+                }
                 foreach (Highscore s in elements)
                 {
                     if (newTime < s.time)
                     {
-                        //Highscore e = elements.Find(s);
                         AddTimeAt(elements.FindIndex(x => x == s), newTime);
-                        //elements.Insert(elements.FindIndex(x => x == s), newElement);
-                        //elements.Add(newElement);
                         return;
                     }
                 }

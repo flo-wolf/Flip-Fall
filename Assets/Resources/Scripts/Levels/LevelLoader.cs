@@ -5,63 +5,39 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEditor;
 using UnityEngine;
 
 namespace Sliders.Levels
 {
     public static class LevelLoader
     {
-        public const string SavePath = "Levels.dat";
         public static bool IsLoaded { get; private set; }
 
-        private static List<LevelData> levelsLoading;
-
-        public static List<LevelData> LoadLevels()
+        public static Level LoadLevel(int id)
         {
-            Debug.Log("levelLoader - ReloadALl");
-            if (File.Exists(SavePath))
+            Level level = new Level();
+            try
             {
-                var fs = new FileStream(SavePath, FileMode.Open);
-                try
-                {
-                    var bf = new BinaryFormatter();
-                    levelsLoading = bf.Deserialize(fs) as List<LevelData>;
-                    return levelsLoading;
-                }
-                catch (SerializationException e)
-                {
-                    Debug.Log("Failed to deserialize. Reason: " + e.Message);
-                    throw;
-                }
-                finally
-                {
-                    fs.Close();
-                }
-                IsLoaded = true;
+                level = (Level)Resources.Load("Prefabs/Levels/" + level.id);
             }
-            else
+            catch (UnityException e)
             {
-                SaveLevels();
-                return LoadLevels();
+                Debug.Log(e);
             }
-            return levelsLoading;
+
+            if (level == null)
+            {
+                Debug.Log("LevelLoader: Levelprefab could not be found.");
+            }
+            return level;
         }
 
-        public static void SaveLevels()
+        public static void SaveLevel(Level level)
         {
-            FileStream file;
-            if (!File.Exists(SavePath))
-            {
-                file = File.Create(SavePath);
-            }
-            else
-            {
-                file = new FileStream(SavePath, FileMode.Open);
-            }
-
-            var bf = new BinaryFormatter();
-            bf.Serialize(file, LevelManager.loadedLevels);
-            file.Close();
+            Object prefab = EditorUtility.CreateEmptyPrefab("Assets/Resources/Prefabs/" + level.id + ".prefab");
+            EditorUtility.ReplacePrefab(LevelManager.levelManager.activeLevel.gameObject, prefab, ReplacePrefabOptions.ReplaceNameBased);
+            //activelevel
         }
     }
 }

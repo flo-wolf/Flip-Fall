@@ -12,7 +12,7 @@ namespace Sliders.UI
     {
         public Text levelInfoText;
         public Dropdown dropdown;
-        public LevelData editorLevel;
+        public Level editorLevel;
 
         #region Public Methods
 
@@ -35,7 +35,7 @@ namespace Sliders.UI
         public void LoadLevels()
         {
             LevelManager.PlaceActiveLevel();
-            UpdateDropdown();
+            //UpdateDropdown();
         }
 
         public void SaveLevels()
@@ -45,18 +45,19 @@ namespace Sliders.UI
 
         public void NewLevel()
         {
-            UpdateDropdown();
+            //UpdateDropdown();
         }
 
         public void RemoveLevel()
         {
-            UpdateDropdown();
+            //UpdateDropdown();
         }
 
+        /*
         public void UpdateDropdown()
         {
             List<Dropdown.OptionData> optionDataList = new List<Dropdown.OptionData>();
-            foreach (LevelData _level in LevelManager.loadedLevels)
+            foreach (Level _level in LevelManager.loadedLevels)
             {
                 Dropdown.OptionData od = new Dropdown.OptionData();
                 od.text = _level.id.ToString();
@@ -70,6 +71,7 @@ namespace Sliders.UI
             }
             dropdown.RefreshShownValue();
         }
+        */
 
         #endregion Public Methods
     }

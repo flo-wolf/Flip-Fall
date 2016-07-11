@@ -1,25 +1,28 @@
-﻿using System.Collections;
+﻿using Sliders.Levels;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 //LevelObjects can either be logic items (triggers, start, end), shapes (custom mesh, boxes, triangles, circles), or enemies(spikes, chainsaws, lasers)
 
-namespace Sliders
+namespace Sliders.Levels
 {
     public class LevelObject : MonoBehaviour
     {
+        public enum LevelObjectType { spawn, finish, killzone }
+
+        public LevelObjectType levelObjectType;
         public Mesh mesh = new Mesh();
         public Vector3[] shapeVertices;
         public int[] shapeTriangles;
         public int numCorners { get; set; }
+        public Spawn spawn;
+        public Finish finish;
 
         private int prevNumCorners;
 
         public void Start()
         {
-            // Add meshrenderer
-            // add
-            //gameObject.
         }
 
         public void UpdateMesh()

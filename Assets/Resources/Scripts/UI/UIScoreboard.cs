@@ -24,7 +24,7 @@ namespace Sliders.UI
 
         private void Start()
         {
-            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.activeLevel.id);
+            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.levelManager.activeLevel.id);
             UpdateTexts();
         }
 
@@ -39,7 +39,7 @@ namespace Sliders.UI
         public void ShowAndUpdate(double time)
         {
             Debug.Log("Display Scoreboards");
-            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.activeLevel.id);
+            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.levelManager.activeLevel.id);
             scoreboard.TryPlacingTime(time);
             UpdateTexts();
             gameObject.SetActive(true);
@@ -48,7 +48,7 @@ namespace Sliders.UI
         public void UpdateTexts()
         {
             Debug.Log("Updating texts!");
-            scoreboard = ProgressManager.GetProgress().GetScoreboard(LevelManager.activeLevel.id);
+            scoreboard = ProgressManager.GetProgress().GetScoreboard(LevelManager.levelManager.activeLevel.id);
             int count = scoreboard.elements.Count;
             string empty = "-.-";
             text1.text = empty;

@@ -96,11 +96,11 @@ namespace Sliders.Progress
             Scoreboard scoreboard = new Scoreboard();
 
             //Scoreboard doesnt exist
-            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.activeLevel.id))
+            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.levelManager.activeLevel.id))
             {
                 //create new
 
-                scoreboard.levelId = LevelManager.activeLevel.id;
+                scoreboard.levelId = LevelManager.levelManager.activeLevel.id;
                 scoreboard.created = DateTime.UtcNow;
                 scoreboard.updated = DateTime.UtcNow;
                 scoreboard.TryPlacingTime(time);
@@ -108,7 +108,7 @@ namespace Sliders.Progress
             //Scoreboard exists already
             else
             {
-                scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.activeLevel.id);
+                scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.levelManager.activeLevel.id);
                 scoreboard.TryPlacingTime(time);
                 scoreboard.updated = DateTime.UtcNow;
             }
@@ -192,7 +192,7 @@ namespace Sliders.Progress
 
         public static void TryFinishLevel()
         {
-            LevelData l = levels.Find(x => x.id == LevelManager.currentLevel);
+            Level l = levels.Find(x => x.id == LevelManager.currentLevel);
         }
         */
     }
