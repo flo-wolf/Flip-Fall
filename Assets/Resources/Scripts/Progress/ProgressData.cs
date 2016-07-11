@@ -18,7 +18,7 @@ namespace Sliders.Progress
         {
             coins = -1;
             if (LevelLoader.IsLoaded)
-                lastPlayedLevelID = LevelManager.levelManager.activeLevel.id;
+                lastPlayedLevelID = LevelManager.levelManager.GetID();
             else lastPlayedLevelID = 1;
             scoreboards = new List<Scoreboard>();
         }

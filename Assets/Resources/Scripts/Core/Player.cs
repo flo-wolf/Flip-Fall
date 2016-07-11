@@ -1,4 +1,5 @@
-﻿using Sliders.UI;
+﻿using Sliders.Levels;
+using Sliders.UI;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace Sliders
         public float respawnTime = 1f;
 
         //get these from current leveldatamodel
-        public Vector3 spawnPosition = new Vector3(0f, 490f, 10);
+        public Vector3 spawnPosition = new Vector3();
 
         public Quaternion spawnRotaion;
 
@@ -41,13 +42,14 @@ namespace Sliders
 
         private void Awake()
         {
-            spawnRotaion = transform.rotation;
-            //swapnrotation, spawnposition = LevelManager.GetLevelSpawn()
             _playerZ = Constants.playerY;
         }
 
         private void Start()
         {
+            spawnRotaion = LevelManager.GetSpawn().spawnRotation;
+            spawnPosition = LevelManager.GetSpawn().spawnLocation;
+            Debug.Log("Spawnpos: " + spawnPosition + " Rot: " + spawnRotaion);
             MoveToSpawn();
             Game.onGameStateChange.AddListener(GameStateChanged);
         }

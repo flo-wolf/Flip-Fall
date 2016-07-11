@@ -20,7 +20,7 @@ namespace Sliders.Levels
 
         public class LevelChangeEvent : UnityEvent<Level> { }
 
-        public Level activeLevel;
+        public Level activeLevel = new Level();
 
         private void Awake()
         {
@@ -39,16 +39,17 @@ namespace Sliders.Levels
             activeLevel = LevelLoader.LoadLevel(lastID);
         }
 
-        public static int activeID()
+        public int GetID()
         {
             return levelManager.activeLevel.id;
         }
 
         public static void PlaceActiveLevel()
         {
+            Debug.Log(levelManager.activeLevel);
             if (levelManager.activeLevel.id >= 0)
             {
-                ProgressManager.SetLastPlayedLevel(levelManager.activeLevel.id);
+                ProgressManager.SetLastPlayedLevel(levelManager.GetID());
                 LevelPlacer.Place(levelManager.activeLevel);
             }
         }
@@ -60,11 +61,11 @@ namespace Sliders.Levels
             onLevelChange.Invoke(levelManager.activeLevel);
         }
 
-        public static Vector2 GetSpawn()
+        public static Spawn GetSpawn()
         {
             //Placeholder, get spawnlocation from the current level.
-            Vector2 spawnlocation = new Vector2();
-            return spawnlocation;
+            Spawn spawn = levelManager.activeLevel.spawn;
+            return spawn;
         }
 
         public static Vector2 GetFinish()

@@ -13,17 +13,15 @@ namespace Sliders.Levels
 
         public class LevelUpdateEvent : UnityEvent<Level> { }
 
-        public GameObject levelGameObject;
         public int id;
         public string title;
-        public Vector2 spawn { get; set; }
-        public Vector2 Finish { get; set; }
         private double timeGold { get; set; }
         private double timeSilver { get; set; }
         private double timeBronze { get; set; }
+        public Spawn spawn;
+        public Finish finish;
         public DateTime created { get; set; }
         public DateTime updated { get; set; }
-        public List<LevelObject> levelObjects { get; set; }
 
         public void Start()
         {
@@ -33,7 +31,6 @@ namespace Sliders.Levels
 
         public void AddObject(LevelObject obj)
         {
-            levelObjects.Add(obj);
         }
 
         public void SetName(String newTitle)
@@ -61,25 +58,12 @@ namespace Sliders.Levels
             timeBronze = newTime;
         }
 
-        public void RemoveLevelObject(int index)
-        {
-            levelObjects.RemoveAt(index);
-        }
-
         public void RemoveLevelObject(LevelObject obj)
         {
-            levelObjects.Remove(obj);
         }
 
         public void AddLevelObject(LevelObject levelObject)
         {
-            levelObjects.Add(levelObject);
-        }
-
-        public LevelObject GetAddLevelObject(LevelObject levelObject)
-        {
-            levelObjects.Add(levelObject);
-            return levelObject;
         }
     }
 }

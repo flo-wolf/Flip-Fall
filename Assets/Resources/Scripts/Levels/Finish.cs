@@ -5,12 +5,12 @@ namespace Sliders.Levels
 {
     public class Finish : MonoBehaviour
     {
-        public static Vector2 spawnLocation;
+        public Vector2 finishLocation;
 
         // Use this for initialization
         private void Start()
         {
-            spawnLocation = (Vector2)this.gameObject.transform.position;
+            finishLocation = (Vector2)this.gameObject.transform.position;
         }
 
         // Update is called once per frame

@@ -19,7 +19,8 @@ namespace Sliders.Levels
             Level level = new Level();
             try
             {
-                level = (Level)Resources.Load("Prefabs/Levels/" + level.id);
+                GameObject go = (GameObject)Resources.Load("Prefabs/Levels/" + id);
+                level = go.GetComponent<Level>();
             }
             catch (UnityException e)
             {

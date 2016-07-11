@@ -27,7 +27,7 @@ namespace Sliders.UI
         private void Start()
         {
             uiManager = this;
-            levelID.text = LevelManager.levelManager.activeLevel.id.ToString();
+            levelID.text = LevelManager.levelManager.GetID().ToString();
             Game.onGameStateChange.AddListener(GameStateChanged);
         }
 
