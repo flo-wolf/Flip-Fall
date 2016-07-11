@@ -31,6 +31,7 @@ namespace Sliders.Levels
             {
                 Debug.Log("LevelLoader: Levelprefab could not be found.");
             }
+            IsLoaded = true;
             return level;
         }
 

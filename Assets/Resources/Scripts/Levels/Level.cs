@@ -15,30 +15,36 @@ namespace Sliders.Levels
 
         public int id;
         public string title;
-        private double timeGold { get; set; }
-        private double timeSilver { get; set; }
-        private double timeBronze { get; set; }
+        public double timeGold;
+        public double timeSilver;
+        public double timeBronze;
         public Spawn spawn;
         public Finish finish;
+        public List<Shape> shapes = new List<Shape>();
         public DateTime created { get; set; }
         public DateTime updated { get; set; }
 
         public void Start()
         {
-            timeSilver = 1;
-            id = ProgressManager.progress.lastPlayedLevelID;
+            timeGold = 10D;
+            timeSilver = 11D;
+            timeBronze = 12D;
         }
 
-        public void AddObject(LevelObject obj)
+        public void AddObject(GameObject go)
         {
         }
 
-        public void SetName(String newTitle)
+        public void RemoveObject(GameObject go)
+        {
+        }
+
+        public void SetTitle(String newTitle)
         {
             title = newTitle;
         }
 
-        public string GetName()
+        public string GetTitle()
         {
             return title;
         }
@@ -56,14 +62,6 @@ namespace Sliders.Levels
         public void SetBronzeTime(double newTime)
         {
             timeBronze = newTime;
-        }
-
-        public void RemoveLevelObject(LevelObject obj)
-        {
-        }
-
-        public void AddLevelObject(LevelObject levelObject)
-        {
         }
     }
 }

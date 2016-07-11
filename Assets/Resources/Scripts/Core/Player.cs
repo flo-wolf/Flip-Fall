@@ -28,13 +28,11 @@ namespace Sliders
         public float chargeForcePerTick;
         public float respawnTime = 1f;
 
-        //get these from current leveldatamodel
-        public Vector3 spawnPosition = new Vector3();
-
-        public Quaternion spawnRotaion;
+        private Spawn spawn;
+        private Quaternion spawnRotaion;
 
         public static float _playerZ;
-        public static bool leftMovement = true;
+        public static bool facingLeft = true;
 
         private bool charging = false;
         private Vector2 chargeVelocity;
@@ -47,10 +45,12 @@ namespace Sliders
 
         private void Start()
         {
-            //these just return null, even though the spawn scripts in the inspector show correct values.
-            spawnRotaion = LevelManager.GetSpawn().spawnRotation;
-            spawnPosition = LevelManager.GetSpawn().spawnLocation;
-            Debug.Log("Spawnpos: " + spawnPosition + " Rot: " + spawnRotaion);
+            spawn = LevelManager.GetSpawn();
+            transform.position = spawn.position;
+            spawnRotaion = transform.rotation;
+            facingLeft = spawn.facingLeftOnSpawn;
+
+            Debug.Log("Spawnpos: " + spawn.position + " Rot: " + spawnRotaion);
             MoveToSpawn();
             Game.onGameStateChange.AddListener(GameStateChanged);
         }
@@ -73,9 +73,9 @@ namespace Sliders
             }
         }
 
-        private void SetLeftMovement(bool lMove)
+        private void SwitchFacingDirection()
         {
-            leftMovement = lMove;
+            facingLeft = !facingLeft;
         }
 
         private void OnTriggerEnter2D(Collider2D collider)
@@ -94,7 +94,7 @@ namespace Sliders
         {
             //Vector3 spawnPos = LevelManager.GetSpawn();
             transform.rotation = spawnRotaion;
-            transform.position = spawnPosition;
+            transform.position = spawn.position;
 
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;
@@ -122,7 +122,7 @@ namespace Sliders
         {
             SetPlayerState(PlayerState.dead);
             charging = false;
-            leftMovement = true;
+            facingLeft = true;
             firstChargeDone = false;
 
             trail.GetComponent<TrailRenderer>().time = 0.0f;
@@ -131,7 +131,7 @@ namespace Sliders
             trail2.GetComponent<TrailRenderer>().enabled = false;
 
             //to game
-            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
+            cm.moveCamTo(new Vector3(spawn.position.x, spawn.position.y + Constants.cameraY, transform.position.z), respawnTime);
 
             MoveToSpawn();
         }
@@ -140,11 +140,7 @@ namespace Sliders
         private void Reflect()
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * (-1), GetComponent<Rigidbody2D>().velocity.y);
-
-            if (leftMovement)
-                leftMovement = false;
-            else
-                leftMovement = true;
+            SwitchFacingDirection();
         }
 
         //Gravitationsabbruch, FIgur wird auf der Ebene gehalten und beschleunigt
@@ -174,7 +170,7 @@ namespace Sliders
 
                 if (charging && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) < maxChargeVelocity)
                 {
-                    if (leftMovement)
+                    if (facingLeft)
                     {
                         velocity.x = velocity.x - chargeForcePerTick;
                     }

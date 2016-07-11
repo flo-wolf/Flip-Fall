@@ -21,6 +21,7 @@ namespace Sliders.Levels
         public class LevelChangeEvent : UnityEvent<Level> { }
 
         public Level activeLevel = new Level();
+        public Level defaultlevel = new Level();
 
         private void Awake()
         {
@@ -36,6 +37,7 @@ namespace Sliders.Levels
         public void Reload()
         {
             int lastID = ProgressManager.progress.lastPlayedLevelID;
+            Debug.Log("S1: lastID: " + lastID);
             activeLevel = LevelLoader.LoadLevel(lastID);
         }
 

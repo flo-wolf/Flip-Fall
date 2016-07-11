@@ -19,12 +19,13 @@ namespace Sliders.Progress
             coins = -1;
             if (LevelLoader.IsLoaded)
                 lastPlayedLevelID = LevelManager.levelManager.GetID();
-            else lastPlayedLevelID = 1;
+            else lastPlayedLevelID = LevelManager.levelManager.defaultlevel.id;
             scoreboards = new List<Scoreboard>();
         }
 
         public Scoreboard NewScoreboard(int id)
         {
+            Debug.Log("[ProgresssData]: Creating new Scoreboard: " + id);
             Scoreboard sc = new Scoreboard();
             sc.levelId = id;
             scoreboards.Add(sc);
@@ -33,10 +34,8 @@ namespace Sliders.Progress
 
         public Scoreboard GetScoreboard(int id)
         {
-            Debug.Log("1");
             if (scoreboards.Count < 1 || scoreboards.Any(x => x.levelId != id))
             {
-                Debug.Log("2");
                 return NewScoreboard(id);
             }
             else
@@ -50,7 +49,7 @@ namespace Sliders.Progress
                     }
                 }
             }
-            Debug.Log("null");
+            Debug.Log("[ProgressData]: GetScoreboard() returns null - there is no scoreboard yet");
             return null;
         }
     }

@@ -5,15 +5,13 @@ namespace Sliders.Levels
 {
     public class Spawn : MonoBehaviour
     {
-        public Vector3 spawnLocation;
-        public Quaternion spawnRotation;
+        public Vector3 position;
         public bool facingLeftOnSpawn;
 
         // Use this for initialization
         private void Awake()
         {
-            spawnLocation = transform.position;
-            spawnRotation = transform.rotation;
+            position = transform.position;
         }
     }
 }
