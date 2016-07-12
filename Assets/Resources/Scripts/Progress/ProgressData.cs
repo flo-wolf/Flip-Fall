@@ -25,10 +25,13 @@ namespace Sliders.Progress
 
         public Scoreboard NewScoreboard(int id)
         {
-            Debug.Log("[ProgresssData]: Creating new Scoreboard: " + id);
             Scoreboard sc = new Scoreboard();
-            sc.levelId = id;
-            scoreboards.Add(sc);
+            if (!scoreboards.Any(x => x.levelId == id))
+            {
+                sc.levelId = id;
+                scoreboards.Add(sc);
+                Debug.Log("[ProgresssData]: Creating new Scoreboard: " + id);
+            }
             return sc;
         }
 

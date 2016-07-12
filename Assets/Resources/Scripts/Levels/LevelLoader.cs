@@ -30,6 +30,7 @@ namespace Sliders.Levels
             if (level == null)
             {
                 Debug.Log("LevelLoader: Levelprefab could not be found.");
+                return level;
             }
             IsLoaded = true;
             return level;
@@ -38,7 +39,7 @@ namespace Sliders.Levels
         public static void SaveLevel(Level level)
         {
             Object prefab = EditorUtility.CreateEmptyPrefab("Assets/Resources/Prefabs/" + level.id + ".prefab");
-            EditorUtility.ReplacePrefab(LevelManager.levelManager.activeLevel.gameObject, prefab, ReplacePrefabOptions.ReplaceNameBased);
+            EditorUtility.ReplacePrefab(LevelManager.levelManager.GetLevel().gameObject, prefab, ReplacePrefabOptions.ReplaceNameBased);
             //activelevel
         }
     }

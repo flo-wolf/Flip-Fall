@@ -40,12 +40,13 @@ namespace Sliders
 
         private void Awake()
         {
-            _playerZ = Constants.playerY;
+            _playerZ = Constants.playerZ;
         }
 
         private void Start()
         {
-            spawn = LevelManager.levelManager.activeLevel.spawn;
+            spawn = LevelManager.levelManager.GetLevel().spawn;
+            spawn.position.z = _playerZ;
             transform.position = spawn.position;
             spawnRotaion = transform.rotation;
             facingLeft = spawn.facingLeftOnSpawn;

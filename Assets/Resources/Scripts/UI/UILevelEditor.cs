@@ -34,7 +34,6 @@ namespace Sliders.UI
 
         public void LoadLevels()
         {
-            LevelManager.levelManager.PlaceActiveLevel();
             //UpdateDropdown();
         }
 

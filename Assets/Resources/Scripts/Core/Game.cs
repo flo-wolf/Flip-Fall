@@ -42,6 +42,7 @@ namespace Sliders
             switch (gs)
             {
                 case GameState.deathscreen: //start coroutine (wait 3 secs, blink times, them switch to ready -> playbtn will apear)
+                    CameraShake.Shake();
                     break;
 
                 case GameState.finishscreen:
@@ -49,6 +50,12 @@ namespace Sliders
                     break;
 
                 case GameState.playing:
+                    break;
+
+                case GameState.ready:
+                    break;
+
+                default:
                     break;
             }
         }

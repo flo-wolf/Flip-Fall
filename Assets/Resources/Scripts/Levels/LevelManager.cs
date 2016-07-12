@@ -20,7 +20,7 @@ namespace Sliders.Levels
 
         public class LevelChangeEvent : UnityEvent<Level> { }
 
-        public Level activeLevel = new Level();
+        private Level activeLevel = new Level();
         public Level defaultlevel = new Level();
 
         private void Awake()
@@ -31,14 +31,23 @@ namespace Sliders.Levels
         private void Start()
         {
             Reload();
-            PlaceActiveLevel();
+        }
+
+        public void SetLevel(Level newLevel)
+        {
+            activeLevel = newLevel;
+        }
+
+        public Level GetLevel()
+        {
+            return activeLevel;
         }
 
         public void Reload()
         {
             int lastID = ProgressManager.progress.lastPlayedLevelID;
             Debug.Log("[LevelManager]: Reload() lastID: " + lastID);
-            activeLevel = LevelLoader.LoadLevel(lastID);
+            SetLevel(lastID);
         }
 
         public int GetID()
@@ -46,21 +55,38 @@ namespace Sliders.Levels
             return levelManager.activeLevel.id;
         }
 
-        public void PlaceActiveLevel()
+        public void NextLevel()
         {
-            Debug.Log("[LevelManager]: PlaceActiveLevel() activelevel: " + levelManager.activeLevel.id);
+            Debug.Log("[LevelManager]: NextLevel()");
             if (levelManager.activeLevel.id >= 0)
             {
-                ProgressManager.SetLastPlayedLevel(levelManager.GetID());
-                activeLevel = LevelPlacer.Place(levelManager.activeLevel);
+                SetLevel(activeLevel.id + 1);
             }
         }
 
-        public static void SetLevel(int newId)
+        public void PreviousLevel()
         {
-            levelManager.activeLevel = LevelLoader.LoadLevel(newId);
-            ProgressManager.progress.lastPlayedLevelID = levelManager.activeLevel.id;
-            onLevelChange.Invoke(levelManager.activeLevel);
+            Debug.Log("[LevelManager]: NextLevel()");
+            if (levelManager.activeLevel.id >= 0)
+            {
+                SetLevel(activeLevel.id - 1);
+            }
+        }
+
+        //destroy previous levels + scoreboard updates
+        public static void SetLevel(int newID)
+        {
+            if (LevelLoader.LoadLevel(newID) != null)
+            {
+                levelManager.activeLevel = LevelLoader.LoadLevel(newID);
+                ProgressManager.SetLastPlayedLevel(levelManager.GetID());
+                levelManager.activeLevel = LevelPlacer.Place(levelManager.activeLevel);
+                onLevelChange.Invoke(levelManager.activeLevel);
+            }
+            else
+            {
+                Debug.Log("[LevelManager]: SetLevel(int) Level trying to be set does not exist!");
+            }
         }
 
         public static Spawn GetSpawn()
