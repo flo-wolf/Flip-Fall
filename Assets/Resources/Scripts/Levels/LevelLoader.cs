@@ -16,7 +16,7 @@ namespace Sliders.Levels
 
         public static Level LoadLevel(int id)
         {
-            Level level = new Level();
+            Level level = null;
             try
             {
                 GameObject go = (GameObject)Resources.Load("Prefabs/Levels/" + id);
@@ -30,8 +30,9 @@ namespace Sliders.Levels
             if (level == null)
             {
                 Debug.Log("LevelLoader: Levelprefab could not be found.");
-                return level;
+                return null;
             }
+
             IsLoaded = true;
             return level;
         }

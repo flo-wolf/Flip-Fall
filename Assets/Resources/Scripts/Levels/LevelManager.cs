@@ -58,29 +58,35 @@ namespace Sliders.Levels
         public void NextLevel()
         {
             Debug.Log("[LevelManager]: NextLevel()");
-            if (levelManager.activeLevel.id >= 0)
+            int nextID = activeLevel.id + 1;
+            if (Resources.Load("Prefabs/Levels/" + nextID))
             {
-                SetLevel(activeLevel.id + 1);
+                SetLevel(nextID);
             }
+            else
+                Debug.Log("[LevelManager]: NextLevel() could not be found.");
         }
 
-        public void PreviousLevel()
+        public void LastLevel()
         {
-            Debug.Log("[LevelManager]: NextLevel()");
-            if (levelManager.activeLevel.id >= 0)
+            Debug.Log("[LevelManager]: LastLevel()");
+            int nextID = activeLevel.id - 1;
+            if (Resources.Load("Prefabs/Levels/" + nextID))
             {
-                SetLevel(activeLevel.id - 1);
+                SetLevel(nextID);
             }
+            else
+                Debug.Log("[LevelManager]: LastLevel() could not be found.");
         }
 
-        //destroy previous levels + scoreboard updates
+        //Try to Place Level with ID newID, destroying all other levels in the scene
         public static void SetLevel(int newID)
         {
             if (LevelLoader.LoadLevel(newID) != null)
             {
                 levelManager.activeLevel = LevelLoader.LoadLevel(newID);
-                ProgressManager.SetLastPlayedLevel(levelManager.GetID());
                 levelManager.activeLevel = LevelPlacer.Place(levelManager.activeLevel);
+                ProgressManager.SetLastPlayedLevel(levelManager.GetID());
                 onLevelChange.Invoke(levelManager.activeLevel);
             }
             else
