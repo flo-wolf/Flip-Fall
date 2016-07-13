@@ -44,7 +44,7 @@ namespace Sliders.UI
                 case Game.GameState.deathscreen:
                     uiTimer.Pause();
                     deathscreen.SetActive(true);
-                    UIScoreboard.uiScoreboard.ShowAndUpdate(uiTimer.GetTime()); //add fancy fadeouts
+                    UIScoreboard.uiScoreboard.Show();
                     CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     //display scoreboard
                     break;
@@ -54,6 +54,10 @@ namespace Sliders.UI
                     break;
 
                 case Game.GameState.finishscreen:
+                    uiTimer.Pause();
+                    deathscreen.SetActive(true);
+                    UIScoreboard.uiScoreboard.ShowAndUpdate(uiTimer.GetTime()); //add fancy fadeouts
+                    CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     break;
 
                 default:

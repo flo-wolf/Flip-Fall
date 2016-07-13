@@ -43,6 +43,11 @@ namespace Sliders.UI
             ProgressManager.SaveProgressData();
         }
 
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
         //works, but its unclean.
         public void ShowAndUpdate(double time)
         {
@@ -50,7 +55,7 @@ namespace Sliders.UI
             scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.levelManager.GetID());
             scoreboard.TryPlacingTime(time);
             UpdateTexts();
-            gameObject.SetActive(true);
+            Show();
         }
 
         public void UpdateTexts()
