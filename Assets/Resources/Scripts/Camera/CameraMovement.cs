@@ -15,13 +15,11 @@ namespace Sliders
         public Player player;
 
         public TransitionType transitionType;
+        public AudioClip transitionSound;
+
         public static CameraState cameraState;
-
         public static CameraStateEvent onCameraStateChange = new CameraStateEvent();
-
-        //variables transmitted by an outside function
         private static Vector3 target;
-
         private static float transitionDuration;
 
         private void Start()
@@ -52,6 +50,7 @@ namespace Sliders
         {
             float t = 0.0f;
             Vector3 startingPos = Camera.main.transform.position;
+            SoundManager.instance.RandomizeSfx(transitionSound);
 
             while (t < 1.0f)
             {

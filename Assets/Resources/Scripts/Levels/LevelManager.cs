@@ -89,6 +89,7 @@ namespace Sliders.Levels
                 levelManager.activeLevel = LevelLoader.LoadLevel(newID);
                 levelManager.activeLevel = LevelPlacer.Place(levelManager.activeLevel);
                 ProgressManager.progress.SetLastPlayedID(levelManager.activeLevel.id);
+                SoundManager.instance.RandomizeSfx(levelManager.changeLevelSound);
                 onLevelChange.Invoke(levelManager.activeLevel);
             }
             else

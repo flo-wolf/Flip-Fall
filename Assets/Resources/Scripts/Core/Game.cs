@@ -22,7 +22,7 @@ namespace Sliders
 
         public static Game instance;
 
-        private int switchDelay = 2;
+        public int switchDelay = 1;
 
         private void Awake()
         {
@@ -59,7 +59,7 @@ namespace Sliders
                     break;
 
                 case GameState.finishscreen:
-                    onGameStateChange.Invoke(gameState);
+                    instance.StartCoroutine(DelayedGameStateSwitch());
                     break;
 
                 case GameState.playing:
@@ -78,7 +78,7 @@ namespace Sliders
 
         public static IEnumerator DelayedGameStateSwitch()
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(instance.switchDelay);
             onGameStateChange.Invoke(gameState);
         }
 

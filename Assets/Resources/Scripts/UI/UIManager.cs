@@ -20,8 +20,6 @@ namespace Sliders.UI
         public UITimer uiTimer;
         public Text levelID;
         public GameObject deathscreen;
-        public Button next;
-        public Button last;
         public Button play;
 
         private void Start()
@@ -70,14 +68,6 @@ namespace Sliders.UI
         {
             Game.SetGameState(Game.GameState.playing);
             play.gameObject.SetActive(false);
-        }
-
-        public void NextBtn()
-        {
-        }
-
-        public void LastBtn()
-        {
         }
     }
 }

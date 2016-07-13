@@ -16,6 +16,7 @@ namespace Sliders
 
         public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
 
+        public Player instance;
         public CameraMovement cm;
         public LayerMask finishMask;
         public LayerMask killMask;
@@ -45,6 +46,7 @@ namespace Sliders
 
         private void Awake()
         {
+            instance = this;
             _playerZ = Constants.playerZ;
         }
 
