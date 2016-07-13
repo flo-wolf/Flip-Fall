@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using UnityEditor;
 using UnityEngine;
 
 namespace Sliders.Levels
@@ -39,9 +38,11 @@ namespace Sliders.Levels
 
         public static void SaveLevel(Level level)
         {
-            Object prefab = EditorUtility.CreateEmptyPrefab("Assets/Resources/Prefabs/" + level.id + ".prefab");
-            EditorUtility.ReplacePrefab(LevelManager.levelManager.GetLevel().gameObject, prefab, ReplacePrefabOptions.ReplaceNameBased);
+#if UNITY_EDITOR
+            Object prefab = UnityEditor.EditorUtility.CreateEmptyPrefab("Assets/Resources/Prefabs/" + level.id + ".prefab");
+            UnityEditor.EditorUtility.ReplacePrefab(LevelManager.levelManager.GetLevel().gameObject, prefab, UnityEditor.ReplacePrefabOptions.ReplaceNameBased);
             //activelevel
+#endif
         }
     }
 }
