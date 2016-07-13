@@ -13,7 +13,9 @@ namespace Sliders.Levels
 
         public class LevelUpdateEvent : UnityEvent<Level> { }
 
+        //id is unique, no doubles allowed!
         public int id;
+
         public string title;
         public double timeGold;
         public double timeSilver;

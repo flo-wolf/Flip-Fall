@@ -1,7 +1,8 @@
-#Core.Shop
 
-#Stars / Gold/Silver/Bronce
-
-#exchange stars for editor items.
+#Toptimes:
+  - Stars / Gold/Silver/Bronce
+  - exchange stars for editor items.
 
 #cameratransition between level switches, deactivate the button while transitioning to next spawn in 1 sec.
+
+#rasterized leveleditor, use grid as layout bases
