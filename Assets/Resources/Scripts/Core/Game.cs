@@ -19,17 +19,17 @@ namespace Sliders
         public class GameStateChangeEvent : UnityEvent<GameState> { }
 
         public static CameraMovement cm;
-        private bool _firsttime;
+
+        public static Game instance;
+
+        private int switchDelay = 2;
 
         private void Awake()
         {
+            instance = this;
             ProgressManager.ClearProgress();
             ProgressManager.LoadProgressData();
             SetGameState(GameState.ready);
-
-            //firsttime? -> load tutorial
-
-            //load last played level -> get value from "progress"
         }
 
         private void Start()
@@ -42,32 +42,44 @@ namespace Sliders
             ProgressManager.SaveProgressData();
         }
 
+        // Only set the GameState through this. All other classes will be able to use GameState listeners.
         public static void SetGameState(GameState gs)
         {
             gameState = gs;
-            onGameStateChange.Invoke(gameState);
+
+            //Executed before event is fired!
             switch (gs)
             {
-                case GameState.deathscreen: //start coroutine (wait 3 secs, blink times, them switch to ready -> playbtn will apear)
+                case GameState.deathscreen:
                     CameraShake.Shake();
+                    instance.StartCoroutine(DelayedGameStateSwitch());
                     //Delay for delayTime
                     //execute UI animationset in Time delayTime
                     //SetReady
                     break;
 
                 case GameState.finishscreen:
-                    ProgressManager.FinishLevel();
+                    onGameStateChange.Invoke(gameState);
                     break;
 
                 case GameState.playing:
+                    onGameStateChange.Invoke(gameState);
                     break;
 
                 case GameState.ready:
+                    onGameStateChange.Invoke(gameState);
                     break;
 
                 default:
+                    onGameStateChange.Invoke(gameState);
                     break;
             }
+        }
+
+        public static IEnumerator DelayedGameStateSwitch()
+        {
+            yield return new WaitForSeconds(1);
+            onGameStateChange.Invoke(gameState);
         }
 
         public void Edit()

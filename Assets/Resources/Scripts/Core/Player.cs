@@ -23,6 +23,9 @@ namespace Sliders
         public GameObject trail2;
         public Text text;
 
+        public AudioClip deathSound;
+        public AudioClip finishSound;
+
         public float gravity = 15F;
         public float maxChargeVelocity;
         public float chargeForcePerTick;
@@ -31,6 +34,7 @@ namespace Sliders
         private Spawn spawn;
         private Quaternion spawnRotaion;
         private Vector3 spawnPosition;
+        private int speed;
 
         public static float _playerZ;
         public static bool facingLeft = true;
@@ -76,11 +80,11 @@ namespace Sliders
                     break;
 
                 case Game.GameState.deathscreen:
-                    Die();
+                    MoveToSpawn();
                     break;
 
                 case Game.GameState.finishscreen:
-                    Die();
+                    MoveToSpawn();
                     break;
 
                 default:
@@ -97,12 +101,15 @@ namespace Sliders
         {
             if (1 << collider.gameObject.layer == killMask.value && IsAlive())
             {
+                Die();
                 Game.SetGameState(Game.GameState.deathscreen);
+                SoundManager.instance.RandomizeSfx(deathSound);
             }
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
+                Die();
                 Game.SetGameState(Game.GameState.finishscreen);
-                SetPlayerState(PlayerState.waiting);
+                SoundManager.instance.RandomizeSfx(finishSound);
             }
         }
 
@@ -132,21 +139,18 @@ namespace Sliders
             trail.GetComponent<TrailRenderer>().enabled = false;
             trail2.GetComponent<TrailRenderer>().time = 0.0f;
             trail2.GetComponent<TrailRenderer>().enabled = false;
-
-            //to game or to cameramovement with game listener
-            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
-
-            MoveToSpawn();
+            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            GetComponent<Rigidbody2D>().gravityScale = 0f;
+            GetComponent<Rigidbody2D>().Sleep();
         }
 
         private void MoveToSpawn()
         {
             transform.position = spawnPosition;
-
+            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;
             GetComponent<Rigidbody2D>().Sleep();
-
             SetPlayerState(PlayerState.ready);
         }
 
@@ -157,7 +161,7 @@ namespace Sliders
             SwitchFacingDirection();
         }
 
-        //Gravitationsabbruch, FIgur wird auf der Ebene gehalten und beschleunigt
+        //Gravitationsabbruch, Figur wird auf der Ebene gehalten und beschleunigt
         private void Charge()
         {
             GetComponent<Rigidbody2D>().gravityScale = 0f;

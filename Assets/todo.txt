@@ -6,3 +6,6 @@
 #cameratransition between level switches, deactivate the button while transitioning to next spawn in 1 sec.
 
 #rasterized leveleditor, use grid as layout bases
+
+# 
+look on the paper to see all
