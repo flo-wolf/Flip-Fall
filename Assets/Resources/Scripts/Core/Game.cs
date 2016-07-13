@@ -50,6 +50,9 @@ namespace Sliders
             {
                 case GameState.deathscreen: //start coroutine (wait 3 secs, blink times, them switch to ready -> playbtn will apear)
                     CameraShake.Shake();
+                    //Delay for delayTime
+                    //execute UI animationset in Time delayTime
+                    //SetReady
                     break;
 
                 case GameState.finishscreen:

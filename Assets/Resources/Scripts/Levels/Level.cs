@@ -20,7 +20,6 @@ namespace Sliders.Levels
         public double timeBronze;
         public Spawn spawn;
         public Finish finish;
-        public List<Shape> shapes = new List<Shape>();
         public DateTime created { get; set; }
         public DateTime updated { get; set; }
 

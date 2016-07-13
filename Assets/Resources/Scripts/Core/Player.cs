@@ -30,6 +30,7 @@ namespace Sliders
 
         private Spawn spawn;
         private Quaternion spawnRotaion;
+        private Vector3 spawnPosition;
 
         public static float _playerZ;
         public static bool facingLeft = true;
@@ -43,17 +44,26 @@ namespace Sliders
             _playerZ = Constants.playerZ;
         }
 
-        private void Start()
+        private void ReloadSpawnPoint()
         {
             spawn = LevelManager.levelManager.GetLevel().spawn;
-            spawn.position.z = _playerZ;
-            transform.position = spawn.position;
-            spawnRotaion = transform.rotation;
+            spawnPosition = spawn.transform.position;
+            spawnPosition.z = _playerZ;
             facingLeft = spawn.facingLeftOnSpawn;
+            transform.position = spawnPosition;
+        }
 
-            Debug.Log("[Player]: Spawnpos: " + spawn.position + " Rot: " + spawnRotaion);
+        private void Start()
+        {
+            ReloadSpawnPoint();
             MoveToSpawn();
             Game.onGameStateChange.AddListener(GameStateChanged);
+            LevelManager.onLevelChange.AddListener(LevelChanged);
+        }
+
+        private void LevelChanged(Level level)
+        {
+            ReloadSpawnPoint();
         }
 
         private void GameStateChanged(Game.GameState gameState)
@@ -98,9 +108,7 @@ namespace Sliders
 
         private void MoveToSpawn()
         {
-            //Vector3 spawnPos = LevelManager.GetSpawn();
-            transform.rotation = spawnRotaion;
-            transform.position = spawn.position;
+            transform.position = spawnPosition;
 
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;
@@ -136,8 +144,8 @@ namespace Sliders
             trail2.GetComponent<TrailRenderer>().time = 0.0f;
             trail2.GetComponent<TrailRenderer>().enabled = false;
 
-            //to game
-            cm.moveCamTo(new Vector3(spawn.position.x, spawn.position.y + Constants.cameraY, transform.position.z), respawnTime);
+            //to game or to cameramovement with game listener
+            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
 
             MoveToSpawn();
         }
@@ -155,7 +163,7 @@ namespace Sliders
             trail2.GetComponent<TrailRenderer>().enabled = false;
 
             //to game
-            cm.moveCamTo(new Vector3(spawn.position.x, spawn.position.y + Constants.cameraY, transform.position.z), respawnTime);
+            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
 
             MoveToSpawn();
         }
