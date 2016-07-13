@@ -10,7 +10,7 @@ namespace Sliders.Progress
     public class ProgressData
     {
         public List<Scoreboard> scoreboards = new List<Scoreboard>();
-        public int lastPlayedLevelID;
+        private int lastPlayedLevelID;
         public int coins;
         //add: unlocks, achievements, stats etc...
 
@@ -18,9 +18,22 @@ namespace Sliders.Progress
         {
             coins = -1;
             if (LevelLoader.IsLoaded)
+            {
                 lastPlayedLevelID = LevelManager.levelManager.GetID();
+                Debug.Log("[ProgressData] ProgressData(): LastPlayedID = " + lastPlayedLevelID);
+            }
             else lastPlayedLevelID = LevelManager.levelManager.defaultlevel.id;
             scoreboards = new List<Scoreboard>();
+        }
+
+        public void SetLastPlayedID(int id)
+        {
+            lastPlayedLevelID = id;
+        }
+
+        public int GetLastPlayedID()
+        {
+            return lastPlayedLevelID;
         }
 
         public Scoreboard NewScoreboard(int id)
@@ -37,7 +50,7 @@ namespace Sliders.Progress
 
         public Scoreboard GetScoreboard(int id)
         {
-            if (scoreboards.Count < 1 || scoreboards.Any(x => x.levelId != id))
+            if (scoreboards.Count < 0 || !scoreboards.Any(x => x.levelId == id))
             {
                 return NewScoreboard(id);
             }
@@ -48,6 +61,7 @@ namespace Sliders.Progress
                     if (s.levelId == id)
                     {
                         //Scoreboard found
+                        Debug.Log("[ProgresssData]: Loading old Scoreboard: " + id);
                         return s;
                     }
                 }

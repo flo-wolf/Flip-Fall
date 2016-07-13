@@ -38,10 +38,14 @@ namespace Sliders.Progress
             return progress;
         }
 
+        public static void ClearProgress()
+        {
+            Debug.Log("[ProgressManager]: Clear Progress");
+            SetProgress(new ProgressData());
+        }
+
         public static void LoadProgressData()
         {
-            Debug.Log("[ProgressManager]: LoadProgressData()");
-
             if (File.Exists(SavePath))
             {
                 var fs = new FileStream(SavePath, FileMode.Open);
@@ -70,11 +74,14 @@ namespace Sliders.Progress
             {
                 SaveProgressData();
             }
+
+            Debug.Log("[ProgressManager]: LoadProgressData() loaded. LastPlayedLevel: " + progress.GetLastPlayedID());
         }
 
         public static void SaveProgressData()
         {
-            Debug.Log("[ProgressManager]: SaveProgressData");
+            LevelManager.onLevelChange.AddListener(LevelStateChanged);
+
             FileStream file;
             if (!File.Exists(SavePath))
             {
@@ -87,9 +94,14 @@ namespace Sliders.Progress
 
             var bf = new BinaryFormatter();
             if (progress.scoreboards.Count > 0)
-                Debug.Log("[ProgressManager]: SaveProgressData() id of first scoreboard: " + progress.scoreboards[0].levelId);
+                Debug.Log("[ProgressManager]: SaveProgressData() id of current level " + progress.GetLastPlayedID() + " scoreboard: " + progress.scoreboards.Find(x => x.levelId == progress.GetLastPlayedID()).levelId);
             bf.Serialize(file, progress);
             file.Close();
+        }
+
+        public static void LevelStateChanged(Level level)
+        {
+            progress.SetLastPlayedID(level.id);
         }
 
         public static void SaveTime()
@@ -119,17 +131,11 @@ namespace Sliders.Progress
             SetProgress(p);
         }
 
-        public static void ClearProgress()
-        {
-            Debug.Log("[ProgressManager]: Clear Progress");
-            SetProgress(new ProgressData());
-        }
-
         public static void ClearScores()
         {
-            if (progress.scoreboards.Any(x => x.levelId == progress.lastPlayedLevelID))
+            if (progress.scoreboards.Any(x => x.levelId == progress.GetLastPlayedID()))
             {
-                var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == progress.lastPlayedLevelID);
+                var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == progress.GetLastPlayedID());
                 progress.scoreboards.Remove(model);
             }
         }
@@ -138,8 +144,8 @@ namespace Sliders.Progress
         {
             if (progress.scoreboards.Any(x => x.levelId == _id))
             {
-                var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == _id);
-                progress.scoreboards.Remove(model);
+                //var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == _id);
+                progress.scoreboards.Remove(progress.scoreboards.Find(x => x.levelId == _id));
             }
         }
 
@@ -163,41 +169,5 @@ namespace Sliders.Progress
             }
             return -1D;
         }
-
-        public static int GetLastPlayedLevel()
-        {
-            return progress.lastPlayedLevelID;
-        }
-
-        public static void SetLastPlayedLevel(int id)
-        {
-            progress.lastPlayedLevelID = id;
-        }
-
-        /*
-        public static void FinishLevel(int _id, double _time)
-        {
-            AddLevelProgress(_id, _time, true);
-            //Update
-            if (_ProgressData.Any(x => x.id == _id))
-            {
-                var model = _ProgressData.FirstOrDefault(x => x.id == _id);
-                if (_time > model.time && _time > 0)
-                {
-                    model.time = _time;
-                }
-                model.updated = DateTime.UtcNow;
-            }
-            else
-            {
-                AddProgressData(_id, _time, true);
-            }
-        }
-
-        public static void TryFinishLevel()
-        {
-            Level l = levels.Find(x => x.id == LevelManager.currentLevel);
-        }
-        */
     }
 }

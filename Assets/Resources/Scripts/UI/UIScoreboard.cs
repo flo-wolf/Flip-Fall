@@ -11,6 +11,7 @@ namespace Sliders.UI
     {
         public static UIScoreboard uiScoreboard;
         public static Scoreboard scoreboard;
+        public Text title;
         public Text text1;
         public Text text2;
         public Text text3;
@@ -24,7 +25,14 @@ namespace Sliders.UI
 
         private void Start()
         {
+            LevelManager.onLevelChange.AddListener(LevelChanged);
             scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.levelManager.GetID());
+            UpdateTexts();
+        }
+
+        //Use it for updating
+        private void LevelChanged(Level level)
+        {
             UpdateTexts();
         }
 
@@ -47,10 +55,11 @@ namespace Sliders.UI
 
         public void UpdateTexts()
         {
-            Debug.Log("[UIScoreboard]: UpdateTexts()");
+            //Debug.Log("[UIScoreboard]: UpdateTexts()");
             scoreboard = ProgressManager.GetProgress().GetScoreboard(LevelManager.levelManager.GetID());
             int count = scoreboard.elements.Count;
             string empty = "-.-";
+            title.text = LevelManager.levelManager.GetLevel().id.ToString();
             text1.text = empty;
             text2.text = empty;
             text3.text = empty;

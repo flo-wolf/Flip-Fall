@@ -11,7 +11,7 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { titlescreen, settingsscreen, ready, playing, deathscreen, finishscreen, editor }
+        public enum GameState { titlescreen, tutorial, ready, playing, pause, deathscreen, finishscreen, editor, settingsscreen }
 
         public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
@@ -28,6 +28,7 @@ namespace Sliders
             SetGameState(GameState.ready);
 
             //firsttime? -> load tutorial
+
             //load last played level -> get value from "progress"
         }
 
