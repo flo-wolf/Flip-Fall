@@ -20,6 +20,8 @@ namespace Sliders.Levels
 
         public class LevelChangeEvent : UnityEvent<Level> { }
 
+        public AudioClip changeLevelSound;
+
         private Level activeLevel = new Level();
         public Level defaultlevel = new Level();
 

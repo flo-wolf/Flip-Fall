@@ -76,11 +76,11 @@ namespace Sliders
                     break;
 
                 case Game.GameState.deathscreen:
-                    Fail();
+                    Die();
                     break;
 
                 case Game.GameState.finishscreen:
-                    Finish();
+                    Die();
                     break;
 
                 default:
@@ -106,17 +106,6 @@ namespace Sliders
             }
         }
 
-        private void MoveToSpawn()
-        {
-            transform.position = spawnPosition;
-
-            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-            GetComponent<Rigidbody2D>().gravityScale = 0f;
-            GetComponent<Rigidbody2D>().Sleep();
-
-            SetPlayerState(PlayerState.ready);
-        }
-
         private void Spawn()
         {
             SetPlayerState(PlayerState.alive);
@@ -132,11 +121,11 @@ namespace Sliders
             GetComponent<Rigidbody2D>().WakeUp();
         }
 
-        private void Fail()
+        private void Die()
         {
             SetPlayerState(PlayerState.dead);
             charging = false;
-            facingLeft = true;
+            facingLeft = spawn.facingLeftOnSpawn;
             firstChargeDone = false;
 
             trail.GetComponent<TrailRenderer>().time = 0.0f;
@@ -150,22 +139,15 @@ namespace Sliders
             MoveToSpawn();
         }
 
-        public void Finish()
+        private void MoveToSpawn()
         {
-            SetPlayerState(PlayerState.dead);
-            charging = false;
-            facingLeft = true;
-            firstChargeDone = false;
+            transform.position = spawnPosition;
 
-            trail.GetComponent<TrailRenderer>().time = 0.0f;
-            trail.GetComponent<TrailRenderer>().enabled = false;
-            trail2.GetComponent<TrailRenderer>().time = 0.0f;
-            trail2.GetComponent<TrailRenderer>().enabled = false;
+            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            GetComponent<Rigidbody2D>().gravityScale = 0f;
+            GetComponent<Rigidbody2D>().Sleep();
 
-            //to game
-            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
-
-            MoveToSpawn();
+            SetPlayerState(PlayerState.ready);
         }
 
         //X-Achsen-Spiegelung der Figurenflugbahn
@@ -223,7 +205,7 @@ namespace Sliders
                 //Keyboard
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    Fail();
+                    Die();
                 }
                 else if (Input.GetKeyDown(KeyCode.M))
                 {
