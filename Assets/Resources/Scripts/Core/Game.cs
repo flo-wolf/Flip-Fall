@@ -16,12 +16,8 @@ namespace Sliders
         public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
 
-        public class GameStateChangeEvent : UnityEvent<GameState> { }
-
         public static CameraMovement cm;
-
         public static Game instance;
-
         public int switchDelay = 1;
 
         private void Awake()
@@ -52,6 +48,7 @@ namespace Sliders
             {
                 case GameState.deathscreen:
                     CameraShake.Shake();
+                    UITimer.instance.Pause();
                     instance.StartCoroutine(DelayedGameStateSwitch());
                     //Delay for delayTime
                     //execute UI animationset in Time delayTime
@@ -59,6 +56,7 @@ namespace Sliders
                     break;
 
                 case GameState.finishscreen:
+                    UITimer.instance.Pause();
                     instance.StartCoroutine(DelayedGameStateSwitch());
                     break;
 
@@ -103,5 +101,7 @@ namespace Sliders
             //player to beginning
             //restart timer
         }
+
+        public class GameStateChangeEvent : UnityEvent<GameState> { }
     }
 }

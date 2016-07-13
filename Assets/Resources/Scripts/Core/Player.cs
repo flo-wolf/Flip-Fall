@@ -33,14 +33,15 @@ namespace Sliders
         public float maxChargeVelocity;
         public float chargeForcePerTick;
         public float respawnTime = 1f;
+        public float notGroundedTime = 0f;
 
         private Spawn spawn;
         private Quaternion spawnRotaion;
         private Vector3 spawnPosition;
         private int speed;
 
-        public static float _playerZ;
-        public static bool facingLeft = true;
+        public float _playerZ;
+        public bool facingLeft = true;
 
         private bool charging = false;
         private Vector2 chargeVelocity;
@@ -82,6 +83,7 @@ namespace Sliders
             {
                 case Game.GameState.playing:
                     Spawn();
+                    StartCoroutine(NotGroundedTimer());
                     break;
 
                 case Game.GameState.deathscreen:
@@ -118,11 +120,23 @@ namespace Sliders
             }
         }
 
+        private IEnumerator NotGroundedTimer()
+        {
+            while (playerState == PlayerState.alive)
+            {
+                notGroundedTime += Time.fixedDeltaTime;
+                var time = TimeSpan.FromSeconds(notGroundedTime);
+
+                yield return new WaitForFixedUpdate();
+            }
+        }
+
         private void Spawn()
         {
             SetPlayerState(PlayerState.alive);
             CameraMovement.SetCameraState(CameraMovement.CameraState.following);
 
+            notGroundedTime = 0;
             trail.GetComponent<TrailRenderer>().time = 0.5f;
             trail.GetComponent<TrailRenderer>().enabled = true;
             trail2.GetComponent<TrailRenderer>().time = 1f;
@@ -171,6 +185,7 @@ namespace Sliders
         private void MoveToSpawn()
         {
             transform.position = spawnPosition;
+            notGroundedTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
             cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;

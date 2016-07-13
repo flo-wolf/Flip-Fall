@@ -42,7 +42,6 @@ namespace Sliders.UI
                     break;
 
                 case Game.GameState.deathscreen:
-                    uiTimer.Pause();
                     deathscreen.SetActive(true);
                     UIScoreboard.uiScoreboard.Show();
                     CameraMovement.SetCameraState(CameraMovement.CameraState.resting);

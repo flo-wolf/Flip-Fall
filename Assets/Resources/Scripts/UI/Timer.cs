@@ -97,6 +97,10 @@ namespace Sliders.UI
                 {
                     Debug.LogError(ex.Message);
                 }
+                if (time.Milliseconds / 10 == 0)
+                {
+                    Behaviour.GetComponent<UITimer>().PlayCountingSound();
+                }
                 yield return new WaitForFixedUpdate();
             }
         }
