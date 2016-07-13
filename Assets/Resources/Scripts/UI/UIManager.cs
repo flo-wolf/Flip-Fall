@@ -15,6 +15,7 @@ namespace Sliders.UI
 
         public static UIManager uiManager;
 
+        public AudioClip playSound;
         public UIDeathscreen uiDeathscreen;
         public UIScoreboard uiScoreboard;
         public UITimer uiTimer;
@@ -34,6 +35,7 @@ namespace Sliders.UI
             {
                 case Game.GameState.playing:
                     UIScoreboard.uiScoreboard.Hide(); //add fancy fadeouts, save
+                    SoundManager.instance.PlaySingle(playSound);
                     deathscreen.SetActive(false);
                     play.gameObject.SetActive(false);
                     uiTimer.Run();

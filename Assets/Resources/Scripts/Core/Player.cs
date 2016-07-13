@@ -23,6 +23,8 @@ namespace Sliders
         public GameObject trail;
         public GameObject trail2;
         public Text text;
+        public Material defaultMaterial;
+        public Material wintMaterial;
 
         public AudioClip deathSound;
         public AudioClip finishSound;
@@ -56,7 +58,6 @@ namespace Sliders
             spawnPosition = spawn.transform.position;
             spawnPosition.z = _playerZ;
             facingLeft = spawn.facingLeftOnSpawn;
-            transform.position = spawnPosition;
         }
 
         private void Start()
@@ -70,8 +71,10 @@ namespace Sliders
         private void LevelChanged(Level level)
         {
             ReloadSpawnPoint();
+            MoveToSpawn();
         }
 
+        //Everything in here happends after the delay on death. To execute before, use the Trigger function.
         private void GameStateChanged(Game.GameState gameState)
         {
             Debug.Log("[Player]: GameState changed to: " + gameState);
@@ -109,9 +112,9 @@ namespace Sliders
             }
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
-                Die();
+                Fin();
                 Game.SetGameState(Game.GameState.finishscreen);
-                SoundManager.instance.RandomizeSfx(finishSound);
+                SoundManager.instance.PlaySingle(finishSound);
             }
         }
 
@@ -137,6 +140,25 @@ namespace Sliders
             facingLeft = spawn.facingLeftOnSpawn;
             firstChargeDone = false;
 
+            //Add here animations, fadeaway etc on death
+            trail.GetComponent<TrailRenderer>().time = 0.0f;
+            trail.GetComponent<TrailRenderer>().enabled = false;
+            trail2.GetComponent<TrailRenderer>().time = 0.0f;
+            trail2.GetComponent<TrailRenderer>().enabled = false;
+            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            GetComponent<Rigidbody2D>().gravityScale = 0f;
+            GetComponent<Rigidbody2D>().Sleep();
+        }
+
+        private void Fin()
+        {
+            SetPlayerState(PlayerState.dead);
+            gameObject.GetComponent<MeshRenderer>().material = wintMaterial;
+            charging = false;
+            facingLeft = spawn.facingLeftOnSpawn;
+            firstChargeDone = false;
+
+            //Add here animations, fadeaway etc on death
             trail.GetComponent<TrailRenderer>().time = 0.0f;
             trail.GetComponent<TrailRenderer>().enabled = false;
             trail2.GetComponent<TrailRenderer>().time = 0.0f;
@@ -149,6 +171,7 @@ namespace Sliders
         private void MoveToSpawn()
         {
             transform.position = spawnPosition;
+            gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
             cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;

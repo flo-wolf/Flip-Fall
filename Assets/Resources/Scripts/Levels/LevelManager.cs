@@ -35,11 +35,6 @@ namespace Sliders.Levels
             Reload();
         }
 
-        public void SetLevel(Level newLevel)
-        {
-            activeLevel = newLevel;
-        }
-
         public Level GetLevel()
         {
             return activeLevel;
