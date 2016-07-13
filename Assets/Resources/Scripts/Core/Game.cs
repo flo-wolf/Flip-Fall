@@ -36,6 +36,12 @@ namespace Sliders
         {
         }
 
+        private void OnApplicationQuit()
+        {
+            Debug.Log("Game Closed down");
+            ProgressManager.SaveProgressData();
+        }
+
         public static void SetGameState(GameState gs)
         {
             gameState = gs;
@@ -68,8 +74,6 @@ namespace Sliders
 
         public void CloseGame()
         {
-            ProgressManager.SaveProgressData();
-            Application.Quit();
         }
 
         public void LoadLevel(int levelID)
