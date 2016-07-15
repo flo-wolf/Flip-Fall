@@ -1,4 +1,4 @@
-# Sliders - Early Alpha
+# Sliders
 This is a free arcade-esque android game being developed with Unity5.
 
 ##Gameplay
