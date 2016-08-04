@@ -18,6 +18,8 @@ namespace Sliders
 
         public static CameraMovement cm;
         public static Game instance;
+
+        //The delay between when SetGameState() gets called and when the GameSTateChangeEvent gets fired.
         public int switchDelay = 1;
 
         private void Awake()

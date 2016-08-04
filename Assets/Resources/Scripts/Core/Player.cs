@@ -16,12 +16,13 @@ namespace Sliders
 
         public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
 
-        public Player instance;
+        //public Player instance;
         public CameraMovement cm;
+
         public LayerMask finishMask;
         public LayerMask killMask;
-        public GameObject trail;
-        public GameObject trail2;
+        public TrailRenderer trail; //Full color
+        public TrailRenderer trail2; //Transparency - use shading instead
         public Text text;
         public Material defaultMaterial;
         public Material wintMaterial;
@@ -32,8 +33,8 @@ namespace Sliders
         public float gravity = 15F;
         public float maxChargeVelocity;
         public float chargeForcePerTick;
-        public float respawnTime = 1f;
-        public float notGroundedTime = 0f;
+        public float respawnDuration = 1f; //change to: Deathdelay !?
+        public float aliveTime = 0f;
 
         private Spawn spawn;
         private Quaternion spawnRotaion;
@@ -49,8 +50,17 @@ namespace Sliders
 
         private void Awake()
         {
-            instance = this;
+            //instance = this;
             _playerZ = Constants.playerZ;
+        }
+
+        private void Start()
+        {
+            ReloadSpawnPoint();
+            MoveToSpawn();
+            Game.onGameStateChange.AddListener(GameStateChanged);
+            LevelManager.onLevelChange.AddListener(LevelChanged);
+            trail.sortingOrder = 2;
         }
 
         private void ReloadSpawnPoint()
@@ -61,21 +71,15 @@ namespace Sliders
             facingLeft = spawn.facingLeftOnSpawn;
         }
 
-        private void Start()
-        {
-            ReloadSpawnPoint();
-            MoveToSpawn();
-            Game.onGameStateChange.AddListener(GameStateChanged);
-            LevelManager.onLevelChange.AddListener(LevelChanged);
-        }
-
+        //Whenever the Level gets changed the LevelManager fires the LevelChangeEvent, calling this method.
+        //Resets the Player to the Spawn
         private void LevelChanged(Level level)
         {
             ReloadSpawnPoint();
             MoveToSpawn();
         }
 
-        //Everything in here happends after the delay on death. To execute before, use the Trigger function.
+        //Everything in here happends after the delay on death. To execute before, enter calls in the Trigger function.
         private void GameStateChanged(Game.GameState gameState)
         {
             Debug.Log("[Player]: GameState changed to: " + gameState);
@@ -83,7 +87,7 @@ namespace Sliders
             {
                 case Game.GameState.playing:
                     Spawn();
-                    StartCoroutine(NotGroundedTimer());
+                    StartCoroutine(AliveTimerCorutine());
                     break;
 
                 case Game.GameState.deathscreen:
@@ -104,6 +108,7 @@ namespace Sliders
             facingLeft = !facingLeft;
         }
 
+        //The Player has hit something!
         private void OnTriggerEnter2D(Collider2D collider)
         {
             if (1 << collider.gameObject.layer == killMask.value && IsAlive())
@@ -120,12 +125,13 @@ namespace Sliders
             }
         }
 
-        private IEnumerator NotGroundedTimer()
+        //Counts the time the Player is alive in this try
+        private IEnumerator AliveTimerCorutine()
         {
             while (playerState == PlayerState.alive)
             {
-                notGroundedTime += Time.fixedDeltaTime;
-                var time = TimeSpan.FromSeconds(notGroundedTime);
+                aliveTime += Time.fixedDeltaTime;
+                var time = TimeSpan.FromSeconds(aliveTime);
 
                 yield return new WaitForFixedUpdate();
             }
@@ -136,11 +142,11 @@ namespace Sliders
             SetPlayerState(PlayerState.alive);
             CameraMovement.SetCameraState(CameraMovement.CameraState.following);
 
-            notGroundedTime = 0;
-            trail.GetComponent<TrailRenderer>().time = 0.5f;
-            trail.GetComponent<TrailRenderer>().enabled = true;
-            trail2.GetComponent<TrailRenderer>().time = 1f;
-            trail2.GetComponent<TrailRenderer>().enabled = true;
+            aliveTime = 0;
+            trail.time = 0.5f;
+            trail.enabled = true;
+            trail2.time = 1f;
+            trail2.enabled = true;
 
             GetComponent<Rigidbody2D>().gravityScale = gravity;
             GetComponent<Rigidbody2D>().velocity = new Vector3(0f, -0.00001f, 0f);
@@ -155,10 +161,10 @@ namespace Sliders
             firstChargeDone = false;
 
             //Add here animations, fadeaway etc on death
-            trail.GetComponent<TrailRenderer>().time = 0.0f;
-            trail.GetComponent<TrailRenderer>().enabled = false;
-            trail2.GetComponent<TrailRenderer>().time = 0.0f;
-            trail2.GetComponent<TrailRenderer>().enabled = false;
+            trail.time = 0.0f;
+            trail.enabled = false;
+            trail2.time = 0.0f;
+            trail2.enabled = false;
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;
             GetComponent<Rigidbody2D>().Sleep();
@@ -173,10 +179,10 @@ namespace Sliders
             firstChargeDone = false;
 
             //Add here animations, fadeaway etc on death
-            trail.GetComponent<TrailRenderer>().time = 0.0f;
-            trail.GetComponent<TrailRenderer>().enabled = false;
-            trail2.GetComponent<TrailRenderer>().time = 0.0f;
-            trail2.GetComponent<TrailRenderer>().enabled = false;
+            trail.time = 0.0f;
+            trail.enabled = false;
+            trail2.time = 0.0f;
+            trail2.enabled = false;
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;
             GetComponent<Rigidbody2D>().Sleep();
@@ -185,9 +191,9 @@ namespace Sliders
         private void MoveToSpawn()
         {
             transform.position = spawnPosition;
-            notGroundedTime = 0;
+            aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
-            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnTime);
+            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnDuration);
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<Rigidbody2D>().gravityScale = 0f;
             GetComponent<Rigidbody2D>().Sleep();
@@ -311,6 +317,7 @@ namespace Sliders
                 return false;
         }
 
+        //Fired whenever the playerstate gets changed through SetPlayerState()
         public class PlayerStateChangeEvent : UnityEvent<PlayerState> { }
     }
 }
