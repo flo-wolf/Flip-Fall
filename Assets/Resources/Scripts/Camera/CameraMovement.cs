@@ -9,12 +9,12 @@ namespace Sliders
     {
         public enum CameraState { following, transitioning, resting }
 
-        public enum TransitionType { smoothstep, linear, resting }
+        public enum InterpolationType { smoothstep, linear, smootherstep, sin }
 
         //Spielfigur für Berechnung der relativen Kameraposition
         public Player player;
 
-        public TransitionType transitionType;
+        public InterpolationType interpolationType;
         public AudioClip transitionSound;
 
         public static CameraState cameraState;
@@ -52,16 +52,53 @@ namespace Sliders
             Vector3 startingPos = Camera.main.transform.position;
             SoundManager.instance.RandomizeSfx(transitionSound);
 
-            while (t < 1.0f)
+            switch (interpolationType)
             {
-                t += Time.deltaTime * (Time.timeScale / transitionDuration);
+                case InterpolationType.linear:
+                    while (t < 1.0f)
+                    {
+                        t += Time.deltaTime * (Time.timeScale / transitionDuration);
+                        Camera.main.transform.position = Vector3.Lerp(startingPos, target, t);
+                        yield return 0;
+                    }
+                    break;
 
-                float accelTime = t / 1;
-                accelTime = accelTime * accelTime * (3f - 2f * t); //Smoothstep formula: t = t*t * (3f - 2f*t)
+                case InterpolationType.sin:
+                    while (t < 1.0f)
+                    {
+                        t += Time.deltaTime * (Time.timeScale / transitionDuration);
+                        float x = Mathf.Sin(t) + 1;
+                        Camera.main.transform.position = Vector3.Lerp(startingPos, target, x);
+                        yield return 0;
+                    }
+                    break;
 
-                Camera.main.transform.position = Vector3.Lerp(startingPos, target, accelTime);
-                yield return 0;
+                case InterpolationType.smoothstep:
+                    while (t < 1.0f)
+                    {
+                        t += Time.deltaTime * (Time.timeScale / transitionDuration);
+
+                        float x = t / 1;
+                        x = x * x * (3f - 2f * t); //Smoothstep formula: t = t*t * (3f - 2f*t)
+
+                        Camera.main.transform.position = Vector3.Lerp(startingPos, target, x);
+                        yield return 0;
+                    }
+                    break;
+
+                case InterpolationType.smootherstep:
+                    while (t < 1.0f)
+                    {
+                        t += Time.deltaTime * (Time.timeScale / transitionDuration);
+                        Camera.main.transform.position = Vector3.Lerp(startingPos, target, Mathf.SmoothStep(0, 1, t));
+                        yield return 0;
+                    }
+                    break;
+
+                default:
+                    break;
             }
+
             SetCameraState(CameraState.resting);
             Game.SetGameState(Game.GameState.ready);
         }

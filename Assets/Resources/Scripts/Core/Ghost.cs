@@ -8,13 +8,11 @@ using UnityEngine.UI;
 
 namespace Sliders
 {
-    public class Player : MonoBehaviour
+    public class Ghost : MonoBehaviour
     {
-        public enum PlayerState { alive, dead, ready, waiting, ghosting };
+        public enum GhostState { alive, dead, ready, finished };
 
-        public static PlayerState playerState;
-
-        public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
+        public static GhostState ghostState;
 
         //public Player instance;
         public CameraMovement cm;
@@ -43,7 +41,7 @@ namespace Sliders
         private int speed;
 
         public float _playerZ;
-        private bool facingLeft = true;
+        public bool facingLeft = true;
 
         private bool charging = false;
         private Vector2 chargeVelocity;
@@ -88,7 +86,6 @@ namespace Sliders
             {
                 case Game.GameState.playing:
                     Spawn();
-                    StartCoroutine(AliveTimerCorutine());
                     break;
 
                 case Game.GameState.deathscreen:
@@ -126,23 +123,8 @@ namespace Sliders
             }
         }
 
-        //Counts the time the Player is alive in this try
-        private IEnumerator AliveTimerCorutine()
-        {
-            while (playerState == PlayerState.alive)
-            {
-                aliveTime += Time.fixedDeltaTime;
-                var time = TimeSpan.FromSeconds(aliveTime);
-
-                yield return new WaitForFixedUpdate();
-            }
-        }
-
         private void Spawn()
         {
-            SetPlayerState(PlayerState.alive);
-            CameraMovement.SetCameraState(CameraMovement.CameraState.following);
-
             aliveTime = 0;
             trail.time = 0.5f;
             trail.enabled = true;
@@ -156,7 +138,6 @@ namespace Sliders
 
         private void Die()
         {
-            SetPlayerState(PlayerState.dead);
             charging = false;
             facingLeft = spawn.facingLeftOnSpawn;
             firstChargeDone = false;
@@ -173,7 +154,6 @@ namespace Sliders
 
         private void Fin()
         {
-            SetPlayerState(PlayerState.dead);
             gameObject.GetComponent<MeshRenderer>().material = winMaterial;
             charging = false;
             facingLeft = spawn.facingLeftOnSpawn;
@@ -198,7 +178,6 @@ namespace Sliders
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();
-            SetPlayerState(PlayerState.ready);
         }
 
         //X-Achsen-Spiegelung der Figurenflugbahn
@@ -248,63 +227,9 @@ namespace Sliders
             }
         }
 
-        //Inputs, alles in den Input Manager!
-        private void Update()
-        {
-            if (IsAlive())
-            {
-                //Keyboard
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    Die();
-                }
-                else if (Input.GetKeyDown(KeyCode.M))
-                {
-                    Reflect();
-                }
-                else if (Input.GetKeyDown(KeyCode.Y) && !charging)
-                {
-                    Charge();
-                }
-                else if (Input.GetKeyUp(KeyCode.Y) && charging)
-                {
-                    Decharge();
-                }
-                /*
-                //Touch
-                foreach (Touch touch in Input.touches)
-                {
-                    Vector3 position = touch.position;
-
-                    //Right Touch
-                    if (position.x >= Camera.main.pixelWidth / 2 && touch.phase == TouchPhase.Began && firstChargeDone)
-                        Reflect();
-
-                    //Left Touch
-                    else if (position.x < Camera.main.pixelWidth / 2)
-                    {
-                        if (touch.phase == TouchPhase.Began && !charging)
-                        {
-                            Charge();
-                            firstChargeDone = true;
-                        }
-                        else if (touch.phase == TouchPhase.Ended && touch.phase != TouchPhase.Canceled && charging)
-                            Decharge();
-                    }
-                }
-                */
-            }
-        }
-
-        public void SetPlayerState(PlayerState ps)
-        {
-            playerState = ps;
-            onPlayerStateChange.Invoke(playerState);
-        }
-
         public static bool IsAlive()
         {
-            if (playerState == PlayerState.alive)
+            if (ghostState == GhostState.alive)
                 return true;
             else
                 return false;
@@ -312,13 +237,10 @@ namespace Sliders
 
         public static bool IsReady()
         {
-            if (playerState == PlayerState.ready)
+            if (ghostState == GhostState.ready)
                 return true;
             else
                 return false;
         }
-
-        //Fired whenever the playerstate gets changed through SetPlayerState()
-        public class PlayerStateChangeEvent : UnityEvent<PlayerState> { }
     }
 }
