@@ -12,7 +12,7 @@ namespace Sliders
     {
         public enum GhostState { alive, dead, ready, finished };
 
-        public static GhostState ghostState;
+        public GhostState ghostState;
 
         //public Player instance;
         public CameraMovement cm;
@@ -118,7 +118,6 @@ namespace Sliders
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
                 Fin();
-                Game.SetGameState(Game.GameState.finishscreen);
                 SoundManager.instance.PlaySingle(finishSound);
             }
         }
@@ -227,7 +226,7 @@ namespace Sliders
             }
         }
 
-        public static bool IsAlive()
+        public bool IsAlive()
         {
             if (ghostState == GhostState.alive)
                 return true;
@@ -235,7 +234,7 @@ namespace Sliders
                 return false;
         }
 
-        public static bool IsReady()
+        public bool IsReady()
         {
             if (ghostState == GhostState.ready)
                 return true;

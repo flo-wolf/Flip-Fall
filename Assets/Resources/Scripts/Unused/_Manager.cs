@@ -35,12 +35,12 @@ namespace Sliders.Unused
         private void Update()
         {
             //Zurück-Tatse
-            if (Input.GetKeyDown(KeyCode.Escape) && CameraMovement.IsResting() && Player.IsReady())
-            {
-                Debug.Log("Game Closed");
-                //Save stuff in here
-                Application.Quit();
-            }
+            //if (Input.GetKeyDown(KeyCode.Escape) && CameraMovement.IsResting() && Player.IsReady())
+            //{
+            //Debug.Log("Game Closed");
+            //Save stuff in here
+            //Application.Quit();
+            //}
         }
     }
 }

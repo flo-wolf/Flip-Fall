@@ -10,9 +10,9 @@ namespace Sliders
 {
     public class Player : MonoBehaviour
     {
-        public enum PlayerState { alive, dead, ready, waiting, ghosting };
+        public enum PlayerState { alive, dead, ready, waiting };
 
-        public static PlayerState playerState;
+        public PlayerState playerState;
 
         public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
 
@@ -302,7 +302,7 @@ namespace Sliders
             onPlayerStateChange.Invoke(playerState);
         }
 
-        public static bool IsAlive()
+        public bool IsAlive()
         {
             if (playerState == PlayerState.alive)
                 return true;
@@ -310,7 +310,7 @@ namespace Sliders
                 return false;
         }
 
-        public static bool IsReady()
+        public bool IsReady()
         {
             if (playerState == PlayerState.ready)
                 return true;
