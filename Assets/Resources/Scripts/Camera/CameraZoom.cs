@@ -14,6 +14,7 @@ namespace Sliders
         public float velocityThreshold; //value around 5 works fine
 
         private float size;
+        private float stopLerpTime;
         private Vector2 lastVelocity = Vector2.zero;
         private float maxVelocity;
 
@@ -30,22 +31,31 @@ namespace Sliders
                 Vector2 velocity = player.rBody.velocity;
                 velocity.x = System.Math.Abs(velocity.x);
 
-                /*if (velocity.y + speedThreshold < lastVelocity.y)
+                //y-axis
+                if (velocity.y + speedThreshold < System.Math.Abs(lastVelocity.y))
                 {
-                    velocity = lastVelocity;
+                    StopAllCoroutines();
+                    StartCoroutine(VelocityStopBufferCoroutine());
                 }
-                else
-                {
-                    lastVelocity = velocity;
-                } */
 
-                Debug.Log("Maxvelocity: " + maxVelocity + " velocityThreshold: " + velocityThreshold + " velocity.x: " + velocity.x);
+                //x-axis
                 if (velocity.x > (maxVelocity - velocityThreshold))
                 {
-                    Debug.Log("sgehtabfdsddasda " + maxVelocity);
                     velocity.x = maxVelocity;
                 }
-                Camera.main.orthographicSize = Mathf.Lerp(minZoom, maxZoom, Mathf.InverseLerp(0F, maxVelocity, velocity.x));
+                lastVelocity = velocity;
+                Camera.main.orthographicSize = Mathf.Lerp(minZoom, maxZoom, Mathf.InverseLerp(0F, maxVelocity, velocity.magnitude));
+            }
+        }
+
+        private IEnumerator VelocityStopBufferCoroutine()
+        {
+            stopLerpTime = 0;
+            while (true)
+            {
+                stopLerpTime += Time.fixedDeltaTime;
+                Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, minZoom, stopLerpTime);
+                yield return new WaitForFixedUpdate();
             }
         }
     }
