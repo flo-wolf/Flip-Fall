@@ -1,3 +1,18 @@
+#ghosts
+  - save ghost data
+  - replay ghosts 
+  - send and load ghosts
+  - 
+
+#RGB shift animations
+  - idle rotation
+  - death animation
+  - charge animation
+  - win animation
+
+#Blur
+  - GameCameraBLur fadein on death 
+  - fadeout on play (fast lerp, <0.5sec)
 
 #Toptimes:
   - Stars / Gold/Silver/Bronce
@@ -9,3 +24,14 @@
 
 # 
 look on the paper to see all
+
+
+ghosts saving:
+	hashmap: action, timestamp
+
+# game names:
+	- velocity
+	- megaball
+	- sliders
+	- charge it
+	- amazing arcade

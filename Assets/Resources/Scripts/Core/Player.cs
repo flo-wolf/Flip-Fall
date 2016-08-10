@@ -12,9 +12,13 @@ namespace Sliders
     {
         public enum PlayerState { alive, dead, ready, waiting };
 
-        public PlayerState playerState;
+        public enum PlayerAction { reflect, charge, decharge };
 
-        public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
+        public PlayerState playerState;
+        public PlayerAction playerAction;
+
+        public PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
+        public PlayerActionEvent onPlayerAction = new PlayerActionEvent();
 
         //public Player instance;
         public CameraMovement cm;
@@ -32,9 +36,9 @@ namespace Sliders
         public AudioClip finishSound;
 
         public float gravity = 15F;
-        public float maxChargeVelocity;
-        public float chargeForcePerTick;
-        public float respawnDuration = 1f; //change to: Deathdelay !?
+        public float maxChargeVelocity = 250F;
+        public float chargeForcePerTick = 5F;
+        public float respawnDuration = 1f;
         public float aliveTime = 0f;
 
         private Spawn spawn;
@@ -206,6 +210,7 @@ namespace Sliders
         {
             rBody.velocity = new Vector2(rBody.velocity.x * (-1), rBody.velocity.y);
             SwitchFacingDirection();
+            onPlayerAction.Invoke(PlayerAction.reflect);
         }
 
         //Gravitationsabbruch, Figur wird auf der Ebene gehalten und beschleunigt
@@ -214,6 +219,7 @@ namespace Sliders
             rBody.gravityScale = 0f;
             rBody.velocity = new Vector2(rBody.velocity.x, 0f);
             charging = true;
+            onPlayerAction.Invoke(PlayerAction.charge);
         }
 
         //Erneutes Hinzufügen der Gravitation
@@ -221,6 +227,7 @@ namespace Sliders
         {
             charging = false;
             rBody.gravityScale = gravity;
+            onPlayerAction.Invoke(PlayerAction.decharge);
         }
 
         //Geschwindigkeitszuwachs während die Figur gehalten wird
@@ -320,5 +327,7 @@ namespace Sliders
 
         //Fired whenever the playerstate gets changed through SetPlayerState()
         public class PlayerStateChangeEvent : UnityEvent<PlayerState> { }
+
+        public class PlayerActionEvent : UnityEvent<PlayerAction> { }
     }
 }
