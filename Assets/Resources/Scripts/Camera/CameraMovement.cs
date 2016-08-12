@@ -48,7 +48,7 @@ namespace Sliders
 
         private IEnumerator Transition()
         {
-            float t = 0.0f;
+            float t = 0F;
             Vector3 startingPos = Camera.main.transform.position;
             SoundManager.instance.RandomizeSfx(transitionSound);
 

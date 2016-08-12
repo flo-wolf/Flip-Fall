@@ -9,9 +9,18 @@ namespace Sliders
     {
         public Player player;
         public Camera cam;
-        public float maxZoom;
-        public float minZoom;
-        public float velocityThreshold; //value around 5 works fine
+
+        //Zoom camera sizes
+        public float maxZoom = 120F;
+        public float minZoom = 80F;
+        public float deathZoom = 50F;
+
+        //Zooming times
+        public float deathZoomDuration = 0.5F;
+        public float defaultZoomDuration = 0.5F;
+
+        //Used for checking
+        public float velocityThreshold = 5F;
 
         private float size;
         private float maxVelocity;
@@ -48,14 +57,14 @@ namespace Sliders
         {
             switch (playerState)
             {
-                case Player.PlayerState.dead:
-                    StopAllCoroutines();
-                    StartCoroutine(ZoomIn());
-                    break;
-
                 case Player.PlayerState.alive:
                     StopAllCoroutines();
                     StartCoroutine(VelocityZoom());
+                    break;
+
+                case Player.PlayerState.dead:
+                    StopAllCoroutines();
+                    StartCoroutine(DeathZoom());
                     break;
 
                 default:
@@ -64,38 +73,47 @@ namespace Sliders
         }
 
         //zooms from the current camera size to the minimum camera size
-        private IEnumerator ZoomIn()
+        private IEnumerator ZoomToMinimum()
         {
             Debug.Log("ZoomIn()");
-            float zoomLerpTime = 0;
-            bool zooming = true;
-
-            while (zooming)
+            float t = 0;
+            while (t < 1F)
             {
-                zoomLerpTime += Time.fixedDeltaTime;
-                cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, minZoom, zoomLerpTime);
-
-                if (cam.orthographicSize == minZoom)
-                {
-                    zooming = false;
-                }
+                t += Time.deltaTime * (Time.timeScale / defaultZoomDuration);
+                cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, minZoom, t);
                 yield return new WaitForFixedUpdate();
             }
-
-            StartCoroutine(VelocityZoom());
+            yield break;
         }
 
         //zooms from the current camera size to the maximum camera size
-        private IEnumerator ZoomOut()
+        private IEnumerator ZoomToMaximum()
         {
             Debug.Log("ZoomOut()");
-            float zoomLerpTime = 0;
-            while (true)
+            float t = 0;
+            while (t < 1F)
             {
-                zoomLerpTime += Time.fixedDeltaTime;
-                cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, maxZoom, zoomLerpTime);
+                t += Time.deltaTime * (Time.timeScale / defaultZoomDuration);
+                cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, maxZoom, t);
                 yield return new WaitForFixedUpdate();
             }
+            yield break;
+        }
+
+        //zooms from the current camera size to the minimum camera size
+        private IEnumerator DeathZoom()
+        {
+            Debug.Log("DeathZoom() : IEnumerator");
+            float t = 0;
+            while (t < 1F)
+            {
+                t += Time.deltaTime * (Time.timeScale / deathZoomDuration);
+
+                cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, deathZoom, t);
+                yield return new WaitForFixedUpdate();
+            }
+            StartCoroutine(ZoomToMinimum());
+            yield break;
         }
 
         private IEnumerator TranslateToVelocityZoom()
@@ -110,11 +128,11 @@ namespace Sliders
                 velocity = player.rBody.velocity;
                 velocity.x = System.Math.Abs(velocity.x);
 
-                size = Mathf.Lerp(minZoom, maxZoom, Mathf.InverseLerp(cam.orthographicSize, maxVelocity, velocity.magnitude));
+                size = Mathf.SmoothStep(minZoom, maxZoom, Mathf.InverseLerp(cam.orthographicSize, maxVelocity, velocity.magnitude));
 
                 zoomLerpTime += Time.fixedDeltaTime;
 
-                cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, size, zoomLerpTime);
+                cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, zoomLerpTime);
 
                 if (cam.orthographicSize == size)
                 {
@@ -142,21 +160,10 @@ namespace Sliders
                     velocity.x = maxVelocity;
                 }
 
-                size = Mathf.Lerp(minZoom, maxZoom, Mathf.InverseLerp(cam.orthographicSize, maxVelocity, velocity.magnitude));
+                size = Mathf.SmoothStep(minZoom, maxZoom, Mathf.InverseLerp(cam.orthographicSize, maxVelocity, velocity.magnitude));
                 cam.orthographicSize = size;
                 yield return new WaitForFixedUpdate();
             }
         }
-
-        /*
-        private void FixedUpdate()
-        {
-                if (velocity.y + speedThreshold < System.Math.Abs(lastVelocity.y))
-                {
-                    StopAllCoroutines();
-                    StartCoroutine(ZoomIn());
-                }
-        }
-        */
     }
 }

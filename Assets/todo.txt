@@ -5,7 +5,7 @@
   - 
 
 #RGB shift animations
-  - idle rotation
+  - idle rotation animation
   - death animation
   - charge animation
   - win animation
@@ -35,3 +35,4 @@ ghosts saving:
 	- sliders
 	- charge it
 	- amazing arcade
+	- unbeatable

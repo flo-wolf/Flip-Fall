@@ -5,6 +5,9 @@ namespace Sliders
 {
     public class InputManager : MonoBehaviour
     {
+        //Todos in this class
+        //
+
         // Use this for initialization
         private void Start()
         {
@@ -14,5 +17,7 @@ namespace Sliders
         private void Update()
         {
         }
+
+        //public class InputEvent : Input;
     }
 }

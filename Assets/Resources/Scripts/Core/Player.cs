@@ -28,7 +28,6 @@ namespace Sliders
         public TrailRenderer trail; //Full color
         public TrailRenderer trail2; //Transparency - use shading instead
         public Rigidbody2D rBody;
-        public Text text;
         public Material defaultMaterial;
         public Material winMaterial;
 
