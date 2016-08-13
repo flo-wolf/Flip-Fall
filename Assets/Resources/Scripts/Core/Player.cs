@@ -1,4 +1,5 @@
-﻿using Sliders.Levels;
+﻿using Sliders.Cam;
+using Sliders.Levels;
 using Sliders.UI;
 using System;
 using System.Collections;
@@ -21,8 +22,6 @@ namespace Sliders
         public PlayerActionEvent onPlayerAction = new PlayerActionEvent();
 
         //public Player instance;
-        public CameraMovement cm;
-
         public LayerMask finishMask;
         public LayerMask killMask;
         public TrailRenderer trail; //Full color
@@ -30,9 +29,6 @@ namespace Sliders
         public Rigidbody2D rBody;
         public Material defaultMaterial;
         public Material winMaterial;
-
-        public AudioClip deathSound;
-        public AudioClip finishSound;
 
         public float gravity = 15F;
         public float maxChargeVelocity = 250F;
@@ -119,13 +115,11 @@ namespace Sliders
             {
                 Die();
                 Game.SetGameState(Game.GameState.deathscreen);
-                SoundManager.instance.RandomizeSfx(deathSound);
             }
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
                 Fin();
                 Game.SetGameState(Game.GameState.finishscreen);
-                SoundManager.instance.PlaySingle(finishSound);
             }
         }
 
@@ -144,7 +138,6 @@ namespace Sliders
         private void Spawn()
         {
             SetPlayerState(PlayerState.alive);
-            CameraMovement.SetCameraState(CameraMovement.CameraState.following);
 
             aliveTime = 0;
             trail.time = 0.5f;
@@ -197,7 +190,7 @@ namespace Sliders
             transform.position = spawnPosition;
             aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
-            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnDuration);
+            CamMovement.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnDuration);
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();

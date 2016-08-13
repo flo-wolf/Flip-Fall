@@ -2,16 +2,20 @@
 using System.Collections;
 using UnityEngine;
 
-// C 2016 FLorian Wolf
+/// <summary>
+/// Camera Rotation Handler, triggered through CameraManager
+/// </summary>
 
-namespace Sliders
+namespace Sliders.Cam
 {
-    public class CameraRotation : MonoBehaviour
+    public class CamRotation : MonoBehaviour
     {
         public enum RotationType { smoothstepDecreasing, linearDecreaing, constant };
 
+        public static CamRotation _instance;
         public Camera cam;
         public Player player;
+
         public float maxRotationAngle = 10F;
         public float defaultRotationAngle = 0F;
         public float rotationSpeed = 0.3F;
@@ -21,7 +25,11 @@ namespace Sliders
         private Vector3 rotation;
         private Vector3 playerVelocity;
 
-        // Use this for initialization
+        private void Awake()
+        {
+            _instance = this;
+        }
+
         private void Start()
         {
             player.onPlayerStateChange.AddListener(PlayerStateChanged);
@@ -67,7 +75,13 @@ namespace Sliders
             }
         }
 
-        private IEnumerator DeathRotation()
+        public static void DeathRotation()
+        {
+            _instance.StopAllCoroutines();
+            _instance.StartCoroutine(cDeathRotation());
+        }
+
+        private IEnumerator cDeathRotation()
         {
             float lerpTime = 0;
             bool right = true;

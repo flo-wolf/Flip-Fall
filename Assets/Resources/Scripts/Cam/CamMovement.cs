@@ -1,15 +1,16 @@
 ﻿using Sliders;
+using Sliders.Audio;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Sliders
+namespace Sliders.Cam
 {
-    public class CameraMovement : MonoBehaviour
+    public class CamMovement : MonoBehaviour
     {
-        public enum CameraState { following, transitioning, resting }
+        public enum CamMoveState { following, transitioning, resting }
 
-        public enum InterpolationType { smoothstep, linear, smootherstep, sin }
+        //public enum InterpolationType { smoothstep, linear, smootherstep, sin }
 
         //Spielfigur für Berechnung der relativen Kameraposition
         public Player player;
@@ -17,40 +18,49 @@ namespace Sliders
         public InterpolationType interpolationType;
         public AudioClip transitionSound;
 
-        public static CameraState cameraState;
+        public static CamMovement _instance;
+
+        public CamMoveState camMoveState;
         public static CameraStateEvent onCameraStateChange = new CameraStateEvent();
-        private static Vector3 target;
-        private static float transitionDuration;
+        private Vector3 target;
+        private float transitionDuration;
+
+        private void Awake()
+        {
+            _instance = this;
+        }
 
         private void Start()
         {
-            cameraState = CameraState.resting;
+            camMoveState = CamMoveState.resting;
             Vector3 PlayerPOS = player.transform.transform.position;
             Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
         }
 
-        public static void SetCameraState(CameraState cs)
+        public static void SetCameraState(CamMoveState cs)
         {
-            cameraState = cs;
-            onCameraStateChange.Invoke(cameraState);
+            _instance.camMoveState = cs;
+            onCameraStateChange.Invoke(_instance.camMoveState);
         }
 
         //Smooth camera Transitions, calls Transition()
-        public void moveCamTo(Vector2 t, float d)
+        public static void moveCamTo(Vector2 t, float d)
         {
             target = t;
             target.z = Constants.cameraY;
             transitionDuration = d;
 
-            SetCameraState(CameraState.transitioning);
-            StartCoroutine(Transition());
+            SetCameraState(CamMoveState.transitioning);
+            _instance.StartCoroutine(Transition());
         }
 
         private IEnumerator Transition()
         {
             float t = 0F;
             Vector3 startingPos = Camera.main.transform.position;
-            SoundManager.instance.RandomizeSfx(transitionSound);
+
+            ///AUSLAGERN! cameraManager class erstellen, dort die listeners reintun
+            SoundPlayer.instance.RandomizeSfx(transitionSound);
 
             switch (interpolationType)
             {
@@ -99,14 +109,14 @@ namespace Sliders
                     break;
             }
 
-            SetCameraState(CameraState.resting);
+            SetCameraState(CamMoveState.resting);
             Game.SetGameState(Game.GameState.ready);
         }
 
         //instead of using transforms rather use joints and only transform one
         private void Update()
         {
-            if (cameraState == CameraState.following)
+            if (camMoveState == CamMoveState.following)
             {
                 Vector3 PlayerPOS = player.transform.transform.position;
 
@@ -133,7 +143,7 @@ namespace Sliders
 
         public static bool IsFollowing()
         {
-            if (cameraState == CameraState.following)
+            if (camMoveState == CamMoveState.following)
                 return true;
             else
                 return false;
@@ -141,7 +151,7 @@ namespace Sliders
 
         public static bool IsResting()
         {
-            if (cameraState == CameraState.resting)
+            if (camMoveState == CamMoveState.resting)
                 return true;
             else
                 return false;
@@ -149,12 +159,12 @@ namespace Sliders
 
         public static bool IsTransitioning()
         {
-            if (cameraState == CameraState.transitioning)
+            if (camMoveState == CamMoveState.transitioning)
                 return true;
             else
                 return false;
         }
 
-        public class CameraStateEvent : UnityEvent<CameraState> { }
+        public class CameraStateEvent : UnityEvent<CamMoveState> { }
     }
 }

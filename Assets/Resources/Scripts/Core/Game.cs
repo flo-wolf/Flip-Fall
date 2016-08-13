@@ -1,4 +1,5 @@
 ﻿using Sliders;
+using Sliders.Cam;
 using Sliders.Levels;
 using Sliders.Progress;
 using Sliders.UI;
@@ -16,7 +17,7 @@ namespace Sliders
         public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
 
-        public static CameraMovement cm;
+        public static CamMovement cm;
         public static Game instance;
 
         //The delay between when SetGameState() gets called and when the GameSTateChangeEvent gets fired.
@@ -49,7 +50,6 @@ namespace Sliders
             switch (gs)
             {
                 case GameState.deathscreen:
-                    CameraShake.Shake();
                     UITimer.instance.Pause();
                     instance.StartCoroutine(DelayedGameStateSwitch());
                     //Delay for delayTime
@@ -89,12 +89,6 @@ namespace Sliders
 
         public void CloseGame()
         {
-        }
-
-        public void LoadLevel(int levelID)
-        {
-            //player.
-            //currentlevel = levelloader.load(levelID);
         }
 
         public static void RestartLevel()

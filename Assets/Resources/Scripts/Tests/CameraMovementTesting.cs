@@ -1,4 +1,5 @@
 ﻿using Sliders;
+using Sliders.Cam;
 using System.Collections;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace Sliders.Tests
 {
     public class CameraMovementTesting : MonoBehaviour
     {
-        public CameraMovement cm;
+        public CamMovement cm;
         public float testDriveTime = 0.7F;
         public Vector2 testStart = new Vector2(0, 100);
         public Vector2 testGoal = new Vector2(0, 450);
@@ -37,7 +38,7 @@ namespace Sliders.Tests
 
         private void Update()
         {
-            if (CameraMovement.IsResting())
+            if (CamMovement.IsResting())
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0) && !testDriveController)
                 {

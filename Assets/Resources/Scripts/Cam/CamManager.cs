@@ -1,42 +1,25 @@
-﻿using Sliders.Cam;
-using Sliders.Levels;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Listens to game events and plays sounds accordingly through the SoundPlayer class
-/// </summary>
-namespace Sliders.Audio
+namespace Sliders.Cam
 {
-    public class SoundManager : MonoBehaviour
+    public enum InterpolationType { smoothstep, linear }
+
+    public class CamManager : MonoBehaviour
     {
-        public SoundPlayer soundPlayer;
+        public enum CamState { transitioning, resting, zooming }
+
+        public Camera cam;
         public Player player;
-        public CamManager camManager;
-
-        [Header("Game Sounds")]
-        public AudioClip spawnSound;
-        public AudioClip deathSound;
-        public AudioClip reflectSound;
-        public AudioClip chargeSound;
-        public AudioClip finishSound;
-
-        [Space(10)]
-        [Header("UI Sounds")]
-        public AudioClip levelChangeSound;
-        public AudioClip clockSound;
-        public AudioClip defaultButtonSound;
-
-        [Space(10)]
-        [Header("Music")]
-        public AudioClip backgroundSound;
+        public CamZoom camZoom;
+        public CamRotation camRotation;
+        public CamShake camShake;
 
         private void Start()
         {
             Game.onGameStateChange.AddListener(GameStateChanged);
             player.onPlayerAction.AddListener(PlayerAction);
             player.onPlayerStateChange.AddListener(PlayerStateChanged);
-            LevelManager.onLevelChange.AddListener(LevelChanged);
         }
 
         //Listener
@@ -45,11 +28,10 @@ namespace Sliders.Audio
             switch (playerAction)
             {
                 case Player.PlayerAction.reflect:
-                    soundPlayer.PlaySingle(reflectSound);
                     break;
 
                 case Player.PlayerAction.charge:
-                    soundPlayer.PlaySingle(chargeSound);
+
                     break;
 
                 case Player.PlayerAction.decharge:
@@ -66,11 +48,12 @@ namespace Sliders.Audio
             switch (playerState)
             {
                 case Player.PlayerState.alive:
-                    soundPlayer.PlaySingle(spawnSound);
+                    CamMovement.SetCameraState(CamMovement.CamMoveState.following);
                     break;
 
                 case Player.PlayerState.dead:
-                    soundPlayer.PlaySingle(deathSound);
+                    CamShake.DeathShake();
+                    CamRotation.DeathRotation(); //change to camshake
                     break;
 
                 default:
@@ -83,7 +66,7 @@ namespace Sliders.Audio
             switch (gameState)
             {
                 case Game.GameState.playing:
-
+                    //play spawn sound
                     break;
 
                 case Game.GameState.deathscreen:
@@ -91,18 +74,12 @@ namespace Sliders.Audio
                     break;
 
                 case Game.GameState.finishscreen:
-                    soundPlayer.PlaySingle(finishSound);
                     //play win sound
                     break;
 
                 default:
                     break;
             }
-        }
-
-        private void LevelChanged(Level level)
-        {
-            soundPlayer.PlaySingle(levelChangeSound);
         }
     }
 }

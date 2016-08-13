@@ -9,6 +9,7 @@
 //Post-Processing: Add a Retro CRT Distortion Effect Using RGB Shifting
 //Audio: Add "character-dive-in", "player-death", "level-done", (...)
 
+using Sliders.Cam;
 using System.Collections;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ namespace Sliders.Unused
         //Importierung
         public Player player;
 
-        public CameraMovement cm;
+        public CamMovement cm;
 
         //Camera Defaults, put these into camera script!
         public static float lockedCameraZ = -10F;
