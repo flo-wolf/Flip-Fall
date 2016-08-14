@@ -11,6 +11,7 @@ namespace Sliders.Audio
 {
     public class SoundManager : MonoBehaviour
     {
+        public static SoundManager _instance;
         public SoundPlayer soundPlayer;
         public Player player;
         public CamManager camManager;
@@ -26,13 +27,18 @@ namespace Sliders.Audio
 
         [Header("UI Sounds")]
         public AudioClip levelChangeSound;
-        public AudioClip clockSound;
+        public AudioClip timerSound;
         public AudioClip defaultButtonSound;
         public AudioClip scoreScreenAppearSound;
         public AudioClip camTransitionSound;
 
         [Header("Music")]
         public AudioClip backgroundSound;
+
+        private void Awake()
+        {
+            _instance = this;
+        }
 
         private void Start()
         {
@@ -49,7 +55,7 @@ namespace Sliders.Audio
             switch (playerAction)
             {
                 case Player.PlayerAction.reflect:
-                    soundPlayer.PlaySingle(reflectSound);
+                    soundPlayer.RandomizeSfx(reflectSound);
                     break;
 
                 case Player.PlayerAction.charge:
@@ -115,6 +121,11 @@ namespace Sliders.Audio
                 default:
                     break;
             }
+        }
+
+        public void PlayTimerSound()
+        {
+            soundPlayer.PlaySingle(timerSound);
         }
 
         private void LevelChanged(Level level)

@@ -12,7 +12,7 @@ namespace Sliders.Audio
     {
         public AudioSource sfxSource;                   //Drag a reference to the audio source which will play the sound effects.
         public AudioSource musicSource;                 //Drag a reference to the audio source which will play the music.
-        public static SoundPlayer instance = null;     //Allows other scripts to call functions from SoundManager.
+        public static SoundPlayer _instance = null;     //Allows other scripts to call functions from SoundManager.
         public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
         public float highPitchRange = 1.05f;            //The highest a sound effect will be randomly pitched.
 
@@ -20,9 +20,9 @@ namespace Sliders.Audio
 
         private void Awake()
         {
-            if (instance == null)
-                instance = this;
-            else if (instance != this)
+            if (_instance == null)
+                _instance = this;
+            else if (_instance != this)
                 //Destroy this, this enforces our singleton pattern so there can only be one instance of SoundManager.
                 Destroy(gameObject);
 

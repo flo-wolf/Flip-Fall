@@ -43,32 +43,11 @@ namespace Sliders.Cam
         }
 
         //Listener
-        private void PlayerAction(Player.PlayerAction playerAction)
-        {
-            switch (playerAction)
-            {
-                case Player.PlayerAction.charge:
-                    break;
-
-                case Player.PlayerAction.decharge:
-                    break;
-
-                case Player.PlayerAction.reflect:
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        //Listener
         private void PlayerStateChanged(Player.PlayerState playerState)
         {
             switch (playerState)
             {
                 case Player.PlayerState.alive:
-                    StopAllCoroutines();
-                    StartCoroutine(cVelocityZoom());
                     break;
 
                 case Player.PlayerState.dead:
@@ -114,10 +93,16 @@ namespace Sliders.Cam
             _instance.cDeathZoom();
         }
 
-        public static void TranslateToVelocityZoom()
+        //Adjust the current camera size smoothly to its according velocity size, calculated through the behaviour's velocity
+        public static void ZoomToVelocity(MonoBehaviour behaviour)
         {
-            _instance.StopAllCoroutines();
-            _instance.cTranslateToVelocityZoom();
+            if (behaviour != null && behaviour.GetComponent<Rigidbody2D>() != null)
+            {
+                _instance.StopAllCoroutines();
+                _instance.cZoomToVelocity(behaviour.GetComponent<Rigidbody2D>());
+            }
+            else
+                Debug.LogError("[ZoomToVelocity] cant find rigidbody2D on gameobject");
         }
 
         private IEnumerator cZoomToMinimum()
@@ -202,7 +187,7 @@ namespace Sliders.Cam
         }
 
         //makes a smooth transition betwen the current size and the appropiate velocity size
-        private IEnumerator cTranslateToVelocityZoom()
+        private IEnumerator cZoomToVelocity(Rigidbody2D rb)
         {
             Vector2 velocity;
             float t = 0;
@@ -210,7 +195,7 @@ namespace Sliders.Cam
             while (t < 1F)
             {
                 t += Time.deltaTime * (Time.timeScale / translationZoomDuration);
-                velocity = player.rBody.velocity;
+                velocity = rb.velocity;
                 velocity.x = System.Math.Abs(velocity.x);
 
                 size = Mathf.SmoothStep(minZoom, maxZoom, Mathf.InverseLerp(cam.orthographicSize, maxVelocity, velocity.magnitude));

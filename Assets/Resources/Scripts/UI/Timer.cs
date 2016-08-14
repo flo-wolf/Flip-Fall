@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Sliders.Audio;
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Sliders.UI
@@ -99,7 +101,7 @@ namespace Sliders.UI
                 }
                 if (time.Milliseconds / 10 == 0)
                 {
-                    Behaviour.GetComponent<UITimer>().PlayCountingSound();
+                    SoundManager._instance.PlayTimerSound();
                 }
                 yield return new WaitForFixedUpdate();
             }

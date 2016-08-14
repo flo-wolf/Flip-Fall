@@ -13,9 +13,8 @@ namespace Sliders.UI
         depending on the current gamestate, called by listeners
         */
 
-        public static UIManager uiManager;
+        public static UIManager _instance;
 
-        public AudioClip playSound;
         public UIDeathscreen uiDeathscreen;
         public UIScoreboard uiScoreboard;
         public UITimer uiTimer;
@@ -25,7 +24,7 @@ namespace Sliders.UI
 
         private void Start()
         {
-            uiManager = this;
+            _instance = this;
             Game.onGameStateChange.AddListener(GameStateChanged);
         }
 

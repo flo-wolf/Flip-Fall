@@ -12,11 +12,12 @@ namespace Sliders.Cam
         public float shakeAmount;
         public float maxChargingShake = 5F;
 
-        public float deathShakeAmount = 15;
+        public float deathShakeAmount = 5f;
+        public float deathShakeDuration = 1f;
 
         private void Awake()
         {
-            _originalPos = transform.localPosition;
+            _originalPos = transform.transform.position;
             _instance = this;
         }
 
@@ -35,7 +36,7 @@ namespace Sliders.Cam
         public static void DeathShake()
         {
             _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cShakeCoroutine(1F, 15F));
+            _instance.StartCoroutine(_instance.cShakeCoroutine(_instance.deathShakeDuration, _instance.deathShakeAmount));
         }
 
         public static void PlayerChargingShake(Player player)
@@ -50,14 +51,14 @@ namespace Sliders.Cam
 
             while (Time.time < endTime)
             {
-                transform.localPosition = _originalPos + Random.insideUnitSphere * amount;
+                transform.transform.position = _originalPos + Random.insideUnitSphere * amount;
 
                 duration -= Time.deltaTime;
 
                 yield return null;
             }
 
-            transform.localPosition = _originalPos;
+            transform.transform.position = _originalPos;
         }
 
         //creates increasing shake depending on the players velocity

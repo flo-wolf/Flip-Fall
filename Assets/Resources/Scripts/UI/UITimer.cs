@@ -43,11 +43,6 @@ namespace Sliders.UI
             Timer.Reset();
         }
 
-        public void PlayCountingSound()
-        {
-            SoundPlayer.instance.PlaySingle(countingSound);
-        }
-
         public double GetTime()
         {
             //maybe change passedTime to pauseTime
