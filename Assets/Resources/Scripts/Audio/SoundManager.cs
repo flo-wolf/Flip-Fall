@@ -1,5 +1,6 @@
 ﻿using Sliders.Cam;
 using Sliders.Levels;
+using Sliders.UI;
 using System.Collections;
 using UnityEngine;
 
@@ -13,21 +14,23 @@ namespace Sliders.Audio
         public SoundPlayer soundPlayer;
         public Player player;
         public CamManager camManager;
+        public UITimer uiTimer;
 
         [Header("Game Sounds")]
+        public AudioClip playSound;
         public AudioClip spawnSound;
         public AudioClip deathSound;
         public AudioClip reflectSound;
         public AudioClip chargeSound;
         public AudioClip finishSound;
 
-        [Space(10)]
         [Header("UI Sounds")]
         public AudioClip levelChangeSound;
         public AudioClip clockSound;
         public AudioClip defaultButtonSound;
+        public AudioClip scoreScreenAppearSound;
+        public AudioClip camTransitionSound;
 
-        [Space(10)]
         [Header("Music")]
         public AudioClip backgroundSound;
 
@@ -36,6 +39,7 @@ namespace Sliders.Audio
             Game.onGameStateChange.AddListener(GameStateChanged);
             player.onPlayerAction.AddListener(PlayerAction);
             player.onPlayerStateChange.AddListener(PlayerStateChanged);
+            CamMove.onCamMoveStateChange.AddListener(CamMoveStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
         }
 
@@ -53,6 +57,19 @@ namespace Sliders.Audio
                     break;
 
                 case Player.PlayerAction.decharge:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void CamMoveStateChanged(CamMove.CamMoveState moveState)
+        {
+            switch (moveState)
+            {
+                case CamMove.CamMoveState.transitioning:
+                    soundPlayer.RandomizeSfx(camTransitionSound);
                     break;
 
                 default:
@@ -83,11 +100,11 @@ namespace Sliders.Audio
             switch (gameState)
             {
                 case Game.GameState.playing:
-
+                    soundPlayer.PlaySingle(playSound);
                     break;
 
-                case Game.GameState.deathscreen:
-                    //play deathscreen sound
+                case Game.GameState.scorescreen:
+                    soundPlayer.PlaySingle(scoreScreenAppearSound);
                     break;
 
                 case Game.GameState.finishscreen:

@@ -1,5 +1,5 @@
-﻿using Sliders.Levels;
-using Sliders.UI;
+﻿using Sliders.Cam;
+using Sliders.Levels;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -12,22 +12,19 @@ namespace Sliders
     {
         public enum GhostState { alive, dead, ready, finished };
 
-        public GhostState ghostState;
+        public GhostStateChangeEvent onGhostStateChange = new GhostStateChangeEvent();
 
         //public Player instance;
-        public CameraMovement cm;
+        public CamMove cm;
 
+        public GhostState ghostState;
         public LayerMask finishMask;
         public LayerMask killMask;
         public TrailRenderer trail; //Full color
         public TrailRenderer trail2; //Transparency - use shading instead
         public Rigidbody2D rBody;
-        public Text text;
         public Material defaultMaterial;
         public Material winMaterial;
-
-        public AudioClip deathSound;
-        public AudioClip finishSound;
 
         public float gravity = 15F;
         public float maxChargeVelocity;
@@ -62,6 +59,12 @@ namespace Sliders
             trail.sortingOrder = 2;
         }
 
+        public void SetGhostState(GhostState gs)
+        {
+            ghostState = gs;
+            onGhostStateChange.Invoke(ghostState);
+        }
+
         private void ReloadSpawnPoint()
         {
             spawn = LevelManager.levelManager.GetLevel().spawn;
@@ -88,7 +91,7 @@ namespace Sliders
                     Spawn();
                     break;
 
-                case Game.GameState.deathscreen:
+                case Game.GameState.scorescreen:
                     MoveToSpawn();
                     break;
 
@@ -112,18 +115,16 @@ namespace Sliders
             if (1 << collider.gameObject.layer == killMask.value && IsAlive())
             {
                 Die();
-                Game.SetGameState(Game.GameState.deathscreen);
-                SoundManager.instance.RandomizeSfx(deathSound);
             }
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
                 Fin();
-                SoundManager.instance.PlaySingle(finishSound);
             }
         }
 
         private void Spawn()
         {
+            SetGhostState(GhostState.alive);
             aliveTime = 0;
             trail.time = 0.5f;
             trail.enabled = true;
@@ -137,6 +138,7 @@ namespace Sliders
 
         private void Die()
         {
+            SetGhostState(GhostState.dead);
             charging = false;
             facingLeft = spawn.facingLeftOnSpawn;
             firstChargeDone = false;
@@ -173,7 +175,7 @@ namespace Sliders
             transform.position = spawnPosition;
             aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
-            cm.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnDuration);
+            CamMove.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnDuration);
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();
@@ -241,5 +243,7 @@ namespace Sliders
             else
                 return false;
         }
+
+        public class GhostStateChangeEvent : UnityEvent<GhostState> { }
     }
 }

@@ -35,16 +35,14 @@ namespace Sliders.UI
             {
                 case Game.GameState.playing:
                     UIScoreboard.uiScoreboard.Hide(); //add fancy fadeouts, save
-                    SoundManager.instance.PlaySingle(playSound);
                     deathscreen.SetActive(false);
                     play.gameObject.SetActive(false);
                     uiTimer.Run();
                     break;
 
-                case Game.GameState.deathscreen:
+                case Game.GameState.scorescreen:
                     deathscreen.SetActive(true);
                     UIScoreboard.uiScoreboard.Show();
-                    CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     //display scoreboard
                     break;
 
@@ -56,7 +54,6 @@ namespace Sliders.UI
                     uiTimer.Pause();
                     deathscreen.SetActive(true);
                     UIScoreboard.uiScoreboard.ShowAndUpdate(uiTimer.GetTime()); //add fancy fadeouts
-                    CameraMovement.SetCameraState(CameraMovement.CameraState.resting);
                     break;
 
                 default:

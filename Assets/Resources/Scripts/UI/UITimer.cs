@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sliders.Audio;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Sliders.UI
@@ -19,37 +20,38 @@ namespace Sliders.UI
         // Use this for initialization
         public void Run()
         {
-            Sliders.UI.Timer.Start(this, textSec, textMil);
+            Timer.Start(this, textSec, textMil);
         }
 
         public void Pause()
         {
-            Sliders.UI.Timer.Pause();
+            Timer.Pause();
         }
 
         public void Continue()
         {
-            Sliders.UI.Timer.Continue();
+            Timer.Continue();
         }
 
         public void Stop()
         {
-            Sliders.UI.Timer.Stop();
+            Timer.Stop();
         }
 
         public void Reset()
         {
-            Sliders.UI.Timer.Reset();
+            Timer.Reset();
         }
 
         public void PlayCountingSound()
         {
-            SoundManager.instance.PlaySingle(countingSound);
+            SoundPlayer.instance.PlaySingle(countingSound);
         }
 
         public double GetTime()
         {
-            double time = Sliders.UI.Timer.pauseTime;
+            //maybe change passedTime to pauseTime
+            double time = Timer.passedTime;
             return time;
         }
     }

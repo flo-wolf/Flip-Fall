@@ -90,7 +90,7 @@ namespace Sliders
                     StartCoroutine(AliveTimerCorutine());
                     break;
 
-                case Game.GameState.deathscreen:
+                case Game.GameState.scorescreen:
                     MoveToSpawn();
                     break;
 
@@ -114,7 +114,7 @@ namespace Sliders
             if (1 << collider.gameObject.layer == killMask.value && IsAlive())
             {
                 Die();
-                Game.SetGameState(Game.GameState.deathscreen);
+                Game.SetGameState(Game.GameState.scorescreen);
             }
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
@@ -190,7 +190,9 @@ namespace Sliders
             transform.position = spawnPosition;
             aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
-            CamMovement.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnDuration);
+
+            CamMove.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnDuration);
+
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();

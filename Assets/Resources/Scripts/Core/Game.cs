@@ -12,12 +12,12 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { titlescreen, tutorial, ready, playing, pause, deathscreen, finishscreen, editor, settingsscreen }
+        public enum GameState { titlescreen, tutorial, ready, playing, pause, scorescreen, finishscreen, editor, settingsscreen }
 
         public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
 
-        public static CamMovement cm;
+        public static CamMove cm;
         public static Game instance;
 
         //The delay between when SetGameState() gets called and when the GameSTateChangeEvent gets fired.
@@ -46,18 +46,16 @@ namespace Sliders
         {
             gameState = gs;
 
-            //Executed before event is fired!
             switch (gs)
             {
-                case GameState.deathscreen:
+                case GameState.scorescreen:
+                    //Executed before event is fired!
                     UITimer.instance.Pause();
                     instance.StartCoroutine(DelayedGameStateSwitch());
-                    //Delay for delayTime
-                    //execute UI animationset in Time delayTime
-                    //SetReady
                     break;
 
                 case GameState.finishscreen:
+                    //Executed before event is fired!
                     UITimer.instance.Pause();
                     instance.StartCoroutine(DelayedGameStateSwitch());
                     break;

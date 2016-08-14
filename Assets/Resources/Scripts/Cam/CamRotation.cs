@@ -46,8 +46,6 @@ namespace Sliders.Cam
                     break;
 
                 case Player.PlayerState.dead:
-                    StopAllCoroutines();
-                    StartCoroutine(DeathRotation());
                     break;
 
                 default:
@@ -78,7 +76,7 @@ namespace Sliders.Cam
         public static void DeathRotation()
         {
             _instance.StopAllCoroutines();
-            _instance.StartCoroutine(cDeathRotation());
+            _instance.StartCoroutine(_instance.cDeathRotation());
         }
 
         private IEnumerator cDeathRotation()

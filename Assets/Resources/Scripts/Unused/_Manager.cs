@@ -22,7 +22,7 @@ namespace Sliders.Unused
         //Importierung
         public Player player;
 
-        public CamMovement cm;
+        public CamMove cm;
 
         //Camera Defaults, put these into camera script!
         public static float lockedCameraZ = -10F;

@@ -48,8 +48,6 @@ namespace Sliders.Cam
             switch (playerAction)
             {
                 case Player.PlayerAction.charge:
-                    StopAllCoroutines();
-                    StartCoroutine(cTranslateToVelocityZoom());
                     break;
 
                 case Player.PlayerAction.decharge:

@@ -6,22 +6,17 @@ using UnityEngine.Events;
 
 namespace Sliders.Cam
 {
-    public class CamMovement : MonoBehaviour
+    public class CamMove : MonoBehaviour
     {
+        public static CamMove _instance;
+
+        public static CameraStateEvent onCamMoveStateChange = new CameraStateEvent();
         public enum CamMoveState { following, transitioning, resting }
 
-        //public enum InterpolationType { smoothstep, linear, smootherstep, sin }
-
-        //Spielfigur für Berechnung der relativen Kameraposition
+        public CamMoveState camMoveState;
+        public InterpolationType interpolationType;
         public Player player;
 
-        public InterpolationType interpolationType;
-        public AudioClip transitionSound;
-
-        public static CamMovement _instance;
-
-        public CamMoveState camMoveState;
-        public static CameraStateEvent onCameraStateChange = new CameraStateEvent();
         private Vector3 target;
         private float transitionDuration;
 
@@ -32,35 +27,42 @@ namespace Sliders.Cam
 
         private void Start()
         {
-            camMoveState = CamMoveState.resting;
+            _instance.camMoveState = CamMoveState.resting;
             Vector3 PlayerPOS = player.transform.transform.position;
             Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
+        }
+
+        public static void StartFollowing()
+        {
+            SetCameraState(CamMoveState.following);
+        }
+
+        public static void StopFollowing()
+        {
+            SetCameraState(CamMoveState.resting);
         }
 
         public static void SetCameraState(CamMoveState cs)
         {
             _instance.camMoveState = cs;
-            onCameraStateChange.Invoke(_instance.camMoveState);
+            onCamMoveStateChange.Invoke(_instance.camMoveState);
         }
 
         //Smooth camera Transitions, calls Transition()
         public static void moveCamTo(Vector2 t, float d)
         {
-            target = t;
-            target.z = Constants.cameraY;
-            transitionDuration = d;
+            _instance.target = t;
+            _instance.target.z = Constants.cameraY;
+            _instance.transitionDuration = d;
 
             SetCameraState(CamMoveState.transitioning);
-            _instance.StartCoroutine(Transition());
+            _instance.StartCoroutine(_instance.Transition());
         }
 
         private IEnumerator Transition()
         {
             float t = 0F;
             Vector3 startingPos = Camera.main.transform.position;
-
-            ///AUSLAGERN! cameraManager class erstellen, dort die listeners reintun
-            SoundPlayer.instance.RandomizeSfx(transitionSound);
 
             switch (interpolationType)
             {
@@ -69,16 +71,6 @@ namespace Sliders.Cam
                     {
                         t += Time.deltaTime * (Time.timeScale / transitionDuration);
                         Camera.main.transform.position = Vector3.Lerp(startingPos, target, t);
-                        yield return 0;
-                    }
-                    break;
-
-                case InterpolationType.sin:
-                    while (t < 1.0f)
-                    {
-                        t += Time.deltaTime * (Time.timeScale / transitionDuration);
-                        float x = Mathf.Sin(t) + 1;
-                        Camera.main.transform.position = Vector3.Lerp(startingPos, target, x);
                         yield return 0;
                     }
                     break;
@@ -92,15 +84,6 @@ namespace Sliders.Cam
                         x = x * x * (3f - 2f * t); //Smoothstep formula: t = t*t * (3f - 2f*t)
 
                         Camera.main.transform.position = Vector3.Lerp(startingPos, target, x);
-                        yield return 0;
-                    }
-                    break;
-
-                case InterpolationType.smootherstep:
-                    while (t < 1.0f)
-                    {
-                        t += Time.deltaTime * (Time.timeScale / transitionDuration);
-                        Camera.main.transform.position = Vector3.Lerp(startingPos, target, Mathf.SmoothStep(0, 1, t));
                         yield return 0;
                     }
                     break;
@@ -143,7 +126,7 @@ namespace Sliders.Cam
 
         public static bool IsFollowing()
         {
-            if (camMoveState == CamMoveState.following)
+            if (_instance.camMoveState == CamMoveState.following)
                 return true;
             else
                 return false;
@@ -151,7 +134,7 @@ namespace Sliders.Cam
 
         public static bool IsResting()
         {
-            if (camMoveState == CamMoveState.resting)
+            if (_instance.camMoveState == CamMoveState.resting)
                 return true;
             else
                 return false;
@@ -159,7 +142,7 @@ namespace Sliders.Cam
 
         public static bool IsTransitioning()
         {
-            if (camMoveState == CamMoveState.transitioning)
+            if (_instance.camMoveState == CamMoveState.transitioning)
                 return true;
             else
                 return false;
