@@ -20,6 +20,10 @@ namespace Sliders
         public static CamMove cm;
         public static Game _instance;
 
+        //delay time between the players death and the appearance of the next screen
+        public static float scoreScreenAppearDelay = 1F;
+        public static float finishScreenAppearDelay = 1F;
+
         //The delay between when SetGameState() gets called and when the GameSTateChangeEvent gets fired.
         public int switchDelay = 1;
 
@@ -51,13 +55,13 @@ namespace Sliders
                 case GameState.scorescreen:
                     //Executed before event is fired!
                     UITimer.instance.Pause();
-                    _instance.StartCoroutine(DelayedGameStateSwitch());
+                    _instance.StartCoroutine(DelayedGameStateSwitch(scoreScreenAppearDelay));
                     break;
 
                 case GameState.finishscreen:
                     //Executed before event is fired!
                     UITimer.instance.Pause();
-                    _instance.StartCoroutine(DelayedGameStateSwitch());
+                    _instance.StartCoroutine(DelayedGameStateSwitch(finishScreenAppearDelay));
                     break;
 
                 case GameState.playing:
@@ -74,9 +78,9 @@ namespace Sliders
             }
         }
 
-        public static IEnumerator DelayedGameStateSwitch()
+        public static IEnumerator DelayedGameStateSwitch(float delay)
         {
-            yield return new WaitForSeconds(_instance.switchDelay);
+            yield return new WaitForSeconds(delay);
             onGameStateChange.Invoke(gameState);
         }
 

@@ -10,8 +10,6 @@ namespace Sliders.Cam
 {
     public class CamRotation : MonoBehaviour
     {
-        public enum RotationType { smoothstepDecreasing, linearDecreaing, constant };
-
         public static CamRotation _instance;
         public Camera cam;
         public Player player;
@@ -20,7 +18,6 @@ namespace Sliders.Cam
         public float defaultRotationAngle = 0F;
         public float rotationSpeed = 0.3F;
         public int rotationCount = 2;
-        public RotationType rotationType;
 
         private Vector3 rotation;
         private Vector3 playerVelocity;
@@ -30,56 +27,41 @@ namespace Sliders.Cam
             _instance = this;
         }
 
-        private void Start()
-        {
-            player.onPlayerStateChange.AddListener(PlayerStateChanged);
-            player.onPlayerAction.AddListener(PlayerAction);
-        }
-
-        private void PlayerStateChanged(Player.PlayerState playerState)
-        {
-            switch (playerState)
-            {
-                case Player.PlayerState.alive:
-                    //StopAllCoroutines();
-                    //StartCoroutine(SpawnRotation());
-                    break;
-
-                case Player.PlayerState.dead:
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        private void PlayerAction(Player.PlayerAction playerAction)
-        {
-            switch (playerAction)
-            {
-                case Player.PlayerAction.charge:
-                    // StopAllCoroutines();
-                    // StartCoroutine(TranslateToVelocityZoom());
-                    break;
-
-                case Player.PlayerAction.decharge:
-                    break;
-
-                case Player.PlayerAction.reflect:
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
         public static void DeathRotation()
         {
-            _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cDeathRotation());
+            //_instance.StopAllCoroutines();
+            //_instance.StartCoroutine(_instance.cDeathRotation());
         }
 
-        private IEnumerator cDeathRotation()
+        public static void RotateToDefault(float duration)
+        {
+            _instance.StopAllCoroutines();
+            _instance.StartCoroutine(_instance.cRotateToDefault(duration));
+        }
+
+        public static void RotateToVelocity(MonoBehaviour behaviour, float duration)
+        {
+            if (behaviour != null && behaviour.GetComponent<Rigidbody2D>() != null)
+            {
+                _instance.StopAllCoroutines();
+                _instance.StartCoroutine(_instance.cRotateToVelocity(behaviour.GetComponent<Rigidbody2D>(), duration));
+            }
+            else
+                Debug.LogError("[VelocityShake] cant find rigidbody2D on gameobject");
+        }
+
+        public static void VelocityRotation(MonoBehaviour behaviour)
+        {
+            if (behaviour != null && behaviour.GetComponent<Rigidbody2D>() != null)
+            {
+                _instance.StopAllCoroutines();
+                _instance.StartCoroutine(_instance.cVelocityRotation(behaviour.GetComponent<Rigidbody2D>()));
+            }
+            else
+                Debug.LogError("[VelocityShake] cant find rigidbody2D on gameobject");
+        }
+
+        private IEnumerator cDeathRotation(float duration)
         {
             float lerpTime = 0;
             bool right = true;
@@ -107,10 +89,10 @@ namespace Sliders.Cam
                 yield return new WaitForFixedUpdate();
             }
 
-            StartCoroutine(RotateToDefault());
+            StartCoroutine(cRotateToDefault(duration));
         }
 
-        private IEnumerator RotateToAngle(float angle)
+        private IEnumerator cRotateToAngle(float angle)
         {
             float zoomLerpTime = 0;
             bool zooming = true;
@@ -130,51 +112,69 @@ namespace Sliders.Cam
             }
         }
 
-        private IEnumerator RotateToDefault()
+        //rotates to the default angle
+        private IEnumerator cRotateToDefault(float duration)
         {
-            Debug.Log("RotateToDefault()");
-            float zoomLerpTime = 0;
-            bool zooming = true;
+            float t = 0;
 
-            while (zooming)
+            Quaternion defaultRotation = Quaternion.AngleAxis(defaultRotationAngle, Vector3.forward);
+
+            while (t < 1F)
             {
-                zoomLerpTime += Time.fixedDeltaTime;
-                rotation = new Vector3(0, 0, Mathf.SmoothStep(cam.transform.rotation.y, defaultRotationAngle, zoomLerpTime));
-                cam.transform.Rotate(rotation);
+                t += Time.deltaTime * (Time.timeScale / duration);
 
-                if (rotation.z == defaultRotationAngle)
-                {
-                    StopCoroutine(RotateToDefault());
-                }
+                transform.rotation = Quaternion.Slerp(transform.rotation, defaultRotation, t);
 
                 yield return new WaitForFixedUpdate();
             }
+            yield break;
         }
 
-        /*
-        private IEnumerator SpawnRotation()
+        public IEnumerator cRotateToVelocity(Rigidbody2D rb, float duration)
         {
-            Debug.Log("DeathRotation()");
-            float zoomLerpTime = 0;
-            bool zooming = true;
+            float maxVelocity = Player._instance.maxChargeVelocity;
+            Vector2 velocity;
+            float t = 0;
+
+            Quaternion minRotation = Quaternion.AngleAxis(-maxRotationAngle, Vector3.forward);
+            Quaternion maxRotation = Quaternion.AngleAxis(maxRotationAngle, Vector3.forward);
+            Quaternion currentVelocityRotation;
+
+            while (t < 1F)
+            {
+                t += Time.deltaTime * (Time.timeScale / duration);
+                velocity = rb.velocity;
+                velocity.x = System.Math.Abs(velocity.x);
+
+                currentVelocityRotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
+                transform.rotation = Quaternion.Lerp(transform.rotation, currentVelocityRotation, t);
+
+                yield return new WaitForFixedUpdate();
+            }
+            StartCoroutine(cVelocityRotation(rb));
+            yield break;
+        }
+
+        private IEnumerator cVelocityRotation(Rigidbody2D rb)
+        {
+            float maxVelocity = Player._instance.maxChargeVelocity;
+            Vector2 velocity;
+            Quaternion minRotation = Quaternion.AngleAxis(-maxRotationAngle, Vector3.forward);
+            Quaternion maxRotation = Quaternion.AngleAxis(maxRotationAngle, Vector3.forward);
 
             while (true)
             {
-                playerVelocity = player.rBody.velocity;
-                playerVelocity.x = System.Math.Abs(velocity.x);
+                velocity = rb.velocity;
+                velocity.x = System.Math.Abs(velocity.x);
 
-                if (playerVelocity.x > (maxVelocity - velocityThreshold))
+                if (velocity.x > (maxVelocity - Constants.velocityThreshhold))
                 {
-                    playerVelocity.x = maxVelocity;
+                    velocity.x = maxVelocity;
                 }
 
-                size = Mathf.Lerp(minZoom, maxZoom, Mathf.InverseLerp(cam.orthographicSize, maxVelocity, velocity.magnitude));
-                cam.orthographicSize = size;
+                transform.rotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
                 yield return new WaitForFixedUpdate();
             }
-
-            StartCoroutine(RotateToDefault());
         }
-        */
     }
 }

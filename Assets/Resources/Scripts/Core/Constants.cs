@@ -6,5 +6,6 @@
         public const float playerZ = 11f;
         public const int scoreboardSize = 10;
         public const string timerFormat = "{0:D1}.{1:D2}";
+        public const float velocityThreshhold = 5F;
     }
 }

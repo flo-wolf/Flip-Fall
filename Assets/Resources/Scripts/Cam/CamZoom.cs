@@ -18,14 +18,6 @@ namespace Sliders.Cam
         public float minZoom = 80F;
         public float deathZoom = 50F;
 
-        //Zooming times
-        public float deathZoomDuration = 0.5F;
-        public float defaultZoomDuration = 0.5F;
-        public float translationZoomDuration = 0.5F;
-
-        //Used for checking
-        public float velocityThreshold = 5F;
-
         private float size;
         private float maxVelocity;
 
@@ -41,70 +33,68 @@ namespace Sliders.Cam
         }
 
         //zooms in from the current camera size to the minimum camera size
-        public static void ZoomToMinimum()
+        public static void ZoomToMinimum(float duration)
         {
             _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cZoomToMinimum());
+            _instance.StartCoroutine(_instance.cZoomToMinimum(duration));
         }
 
         //zooms out from the current camera size to the maximum camera size
-        public static void ZoomToMaximum()
+        public static void ZoomToMaximum(float duration)
         {
             _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cZoomToMaximum());
+            _instance.StartCoroutine(_instance.cZoomToMaximum(duration));
         }
 
         //translates camera size to a new value
-        public static void Zoom(float size)
+        public static void Zoom(float size, float duration)
         {
             _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cZoom(size));
+            _instance.StartCoroutine(_instance.cZoom(size, duration));
         }
 
-        public static void Zoom(float size, InterpolationType interpolationType)
+        public static void Zoom(float size, float duration, InterpolationType interpolationType)
         {
             _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cZoom(size, interpolationType));
+            _instance.StartCoroutine(_instance.cZoom(size, duration, interpolationType));
         }
 
-        public static void DeathZoom()
+        public static void DeathZoom(float duration)
         {
-            Debug.Log("dzoom and instance: " + _instance);
             _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cDeathZoom());
+            _instance.StartCoroutine(_instance.cDeathZoom(duration));
         }
 
         //Adjust the current camera size smoothly to its according velocity size, calculated through the behaviour's velocity
-        public static void ZoomToVelocity(MonoBehaviour behaviour)
+        public static void ZoomToVelocity(MonoBehaviour behaviour, float duration)
         {
             if (behaviour != null && behaviour.GetComponent<Rigidbody2D>() != null)
             {
                 _instance.StopAllCoroutines();
-                _instance.StartCoroutine(_instance.cZoomToVelocity(behaviour.GetComponent<Rigidbody2D>()));
+                _instance.StartCoroutine(_instance.cZoomToVelocity(behaviour.GetComponent<Rigidbody2D>(), duration));
             }
             else
                 Debug.LogError("[ZoomToVelocity] cant find rigidbody2D on gameobject");
         }
 
-        public IEnumerator cZoomToMinimum()
+        public IEnumerator cZoomToMinimum(float duration)
         {
-            Debug.Log("ZoomIn()");
             float t = 0;
             while (t < 1F)
             {
-                t += Time.deltaTime * (Time.timeScale / defaultZoomDuration);
+                t += Time.deltaTime * (Time.timeScale / duration);
                 cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, minZoom, t);
                 yield return new WaitForFixedUpdate();
             }
             yield break;
         }
 
-        public IEnumerator cZoom(float size)
+        public IEnumerator cZoom(float size, float duration)
         {
             float t = 0;
             while (t < 1F)
             {
-                t += Time.deltaTime * (Time.timeScale / defaultZoomDuration);
+                t += Time.deltaTime * (Time.timeScale / duration);
 
                 cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
 
@@ -113,12 +103,12 @@ namespace Sliders.Cam
             yield break;
         }
 
-        public IEnumerator cZoom(float size, InterpolationType interpolationType)
+        public IEnumerator cZoom(float size, float duration, InterpolationType interpolationType)
         {
             float t = 0;
             while (t < 1F)
             {
-                t += Time.deltaTime * (Time.timeScale / defaultZoomDuration);
+                t += Time.deltaTime * (Time.timeScale / duration);
 
                 switch (interpolationType)
                 {
@@ -140,12 +130,12 @@ namespace Sliders.Cam
             yield break;
         }
 
-        public IEnumerator cZoomToMaximum()
+        public IEnumerator cZoomToMaximum(float duration)
         {
             float t = 0;
             while (t < 1F)
             {
-                t += Time.deltaTime * (Time.timeScale / defaultZoomDuration);
+                t += Time.deltaTime * (Time.timeScale / duration);
                 cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, maxZoom, t);
                 yield return new WaitForFixedUpdate();
             }
@@ -153,13 +143,12 @@ namespace Sliders.Cam
         }
 
         //zooms from the current camera size to the death camera size
-        public IEnumerator cDeathZoom()
+        public IEnumerator cDeathZoom(float duration)
         {
-            Debug.Log("cDeathZoom");
             float t = 0;
             while (t < 1F)
             {
-                t += Time.deltaTime * (Time.timeScale / deathZoomDuration);
+                t += Time.deltaTime * (Time.timeScale / duration);
 
                 cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, deathZoom, t);
                 yield return new WaitForFixedUpdate();
@@ -168,14 +157,14 @@ namespace Sliders.Cam
         }
 
         //makes a smooth transition betwen the current size and the appropiate velocity size
-        public IEnumerator cZoomToVelocity(Rigidbody2D rb)
+        public IEnumerator cZoomToVelocity(Rigidbody2D rb, float duration)
         {
             Vector2 velocity;
             float t = 0;
 
             while (t < 1F)
             {
-                t += Time.deltaTime * (Time.timeScale / translationZoomDuration);
+                t += Time.deltaTime * (Time.timeScale / duration);
                 velocity = rb.velocity;
                 velocity.x = System.Math.Abs(velocity.x);
 
@@ -198,7 +187,7 @@ namespace Sliders.Cam
                 velocity = rb.velocity;
                 velocity.x = System.Math.Abs(velocity.x);
 
-                if (velocity.x > (maxVelocity - velocityThreshold))
+                if (velocity.x > (maxVelocity - Constants.velocityThreshhold))
                 {
                     velocity.x = maxVelocity;
                 }

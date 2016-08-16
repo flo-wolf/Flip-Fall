@@ -9,28 +9,15 @@ namespace Sliders.Cam
         public static CamShake _instance;
         public Camera cam;
 
-        [Space(10)]
-        public float shakeDuration;
-        public float shakeAmount;
+        [Header("Shake Settings")]
         public float maxChargingShake = 5F;
-
-        [Space(10)]
-        public float deathShakeAmount = 5f;
-        public float deathShakeSpeed = 5f;
-        public float deathShakeDuration = 1f;
-
-        private Vector3 originalPos;
+        public float deathShakeAmount = 10f;
+        public float deathShakeDuration = 0.2f;
 
         private void Awake()
         {
             _instance = this;
             Debug.Log("awake");
-        }
-
-        public static void Shake()
-        {
-            _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cShakeCoroutine(_instance.shakeDuration, _instance.shakeAmount));
         }
 
         public static void Shake(float duration, float amount)
@@ -45,20 +32,29 @@ namespace Sliders.Cam
             _instance.StartCoroutine(_instance.cShakeCoroutine(_instance.deathShakeDuration, _instance.deathShakeAmount));
         }
 
-        public static void PlayerChargingShake(Player player)
+        public static void VelocityShake(MonoBehaviour behaviour)
         {
-            _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cPlayerChargingShake(player));
+            if (behaviour != null && behaviour.GetComponent<Rigidbody2D>() != null)
+            {
+                _instance.StopAllCoroutines();
+                _instance.StartCoroutine(_instance.cVelocityShake(behaviour.GetComponent<Rigidbody2D>()));
+            }
+            else
+                Debug.LogError("[VelocityShake] cant find rigidbody2D on gameobject");
         }
 
         public IEnumerator cShakeCoroutine(float duration, float amount)
         {
             float endTime = Time.time + duration;
+            Vector3 originalPos = Vector3.zero;
+            Vector3 newPos = Vector3.zero;
 
             while (Time.time < endTime)
             {
-                cam.transform.position = originalPos + Random.insideUnitSphere * amount;
-
+                originalPos = cam.transform.position;
+                newPos = originalPos + Random.insideUnitSphere * amount;
+                newPos.z = originalPos.z;
+                cam.transform.position = newPos;
                 duration -= Time.deltaTime;
 
                 yield return null;
@@ -67,21 +63,31 @@ namespace Sliders.Cam
             cam.transform.position = originalPos;
         }
 
-        //creates increasing shake depending on the players velocity
-        public IEnumerator cPlayerChargingShake(Player player)
+        //creates increasing shake depending on the rigidbody's velocity
+        public IEnumerator cVelocityShake(Rigidbody2D rb)
         {
-            float maxVelocity = player.maxChargeVelocity;
+            float maxVelocity = Player._instance.maxChargeVelocity;
             Vector2 velocity;
+            Vector3 originalPos = Vector3.zero;
+            Vector3 newPos = Vector3.zero;
+
             float amount;
 
             while (true)
             {
-                velocity = player.rBody.velocity;
+                originalPos = cam.transform.position;
+                velocity = rb.velocity;
                 velocity.x = System.Math.Abs(velocity.x);
 
-                //change 1 to a higher value for shake strength changes
+                if (velocity.x > (maxVelocity - Constants.velocityThreshhold))
+                {
+                    velocity.x = maxVelocity;
+                }
+
                 amount = Mathf.SmoothStep(0, maxChargingShake, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
-                cam.transform.position = originalPos + Random.insideUnitSphere * amount;
+                newPos = originalPos + Random.insideUnitSphere * amount;
+                newPos.z = 0;
+                cam.transform.position = newPos;
                 yield return new WaitForFixedUpdate();
             }
         }

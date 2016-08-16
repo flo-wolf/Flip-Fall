@@ -10,6 +10,17 @@ namespace Sliders.Cam
         public static CamManager _instance;
         public Player player;
 
+        public static float defaultTransitionDuration = 1F;
+
+        //Duration camera events use after the player's death, i.e. zooming and rotation times
+        public float deathTransitionDuration = 1F;
+
+        //Duration between the appearance of the score screen and the transition back to the game start
+        public float scoreScreenTransitionDuration = 1F;
+
+        //Duration between the appearance of the finish screen and the transition back to the game start
+        public float finishScreenTransitionDuration = 1F;
+
         private void Awake()
         {
             _instance = this;
@@ -22,7 +33,7 @@ namespace Sliders.Cam
             player.onPlayerStateChange.AddListener(PlayerStateChanged);
         }
 
-        //Listener
+        //Player Listener
         private void PlayerAction(Player.PlayerAction playerAction)
         {
             switch (playerAction)
@@ -31,7 +42,8 @@ namespace Sliders.Cam
                     break;
 
                 case Player.PlayerAction.charge:
-                    CamZoom.ZoomToVelocity(player);
+                    CamZoom.ZoomToVelocity(player, defaultTransitionDuration);
+                    CamRotation.RotateToVelocity(player, defaultTransitionDuration);
                     break;
 
                 case Player.PlayerAction.decharge:
@@ -42,20 +54,22 @@ namespace Sliders.Cam
             }
         }
 
-        //Listener
+        //Player Listener
         private void PlayerStateChanged(Player.PlayerState playerState)
         {
             switch (playerState)
             {
                 case Player.PlayerState.alive:
                     CamMove.StartFollowing();
-                    CamZoom.ZoomToVelocity(player);
+                    CamZoom.ZoomToVelocity(player, deathTransitionDuration);
+                    //CamShake.VelocityShake(player);
+                    CamRotation.RotateToVelocity(player, defaultTransitionDuration); // currently deactivated in CamRotation
                     break;
 
                 case Player.PlayerState.dead:
-                    Debug.Log("DEAD");
-                    CamZoom.DeathZoom();
-                    //CamShake.DeathShake();
+                    CamZoom.DeathZoom(deathTransitionDuration);
+                    CamShake.DeathShake();
+                    CamRotation.RotateToVelocity(player, deathTransitionDuration);
                     //CamRotation.DeathRotation(); //change to camshake
                     //CamMove.StopFollowing();
                     break;
@@ -68,6 +82,7 @@ namespace Sliders.Cam
             }
         }
 
+        //Game Listener
         private void GameStateChanged(Game.GameState gameState)
         {
             switch (gameState)
@@ -76,10 +91,12 @@ namespace Sliders.Cam
                     break;
 
                 case Game.GameState.scorescreen:
-                    CamZoom.ZoomToMinimum();
+                    CamZoom.ZoomToMinimum(scoreScreenTransitionDuration);
+                    CamRotation.RotateToDefault(scoreScreenTransitionDuration);
                     break;
 
                 case Game.GameState.finishscreen:
+                    CamZoom.ZoomToMinimum(finishScreenTransitionDuration);
                     break;
 
                 default:
