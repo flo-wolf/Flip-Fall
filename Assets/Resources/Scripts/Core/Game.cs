@@ -18,14 +18,14 @@ namespace Sliders
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
 
         public static CamMove cm;
-        public static Game instance;
+        public static Game _instance;
 
         //The delay between when SetGameState() gets called and when the GameSTateChangeEvent gets fired.
         public int switchDelay = 1;
 
         private void Awake()
         {
-            instance = this;
+            _instance = this;
             ProgressManager.ClearProgress();
             ProgressManager.LoadProgressData();
             SetGameState(GameState.ready);
@@ -51,13 +51,13 @@ namespace Sliders
                 case GameState.scorescreen:
                     //Executed before event is fired!
                     UITimer.instance.Pause();
-                    instance.StartCoroutine(DelayedGameStateSwitch());
+                    _instance.StartCoroutine(DelayedGameStateSwitch());
                     break;
 
                 case GameState.finishscreen:
                     //Executed before event is fired!
                     UITimer.instance.Pause();
-                    instance.StartCoroutine(DelayedGameStateSwitch());
+                    _instance.StartCoroutine(DelayedGameStateSwitch());
                     break;
 
                 case GameState.playing:
@@ -76,7 +76,7 @@ namespace Sliders
 
         public static IEnumerator DelayedGameStateSwitch()
         {
-            yield return new WaitForSeconds(instance.switchDelay);
+            yield return new WaitForSeconds(_instance.switchDelay);
             onGameStateChange.Invoke(gameState);
         }
 

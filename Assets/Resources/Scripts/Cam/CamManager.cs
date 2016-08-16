@@ -7,7 +7,13 @@ namespace Sliders.Cam
 
     public class CamManager : MonoBehaviour
     {
+        public static CamManager _instance;
         public Player player;
+
+        private void Awake()
+        {
+            _instance = this;
+        }
 
         private void Start()
         {
@@ -47,9 +53,11 @@ namespace Sliders.Cam
                     break;
 
                 case Player.PlayerState.dead:
-                    CamShake.DeathShake();
+                    Debug.Log("DEAD");
+                    CamZoom.DeathZoom();
+                    //CamShake.DeathShake();
                     //CamRotation.DeathRotation(); //change to camshake
-                    CamMove.StopFollowing();
+                    //CamMove.StopFollowing();
                     break;
 
                 case Player.PlayerState.ready:
@@ -65,15 +73,13 @@ namespace Sliders.Cam
             switch (gameState)
             {
                 case Game.GameState.playing:
-                    //play spawn sound
                     break;
 
                 case Game.GameState.scorescreen:
-                    //play deathscreen sound
+                    CamZoom.ZoomToMinimum();
                     break;
 
                 case Game.GameState.finishscreen:
-                    //play win sound
                     break;
 
                 default:

@@ -6,19 +6,25 @@ namespace Sliders.Cam
 {
     public class CamShake : MonoBehaviour
     {
-        private Vector3 _originalPos;
         public static CamShake _instance;
+        public Camera cam;
+
+        [Space(10)]
         public float shakeDuration;
         public float shakeAmount;
         public float maxChargingShake = 5F;
 
+        [Space(10)]
         public float deathShakeAmount = 5f;
+        public float deathShakeSpeed = 5f;
         public float deathShakeDuration = 1f;
+
+        private Vector3 originalPos;
 
         private void Awake()
         {
-            _originalPos = transform.transform.position;
             _instance = this;
+            Debug.Log("awake");
         }
 
         public static void Shake()
@@ -51,14 +57,14 @@ namespace Sliders.Cam
 
             while (Time.time < endTime)
             {
-                transform.transform.position = _originalPos + Random.insideUnitSphere * amount;
+                cam.transform.position = originalPos + Random.insideUnitSphere * amount;
 
                 duration -= Time.deltaTime;
 
                 yield return null;
             }
 
-            transform.transform.position = _originalPos;
+            cam.transform.position = originalPos;
         }
 
         //creates increasing shake depending on the players velocity
@@ -75,7 +81,7 @@ namespace Sliders.Cam
 
                 //change 1 to a higher value for shake strength changes
                 amount = Mathf.SmoothStep(0, maxChargingShake, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
-                transform.localPosition = _originalPos + Random.insideUnitSphere * amount;
+                cam.transform.position = originalPos + Random.insideUnitSphere * amount;
                 yield return new WaitForFixedUpdate();
             }
         }

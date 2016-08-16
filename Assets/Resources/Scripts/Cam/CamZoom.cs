@@ -11,8 +11,6 @@ namespace Sliders.Cam
     public class CamZoom : MonoBehaviour
     {
         public static CamZoom _instance;
-
-        public Player player;
         public Camera cam;
 
         //Zoom camera sizes
@@ -42,55 +40,38 @@ namespace Sliders.Cam
             size = cam.orthographicSize;
         }
 
-        //Listener
-        private void PlayerStateChanged(Player.PlayerState playerState)
-        {
-            switch (playerState)
-            {
-                case Player.PlayerState.alive:
-                    break;
-
-                case Player.PlayerState.dead:
-                    StopAllCoroutines();
-                    StartCoroutine(cDeathZoom());
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
         //zooms in from the current camera size to the minimum camera size
         public static void ZoomToMinimum()
         {
             _instance.StopAllCoroutines();
-            _instance.cZoomToMinimum();
+            _instance.StartCoroutine(_instance.cZoomToMinimum());
         }
 
         //zooms out from the current camera size to the maximum camera size
         public static void ZoomToMaximum()
         {
             _instance.StopAllCoroutines();
-            _instance.cZoomToMaximum();
+            _instance.StartCoroutine(_instance.cZoomToMaximum());
         }
 
         //translates camera size to a new value
         public static void Zoom(float size)
         {
             _instance.StopAllCoroutines();
-            _instance.cZoom(size);
+            _instance.StartCoroutine(_instance.cZoom(size));
         }
 
         public static void Zoom(float size, InterpolationType interpolationType)
         {
             _instance.StopAllCoroutines();
-            _instance.cZoom(size, interpolationType);
+            _instance.StartCoroutine(_instance.cZoom(size, interpolationType));
         }
 
         public static void DeathZoom()
         {
+            Debug.Log("dzoom and instance: " + _instance);
             _instance.StopAllCoroutines();
-            _instance.cDeathZoom();
+            _instance.StartCoroutine(_instance.cDeathZoom());
         }
 
         //Adjust the current camera size smoothly to its according velocity size, calculated through the behaviour's velocity
@@ -99,13 +80,13 @@ namespace Sliders.Cam
             if (behaviour != null && behaviour.GetComponent<Rigidbody2D>() != null)
             {
                 _instance.StopAllCoroutines();
-                _instance.cZoomToVelocity(behaviour.GetComponent<Rigidbody2D>());
+                _instance.StartCoroutine(_instance.cZoomToVelocity(behaviour.GetComponent<Rigidbody2D>()));
             }
             else
                 Debug.LogError("[ZoomToVelocity] cant find rigidbody2D on gameobject");
         }
 
-        private IEnumerator cZoomToMinimum()
+        public IEnumerator cZoomToMinimum()
         {
             Debug.Log("ZoomIn()");
             float t = 0;
@@ -118,7 +99,7 @@ namespace Sliders.Cam
             yield break;
         }
 
-        private IEnumerator cZoom(float size)
+        public IEnumerator cZoom(float size)
         {
             float t = 0;
             while (t < 1F)
@@ -132,7 +113,7 @@ namespace Sliders.Cam
             yield break;
         }
 
-        private IEnumerator cZoom(float size, InterpolationType interpolationType)
+        public IEnumerator cZoom(float size, InterpolationType interpolationType)
         {
             float t = 0;
             while (t < 1F)
@@ -159,7 +140,7 @@ namespace Sliders.Cam
             yield break;
         }
 
-        private IEnumerator cZoomToMaximum()
+        public IEnumerator cZoomToMaximum()
         {
             float t = 0;
             while (t < 1F)
@@ -172,8 +153,9 @@ namespace Sliders.Cam
         }
 
         //zooms from the current camera size to the death camera size
-        private IEnumerator cDeathZoom()
+        public IEnumerator cDeathZoom()
         {
+            Debug.Log("cDeathZoom");
             float t = 0;
             while (t < 1F)
             {
@@ -182,12 +164,11 @@ namespace Sliders.Cam
                 cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, deathZoom, t);
                 yield return new WaitForFixedUpdate();
             }
-            StartCoroutine(cZoomToMinimum());
             yield break;
         }
 
         //makes a smooth transition betwen the current size and the appropiate velocity size
-        private IEnumerator cZoomToVelocity(Rigidbody2D rb)
+        public IEnumerator cZoomToVelocity(Rigidbody2D rb)
         {
             Vector2 velocity;
             float t = 0;
@@ -203,18 +184,18 @@ namespace Sliders.Cam
 
                 yield return new WaitForFixedUpdate();
             }
-            StartCoroutine(cVelocityZoom());
+            StartCoroutine(cVelocityZoom(rb));
         }
 
         //transforms the camera size according to the players velocity
-        private IEnumerator cVelocityZoom()
+        public IEnumerator cVelocityZoom(Rigidbody2D rb)
         {
-            maxVelocity = player.maxChargeVelocity;
+            maxVelocity = Player._instance.maxChargeVelocity;
             Vector2 velocity;
 
             while (true)
             {
-                velocity = player.rBody.velocity;
+                velocity = rb.velocity;
                 velocity.x = System.Math.Abs(velocity.x);
 
                 if (velocity.x > (maxVelocity - velocityThreshold))

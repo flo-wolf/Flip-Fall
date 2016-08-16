@@ -11,17 +11,18 @@ namespace Sliders
 {
     public class Player : MonoBehaviour
     {
+        public static Player _instance;
+
         public enum PlayerState { alive, dead, ready, waiting };
-
         public enum PlayerAction { reflect, charge, decharge };
-
-        public PlayerState playerState;
-        public PlayerAction playerAction;
+        private PlayerState playerState;
+        private PlayerAction playerAction;
 
         public PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
         public PlayerActionEvent onPlayerAction = new PlayerActionEvent();
 
         //public Player instance;
+        [Header("References")]
         public LayerMask finishMask;
         public LayerMask killMask;
         public TrailRenderer trail; //Full color
@@ -30,20 +31,19 @@ namespace Sliders
         public Material defaultMaterial;
         public Material winMaterial;
 
+        [Header("Settings")]
         public float gravity = 15F;
         public float maxChargeVelocity = 250F;
         public float chargeForcePerTick = 5F;
         public float respawnDuration = 1f;
         public float aliveTime = 0f;
+        public float _playerZ;
 
         private Spawn spawn;
         private Quaternion spawnRotaion;
         private Vector3 spawnPosition;
         private int speed;
-
-        public float _playerZ;
         private bool facingLeft = true;
-
         private bool charging = false;
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
@@ -51,6 +51,7 @@ namespace Sliders
         private void Awake()
         {
             //instance = this;
+            _instance = this;
             _playerZ = Constants.playerZ;
         }
 
