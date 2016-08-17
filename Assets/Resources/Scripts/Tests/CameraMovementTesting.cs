@@ -19,20 +19,20 @@ namespace Sliders.Tests
         {
             Vector3 testPosition = new Vector3(testGoal.x, testGoal.y, Constants.cameraZ);
             testLastPosition = transform.position;
-            CamMove.moveCamTo(testPosition, testDriveTime);
+            CamMove.MoveCamTo(testPosition, testDriveTime);
         }
 
         private void testDriveBack()
         {
             if (testStartToCurrentPos)
             {
-                CamMove.moveCamTo(testLastPosition, testDriveTime);
+                CamMove.MoveCamTo(testLastPosition, testDriveTime);
             }
             else
             {
                 Vector3 testPosition = new Vector3(testStart.x, testStart.y, Constants.cameraZ);
                 testLastPosition = transform.position;
-                CamMove.moveCamTo(testPosition, testDriveTime);
+                CamMove.MoveCamTo(testPosition, testDriveTime);
             }
         }
 

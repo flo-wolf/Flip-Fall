@@ -17,20 +17,14 @@ namespace Sliders.Levels
         public int id;
 
         public string title;
-        public double timeGold;
-        public double timeSilver;
-        public double timeBronze;
+        public Ghost goldGhost;
+        public Ghost silverGhost;
+        public Ghost bronzeGhost;
+
         public Spawn spawn;
         public Finish finish;
         public DateTime created { get; set; }
         public DateTime updated { get; set; }
-
-        public void Start()
-        {
-            timeGold = 10D;
-            timeSilver = 11D;
-            timeBronze = 12D;
-        }
 
         public void AddObject(GameObject go)
         {
@@ -52,17 +46,14 @@ namespace Sliders.Levels
 
         public void SetGoldTime(double newTime)
         {
-            timeGold = newTime;
         }
 
         public void SetSilverTime(double newTime)
         {
-            timeSilver = newTime;
         }
 
         public void SetBronzeTime(double newTime)
         {
-            timeBronze = newTime;
         }
     }
 }

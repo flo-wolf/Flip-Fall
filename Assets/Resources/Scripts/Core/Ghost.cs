@@ -26,29 +26,16 @@ namespace Sliders
         public Material defaultMaterial;
         public Material winMaterial;
 
-        public float gravity = 15F;
-        public float maxChargeVelocity;
-        public float chargeForcePerTick;
-        public float respawnDuration = 1f; //change to: Deathdelay !?
-        public float aliveTime = 0f;
+        public Time time;
 
         private Spawn spawn;
         private Quaternion spawnRotaion;
         private Vector3 spawnPosition;
         private int speed;
-
-        public float _playerZ;
-        public bool facingLeft = true;
-
+        private bool facingLeft = true;
         private bool charging = false;
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
-
-        private void Awake()
-        {
-            //instance = this;
-            _playerZ = Constants.playerZ;
-        }
 
         private void Start()
         {
@@ -67,9 +54,9 @@ namespace Sliders
 
         private void ReloadSpawnPoint()
         {
-            spawn = LevelManager.levelManager.GetLevel().spawn;
-            spawnPosition = spawn.transform.position;
-            spawnPosition.z = _playerZ;
+            spawn = LevelManager.GetSpawn();
+            spawnPosition = spawn.GetPosition();
+            spawnPosition.z = Constants.ghostZ;
             facingLeft = spawn.facingLeftOnSpawn;
         }
 
@@ -125,13 +112,12 @@ namespace Sliders
         private void Spawn()
         {
             SetGhostState(GhostState.alive);
-            aliveTime = 0;
             trail.time = 0.5f;
             trail.enabled = true;
             trail2.time = 1f;
             trail2.enabled = true;
 
-            rBody.gravityScale = gravity;
+            rBody.gravityScale = Player._instance.gravity;
             rBody.velocity = new Vector3(0f, -0.00001f, 0f);
             rBody.WakeUp();
         }
@@ -173,7 +159,6 @@ namespace Sliders
         private void MoveToSpawn()
         {
             transform.position = spawnPosition;
-            aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
@@ -199,7 +184,7 @@ namespace Sliders
         private void Decharge()
         {
             charging = false;
-            rBody.gravityScale = gravity;
+            rBody.gravityScale = Player._instance.gravity;
         }
 
         //Geschwindigkeitszuwachs während die Figur gehalten wird
@@ -212,15 +197,15 @@ namespace Sliders
                 //Quaternion quad = Quaternion.AngleAxis(angle, Vector3.forward);
                 //transform.rotation = quad;
 
-                if (charging && Mathf.Abs(rBody.velocity.x) < maxChargeVelocity)
+                if (charging && Mathf.Abs(rBody.velocity.x) < Player._instance.maxChargeVelocity)
                 {
                     if (facingLeft)
                     {
-                        velocity.x = velocity.x - chargeForcePerTick;
+                        velocity.x = velocity.x - Player._instance.chargeForcePerTick;
                     }
                     else
                     {
-                        velocity.x = velocity.x + chargeForcePerTick;
+                        velocity.x = velocity.x + Player._instance.chargeForcePerTick;
                     }
                     rBody.velocity = velocity;
                 }

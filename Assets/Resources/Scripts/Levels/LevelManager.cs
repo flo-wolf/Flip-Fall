@@ -56,9 +56,9 @@ namespace Sliders.Levels
             return levelManager.activeLevel.id;
         }
 
-        public static Vector3 GetSpawnLocation()
+        public static Vector3 GetSpawnPosition()
         {
-            return levelManager.activeLevel.spawn.spawnPosition;
+            return GetSpawn().GetPosition();
         }
 
         public static Spawn GetSpawn()

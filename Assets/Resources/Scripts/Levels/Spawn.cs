@@ -6,16 +6,10 @@ namespace Sliders.Levels
     public class Spawn : MonoBehaviour
     {
         public bool facingLeftOnSpawn;
-        public Vector3 spawnPosition;
 
-        private void Start()
+        public Vector3 GetPosition()
         {
-            spawnPosition = transform.position;
-        }
-
-        public Vector3 GetLocation()
-        {
-            return spawnPosition;
+            return transform.position;
         }
     }
 }

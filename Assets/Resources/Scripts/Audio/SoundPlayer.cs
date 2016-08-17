@@ -10,9 +10,12 @@ namespace Sliders.Audio
 {
     public class SoundPlayer : MonoBehaviour
     {
+        public static SoundPlayer _instance = null;     //Allows other scripts to call functions from SoundManager.
+
+        public float playSingleVolume = 1F;
         public AudioSource sfxSource;                   //Drag a reference to the audio source which will play the sound effects.
         public AudioSource musicSource;                 //Drag a reference to the audio source which will play the music.
-        public static SoundPlayer _instance = null;     //Allows other scripts to call functions from SoundManager.
+
         public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
         public float highPitchRange = 1.05f;            //The highest a sound effect will be randomly pitched.
 
@@ -33,12 +36,14 @@ namespace Sliders.Audio
         //Used to play single sound clips.
         public void PlaySingle(AudioClip clip)
         {
+            if (sfxSource.clip == null)
+            {
+            }
             //Set the clip of our efxSource audio source to the clip passed in as a parameter.
             sfxSource.pitch = 1;
-            sfxSource.clip = clip;
 
             //Play the clip.
-            sfxSource.Play();
+            sfxSource.PlayOneShot(clip, playSingleVolume);
         }
 
         //RandomizeSfx chooses randomly between various audio clips and slightly changes their pitch.
@@ -54,10 +59,7 @@ namespace Sliders.Audio
             sfxSource.pitch = randomPitch;
 
             //Set the clip to the clip at our randomly chosen index.
-            sfxSource.clip = clips[randomIndex];
-
-            //Play the clip.
-            sfxSource.Play();
+            sfxSource.PlayOneShot(clips[randomIndex], playSingleVolume);
         }
     }
 }

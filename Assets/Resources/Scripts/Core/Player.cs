@@ -46,13 +46,11 @@ namespace Sliders
         private bool charging = false;
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
-        private float _playerZ;
 
         private void Awake()
         {
             //instance = this;
             _instance = this;
-            _playerZ = Constants.playerZ;
         }
 
         private void Start()
@@ -63,22 +61,6 @@ namespace Sliders
             Game.onGameStateChange.AddListener(GameStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
             trail.sortingOrder = 2;
-        }
-
-        private void ReloadSpawnPoint()
-        {
-            spawn = LevelManager.GetSpawn();
-            spawnPosition = spawn.GetLocation();
-            spawnPosition.z = _playerZ;
-            facingLeft = spawn.facingLeftOnSpawn;
-        }
-
-        //Whenever the Level gets changed the LevelManager fires the LevelChangeEvent, calling this method.
-        //Resets the Player to the Spawn
-        private void LevelChanged(Level level)
-        {
-            ReloadSpawnPoint();
-            MoveToSpawn();
         }
 
         //Everything in here happends after the delay on death. To execute before, enter calls in the Trigger function.
@@ -105,9 +87,20 @@ namespace Sliders
             }
         }
 
-        private void SwitchFacingDirection()
+        //Whenever the Level gets changed the LevelManager fires the LevelChangeEvent, calling this method.
+        //Resets the Player to the Spawn
+        private void LevelChanged(Level level)
         {
-            facingLeft = !facingLeft;
+            ReloadSpawnPoint();
+            MoveToSpawn();
+        }
+
+        private void ReloadSpawnPoint()
+        {
+            spawn = LevelManager.GetSpawn();
+            spawnPosition = spawn.GetPosition();
+            spawnPosition.z = Constants.playerZ;
+            facingLeft = spawn.facingLeftOnSpawn;
         }
 
         //The Player has hit something!
@@ -198,7 +191,12 @@ namespace Sliders
             SetPlayerState(PlayerState.ready);
         }
 
-        //X-Achsen-Spiegelung der Figurenflugbahn
+        private void SwitchFacingDirection()
+        {
+            facingLeft = !facingLeft;
+        }
+
+        //Spieleraktion - X-Achsen-Spiegelung der Figurenflugbahn
         private void Reflect()
         {
             rBody.velocity = new Vector2(rBody.velocity.x * (-1), rBody.velocity.y);
@@ -206,7 +204,7 @@ namespace Sliders
             onPlayerAction.Invoke(PlayerAction.reflect);
         }
 
-        //Gravitationsabbruch, Figur wird auf der Ebene gehalten und beschleunigt
+        //Spieleraktion - Gravitationsabbruch, Figur wird auf der Ebene gehalten und beschleunigt
         private void Charge()
         {
             rBody.gravityScale = 0f;
@@ -215,7 +213,7 @@ namespace Sliders
             onPlayerAction.Invoke(PlayerAction.charge);
         }
 
-        //Erneutes Hinzufügen der Gravitation
+        //Spieleraktion - Erneutes Hinzufügen der Gravitation
         private void Decharge()
         {
             charging = false;
@@ -316,6 +314,11 @@ namespace Sliders
                 return true;
             else
                 return false;
+        }
+
+        public bool IsFacingLeft()
+        {
+            return facingLeft;
         }
 
         //Fired whenever the playerstate gets changed through SetPlayerState()

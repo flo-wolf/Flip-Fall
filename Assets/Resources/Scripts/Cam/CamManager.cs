@@ -76,8 +76,6 @@ namespace Sliders.Cam
                     break;
 
                 case Player.PlayerState.ready:
-                    Vector3 spawnPos = LevelManager.GetSpawnLocation();
-                    CamMove.moveCamTo(new Vector3(spawnPos.x, spawnPos.y, transform.position.z), deathTransitionDuration);
                     break;
 
                 default:
@@ -88,6 +86,8 @@ namespace Sliders.Cam
         //Game Listener
         private void GameStateChanged(Game.GameState gameState)
         {
+            Vector3 spawnPos = LevelManager.GetSpawnPosition();
+
             switch (gameState)
             {
                 case Game.GameState.playing:
@@ -96,10 +96,13 @@ namespace Sliders.Cam
                 case Game.GameState.scorescreen:
                     CamZoom.ZoomToMinimum(scoreScreenTransitionDuration);
                     CamRotation.RotateToDefault(scoreScreenTransitionDuration);
+                    CamMove.MoveCamTo(spawnPos, defaultTransitionDuration);
                     break;
 
                 case Game.GameState.finishscreen:
                     CamZoom.ZoomToMinimum(finishScreenTransitionDuration);
+                    CamRotation.RotateToDefault(scoreScreenTransitionDuration);
+                    CamMove.MoveCamTo(spawnPos, defaultTransitionDuration);
                     break;
 
                 default:

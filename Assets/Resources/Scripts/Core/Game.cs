@@ -48,40 +48,39 @@ namespace Sliders
         // Only set the GameState through this. All other classes will be able to use GameState listeners.
         public static void SetGameState(GameState gs)
         {
-            gameState = gs;
-
             switch (gs)
             {
                 case GameState.scorescreen:
                     //Executed before event is fired!
                     UITimer.instance.Pause();
-                    _instance.StartCoroutine(DelayedGameStateSwitch(scoreScreenAppearDelay));
+                    _instance.StartCoroutine(DelayedGameStateSwitch(gs, scoreScreenAppearDelay));
                     break;
 
                 case GameState.finishscreen:
                     //Executed before event is fired!
                     UITimer.instance.Pause();
-                    _instance.StartCoroutine(DelayedGameStateSwitch(finishScreenAppearDelay));
+                    _instance.StartCoroutine(DelayedGameStateSwitch(gs, finishScreenAppearDelay));
                     break;
 
                 case GameState.playing:
-                    onGameStateChange.Invoke(gameState);
+                    onGameStateChange.Invoke(gs);
                     break;
 
                 case GameState.ready:
-                    onGameStateChange.Invoke(gameState);
+                    onGameStateChange.Invoke(gs);
                     break;
 
                 default:
-                    onGameStateChange.Invoke(gameState);
+                    onGameStateChange.Invoke(gs);
                     break;
             }
+            gameState = gs;
         }
 
-        public static IEnumerator DelayedGameStateSwitch(float delay)
+        public static IEnumerator DelayedGameStateSwitch(GameState gs, float delay)
         {
             yield return new WaitForSeconds(delay);
-            onGameStateChange.Invoke(gameState);
+            onGameStateChange.Invoke(gs);
         }
 
         public void Edit()

@@ -32,13 +32,13 @@ namespace Sliders.Cam
         public static void StartFollowing()
         {
             SetCameraState(CamMoveState.following);
-            _instance.joint.enabled = true;
+            //_instance.joint.enabled = true;
         }
 
         public static void StopFollowing()
         {
             SetCameraState(CamMoveState.resting);
-            _instance.joint.enabled = false;
+            //_instance.joint.enabled = false;
         }
 
         public static void SetCameraState(CamMoveState cs)
@@ -48,7 +48,7 @@ namespace Sliders.Cam
         }
 
         //Smooth camera Transitions, calls Transition()
-        public static void moveCamTo(Vector2 target, float duration)
+        public static void MoveCamTo(Vector2 target, float duration)
         {
             Vector3 t = new Vector3(target.x, target.y, Constants.cameraZ);
             _instance.StartCoroutine(_instance.Transition(target, duration));
@@ -93,14 +93,14 @@ namespace Sliders.Cam
         }
 
         //instead of using transforms rather use joints and only transform one
-        //private void Update()
-        //{
-        //    if (camMoveState == CamMoveState.following)
-        //    {
-        //        Vector3 PlayerPOS = Player._instance.transform.transform.position;
-        //        cam.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
-        //    }
-        //}
+        private void Update()
+        {
+            if (camMoveState == CamMoveState.following)
+            {
+                Vector3 PlayerPOS = Player._instance.transform.transform.position;
+                cam.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y, Constants.cameraZ);
+            }
+        }
 
         //camera info
         public float GetCamHeight()
