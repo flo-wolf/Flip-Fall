@@ -9,16 +9,14 @@ namespace Sliders.Cam
     public class CamMove : MonoBehaviour
     {
         public static CamMove _instance;
+        public Camera cam;
+        public FixedJoint2D joint;
 
         public static CameraStateEvent onCamMoveStateChange = new CameraStateEvent();
         public enum CamMoveState { following, transitioning, resting }
 
-        public CamMoveState camMoveState;
+        public CamMoveState camMoveState = CamMoveState.resting;
         public InterpolationType interpolationType;
-        public Player player;
-
-        private Vector3 target;
-        private float transitionDuration;
 
         private void Awake()
         {
@@ -27,19 +25,20 @@ namespace Sliders.Cam
 
         private void Start()
         {
-            _instance.camMoveState = CamMoveState.resting;
-            Vector3 PlayerPOS = player.transform.transform.position;
-            Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
+            Vector3 PlayerPOS = Player._instance.transform.transform.position;
+            cam.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraZ, Camera.main.transform.position.z);
         }
 
         public static void StartFollowing()
         {
             SetCameraState(CamMoveState.following);
+            _instance.joint.enabled = true;
         }
 
         public static void StopFollowing()
         {
             SetCameraState(CamMoveState.resting);
+            _instance.joint.enabled = false;
         }
 
         public static void SetCameraState(CamMoveState cs)
@@ -49,18 +48,15 @@ namespace Sliders.Cam
         }
 
         //Smooth camera Transitions, calls Transition()
-        public static void moveCamTo(Vector2 t, float d)
+        public static void moveCamTo(Vector2 target, float duration)
         {
-            _instance.target = t;
-            _instance.target.z = Constants.cameraY;
-            _instance.transitionDuration = d;
-
-            SetCameraState(CamMoveState.transitioning);
-            _instance.StartCoroutine(_instance.Transition());
+            Vector3 t = new Vector3(target.x, target.y, Constants.cameraZ);
+            _instance.StartCoroutine(_instance.Transition(target, duration));
         }
 
-        private IEnumerator Transition()
+        private IEnumerator Transition(Vector3 target, float duration)
         {
+            SetCameraState(CamMoveState.transitioning);
             float t = 0F;
             Vector3 startingPos = Camera.main.transform.position;
 
@@ -69,7 +65,7 @@ namespace Sliders.Cam
                 case InterpolationType.linear:
                     while (t < 1.0f)
                     {
-                        t += Time.deltaTime * (Time.timeScale / transitionDuration);
+                        t += Time.deltaTime * (Time.timeScale / duration);
                         Camera.main.transform.position = Vector3.Lerp(startingPos, target, t);
                         yield return 0;
                     }
@@ -78,7 +74,7 @@ namespace Sliders.Cam
                 case InterpolationType.smoothstep:
                     while (t < 1.0f)
                     {
-                        t += Time.deltaTime * (Time.timeScale / transitionDuration);
+                        t += Time.deltaTime * (Time.timeScale / duration);
 
                         float x = t / 1;
                         x = x * x * (3f - 2f * t); //Smoothstep formula: t = t*t * (3f - 2f*t)
@@ -97,16 +93,14 @@ namespace Sliders.Cam
         }
 
         //instead of using transforms rather use joints and only transform one
-        private void Update()
-        {
-            if (camMoveState == CamMoveState.following)
-            {
-                Vector3 PlayerPOS = player.transform.transform.position;
-
-                //35 wegen der Ballhöhe (455) minus der Camerahöhe (420), die im BallMovement und BTN_PLAY gesetzt werden.
-                Camera.main.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
-            }
-        }
+        //private void Update()
+        //{
+        //    if (camMoveState == CamMoveState.following)
+        //    {
+        //        Vector3 PlayerPOS = Player._instance.transform.transform.position;
+        //        cam.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraY, Camera.main.transform.position.z);
+        //    }
+        //}
 
         //camera info
         public float GetCamHeight()

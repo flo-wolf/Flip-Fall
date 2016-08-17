@@ -56,6 +56,16 @@ namespace Sliders.Levels
             return levelManager.activeLevel.id;
         }
 
+        public static Vector3 GetSpawnLocation()
+        {
+            return levelManager.activeLevel.spawn.spawnPosition;
+        }
+
+        public static Spawn GetSpawn()
+        {
+            return levelManager.activeLevel.spawn;
+        }
+
         public void NextLevel()
         {
             Debug.Log("[LevelManager]: NextLevel()");
@@ -94,13 +104,6 @@ namespace Sliders.Levels
             {
                 Debug.Log("[LevelManager]: SetLevel(int) Level trying to be set does not exist!");
             }
-        }
-
-        public static Spawn GetSpawn()
-        {
-            //Placeholder, get spawnlocation from the current level.
-            Spawn spawn = levelManager.activeLevel.spawn;
-            return spawn;
         }
 
         public static Vector2 GetFinish()

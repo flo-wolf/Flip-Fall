@@ -175,7 +175,6 @@ namespace Sliders
             transform.position = spawnPosition;
             aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
-            CamMove.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnDuration);
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();

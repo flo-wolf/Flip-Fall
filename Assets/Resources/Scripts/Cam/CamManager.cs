@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Sliders.Levels;
+using System.Collections;
 using UnityEngine;
 
 namespace Sliders.Cam
@@ -75,6 +76,8 @@ namespace Sliders.Cam
                     break;
 
                 case Player.PlayerState.ready:
+                    Vector3 spawnPos = LevelManager.GetSpawnLocation();
+                    CamMove.moveCamTo(new Vector3(spawnPos.x, spawnPos.y, transform.position.z), deathTransitionDuration);
                     break;
 
                 default:

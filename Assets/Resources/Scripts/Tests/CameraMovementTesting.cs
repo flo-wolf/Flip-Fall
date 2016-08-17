@@ -17,7 +17,7 @@ namespace Sliders.Tests
 
         private void testDrive()
         {
-            Vector3 testPosition = new Vector3(testGoal.x, testGoal.y, Constants.cameraY);
+            Vector3 testPosition = new Vector3(testGoal.x, testGoal.y, Constants.cameraZ);
             testLastPosition = transform.position;
             CamMove.moveCamTo(testPosition, testDriveTime);
         }
@@ -30,7 +30,7 @@ namespace Sliders.Tests
             }
             else
             {
-                Vector3 testPosition = new Vector3(testStart.x, testStart.y, Constants.cameraY);
+                Vector3 testPosition = new Vector3(testStart.x, testStart.y, Constants.cameraZ);
                 testLastPosition = transform.position;
                 CamMove.moveCamTo(testPosition, testDriveTime);
             }

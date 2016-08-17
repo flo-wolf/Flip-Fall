@@ -37,16 +37,16 @@ namespace Sliders
         public float chargeForcePerTick = 5F;
         public float respawnDuration = 1f;
         public float aliveTime = 0f;
-        public float _playerZ;
 
         private Spawn spawn;
-        private Quaternion spawnRotaion;
         private Vector3 spawnPosition;
+        private Quaternion spawnRotaion;
         private int speed;
         private bool facingLeft = true;
         private bool charging = false;
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
+        private float _playerZ;
 
         private void Awake()
         {
@@ -57,6 +57,7 @@ namespace Sliders
 
         private void Start()
         {
+            rBody.Sleep();
             ReloadSpawnPoint();
             MoveToSpawn();
             Game.onGameStateChange.AddListener(GameStateChanged);
@@ -66,8 +67,8 @@ namespace Sliders
 
         private void ReloadSpawnPoint()
         {
-            spawn = LevelManager.levelManager.GetLevel().spawn;
-            spawnPosition = spawn.transform.position;
+            spawn = LevelManager.GetSpawn();
+            spawnPosition = spawn.GetLocation();
             spawnPosition.z = _playerZ;
             facingLeft = spawn.facingLeftOnSpawn;
         }
@@ -191,9 +192,6 @@ namespace Sliders
             transform.position = spawnPosition;
             aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
-
-            CamMove.moveCamTo(new Vector3(spawnPosition.x, spawnPosition.y + Constants.cameraY, transform.position.z), respawnDuration);
-
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();
