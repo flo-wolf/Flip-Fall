@@ -19,12 +19,17 @@ namespace Sliders.Cam
         public float rotationSpeed = 0.3F;
         public int rotationCount = 2;
 
+        private Quaternion minRotation;
+        private Quaternion maxRotation;
+
         private Vector3 rotation;
         private Vector3 playerVelocity;
 
         private void Awake()
         {
             _instance = this;
+            minRotation = Quaternion.AngleAxis(-maxRotationAngle, Vector3.forward);
+            maxRotation = Quaternion.AngleAxis(maxRotationAngle, Vector3.forward);
         }
 
         public static void DeathRotation()
@@ -59,6 +64,18 @@ namespace Sliders.Cam
             }
             else
                 Debug.LogError("[VelocityShake] cant find rigidbody2D on gameobject");
+        }
+
+        public static void ReflectRotationSwitch(MonoBehaviour behaviour, float duration)
+        {
+            if (behaviour != null && behaviour.GetComponent<Rigidbody2D>() != null)
+            {
+                _instance.StopAllCoroutines();
+                Quaternion memoryRotation = _instance.minRotation;
+                _instance.minRotation = _instance.maxRotation;
+                _instance.maxRotation = memoryRotation;
+                _instance.StartCoroutine(_instance.cRotateToVelocity(behaviour.GetComponent<Rigidbody2D>(), duration));
+            }
         }
 
         private IEnumerator cDeathRotation(float duration)
@@ -136,8 +153,6 @@ namespace Sliders.Cam
             Vector2 velocity;
             float t = 0;
 
-            Quaternion minRotation = Quaternion.AngleAxis(-maxRotationAngle, Vector3.forward);
-            Quaternion maxRotation = Quaternion.AngleAxis(maxRotationAngle, Vector3.forward);
             Quaternion currentVelocityRotation;
 
             while (t < 1F)
@@ -172,7 +187,10 @@ namespace Sliders.Cam
                     velocity.x = maxVelocity;
                 }
 
-                transform.rotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
+                //change Lerp to Smoothstep, since min and max are fixed values
+                //transform.rotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
+                transform.rotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude)));
+
                 yield return new WaitForFixedUpdate();
             }
         }

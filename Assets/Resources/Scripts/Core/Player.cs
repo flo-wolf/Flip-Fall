@@ -25,6 +25,7 @@ namespace Sliders
         [Header("References")]
         public LayerMask finishMask;
         public LayerMask killMask;
+        public LayerMask moveMask;
         public TrailRenderer trail; //Full color
         public TrailRenderer trail2; //Transparency - use shading instead
         public Rigidbody2D rBody;
@@ -103,14 +104,38 @@ namespace Sliders
             facingLeft = spawn.facingLeftOnSpawn;
         }
 
-        //The Player has hit something!
+        //The Player has left the moveable area
+        private void OnTriggerExit2D(Collider2D collider)
+        {
+            Debug.Log("Exit");
+            if (1 << collider.gameObject.layer == moveMask.value && IsAlive() || collider == null)
+            {
+                Debug.Log("Die");
+                Die();
+                Game.SetGameState(Game.GameState.scorescreen);
+            }
+        }
+
+        private void OnCollisionExit2D(Collision collision)
+        {
+            Debug.Log("Exit2");
+            if (1 << collision.collider.gameObject.layer == moveMask.value && IsAlive() || collision.collider == null)
+            {
+                Debug.Log("Die2");
+                Die();
+                Game.SetGameState(Game.GameState.scorescreen);
+            }
+        }
+
         private void OnTriggerEnter2D(Collider2D collider)
         {
+            //the collided object is on one of the layers marked as killMask => death
             if (1 << collider.gameObject.layer == killMask.value && IsAlive())
             {
                 Die();
                 Game.SetGameState(Game.GameState.scorescreen);
             }
+            //the collided object is the finish => fin
             else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
             {
                 Fin();

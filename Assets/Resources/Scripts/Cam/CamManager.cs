@@ -22,6 +22,8 @@ namespace Sliders.Cam
         //Duration between the appearance of the finish screen and the transition back to the game start
         public float finishScreenTransitionDuration = 1F;
 
+        public float reflectRotationSwitchDuration = 1F;
+
         private void Awake()
         {
             _instance = this;
@@ -40,6 +42,7 @@ namespace Sliders.Cam
             switch (playerAction)
             {
                 case Player.PlayerAction.reflect:
+                    CamRotation.ReflectRotationSwitch(player, reflectRotationSwitchDuration);
                     break;
 
                 case Player.PlayerAction.charge:
