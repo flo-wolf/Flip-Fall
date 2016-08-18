@@ -24,6 +24,8 @@ namespace Sliders.Cam
 
         public float reflectRotationSwitchDuration = 1F;
 
+        public float rotateToVelocityDuration = 1F;
+
         private void Awake()
         {
             _instance = this;
@@ -67,13 +69,13 @@ namespace Sliders.Cam
                     CamMove.StartFollowing();
                     CamZoom.ZoomToVelocity(player, deathTransitionDuration);
                     //CamShake.VelocityShake(player);
-                    CamRotation.RotateToVelocity(player, defaultTransitionDuration); // currently deactivated in CamRotation
+                    CamRotation.VelocityRotation(player); // currently deactivated in CamRotation
                     break;
 
                 case Player.PlayerState.dead:
                     CamZoom.DeathZoom(deathTransitionDuration);
                     CamShake.DeathShake();
-                    CamRotation.RotateToVelocity(player, deathTransitionDuration);
+                    CamRotation.RotateToDefault(deathTransitionDuration);
                     //CamRotation.DeathRotation(); //change to camshake
                     //CamMove.StopFollowing();
                     break;

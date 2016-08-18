@@ -107,7 +107,7 @@ namespace Sliders
         //The Player has left the moveable area
         private void OnTriggerExit2D(Collider2D collider)
         {
-            Debug.Log("Exit");
+            Debug.Log("Exit1 + collider: " + collider);
             if (1 << collider.gameObject.layer == moveMask.value && IsAlive() || collider == null)
             {
                 Debug.Log("Die");
@@ -116,10 +116,10 @@ namespace Sliders
             }
         }
 
-        private void OnCollisionExit2D(Collision collision)
+        private void OnCollisionExit2D(Collision2D collision)
         {
-            Debug.Log("Exit2");
-            if (1 << collision.collider.gameObject.layer == moveMask.value && IsAlive() || collision.collider == null)
+            Debug.Log("Exit2 + collider: " + collision.collider);
+            if (1 << collision.gameObject.layer == moveMask.value && IsAlive() || collision.collider == null)
             {
                 Debug.Log("Die2");
                 Die();

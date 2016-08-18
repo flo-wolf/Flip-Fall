@@ -14,6 +14,7 @@ namespace Sliders.Audio
 
         public float playSingleVolume = 1F;
         public AudioSource sfxSource;                   //Drag a reference to the audio source which will play the sound effects.
+        public AudioSource sfxSourceRdmPitch;
         public AudioSource musicSource;                 //Drag a reference to the audio source which will play the music.
 
         public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
@@ -56,10 +57,10 @@ namespace Sliders.Audio
             float randomPitch = Random.Range(lowPitchRange, highPitchRange);
 
             //Set the pitch of the audio source to the randomly chosen pitch.
-            sfxSource.pitch = randomPitch;
+            sfxSourceRdmPitch.pitch = randomPitch;
 
             //Set the clip to the clip at our randomly chosen index.
-            sfxSource.PlayOneShot(clips[randomIndex], playSingleVolume);
+            sfxSourceRdmPitch.PlayOneShot(clips[randomIndex], playSingleVolume);
         }
     }
 }
