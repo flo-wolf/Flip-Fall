@@ -37,6 +37,7 @@ namespace Sliders
 
         private void Start()
         {
+            SetGameState(GameState.ready);
         }
 
         private void OnApplicationQuit()
@@ -52,13 +53,13 @@ namespace Sliders
             {
                 case GameState.scorescreen:
                     //Executed before event is fired!
-                    UITimer.instance.Pause();
+                    UITimer.Pause();
                     _instance.StartCoroutine(DelayedGameStateSwitch(gs, scoreScreenAppearDelay));
                     break;
 
                 case GameState.finishscreen:
                     //Executed before event is fired!
-                    UITimer.instance.Pause();
+                    UITimer.Pause();
                     _instance.StartCoroutine(DelayedGameStateSwitch(gs, finishScreenAppearDelay));
                     break;
 

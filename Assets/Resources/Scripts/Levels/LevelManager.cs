@@ -15,7 +15,7 @@ namespace Sliders.Levels
 {
     public class LevelManager : MonoBehaviour
     {
-        public static LevelManager levelManager;
+        public static LevelManager _instance;
         public static LevelChangeEvent onLevelChange = new LevelChangeEvent();
 
         public class LevelChangeEvent : UnityEvent<Level> { }
@@ -23,11 +23,11 @@ namespace Sliders.Levels
         public AudioClip changeLevelSound;
 
         private Level activeLevel = new Level();
-        public Level defaultlevel = new Level();
+        private Level defaultlevel = new Level();
 
         private void Awake()
         {
-            levelManager = this;
+            _instance = this;
         }
 
         private void Start()
@@ -39,21 +39,26 @@ namespace Sliders.Levels
         {
         }
 
-        public Level GetLevel()
+        public static Level GetLevel()
         {
-            return activeLevel;
+            return _instance.activeLevel;
         }
 
-        public void Reload()
+        public static void Reload()
         {
-            int lastID = ProgressManager.progress.GetLastPlayedID();
+            int lastID = ProgressManager.GetProgress().GetLastPlayedID();
             Debug.Log("[LevelManager]: Reload() lastID: " + lastID);
             SetLevel(lastID);
         }
 
-        public int GetID()
+        public static int GetID()
         {
-            return levelManager.activeLevel.id;
+            return _instance.activeLevel.id;
+        }
+
+        public static int GetDefaultID()
+        {
+            return _instance.defaultlevel.id;
         }
 
         public static Vector3 GetSpawnPosition()
@@ -63,7 +68,7 @@ namespace Sliders.Levels
 
         public static Spawn GetSpawn()
         {
-            return levelManager.activeLevel.spawn;
+            return _instance.activeLevel.spawn;
         }
 
         public void NextLevel()
@@ -95,10 +100,10 @@ namespace Sliders.Levels
         {
             if (LevelLoader.LoadLevel(newID) != null)
             {
-                levelManager.activeLevel = LevelLoader.LoadLevel(newID);
-                levelManager.activeLevel = LevelPlacer.Place(levelManager.activeLevel);
-                ProgressManager.progress.SetLastPlayedID(levelManager.activeLevel.id);
-                onLevelChange.Invoke(levelManager.activeLevel);
+                _instance.activeLevel = LevelLoader.LoadLevel(newID);
+                _instance.activeLevel = LevelPlacer.Place(GetLevel());
+                ProgressManager.GetProgress().SetLastPlayedID(GetID());
+                onLevelChange.Invoke(GetLevel());
             }
             else
             {

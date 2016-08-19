@@ -5,11 +5,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the UI Scoreboard and Updates it if neccessary
+/// </summary>
+
 namespace Sliders.UI
 {
     public class UIScoreboard : MonoBehaviour
     {
-        public static UIScoreboard uiScoreboard;
+        public static UIScoreboard _instance;
         public static Scoreboard scoreboard;
         public Text title;
         public Text text1;
@@ -20,56 +24,46 @@ namespace Sliders.UI
 
         private void Awake()
         {
-            uiScoreboard = this;
+            _instance = this;
         }
 
         private void Start()
         {
-            LevelManager.onLevelChange.AddListener(LevelChanged);
-            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.levelManager.GetID());
+            scoreboard = ProgressManager.GetProgress().GetCurrentScoreboard();
             UpdateTexts();
         }
 
-        //Use it for updating
-        private void LevelChanged(Level level)
-        {
-            UpdateTexts();
-        }
-
-        public void Hide()
+        public static void Hide()
         {
             Debug.Log("[UIScoreboard]: Hide()");
-            gameObject.SetActive(false);
+            _instance.gameObject.SetActive(false);
             ProgressManager.SaveProgressData();
         }
 
-        public void Show()
+        public static void Show()
         {
-            gameObject.SetActive(true);
-        }
-
-        //works, but its unclean.
-        public void ShowAndUpdate(double time)
-        {
-            Debug.Log("[UIScoreboard]: ShowAndUpdate() time: " + time);
-            scoreboard = ProgressManager.progress.GetScoreboard(LevelManager.levelManager.GetID());
-            scoreboard.TryPlacingTime(time);
+            _instance.gameObject.SetActive(true);
             UpdateTexts();
-            Show();
         }
 
-        public void UpdateTexts()
+        public static void PlaceTime()
+        {
+            scoreboard = ProgressManager.GetProgress().GetCurrentScoreboard();
+            scoreboard.TryPlacingTime(UITimer.GetTime());
+        }
+
+        public static void UpdateTexts()
         {
             //Debug.Log("[UIScoreboard]: UpdateTexts()");
-            scoreboard = ProgressManager.GetProgress().GetScoreboard(LevelManager.levelManager.GetID());
+            scoreboard = ProgressManager.GetProgress().GetCurrentScoreboard();
             int count = scoreboard.elements.Count;
             string empty = "-.-";
-            title.text = LevelManager.levelManager.GetLevel().id.ToString();
-            text1.text = empty;
-            text2.text = empty;
-            text3.text = empty;
-            text4.text = empty;
-            text5.text = empty;
+            _instance.title.text = LevelManager.GetID().ToString();
+            _instance.text1.text = empty;
+            _instance.text2.text = empty;
+            _instance.text3.text = empty;
+            _instance.text4.text = empty;
+            _instance.text5.text = empty;
 
             if (count > 0)
             {
@@ -80,16 +74,16 @@ namespace Sliders.UI
                     int milSecs = (int)((t - (int)t) * 100);
                     string format = string.Format(Constants.timerFormat, secs, milSecs);
 
-                    if (text1.text == empty)
-                        text1.text = format;
-                    else if (text2.text == empty)
-                        text2.text = format;
-                    else if (text3.text == empty)
-                        text3.text = format;
-                    else if (text4.text == empty)
-                        text4.text = format;
-                    else if (text5.text == empty)
-                        text5.text = format;
+                    if (_instance.text1.text == empty)
+                        _instance.text1.text = format;
+                    else if (_instance.text2.text == empty)
+                        _instance.text2.text = format;
+                    else if (_instance.text3.text == empty)
+                        _instance.text3.text = format;
+                    else if (_instance.text4.text == empty)
+                        _instance.text4.text = format;
+                    else if (_instance.text5.text == empty)
+                        _instance.text5.text = format;
                     else return;
                 }
             }

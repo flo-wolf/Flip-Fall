@@ -3,29 +3,26 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages all UI Elements through externally fired events and turns them on and off
+/// </summary>
+
 namespace Sliders.UI
 {
     public class UIManager : MonoBehaviour
     {
-        /*
-        This class controls all UI Elements like
-        Scoreboards, Levelselection, Playbuttons, Instructions, Timers,..
-        depending on the current gamestate, called by listeners
-        */
-
         public static UIManager _instance;
 
-        public UIDeathscreen uiDeathscreen;
-        public UIScoreboard uiScoreboard;
-        public UITimer uiTimer;
         public Text levelID;
-        public GameObject deathscreen;
         public Button play;
 
         private void Start()
         {
             _instance = this;
             Game.onGameStateChange.AddListener(GameStateChanged);
+            Player._instance.onPlayerAction.AddListener(PlayerAction);
+            Player._instance.onPlayerStateChange.AddListener(PlayerStateChanged);
+            LevelManager.onLevelChange.AddListener(LevelChanged);
         }
 
         private void GameStateChanged(Game.GameState gameState)
@@ -33,16 +30,15 @@ namespace Sliders.UI
             switch (gameState)
             {
                 case Game.GameState.playing:
-                    UIScoreboard.uiScoreboard.Hide(); //add fancy fadeouts, save
-                    deathscreen.SetActive(false);
+                    UIScoreboard.Hide(); //add fancy fadeouts, save
+                    UILevelManager.Hide();
+                    UITimer.Run();
                     play.gameObject.SetActive(false);
-                    uiTimer.Run();
                     break;
 
                 case Game.GameState.scorescreen:
-                    deathscreen.SetActive(true);
-                    UIScoreboard.uiScoreboard.Show();
-                    //display scoreboard
+                    UIScoreboard.Show();
+                    UILevelManager.Show();
                     break;
 
                 case Game.GameState.ready:
@@ -50,15 +46,59 @@ namespace Sliders.UI
                     break;
 
                 case Game.GameState.finishscreen:
-                    uiTimer.Pause();
-                    deathscreen.SetActive(true);
-                    UIScoreboard.uiScoreboard.ShowAndUpdate(uiTimer.GetTime()); //add fancy fadeouts
+                    UITimer.Pause();
+                    UIScoreboard.PlaceTime();
+                    UIScoreboard.Show();
+                    UILevelManager.Show();
                     break;
 
                 default:
                     Debug.Log("Incorrect PlayerState");
                     break;
             }
+        }
+
+        //Player Listener
+        private void PlayerAction(Player.PlayerAction playerAction)
+        {
+            switch (playerAction)
+            {
+                case Player.PlayerAction.reflect:
+                    break;
+
+                case Player.PlayerAction.charge:
+                    break;
+
+                case Player.PlayerAction.decharge:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        //Player Listener
+        private void PlayerStateChanged(Player.PlayerState playerState)
+        {
+            switch (playerState)
+            {
+                case Player.PlayerState.alive:
+                    break;
+
+                case Player.PlayerState.dead:
+                    break;
+
+                case Player.PlayerState.ready:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void LevelChanged(Level level)
+        {
+            UIScoreboard.UpdateTexts();
         }
 
         public void PlayBtn()

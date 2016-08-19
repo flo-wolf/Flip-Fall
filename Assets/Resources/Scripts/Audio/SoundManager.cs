@@ -118,6 +118,10 @@ namespace Sliders.Audio
                     //play win sound
                     break;
 
+                case Game.GameState.ready:
+                    soundPlayer.PlaySingle(spawnSound);
+                    break;
+
                 default:
                     break;
             }

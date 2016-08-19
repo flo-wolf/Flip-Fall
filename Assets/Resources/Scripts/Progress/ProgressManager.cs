@@ -18,7 +18,7 @@ namespace Sliders.Progress
         public const string SavePath = "ProgressSave.dat";
 
         [SerializeField]
-        public static ProgressData progress = new ProgressData();
+        private static ProgressData progress = new ProgressData();
 
         public static ProgressChangeEvent onProgressChange = new ProgressChangeEvent();
 
@@ -111,11 +111,11 @@ namespace Sliders.Progress
             Scoreboard scoreboard = new Scoreboard();
 
             //Scoreboard doesnt exist
-            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.levelManager.GetID()))
+            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.GetID()))
             {
                 //create new
 
-                scoreboard.levelId = LevelManager.levelManager.GetID();
+                scoreboard.levelId = LevelManager.GetID();
                 scoreboard.created = DateTime.UtcNow;
                 scoreboard.updated = DateTime.UtcNow;
                 scoreboard.TryPlacingTime(time);
@@ -123,7 +123,7 @@ namespace Sliders.Progress
             //Scoreboard exists already
             else
             {
-                scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.levelManager.GetID());
+                scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.GetID());
                 scoreboard.TryPlacingTime(time);
                 scoreboard.updated = DateTime.UtcNow;
             }

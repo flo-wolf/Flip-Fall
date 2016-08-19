@@ -7,6 +7,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+/// <summary>
+/// The Player controller class - handles player actions and events
+/// </summary>
 namespace Sliders
 {
     public class Player : MonoBehaviour

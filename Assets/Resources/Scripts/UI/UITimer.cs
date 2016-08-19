@@ -6,44 +6,42 @@ namespace Sliders.UI
 {
     public class UITimer : MonoBehaviour
     {
-        public static UITimer instance;
+        public static UITimer _instance;
         public Text textSec;
         public Text textMil;
 
-        public AudioClip countingSound;
-
         private void Start()
         {
-            instance = this;
+            _instance = this;
         }
 
         // Use this for initialization
-        public void Run()
+        public static void Run()
         {
-            Timer.Start(this, textSec, textMil);
+            Timer.Start(_instance, _instance.textSec, _instance.textMil);
         }
 
-        public void Pause()
+        public static void Pause()
         {
             Timer.Pause();
         }
 
-        public void Continue()
+        public static void Continue()
         {
             Timer.Continue();
         }
 
-        public void Stop()
+        public static void Stop()
         {
             Timer.Stop();
         }
 
-        public void Reset()
+        public static void Reset()
         {
             Timer.Reset();
         }
 
-        public double GetTime()
+        public static double GetTime()
         {
             //maybe change passedTime to pauseTime
             double time = Timer.passedTime;

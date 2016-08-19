@@ -1,8 +1,11 @@
-﻿namespace Sliders
+﻿/// <summary>
+/// Constants storage, do not change
+/// </summary>
+namespace Sliders
 {
     public static class Constants
     {
-        public const float cameraZ = -20f; //-40F
+        public const float cameraZ = -20f;
         public const float playerZ = 0f;
         public const float ghostZ = 0f;
         public const int scoreboardSize = 10;

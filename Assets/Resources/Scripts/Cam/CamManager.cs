@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Manages camera actions based on externally fired events
+/// </summary>
 namespace Sliders.Cam
 {
     public enum InterpolationType { smoothstep, linear }

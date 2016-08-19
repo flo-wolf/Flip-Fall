@@ -17,7 +17,7 @@ namespace Sliders.Levels
 
         private void Start()
         {
-            placingParent = LevelManager.levelManager.gameObject.transform;
+            placingParent = LevelManager._instance.gameObject.transform;
         }
 
         public static Level Place(Level level)

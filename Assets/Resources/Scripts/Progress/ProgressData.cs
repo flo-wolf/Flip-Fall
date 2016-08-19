@@ -19,10 +19,11 @@ namespace Sliders.Progress
             coins = -1;
             if (LevelLoader.IsLoaded)
             {
-                lastPlayedLevelID = LevelManager.levelManager.GetID();
+                lastPlayedLevelID = LevelManager.GetID();
                 Debug.Log("[ProgressData] ProgressData(): LastPlayedID = " + lastPlayedLevelID);
             }
-            else lastPlayedLevelID = LevelManager.levelManager.defaultlevel.id;
+            else
+                lastPlayedLevelID = LevelManager.GetDefaultID();
             scoreboards = new List<Scoreboard>();
         }
 
@@ -68,6 +69,11 @@ namespace Sliders.Progress
             }
             Debug.Log("[ProgressData]: GetScoreboard() returns null - there is no scoreboard yet");
             return null;
+        }
+
+        public Scoreboard GetCurrentScoreboard()
+        {
+            return GetScoreboard(LevelManager.GetID());
         }
     }
 }
