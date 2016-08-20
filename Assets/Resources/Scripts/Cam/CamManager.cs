@@ -37,8 +37,8 @@ namespace Sliders.Cam
         private void Start()
         {
             Game.onGameStateChange.AddListener(GameStateChanged);
-            player.onPlayerAction.AddListener(PlayerAction);
-            player.onPlayerStateChange.AddListener(PlayerStateChanged);
+            Player.onPlayerAction.AddListener(PlayerAction);
+            Player.onPlayerStateChange.AddListener(PlayerStateChanged);
         }
 
         //Player Listener

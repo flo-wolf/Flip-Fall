@@ -14,14 +14,13 @@ namespace Sliders.UI
         public static UIManager _instance;
 
         public Text levelID;
-        public Button play;
 
         private void Start()
         {
             _instance = this;
             Game.onGameStateChange.AddListener(GameStateChanged);
-            Player._instance.onPlayerAction.AddListener(PlayerAction);
-            Player._instance.onPlayerStateChange.AddListener(PlayerStateChanged);
+            Player.onPlayerAction.AddListener(PlayerAction);
+            Player.onPlayerStateChange.AddListener(PlayerStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
         }
 
@@ -33,7 +32,7 @@ namespace Sliders.UI
                     UIScoreboard.Hide(); //add fancy fadeouts, save
                     UILevelManager.Hide();
                     UITimer.Run();
-                    play.gameObject.SetActive(false);
+                    UIButtonManager.Hide(UIButtonManager._instance.playBtn);
                     break;
 
                 case Game.GameState.scorescreen:
@@ -42,7 +41,7 @@ namespace Sliders.UI
                     break;
 
                 case Game.GameState.ready:
-                    play.gameObject.SetActive(true);
+                    UIButtonManager.Show(UIButtonManager._instance.playBtn);
                     break;
 
                 case Game.GameState.finishscreen:
@@ -99,12 +98,6 @@ namespace Sliders.UI
         private void LevelChanged(Level level)
         {
             UIScoreboard.UpdateTexts();
-        }
-
-        public void PlayBtn()
-        {
-            Game.SetGameState(Game.GameState.playing);
-            play.gameObject.SetActive(false);
         }
     }
 }

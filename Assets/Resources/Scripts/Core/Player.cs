@@ -21,8 +21,8 @@ namespace Sliders
         private PlayerState playerState;
         private PlayerAction playerAction;
 
-        public PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
-        public PlayerActionEvent onPlayerAction = new PlayerActionEvent();
+        public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
+        public static PlayerActionEvent onPlayerAction = new PlayerActionEvent();
 
         //public Player instance;
         [Header("References")]

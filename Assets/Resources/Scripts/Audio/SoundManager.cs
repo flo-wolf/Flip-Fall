@@ -3,6 +3,7 @@ using Sliders.Levels;
 using Sliders.UI;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Listens to game events and plays sounds accordingly through the SoundPlayer class
@@ -26,6 +27,8 @@ namespace Sliders.Audio
         public AudioClip finishSound;
 
         [Header("UI Sounds")]
+        public AudioClip buttonClickSound;
+        public AudioClip buttonReleaseSound;
         public AudioClip levelChangeSound;
         public AudioClip timerSound;
         public AudioClip defaultButtonSound;
@@ -43,10 +46,12 @@ namespace Sliders.Audio
         private void Start()
         {
             Game.onGameStateChange.AddListener(GameStateChanged);
-            player.onPlayerAction.AddListener(PlayerAction);
-            player.onPlayerStateChange.AddListener(PlayerStateChanged);
+            Player.onPlayerAction.AddListener(PlayerAction);
+            Player.onPlayerStateChange.AddListener(PlayerStateChanged);
             CamMove.onCamMoveStateChange.AddListener(CamMoveStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
+            UIButtonManager.onButtonClick.AddListener(ButtonClicked);
+            UIButtonManager.onButtonRelease.AddListener(ButtonReleased);
         }
 
         //Listener
@@ -125,6 +130,16 @@ namespace Sliders.Audio
                 default:
                     break;
             }
+        }
+
+        public void ButtonClicked(Button b)
+        {
+            soundPlayer.PlaySingle(buttonClickSound);
+        }
+
+        public void ButtonReleased(Button b)
+        {
+            soundPlayer.PlaySingle(buttonReleaseSound);
         }
 
         public void PlayTimerSound()
