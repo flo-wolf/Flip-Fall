@@ -124,7 +124,7 @@ namespace Sliders.Audio
                     break;
 
                 case Game.GameState.ready:
-                    soundPlayer.PlaySingle(spawnSound);
+                    //soundPlayer.PlaySingle(spawnSound);
                     break;
 
                 default:
@@ -132,12 +132,12 @@ namespace Sliders.Audio
             }
         }
 
-        public void ButtonClicked(Button b)
+        private void ButtonClicked(Button b)
         {
             soundPlayer.PlaySingle(buttonClickSound);
         }
 
-        public void ButtonReleased(Button b)
+        private void ButtonReleased(Button b)
         {
             soundPlayer.PlaySingle(buttonReleaseSound);
         }

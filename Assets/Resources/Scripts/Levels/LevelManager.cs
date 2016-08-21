@@ -44,6 +44,11 @@ namespace Sliders.Levels
             return _instance.activeLevel;
         }
 
+        public static Level GetLevel(int id)
+        {
+            return LevelLoader.LoadLevel(id);
+        }
+
         public static void Reload()
         {
             int lastID = ProgressManager.GetProgress().GetLastPlayedID();

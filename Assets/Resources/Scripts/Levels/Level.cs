@@ -17,9 +17,7 @@ namespace Sliders.Levels
         public int id;
 
         public string title;
-        public Ghost goldGhost;
-        public Ghost silverGhost;
-        public Ghost bronzeGhost;
+        public Ghost ghost;
 
         public Spawn spawn;
         public Finish finish;
@@ -42,6 +40,11 @@ namespace Sliders.Levels
         public string GetTitle()
         {
             return title;
+        }
+
+        public Ghost GetGhost()
+        {
+            return ghost;
         }
 
         public void SetGoldTime(double newTime)

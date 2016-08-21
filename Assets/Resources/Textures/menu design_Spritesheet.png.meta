@@ -1,0 +1,1420 @@
+fileFormatVersion: 2
+guid: cf2ac44e28cd4a144af9a52c7aeeb43e
+timeCreated: 1471813021
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: menu design_Spritesheet_0
+    21300002: menu design_Spritesheet_1
+    21300004: menu design_Spritesheet_2
+    21300006: menu design_Spritesheet_3
+    21300008: menu design_Spritesheet_4
+    21300010: menu design_Spritesheet_5
+    21300012: menu design_Spritesheet_6
+    21300014: menu design_Spritesheet_7
+    21300016: menu design_Spritesheet_8
+    21300018: menu design_Spritesheet_9
+    21300020: menu design_Spritesheet_10
+    21300022: menu design_Spritesheet_11
+    21300024: menu design_Spritesheet_12
+    21300026: menu design_Spritesheet_13
+    21300028: menu design_Spritesheet_14
+    21300030: menu design_Spritesheet_15
+    21300032: menu design_Spritesheet_16
+    21300034: menu design_Spritesheet_17
+    21300036: menu design_Spritesheet_18
+    21300038: menu design_Spritesheet_19
+    21300040: menu design_Spritesheet_20
+    21300042: menu design_Spritesheet_21
+    21300044: menu design_Spritesheet_22
+    21300046: menu design_Spritesheet_23
+    21300048: menu design_Spritesheet_24
+    21300050: menu design_Spritesheet_25
+    21300052: menu design_Spritesheet_26
+    21300054: menu design_Spritesheet_27
+    21300056: menu design_Spritesheet_28
+    21300058: menu design_Spritesheet_29
+    21300060: menu design_Spritesheet_30
+    21300062: menu design_Spritesheet_31
+    21300064: menu design_Spritesheet_32
+    21300066: menu design_Spritesheet_33
+    21300068: menu design_Spritesheet_34
+    21300070: menu design_Spritesheet_35
+    21300072: menu design_Spritesheet_36
+    21300074: menu design_Spritesheet_37
+    21300076: menu design_Spritesheet_38
+    21300078: menu design_Spritesheet_39
+    21300080: menu design_Spritesheet_40
+    21300082: menu design_Spritesheet_41
+    21300084: menu design_Spritesheet_42
+    21300086: menu design_Spritesheet_43
+    21300088: menu design_Spritesheet_44
+    21300090: menu design_Spritesheet_45
+    21300092: menu design_Spritesheet_46
+    21300094: menu design_Spritesheet_47
+    21300096: menu design_Spritesheet_48
+    21300098: menu design_Spritesheet_49
+    21300100: menu design_Spritesheet_50
+    21300102: menu design_Spritesheet_51
+    21300104: menu design_Spritesheet_52
+    21300106: menu design_Spritesheet_53
+    21300108: menu design_Spritesheet_54
+    21300110: menu design_Spritesheet_55
+    21300112: menu design_Spritesheet_56
+    21300114: menu design_Spritesheet_57
+    21300116: menu design_Spritesheet_58
+    21300118: menu design_Spritesheet_59
+    21300120: menu design_Spritesheet_60
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 200
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: menu design_Spritesheet_0
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1880
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -70, y: 74}
+        - {x: -70, y: -71}
+        - {x: -54, y: -74}
+        - {x: 54, y: -74}
+        - {x: 70, y: -53}
+        - {x: 70, y: 69}
+        - {x: 54, y: 74}
+    - name: menu design_Spritesheet_1
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 1880
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -61, y: 74}
+        - {x: -70, y: 59}
+        - {x: -70, y: -62}
+        - {x: -58, y: -74}
+        - {x: 50, y: -74}
+        - {x: 70, y: -56}
+        - {x: 70, y: 71}
+        - {x: 56, y: 74}
+    - name: menu design_Spritesheet_2
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 1880
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -45, y: 74}
+        - {x: -69, y: 59}
+        - {x: -70, y: 52}
+        - {x: -70, y: -68}
+        - {x: -68, y: -74}
+        - {x: 68, y: -74}
+        - {x: 70, y: -57}
+        - {x: 70, y: 62}
+        - {x: 52, y: 74}
+    - name: menu design_Spritesheet_3
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 1880
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -70, y: 74}
+        - {x: -70, y: -58}
+        - {x: -67, y: -74}
+        - {x: 53, y: -74}
+        - {x: 70, y: -60}
+        - {x: 70, y: 56}
+        - {x: 67, y: 74}
+    - name: menu design_Spritesheet_4
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 1880
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -61, y: 74}
+        - {x: -70, y: 59}
+        - {x: -70, y: -62}
+        - {x: -58, y: -74}
+        - {x: 50, y: -74}
+        - {x: 70, y: -56}
+        - {x: 70, y: 71}
+        - {x: 56, y: 74}
+    - name: menu design_Spritesheet_5
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 1880
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -52, y: 74}
+        - {x: -66, y: 58}
+        - {x: -69, y: 47}
+        - {x: -70, y: 44}
+        - {x: -70, y: -53}
+        - {x: -68, y: -64}
+        - {x: -56, y: -74}
+        - {x: 52, y: -74}
+        - {x: 70, y: -71}
+        - {x: 70, y: 49}
+        - {x: 56, y: 74}
+    - name: menu design_Spritesheet_6
+      rect:
+        serializedVersion: 2
+        x: 926
+        y: 1880
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -52, y: 74}
+        - {x: -66, y: 58}
+        - {x: -69, y: 47}
+        - {x: -70, y: 44}
+        - {x: -70, y: -53}
+        - {x: -68, y: -64}
+        - {x: -56, y: -74}
+        - {x: 52, y: -74}
+        - {x: 70, y: -71}
+        - {x: 70, y: 49}
+        - {x: 56, y: 74}
+    - name: menu design_Spritesheet_7
+      rect:
+        serializedVersion: 2
+        x: 1580
+        y: 1907
+        width: 67
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 16.5, y: 42}
+        - {x: -19.5, y: 42}
+        - {x: -33.5, y: 23}
+        - {x: -33.5, y: -42}
+        - {x: 33.5, y: -42}
+        - {x: 33.5, y: 24}
+        - {x: 30.5, y: 29}
+    - name: menu design_Spritesheet_8
+      rect:
+        serializedVersion: 2
+        x: 1685
+        y: 1898
+        width: 77
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34.5, y: 48.5}
+        - {x: -38.5, y: 37.5}
+        - {x: -38.5, y: -30.5}
+        - {x: -34.5, y: -45.5}
+        - {x: -30.5, y: -48.5}
+        - {x: 33.5, y: -48.5}
+        - {x: 38.5, y: -42.5}
+        - {x: 38.5, y: 48.5}
+    - name: menu design_Spritesheet_9
+      rect:
+        serializedVersion: 2
+        x: 1781
+        y: 1895
+        width: 97
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21.5, y: 51.5}
+        - {x: -46.5, y: 33.5}
+        - {x: -48.5, y: 24.5}
+        - {x: -48.5, y: -36.5}
+        - {x: -37.5, y: -51.5}
+        - {x: 30.5, y: -51.5}
+        - {x: 48.5, y: -45.5}
+        - {x: 48.5, y: 24.5}
+        - {x: 32.5, y: 51.5}
+    - name: menu design_Spritesheet_10
+      rect:
+        serializedVersion: 2
+        x: 1888
+        y: 1908
+        width: 72
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 26, y: 39}
+        - {x: -21, y: 39}
+        - {x: -36, y: 25}
+        - {x: -36, y: -36}
+        - {x: -26, y: -39}
+        - {x: 28, y: -39}
+        - {x: 35, y: -27}
+        - {x: 36, y: -23}
+        - {x: 36, y: 24}
+    - name: menu design_Spritesheet_11
+      rect:
+        serializedVersion: 2
+        x: 1965
+        y: 1919
+        width: 57
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -22.5, y: 30.5}
+        - {x: -28.5, y: 25.5}
+        - {x: -28.5, y: -19.5}
+        - {x: -15.5, y: -30.5}
+        - {x: 15.5, y: -30.5}
+        - {x: 28.5, y: -23.5}
+        - {x: 28.5, y: 27.5}
+        - {x: 19.5, y: 30.5}
+    - name: menu design_Spritesheet_12
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1728
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -58, y: 74}
+        - {x: -70, y: 71}
+        - {x: -70, y: -59}
+        - {x: -55, y: -74}
+        - {x: 48, y: -74}
+        - {x: 70, y: -62}
+        - {x: 70, y: 55}
+        - {x: 60, y: 74}
+    - name: menu design_Spritesheet_13
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 1728
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 53, y: 74}
+        - {x: -47, y: 74}
+        - {x: -58, y: 72}
+        - {x: -70, y: 62}
+        - {x: -70, y: -61}
+        - {x: -68, y: -74}
+        - {x: 49, y: -74}
+        - {x: 55, y: -70}
+        - {x: 70, y: -55}
+        - {x: 70, y: 63}
+    - name: menu design_Spritesheet_14
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 1728
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -69, y: 74}
+        - {x: -70, y: 73}
+        - {x: -70, y: -55}
+        - {x: -65, y: -74}
+        - {x: 61, y: -74}
+        - {x: 70, y: -58}
+        - {x: 70, y: 71}
+        - {x: 56, y: 74}
+    - name: menu design_Spritesheet_15
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 1728
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -52, y: 74}
+        - {x: -55, y: 73}
+        - {x: -70, y: 60}
+        - {x: -70, y: -60}
+        - {x: -67, y: -74}
+        - {x: 70, y: -74}
+        - {x: 70, y: 62}
+        - {x: 57, y: 74}
+    - name: menu design_Spritesheet_16
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 1728
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 53, y: 74}
+        - {x: -47, y: 74}
+        - {x: -58, y: 72}
+        - {x: -70, y: 62}
+        - {x: -70, y: -61}
+        - {x: -68, y: -74}
+        - {x: 49, y: -74}
+        - {x: 55, y: -70}
+        - {x: 70, y: -55}
+        - {x: 70, y: 63}
+    - name: menu design_Spritesheet_17
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 1728
+        width: 140
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 68, y: 59}
+        - {x: 49, y: 74}
+        - {x: -47, y: 74}
+        - {x: -57, y: 72}
+        - {x: -70, y: 64}
+        - {x: -70, y: -74}
+        - {x: 59, y: -74}
+        - {x: 70, y: -51}
+        - {x: 70, y: 41}
+    - name: menu design_Spritesheet_18
+      rect:
+        serializedVersion: 2
+        x: 926
+        y: 1728
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -70, y: 73.5}
+        - {x: -70, y: -63.5}
+        - {x: -62, y: -73.5}
+        - {x: 54, y: -73.5}
+        - {x: 70, y: -70.5}
+        - {x: 70, y: 63.5}
+        - {x: 54, y: 73.5}
+    - name: menu design_Spritesheet_19
+      rect:
+        serializedVersion: 2
+        x: 1743
+        y: 1728
+        width: 251
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 125.5, y: 49.5}
+        - {x: 109.5, y: 69.5}
+        - {x: 97.5, y: 73.5}
+        - {x: -99.5, y: 73.5}
+        - {x: -121.5, y: 57.5}
+        - {x: -125.5, y: 47.5}
+        - {x: -125.5, y: -50.5}
+        - {x: -114.5, y: -68.5}
+        - {x: -98.5, y: -73.5}
+        - {x: 97.5, y: -73.5}
+        - {x: 107.5, y: -71.5}
+        - {x: 125.5, y: -50.5}
+    - name: menu design_Spritesheet_20
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1579
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -53, y: 73.5}
+        - {x: -70, y: 53.5}
+        - {x: -70, y: -54.5}
+        - {x: -53, y: -73.5}
+        - {x: 53, y: -73.5}
+        - {x: 70, y: -55.5}
+        - {x: 70, y: 70.5}
+        - {x: 56, y: 73.5}
+    - name: menu design_Spritesheet_21
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 1579
+        width: 141
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -54.5, y: 73.5}
+        - {x: -70.5, y: 59.5}
+        - {x: -70.5, y: -56.5}
+        - {x: -69.5, y: -63.5}
+        - {x: -48.5, y: -73.5}
+        - {x: 58.5, y: -73.5}
+        - {x: 70.5, y: -52.5}
+        - {x: 70.5, y: 53.5}
+        - {x: 49.5, y: 73.5}
+    - name: menu design_Spritesheet_22
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 1579
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -58, y: 73.5}
+        - {x: -70, y: 54.5}
+        - {x: -70, y: -69.5}
+        - {x: -51, y: -73.5}
+        - {x: 68, y: -73.5}
+        - {x: 70, y: -71.5}
+        - {x: 70, y: 65.5}
+        - {x: 56, y: 73.5}
+    - name: menu design_Spritesheet_23
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 1579
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -57, y: 73.5}
+        - {x: -70, y: 50.5}
+        - {x: -70, y: -49.5}
+        - {x: -57, y: -72.5}
+        - {x: -50, y: -73.5}
+        - {x: 61, y: -73.5}
+        - {x: 70, y: -65.5}
+        - {x: 70, y: 54.5}
+        - {x: 66, y: 73.5}
+    - name: menu design_Spritesheet_24
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 1579
+        width: 141
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -54.5, y: 73.5}
+        - {x: -70.5, y: 59.5}
+        - {x: -70.5, y: -56.5}
+        - {x: -69.5, y: -63.5}
+        - {x: -48.5, y: -73.5}
+        - {x: 58.5, y: -73.5}
+        - {x: 70.5, y: -52.5}
+        - {x: 70.5, y: 53.5}
+        - {x: 49.5, y: 73.5}
+    - name: menu design_Spritesheet_25
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 1579
+        width: 141
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -52.5, y: 73.5}
+        - {x: -70.5, y: 63.5}
+        - {x: -70.5, y: -58.5}
+        - {x: -55.5, y: -73.5}
+        - {x: 69.5, y: -73.5}
+        - {x: 70.5, y: -68.5}
+        - {x: 70.5, y: 65.5}
+        - {x: 55.5, y: 73.5}
+    - name: menu design_Spritesheet_26
+      rect:
+        serializedVersion: 2
+        x: 925
+        y: 1579
+        width: 141
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 70.5, y: 69}
+        - {x: 48.5, y: 73}
+        - {x: -56.5, y: 73}
+        - {x: -70.5, y: 58}
+        - {x: -70.5, y: -69}
+        - {x: -52.5, y: -73}
+        - {x: 63.5, y: -73}
+        - {x: 69.5, y: -63}
+        - {x: 70.5, y: -54}
+    - name: menu design_Spritesheet_27
+      rect:
+        serializedVersion: 2
+        x: 1746
+        y: 1579
+        width: 251
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 120.5, y: 56}
+        - {x: 108.5, y: 67}
+        - {x: 100.5, y: 71}
+        - {x: 94.5, y: 73}
+        - {x: -99.5, y: 73}
+        - {x: -121.5, y: 57}
+        - {x: -125.5, y: 47}
+        - {x: -125.5, y: -51}
+        - {x: -110.5, y: -69}
+        - {x: -100.5, y: -73}
+        - {x: 101.5, y: -73}
+        - {x: 122.5, y: -58}
+        - {x: 125.5, y: -50}
+        - {x: 125.5, y: 46}
+    - name: menu design_Spritesheet_28
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1422
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -45, y: 73.5}
+        - {x: -70, y: 59.5}
+        - {x: -70, y: -63.5}
+        - {x: -66, y: -73.5}
+        - {x: 70, y: -73.5}
+        - {x: 70, y: 73.5}
+    - name: menu design_Spritesheet_29
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 1423
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 53, y: 73}
+        - {x: -50, y: 73}
+        - {x: -70, y: 53}
+        - {x: -70, y: -71}
+        - {x: -57, y: -73}
+        - {x: 61, y: -73}
+        - {x: 69, y: -63}
+        - {x: 70, y: -54}
+        - {x: 70, y: 55}
+    - name: menu design_Spritesheet_30
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 1423
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 53, y: 73}
+        - {x: -50, y: 73}
+        - {x: -70, y: 53}
+        - {x: -70, y: -72}
+        - {x: -66, y: -73}
+        - {x: 65, y: -73}
+        - {x: 69, y: -63}
+        - {x: 70, y: -54}
+        - {x: 70, y: 55}
+    - name: menu design_Spritesheet_31
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 1422
+        width: 139
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63.5, y: 73.5}
+        - {x: -69.5, y: 50.5}
+        - {x: -69.5, y: -51.5}
+        - {x: -57.5, y: -72.5}
+        - {x: -45.5, y: -73.5}
+        - {x: 59.5, y: -73.5}
+        - {x: 69.5, y: -62.5}
+        - {x: 69.5, y: 55.5}
+        - {x: 66.5, y: 73.5}
+    - name: menu design_Spritesheet_32
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 1422
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -48, y: 73.5}
+        - {x: -70, y: 60.5}
+        - {x: -70, y: -56.5}
+        - {x: -47, y: -73.5}
+        - {x: 70, y: -73.5}
+        - {x: 70, y: 70.5}
+        - {x: 69, y: 73.5}
+    - name: menu design_Spritesheet_33
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 1423
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 53, y: 73}
+        - {x: -50, y: 73}
+        - {x: -70, y: 53}
+        - {x: -70, y: -71}
+        - {x: -57, y: -73}
+        - {x: 61, y: -73}
+        - {x: 69, y: -63}
+        - {x: 70, y: -54}
+        - {x: 70, y: 55}
+    - name: menu design_Spritesheet_34
+      rect:
+        serializedVersion: 2
+        x: 926
+        y: 1423
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 53, y: 73}
+        - {x: -50, y: 73}
+        - {x: -70, y: 53}
+        - {x: -70, y: -71}
+        - {x: -57, y: -73}
+        - {x: 61, y: -73}
+        - {x: 69, y: -63}
+        - {x: 70, y: -54}
+        - {x: 70, y: 55}
+    - name: menu design_Spritesheet_35
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1268
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -64, y: 73}
+        - {x: -70, y: 67}
+        - {x: -70, y: -63}
+        - {x: -58, y: -73}
+        - {x: 59, y: -73}
+        - {x: 70, y: -58}
+        - {x: 70, y: 70}
+        - {x: 51, y: 73}
+    - name: menu design_Spritesheet_36
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 1268
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 73}
+        - {x: -69, y: 62}
+        - {x: -70, y: 54}
+        - {x: -70, y: -55}
+        - {x: -56, y: -71}
+        - {x: -48, y: -73}
+        - {x: 63, y: -73}
+        - {x: 70, y: -68}
+        - {x: 70, y: 51}
+        - {x: 63, y: 73}
+    - name: menu design_Spritesheet_37
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 1268
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -57, y: 73}
+        - {x: -70, y: 58}
+        - {x: -70, y: -51}
+        - {x: -69, y: -59}
+        - {x: -52, y: -73}
+        - {x: 68, y: -73}
+        - {x: 70, y: -57}
+        - {x: 70, y: 61}
+        - {x: 55, y: 73}
+    - name: menu design_Spritesheet_38
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 1268
+        width: 139
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -48.5, y: 73}
+        - {x: -69.5, y: 58}
+        - {x: -69.5, y: -73}
+        - {x: 69.5, y: -73}
+        - {x: 69.5, y: 52}
+        - {x: 49.5, y: 73}
+    - name: menu design_Spritesheet_39
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 1268
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -64, y: 73}
+        - {x: -70, y: 67}
+        - {x: -70, y: -63}
+        - {x: -58, y: -73}
+        - {x: 59, y: -73}
+        - {x: 70, y: -58}
+        - {x: 70, y: 70}
+        - {x: 51, y: 73}
+    - name: menu design_Spritesheet_40
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 1268
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -62, y: 73}
+        - {x: -70, y: 68}
+        - {x: -70, y: -68}
+        - {x: -55, y: -73}
+        - {x: 57, y: -73}
+        - {x: 70, y: -65}
+        - {x: 70, y: 68}
+        - {x: 69, y: 73}
+    - name: menu design_Spritesheet_41
+      rect:
+        serializedVersion: 2
+        x: 926
+        y: 1268
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -62, y: 73}
+        - {x: -70, y: 68}
+        - {x: -70, y: -68}
+        - {x: -55, y: -73}
+        - {x: 57, y: -73}
+        - {x: 70, y: -65}
+        - {x: 70, y: 68}
+        - {x: 69, y: 73}
+    - name: menu design_Spritesheet_42
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1110
+        width: 139
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -66.5, y: 73}
+        - {x: -69.5, y: 67}
+        - {x: -69.5, y: -63}
+        - {x: -58.5, y: -73}
+        - {x: 61.5, y: -73}
+        - {x: 69.5, y: -65}
+        - {x: 69.5, y: 62}
+        - {x: 67.5, y: 73}
+    - name: menu design_Spritesheet_43
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 1110
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -60, y: 73.5}
+        - {x: -70, y: 67.5}
+        - {x: -70, y: -73.5}
+        - {x: 55, y: -73.5}
+        - {x: 70, y: -54.5}
+        - {x: 70, y: 52.5}
+        - {x: 55, y: 73.5}
+    - name: menu design_Spritesheet_44
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 1110
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -65, y: 73.5}
+        - {x: -70, y: 71.5}
+        - {x: -70, y: -72.5}
+        - {x: -67, y: -73.5}
+        - {x: 70, y: -73.5}
+        - {x: 70, y: 57.5}
+        - {x: 57, y: 73.5}
+    - name: menu design_Spritesheet_45
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 1110
+        width: 140
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -49, y: 73}
+        - {x: -54, y: 72}
+        - {x: -70, y: 55}
+        - {x: -70, y: -58}
+        - {x: -62, y: -73}
+        - {x: 70, y: -73}
+        - {x: 70, y: 64}
+        - {x: 57, y: 73}
+    - name: menu design_Spritesheet_46
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 1110
+        width: 139
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -66.5, y: 73}
+        - {x: -69.5, y: 67}
+        - {x: -69.5, y: -63}
+        - {x: -58.5, y: -73}
+        - {x: 61.5, y: -73}
+        - {x: 69.5, y: -65}
+        - {x: 69.5, y: 62}
+        - {x: 67.5, y: 73}
+    - name: menu design_Spritesheet_47
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 1110
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 43, y: 73.5}
+        - {x: -49, y: 73.5}
+        - {x: -70, y: 63.5}
+        - {x: -70, y: -67.5}
+        - {x: -65, y: -73.5}
+        - {x: 63, y: -73.5}
+        - {x: 70, y: -72.5}
+        - {x: 70, y: 55.5}
+        - {x: 52, y: 70.5}
+    - name: menu design_Spritesheet_48
+      rect:
+        serializedVersion: 2
+        x: 925
+        y: 1110
+        width: 140
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -60, y: 73.5}
+        - {x: -70, y: 71.5}
+        - {x: -70, y: -63.5}
+        - {x: -53, y: -73.5}
+        - {x: 49, y: -73.5}
+        - {x: 70, y: -60.5}
+        - {x: 70, y: 63.5}
+        - {x: 59, y: 73.5}
+    - name: menu design_Spritesheet_49
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 816
+        width: 474
+        height: 277
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -106, y: -124.5}
+        - {x: -98, y: -132.5}
+        - {x: -89, y: -136.5}
+        - {x: -82, y: -138.5}
+        - {x: 205, y: -138.5}
+        - {x: 209, y: -137.5}
+        - {x: 212, y: -136.5}
+        - {x: 221, y: -132.5}
+        - {x: 232, y: -120.5}
+        - {x: 234, y: -118.5}
+        - {x: 236, y: -113.5}
+        - {x: 237, y: -110.5}
+        - {x: 237, y: 108.5}
+        - {x: 236, y: 111.5}
+        - {x: 233, y: 118.5}
+        - {x: 217, y: 134.5}
+        - {x: 212, y: 136.5}
+        - {x: 206, y: 138.5}
+        - {x: -84, y: 138.5}
+        - {x: -87, y: 137.5}
+        - {x: -96, y: 133.5}
+        - {x: -98, y: 131.5}
+        - {x: -107, y: 123.5}
+        - {x: -115, y: 131.5}
+        - {x: -124, y: 136.5}
+        - {x: -130, y: 138.5}
+        - {x: -205, y: 138.5}
+        - {x: -211, y: 136.5}
+        - {x: -218, y: 133.5}
+        - {x: -233, y: 118.5}
+        - {x: -236, y: 111.5}
+        - {x: -237, y: 108.5}
+        - {x: -237, y: -111.5}
+        - {x: -232, y: -122.5}
+        - {x: -221, y: -132.5}
+        - {x: -212, y: -137.5}
+        - {x: -209, y: -138.5}
+        - {x: -126, y: -138.5}
+        - {x: -123, y: -137.5}
+        - {x: -116, y: -134.5}
+    - name: menu design_Spritesheet_50
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 816
+        width: 474
+        height: 277
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -106, y: -124.5}
+        - {x: -98, y: -132.5}
+        - {x: -89, y: -136.5}
+        - {x: -82, y: -138.5}
+        - {x: 205, y: -138.5}
+        - {x: 209, y: -137.5}
+        - {x: 212, y: -136.5}
+        - {x: 219, y: -133.5}
+        - {x: 221, y: -131.5}
+        - {x: 232, y: -121.5}
+        - {x: 237, y: -110.5}
+        - {x: 237, y: 109.5}
+        - {x: 232, y: 120.5}
+        - {x: 219, y: 133.5}
+        - {x: 210, y: 137.5}
+        - {x: 207, y: 138.5}
+        - {x: -84, y: 138.5}
+        - {x: -87, y: 137.5}
+        - {x: -96, y: 133.5}
+        - {x: -99, y: 130.5}
+        - {x: -107, y: 123.5}
+        - {x: -117, y: 133.5}
+        - {x: -126, y: 137.5}
+        - {x: -134, y: 138.5}
+        - {x: -201, y: 138.5}
+        - {x: -209, y: 137.5}
+        - {x: -220, y: 132.5}
+        - {x: -231, y: 120.5}
+        - {x: -233, y: 118.5}
+        - {x: -236, y: 111.5}
+        - {x: -237, y: 108.5}
+        - {x: -237, y: -111.5}
+        - {x: -232, y: -122.5}
+        - {x: -221, y: -132.5}
+        - {x: -219, y: -134.5}
+        - {x: -212, y: -137.5}
+        - {x: -209, y: -138.5}
+        - {x: -126, y: -138.5}
+        - {x: -116, y: -134.5}
+    - name: menu design_Spritesheet_51
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 658
+        width: 293
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 145.5, y: 48}
+        - {x: 139.5, y: 57}
+        - {x: 126.5, y: 70}
+        - {x: 117.5, y: 73}
+        - {x: -116.5, y: 73}
+        - {x: -119.5, y: 72}
+        - {x: -128.5, y: 68}
+        - {x: -141.5, y: 56}
+        - {x: -146.5, y: 44}
+        - {x: -146.5, y: -44}
+        - {x: -142.5, y: -60}
+        - {x: -123.5, y: -73}
+        - {x: 123.5, y: -73}
+        - {x: 144.5, y: -58}
+        - {x: 146.5, y: -47}
+        - {x: 146.5, y: 41}
+    - name: menu design_Spritesheet_52
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 658
+        width: 293
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 146.5, y: 41}
+        - {x: 145.5, y: 48}
+        - {x: 139.5, y: 57}
+        - {x: 126.5, y: 69}
+        - {x: 117.5, y: 73}
+        - {x: -122.5, y: 73}
+        - {x: -142.5, y: 57}
+        - {x: -146.5, y: 47}
+        - {x: -146.5, y: -50}
+        - {x: -139.5, y: -58}
+        - {x: -127.5, y: -70}
+        - {x: -118.5, y: -73}
+        - {x: 122.5, y: -73}
+        - {x: 142.5, y: -60}
+        - {x: 146.5, y: -45}
+    - name: menu design_Spritesheet_53
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 657
+        width: 293
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 146.5, y: 49.5}
+        - {x: 127.5, y: 70.5}
+        - {x: 119.5, y: 73.5}
+        - {x: -121.5, y: 73.5}
+        - {x: -143.5, y: 57.5}
+        - {x: -146.5, y: 43.5}
+        - {x: -146.5, y: -47.5}
+        - {x: -141.5, y: -57.5}
+        - {x: -129.5, y: -69.5}
+        - {x: -119.5, y: -73.5}
+        - {x: 121.5, y: -73.5}
+        - {x: 131.5, y: -69.5}
+        - {x: 146.5, y: -49.5}
+    - name: menu design_Spritesheet_54
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 505
+        width: 292
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 146, y: -46}
+        - {x: 146, y: 47}
+        - {x: 130, y: 69}
+        - {x: 119, y: 73}
+        - {x: -122, y: 73}
+        - {x: -144, y: 56}
+        - {x: -146, y: 46}
+        - {x: -146, y: -46}
+        - {x: -141, y: -57}
+        - {x: -130, y: -68}
+        - {x: -119, y: -73}
+        - {x: 122, y: -73}
+        - {x: 132, y: -68}
+        - {x: 145, y: -51}
+    - name: menu design_Spritesheet_55
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 505
+        width: 292
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 146, y: 45}
+        - {x: 143, y: 53}
+        - {x: 126, y: 70}
+        - {x: 116, y: 73}
+        - {x: -122, y: 73}
+        - {x: -144, y: 56}
+        - {x: -146, y: 46}
+        - {x: -146, y: -48}
+        - {x: -141, y: -59}
+        - {x: -128, y: -69}
+        - {x: -119, y: -73}
+        - {x: 122, y: -73}
+        - {x: 132, y: -69}
+        - {x: 146, y: -50}
+    - name: menu design_Spritesheet_56
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 504
+        width: 292
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 122, y: 73}
+        - {x: -119, y: 73}
+        - {x: -130, y: 69}
+        - {x: -146, y: 48}
+        - {x: -146, y: -44}
+        - {x: -145, y: -47}
+        - {x: -141, y: -56}
+        - {x: -138, y: -60}
+        - {x: -129, y: -68}
+        - {x: -118, y: -73}
+        - {x: 123, y: -73}
+        - {x: 140, y: -62}
+        - {x: 146, y: -54}
+        - {x: 146, y: 62}
+    - name: menu design_Spritesheet_57
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 350
+        width: 292
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 140, y: 37.5}
+        - {x: 140, y: 48.5}
+        - {x: 124, y: 70.5}
+        - {x: 114, y: 73.5}
+        - {x: -120, y: 73.5}
+        - {x: -140, y: 61.5}
+        - {x: -145, y: -9.5}
+        - {x: -146, y: -11.5}
+        - {x: -146, y: -50.5}
+        - {x: -130, y: -71.5}
+        - {x: -122, y: -73.5}
+        - {x: 129, y: -73.5}
+        - {x: 146, y: -50.5}
+        - {x: 146, y: -10.5}
+    - name: menu design_Spritesheet_58
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 350
+        width: 292
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 141, y: 39.5}
+        - {x: 134, y: 63.5}
+        - {x: 117, y: 73.5}
+        - {x: -118, y: 73.5}
+        - {x: -134, y: 59.5}
+        - {x: -140, y: 39.5}
+        - {x: -143, y: -14.5}
+        - {x: -146, y: -16.5}
+        - {x: -146, y: -51.5}
+        - {x: -145, y: -60.5}
+        - {x: -124, y: -73.5}
+        - {x: 123, y: -73.5}
+        - {x: 145, y: -56.5}
+        - {x: 146, y: -51.5}
+        - {x: 146, y: -8.5}
+    - name: menu design_Spritesheet_59
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 350
+        width: 292
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 140, y: -13}
+        - {x: 141, y: 41}
+        - {x: 135, y: 58}
+        - {x: 123, y: 69}
+        - {x: 115, y: 73}
+        - {x: -119, y: 73}
+        - {x: -137, y: 59}
+        - {x: -146, y: 5}
+        - {x: -146, y: -52}
+        - {x: -133, y: -67}
+        - {x: -124, y: -73}
+        - {x: 121, y: -73}
+        - {x: 130, y: -68}
+        - {x: 146, y: -52}
+        - {x: 146, y: -15}
+    - name: menu design_Spritesheet_60
+      rect:
+        serializedVersion: 2
+        x: 1727
+        y: 24
+        width: 297
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -148.5, y: 99}
+        - {x: -148.5, y: -99}
+        - {x: 148.5, y: -99}
+        - {x: 148.5, y: 99}
+    outline: []
+  spritePackingTag: UI
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

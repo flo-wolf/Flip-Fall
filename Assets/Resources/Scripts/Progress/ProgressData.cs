@@ -4,19 +4,25 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// This is the actual Progress Data that is saved and loaded.
+/// It consists out of an array of scoreboars, each of them containing the scores for a level.
+/// It also holds other variables important for the players progress. Settings are not included.
+/// </summary>
+
 namespace Sliders.Progress
 {
     [Serializable]
     public class ProgressData
     {
-        public List<Scoreboard> scoreboards = new List<Scoreboard>();
+        public List<Highscore> highscores = new List<Highscore>();
         private int lastPlayedLevelID;
-        public int coins;
+        public int totalCoins;
         //add: unlocks, achievements, stats etc...
 
         public ProgressData()
         {
-            coins = -1;
+            totalCoins = -1;
             if (LevelLoader.IsLoaded)
             {
                 lastPlayedLevelID = LevelManager.GetID();
@@ -24,7 +30,7 @@ namespace Sliders.Progress
             }
             else
                 lastPlayedLevelID = LevelManager.GetDefaultID();
-            scoreboards = new List<Scoreboard>();
+            highscores = new List<Highscore>();
         }
 
         public void SetLastPlayedID(int id)
@@ -37,41 +43,40 @@ namespace Sliders.Progress
             return lastPlayedLevelID;
         }
 
-        public Scoreboard NewScoreboard(int id)
+        public Highscore NewHighscore(int id)
         {
-            Scoreboard sc = new Scoreboard();
-            if (!scoreboards.Any(x => x.levelId == id))
+            Highscore hs = new Highscore();
+            if (!highscores.Any(x => x.levelId == id))
             {
-                sc.levelId = id;
-                scoreboards.Add(sc);
-                Debug.Log("[ProgresssData]: Creating new Scoreboard: " + id);
+                hs.levelId = id;
+                highscores.Add(hs);
+                Debug.Log("[ProgresssData]: Creating new Highscore of level " + id);
             }
-            return sc;
+            return hs;
         }
 
-        public Scoreboard GetScoreboard(int id)
+        public Highscore GetHighscore(int id)
         {
-            if (scoreboards.Count < 0 || !scoreboards.Any(x => x.levelId == id))
+            if (highscores.Count < 0 || !highscores.Any(x => x.levelId == id))
             {
-                return NewScoreboard(id);
+                return NewHighscore(id);
             }
             else
             {
-                foreach (Scoreboard s in scoreboards)
+                foreach (Highscore h in highscores)
                 {
-                    if (s.levelId == id)
+                    if (h.levelId == id)
                     {
                         //Scoreboard found
-                        Debug.Log("[ProgresssData]: Loading old Scoreboard: " + id);
-                        return s;
+                        return h;
                     }
                 }
             }
-            Debug.Log("[ProgressData]: GetScoreboard() returns null - there is no scoreboard yet");
+            Debug.LogError("[ProgressData] You try to load a Highscore that doesnt exist!");
             return null;
         }
 
-        public Scoreboard GetCurrentScoreboard()
+        public Scoreboard GetCurrentHighscore()
         {
             return GetScoreboard(LevelManager.GetID());
         }

@@ -2,6 +2,7 @@
 using Sliders.Progress;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,16 +12,18 @@ using UnityEngine.UI;
 
 namespace Sliders.UI
 {
-    public class UIScoreboard : MonoBehaviour
+    public class UIScoreboardsManager : MonoBehaviour
     {
-        public static UIScoreboard _instance;
-        public static Scoreboard scoreboard;
+        private static UIScoreboardsManager _instance;
+        public static List<Scoreboard> scoreboards;
+        public static int currentPage = 0;
         public Text title;
         public Text text1;
         public Text text2;
         public Text text3;
         public Text text4;
         public Text text5;
+        public Text text6;
 
         private void Awake()
         {
@@ -29,7 +32,7 @@ namespace Sliders.UI
 
         private void Start()
         {
-            scoreboard = ProgressManager.GetProgress().GetCurrentScoreboard();
+            scoreboards = ProgressManager.GetProgress().GetCurrentScoreboard();
             UpdateTexts();
         }
 

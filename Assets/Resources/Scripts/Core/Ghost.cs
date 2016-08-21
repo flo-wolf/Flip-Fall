@@ -26,7 +26,10 @@ namespace Sliders
         public Material defaultMaterial;
         public Material winMaterial;
 
-        public Time time;
+        public double time
+        {
+            get; set;
+        }
 
         private Spawn spawn;
         private Quaternion spawnRotaion;

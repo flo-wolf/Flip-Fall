@@ -56,7 +56,7 @@ namespace Sliders.Progress
                     if (progress.scoreboards.Count > 0)
                     {
                         Debug.Log("[ProgressManager]: LoadProgressData() element count in first scoreboard: " + progress.scoreboards[0].elements.Count);
-                        Debug.Log("[ProgressManager]: LoadProgressData() id of first scoreboard: " + progress.scoreboards[0].levelId);
+                        Debug.Log("[ProgressManager]: LoadProgressData() id of first scoreboard: " + progress.GetScoreboard(UIScoreboardsManager.currentPage));
                     }
                 }
                 catch (SerializationException e)
