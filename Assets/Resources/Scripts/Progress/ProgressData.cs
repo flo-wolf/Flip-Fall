@@ -1,4 +1,5 @@
 ﻿using Sliders.Levels;
+using Sliders.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Sliders.Progress
     public class ProgressData
     {
         public List<Highscore> highscores = new List<Highscore>();
+        //public HighscoreEvent;
 
         //public List<Achievements>
         //public List<Unlocks>
@@ -47,23 +49,30 @@ namespace Sliders.Progress
             return lastPlayedLevelID;
         }
 
-        public Highscore NewHighscore(int id)
+        //Updates existing highscores (if the score is better) or creates a new one if it doesnt exist already
+        public void EnterHighscore(int id, double time)
         {
-            Highscore hs = new Highscore();
+            Highscore hs;
+            //doesnt exist
             if (!highscores.Any(x => x.levelId == id))
             {
-                hs.levelId = id;
+                hs = new Highscore(id, time);
                 highscores.Add(hs);
                 Debug.Log("[ProgresssData]: Creating new Highscore of level " + id);
             }
-            return hs;
+            //exists, thus try to edit this one
+            else
+            {
+                highscores.Find(x => x.levelId == id).PlaceTime(time);
+                Debug.Log("[ProgresssData]: Updating existing Highscore of level " + id);
+            }
         }
 
         public Highscore GetHighscore(int id)
         {
             if (highscores.Count < 0 || !highscores.Any(x => x.levelId == id))
             {
-                return NewHighscore(id);
+                return null;
             }
             else
             {
@@ -71,7 +80,7 @@ namespace Sliders.Progress
                 {
                     if (h.levelId == id)
                     {
-                        //Scoreboard found
+                        //Highscore found
                         return h;
                     }
                 }

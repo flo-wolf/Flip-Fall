@@ -107,42 +107,34 @@ namespace Sliders
             facingLeft = spawn.facingLeftOnSpawn;
         }
 
-        //The Player has left the moveable area
-        private void OnTriggerExit2D(Collider2D collider)
-        {
-            Debug.Log("Exit1 + collider: " + collider);
-            if (1 << collider.gameObject.layer == moveMask.value && IsAlive() || collider == null)
-            {
-                Debug.Log("Die");
-                Die();
-                Game.SetGameState(Game.GameState.scorescreen);
-            }
-        }
-
-        private void OnCollisionExit2D(Collision2D collision)
-        {
-            Debug.Log("Exit2 + collider: " + collision.collider);
-            if (1 << collision.gameObject.layer == moveMask.value && IsAlive() || collision.collider == null)
-            {
-                Debug.Log("Die2");
-                Die();
-                Game.SetGameState(Game.GameState.scorescreen);
-            }
-        }
-
+        //The Player has hit an object, either the finish or an enemy
         private void OnTriggerEnter2D(Collider2D collider)
         {
             //the collided object is on one of the layers marked as killMask => death
-            if (1 << collider.gameObject.layer == killMask.value && IsAlive())
+            if (killMask == (killMask | (1 << collider.gameObject.layer)) && IsAlive())
             {
+                Debug.Log("DEATHMASK: " + collider.gameObject.layer);
                 Die();
                 Game.SetGameState(Game.GameState.scorescreen);
             }
             //the collided object is the finish => fin
-            else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
+            else if (finishMask == (finishMask | (1 << collider.gameObject.layer)))
             {
                 Fin();
                 Game.SetGameState(Game.GameState.finishscreen);
+            }
+        }
+
+        //The Player has left the area allowed for moving(moveMask)
+        private void OnTriggerExit2D(Collider2D collider)
+        {
+            Debug.Log("Exit1 + collider: " + collider);
+
+            if ((moveMask == (moveMask | (1 << collider.gameObject.layer)) && IsAlive()) || collider == null)
+            {
+                Debug.Log("Die");
+                Die();
+                Game.SetGameState(Game.GameState.scorescreen);
             }
         }
 

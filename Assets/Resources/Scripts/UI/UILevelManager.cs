@@ -1,6 +1,7 @@
 ﻿using Sliders;
 using Sliders.Progress;
 using Sliders.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,6 @@ namespace Sliders.UI
 
         private void Start()
         {
-            highscores = ProgressManager.GetProgress().highscores;
             UpdateTexts();
         }
 
@@ -46,12 +46,6 @@ namespace Sliders.UI
             ProgressManager.SaveProgressData();
         }
 
-        public static void PlaceTime(int levelId, double time)
-        {
-            highscore = ProgressManager.GetProgress().GetHighscore(levelId);
-            highscore.PlaceTime(time);
-        }
-
         public static void UpdateTexts()
         {
             //edit to only update those visible in the cameraview, not neccessarily all UILevels
@@ -59,34 +53,49 @@ namespace Sliders.UI
 
             foreach (Highscore h in highscores)
             {
-                UpdateText(h.levelId);
+                UpdateText(h.levelId, h);
             }
         }
 
-        public static void UpdateText(int levelId)
+        //fire updated text event and send the changes that were made (1 to 2 stars, new bestTime etc)
+        //in the animationManager, check for changes in star amount - update them with animations
+        public static void UpdateText(int levelId, Highscore highscore)
         {
-            highscore = ProgressManager.GetProgress().GetHighscore(levelId);
-            UILevel level = _instance.GetUILevel(levelId);
+            Debug.Log("[UpdateText] of level: " + levelId);
+            UILevel uiLevel = _instance.GetUILevel(levelId);
 
-            //fire updated text event and send the changes that were made (1 to 2 stars, new bestTime etc)
-            //in the animationManager, check for changes in star amount - update them with animations
+            if (uiLevel == null)
+            {
+                Debug.LogError("There is no UI Element to display this highscore: " + highscore.levelId);
+            }
+            else
+            {
+                string timeString = "--.--";
+                double t = highscore.bestTime + 0.01F;
 
-            string timeString = "--.--";
-            double t = highscore.bestTime;
+                int secs = (int)t;
+                int milSecs = (int)((t - (int)t) * 100);
+                //int milSecs = (int)(Mathf.Round(t * 10) / 10);
 
-            int secs = (int)t;
-            int milSecs = (int)((t - (int)t) * 100);
-            timeString = string.Format(Constants.timerFormat, secs, milSecs);
+                Debug.Log("[UpdateText] bestTime: " + t + " milSecs: " + milSecs);
+                timeString = string.Format(Constants.timerFormat, secs, milSecs);
 
-            level.bestText.text = timeString;
+                uiLevel.bestText.text = timeString;
+            }
         }
 
         private UILevel GetUILevel(int id)
         {
-            //edit
-            List<UILevel> uiLevels = gameObject.GetComponentsInChildren<UILevel>().ToList();
-            UILevel uiLevel = uiLevels.Find(x => x.id == id);
-
+            UILevel uiLevel = null;
+            UILevel[] uiLevels = gameObject.GetComponentsInChildren<UILevel>();
+            foreach (UILevel lvl in uiLevels)
+            {
+                if (lvl.id == id)
+                {
+                    uiLevel = lvl;
+                    break;
+                }
+            }
             return uiLevel;
         }
     }

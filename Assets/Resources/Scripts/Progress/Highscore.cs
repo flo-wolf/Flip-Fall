@@ -21,11 +21,11 @@ namespace Sliders.Progress
         public double bestTime { get; set; }
         public int levelId = 0;
 
-        public Highscore()
+        public Highscore(int id, double time)
         {
-            levelId = 0;
+            levelId = id;
             scoreType = ScoreType.unvalid;
-            bestTime = -0.66D;
+            bestTime = time;
         }
 
         public void SetScoreType(ScoreType st)

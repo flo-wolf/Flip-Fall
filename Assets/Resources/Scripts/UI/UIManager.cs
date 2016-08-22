@@ -11,7 +11,9 @@ namespace Sliders.UI
 {
     public class UIManager : MonoBehaviour
     {
+        public enum UIState { levelSelection, home, settings, game, title, shop, editor, credits, buyPro }
         public static UIManager _instance;
+        public static UIState uiState;
 
         public Text levelID;
 
@@ -44,8 +46,7 @@ namespace Sliders.UI
                     break;
 
                 case Game.GameState.finishscreen:
-                    UITimer.Pause();
-                    UILevelManager.PlaceTime(LevelManager.GetID(), UITimer.GetTime());
+                    UILevelManager.UpdateTexts();
                     UILevelManager.Show();
                     break;
 

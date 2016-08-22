@@ -52,14 +52,17 @@ namespace Sliders
             switch (gs)
             {
                 case GameState.scorescreen:
+                    Debug.Log("Game: SCORESREEN");
                     //Executed before event is fired!
-                    UITimer.Pause();
+                    Timer.Pause();
                     _instance.StartCoroutine(DelayedGameStateSwitch(gs, scoreScreenAppearDelay));
                     break;
 
                 case GameState.finishscreen:
                     //Executed before event is fired!
-                    UITimer.Pause();
+                    Debug.Log("Game: FINISHSCREEN");
+                    Timer.Pause();
+                    ProgressManager.GetProgress().EnterHighscore(LevelManager.GetID(), UITimer.GetTime());
                     _instance.StartCoroutine(DelayedGameStateSwitch(gs, finishScreenAppearDelay));
                     break;
 
