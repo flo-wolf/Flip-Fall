@@ -33,28 +33,21 @@ namespace Sliders.UI
         public static void Show(Button b)
         {
             //FadeInAnimations
-            b.gameObject.SetActive(true);
+            //b.gameObject.SetActive(true);
         }
 
         public static void Hide(Button b)
         {
             //FadeOutAnimations
-            b.gameObject.SetActive(false);
-        }
-
-        public void PlayBtnClicked(Button b)
-        {
-            if (b == playBtn)
-            {
-                onButtonClick.Invoke(b);
-                Game.SetGameState(Game.GameState.playing);
-                b.gameObject.SetActive(false);
-            }
-            else
-                Debug.LogError("[UIButtonManager] Button tries to call the wrong function.");
+            //b.gameObject.SetActive(false);
         }
 
         public void HomeBtnClicked(Button b)
+        {
+            onButtonClick.Invoke(b);
+        }
+
+        public void LevelButtonClicked(Button b, UILevel level)
         {
             onButtonClick.Invoke(b);
         }

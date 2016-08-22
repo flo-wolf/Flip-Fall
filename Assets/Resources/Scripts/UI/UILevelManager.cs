@@ -16,11 +16,12 @@ namespace Sliders.UI
     public class UILevelManager : MonoBehaviour
     {
         public static UILevelManager _instance;
-        public static int currentPage = 0;
+        public static int currentPage = 1;
+        public static int pageCount = 10;
 
         private static List<Highscore> highscores;
         private static Highscore highscore;
-        public Text levelCount;
+        public Text pageText;
 
         // Use this for initialization
         private void Awake()
@@ -31,6 +32,7 @@ namespace Sliders.UI
         private void Start()
         {
             UpdateTexts();
+            UpdatePageCount();
         }
 
         public static void Show()
@@ -44,6 +46,32 @@ namespace Sliders.UI
         {
             _instance.gameObject.SetActive(false);
             ProgressManager.SaveProgressData();
+        }
+
+        public void NextPage(Button b)
+        {
+            if (currentPage + 1 <= pageCount)
+            {
+                currentPage++;
+                UpdatePageCount();
+                UIButtonManager.onButtonClick.Invoke(b);
+            }
+        }
+
+        public void LastPage(Button b)
+        {
+            if (currentPage - 1 >= 1)
+            {
+                currentPage--;
+                UpdatePageCount();
+                UIButtonManager.onButtonClick.Invoke(b);
+            }
+        }
+
+        public static void UpdatePageCount()
+        {
+            //edit to only update those visible in the cameraview, not neccessarily all UILevels
+            _instance.pageText.text = currentPage.ToString();
         }
 
         public static void UpdateTexts()
@@ -75,12 +103,12 @@ namespace Sliders.UI
 
                 int secs = (int)t;
                 int milSecs = (int)((t - (int)t) * 100);
-                //int milSecs = (int)(Mathf.Round(t * 10) / 10);
 
                 Debug.Log("[UpdateText] bestTime: " + t + " milSecs: " + milSecs);
                 timeString = string.Format(Constants.timerFormat, secs, milSecs);
 
                 uiLevel.bestText.text = timeString;
+                uiLevel.levelNumberText.text = uiLevel.id.ToString();
             }
         }
 

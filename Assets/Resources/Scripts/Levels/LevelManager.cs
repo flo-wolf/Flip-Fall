@@ -75,34 +75,35 @@ namespace Sliders.Levels
             return _instance.activeLevel.spawn;
         }
 
-        public void NextLevel()
-        {
-            Debug.Log("[LevelManager]: NextLevel()");
-            int nextID = activeLevel.id + 1;
-            if (Resources.Load("Prefabs/Levels/" + nextID))
-            {
-                SetLevel(nextID);
-            }
-            else
-                Debug.Log("[LevelManager]: NextLevel() could not be found.");
-        }
+        //public void NextLevel()
+        //{
+        //    Debug.Log("[LevelManager]: NextLevel()");
+        //    int nextID = activeLevel.id + 1;
+        //    if (Resources.Load("Prefabs/Levels/" + nextID))
+        //    {
+        //        SetLevel(nextID);
+        //    }
+        //    else
+        //        Debug.Log("[LevelManager]: NextLevel() could not be found.");
+        //}
 
-        public void LastLevel()
-        {
-            Debug.Log("[LevelManager]: LastLevel()");
-            int nextID = activeLevel.id - 1;
-            if (Resources.Load("Prefabs/Levels/" + nextID))
-            {
-                SetLevel(nextID);
-            }
-            else
-                Debug.Log("[LevelManager]: LastLevel() could not be found.");
-        }
+        //public void LastLevel()
+        //{
+        //    Debug.Log("[LevelManager]: LastLevel()");
+        //    int nextID = activeLevel.id - 1;
+        //    if (Resources.Load("Prefabs/Levels/" + nextID))
+        //    {
+        //        SetLevel(nextID);
+        //    }
+        //    else
+        //        Debug.Log("[LevelManager]: LastLevel() could not be found.");
+        //}
 
         //Try to Place Level with ID newID, destroying all other levels in the scene
         public static void SetLevel(int newID)
         {
-            if (LevelLoader.LoadLevel(newID) != null)
+            //add fadein animation
+            if (GetID() != newID && Resources.Load("Prefabs/Levels/" + newID))
             {
                 _instance.activeLevel = LevelLoader.LoadLevel(newID);
                 _instance.activeLevel = LevelPlacer.Place(GetLevel());
