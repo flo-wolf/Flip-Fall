@@ -29,14 +29,13 @@ namespace Sliders.UI
             switch (gameState)
             {
                 case Game.GameState.playing:
-                    UIScoreboard.Hide(); //add fancy fadeouts, save
+                    //add fancy fadeouts, save
                     UILevelManager.Hide();
                     UITimer.Run();
                     UIButtonManager.Hide(UIButtonManager._instance.playBtn);
                     break;
 
                 case Game.GameState.scorescreen:
-                    UIScoreboard.Show();
                     UILevelManager.Show();
                     break;
 
@@ -46,8 +45,7 @@ namespace Sliders.UI
 
                 case Game.GameState.finishscreen:
                     UITimer.Pause();
-                    UIScoreboard.PlaceTime();
-                    UIScoreboard.Show();
+                    UILevelManager.PlaceTime(LevelManager.GetID(), UITimer.GetTime());
                     UILevelManager.Show();
                     break;
 
@@ -97,7 +95,7 @@ namespace Sliders.UI
 
         private void LevelChanged(Level level)
         {
-            UIScoreboard.UpdateTexts();
+            UILevelManager.UpdateTexts();
         }
     }
 }

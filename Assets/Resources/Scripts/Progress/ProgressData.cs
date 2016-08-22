@@ -7,7 +7,7 @@ using UnityEngine;
 /// <summary>
 /// This is the actual Progress Data that is saved and loaded.
 /// It consists out of an array of scoreboars, each of them containing the scores for a level.
-/// It also holds other variables important for the players progress. Settings are not included.
+/// It also holds other variables important for the players progress like achievemnts or settings.
 /// </summary>
 
 namespace Sliders.Progress
@@ -16,6 +16,10 @@ namespace Sliders.Progress
     public class ProgressData
     {
         public List<Highscore> highscores = new List<Highscore>();
+
+        //public List<Achievements>
+        //public List<Unlocks>
+        //public List<Settings>
         private int lastPlayedLevelID;
         public int totalCoins;
         //add: unlocks, achievements, stats etc...
@@ -76,9 +80,9 @@ namespace Sliders.Progress
             return null;
         }
 
-        public Scoreboard GetCurrentHighscore()
+        public Highscore GetCurrentHighscore()
         {
-            return GetScoreboard(LevelManager.GetID());
+            return GetHighscore(LevelManager.GetID());
         }
     }
 }

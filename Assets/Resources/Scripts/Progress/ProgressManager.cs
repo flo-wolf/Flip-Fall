@@ -53,10 +53,9 @@ namespace Sliders.Progress
                 {
                     var bf = new BinaryFormatter();
                     SetProgress(bf.Deserialize(fs) as ProgressData);
-                    if (progress.scoreboards.Count > 0)
+                    if (progress.highscores.Count > 0)
                     {
-                        Debug.Log("[ProgressManager]: LoadProgressData() element count in first scoreboard: " + progress.scoreboards[0].elements.Count);
-                        Debug.Log("[ProgressManager]: LoadProgressData() id of first scoreboard: " + progress.GetScoreboard(UIScoreboardsManager.currentPage));
+                        Debug.Log("[ProgressManager]: LoadProgressData() id of first highscore: " + progress.GetHighscore(LevelManager.GetID()));
                     }
                 }
                 catch (SerializationException e)
@@ -93,8 +92,7 @@ namespace Sliders.Progress
             }
 
             var bf = new BinaryFormatter();
-            if (progress.scoreboards.Count > 0)
-                Debug.Log("[ProgressManager]: SaveProgressData() id of current level " + progress.GetLastPlayedID() + " scoreboard: " + progress.scoreboards.Find(x => x.levelId == progress.GetLastPlayedID()).levelId);
+            Debug.Log("[ProgressManager]: SaveProgressData() id of current level " + progress.GetLastPlayedID());
             bf.Serialize(file, progress);
             file.Close();
         }
@@ -104,70 +102,18 @@ namespace Sliders.Progress
             progress.SetLastPlayedID(level.id);
         }
 
-        public static void SaveTime()
+        public static void ClearHighscore(int _id)
         {
-            double time = Timer.pauseTime;
-            ProgressData p = progress;
-            Scoreboard scoreboard = new Scoreboard();
-
-            //Scoreboard doesnt exist
-            if (!progress.scoreboards.Any(x => x.levelId == LevelManager.GetID()))
-            {
-                //create new
-
-                scoreboard.levelId = LevelManager.GetID();
-                scoreboard.created = DateTime.UtcNow;
-                scoreboard.updated = DateTime.UtcNow;
-                scoreboard.TryPlacingTime(time);
-            }
-            //Scoreboard exists already
-            else
-            {
-                scoreboard = progress.scoreboards.Find(x => x.levelId == LevelManager.GetID());
-                scoreboard.TryPlacingTime(time);
-                scoreboard.updated = DateTime.UtcNow;
-            }
-            p.scoreboards.Add(scoreboard);
-            SetProgress(p);
-        }
-
-        public static void ClearScores()
-        {
-            if (progress.scoreboards.Any(x => x.levelId == progress.GetLastPlayedID()))
-            {
-                var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == progress.GetLastPlayedID());
-                progress.scoreboards.Remove(model);
-            }
-        }
-
-        public static void ClearLevelScores(int _id)
-        {
-            if (progress.scoreboards.Any(x => x.levelId == _id))
+            if (progress.highscores.Any(x => x.levelId == _id))
             {
                 //var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == _id);
-                progress.scoreboards.Remove(progress.scoreboards.Find(x => x.levelId == _id));
+                progress.highscores.Remove(progress.highscores.Find(x => x.levelId == _id));
             }
         }
 
         public static bool IsLevelFinished(int _id)
         {
-            return progress.scoreboards.Any(x => x.finished);
-        }
-
-        public static void FinishLevel()
-        {
-            Debug.Log("[ProgressManager]: FinishLevel()");
-            SaveTime();
-        }
-
-        public static double GetBestTime(int _id)
-        {
-            if (progress.scoreboards.Any(x => x.levelId == _id))
-            {
-                var model = progress.scoreboards.FirstOrDefault(x => x.levelId == _id);
-                return model.elements[0].time;
-            }
-            return -1D;
+            return progress.highscores.Any(x => x.finished);
         }
     }
 }

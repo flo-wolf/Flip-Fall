@@ -16,6 +16,8 @@ namespace Sliders.Progress
         public enum ScoreType { oneStar, twoStar, threeStar, unvalid }
 
         public ScoreType scoreType { get; set; }
+        public bool unlocked = true;
+        public bool finished = false;
         public double bestTime { get; set; }
         public int levelId = 0;
 
@@ -26,20 +28,29 @@ namespace Sliders.Progress
             bestTime = -0.66D;
         }
 
+        public void SetScoreType(ScoreType st)
+        {
+            scoreType = st;
+        }
+
         public void PlaceTime(double t)
         {
-            double ghostBest = LevelManager.GetLevel(levelId).GetGhost().time;
-            if (bestTime < t)
+            //as soon as ghosts are there do it like this
+            //double ghostBest = LevelManager.GetLevel(levelId).GetGhost().time;
+            double ghostBest = 10;
+            if (bestTime > t)
             {
                 bestTime = t;
                 if (t <= ghostBest)
-                {
-                    bestTime = t;
-                    scoreType = ScoreType.threeStar;
-                }
-                else if (t <= ghostBest + Constants.twoStarPercantage)
-                {
-                }
+                    SetScoreType(ScoreType.threeStar);
+                else if (t <= ghostBest + (ghostBest * Constants.twoStarPercantage))
+                    SetScoreType(ScoreType.twoStar);
+                else
+                    SetScoreType(ScoreType.oneStar);
+            }
+            else
+            {
+                //display too small time, maybe let the timer blink up red then make it disappear and replace with timer
             }
         }
     }

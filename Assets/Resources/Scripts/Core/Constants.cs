@@ -10,7 +10,7 @@ namespace Sliders
         public const float playerZ = 0f;
         public const float ghostZ = 0f;
         public const int scoreboardSize = 10;
-        public const string timerFormat = "{0:D1}.{1:D2}";
+        public const string timerFormat = "{0:D2}.{1:D2}";
         public const float velocityThreshhold = 5F;
         public const int lastPage = 6; //placeholder, find better solution, used as levelselection scroll boundery check,
     }
