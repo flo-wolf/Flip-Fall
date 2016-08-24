@@ -89,7 +89,6 @@ namespace Sliders.Cam
             }
 
             SetCameraState(CamMoveState.resting);
-            Game.SetGameState(Game.GameState.ready);
         }
 
         //instead of using transforms rather use joints and only transform one

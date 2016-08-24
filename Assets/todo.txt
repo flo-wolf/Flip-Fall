@@ -1,22 +1,30 @@
-#ghosts
+#speedstripes and other levelobjets []
+#touch input invoking mirror and reflect functions []
+#calculate and display reached stars of a level []
+#save starcount into progress and display it []
+#you get one item out of a selection of shop items for free every six levels cleared. stars you get []
+#create a shop in which you exchange stars for editor items []
+	- buy a "share" for 50 stars
+		- each player gets one share for free after 
+		- with a share you can distribute one of your custom levels onto a global market
+		- build up a steam workshop like submission and subscribe levelbrowser with ratings and popularity
+	- buy editor items
+	- buy game skins/color schemes
+#buy more stars for real life cash, you can also buy "shares"
+#ghosts []
   - save ghost data
   - replay ghosts 
   - send and load ghosts
   - 
-
-#RGB shift animations
+#RGB shift animations []
   - idle rotation animation
   - death animation
   - charge animation
   - win animation
-
-#Blur
+#blur between levelselection and level, fading in and out through lerps []
   - GameCameraBLur fadein on death 
   - fadeout on play (fast lerp, <0.5sec)
 
-#Toptimes:
-  - Stars / Gold/Silver/Bronce
-  - exchange stars for editor items.
 
 #cameratransition between level switches, deactivate the button while transitioning to next spawn in 1 sec.
 

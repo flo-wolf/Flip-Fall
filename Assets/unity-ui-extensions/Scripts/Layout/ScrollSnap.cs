@@ -442,7 +442,7 @@ namespace UnityEngine.UI.Extensions
 
             float page = pos / itemSize;
 
-            Debug.Log("CurrentPage() " + page);
+            //Debug.Log("CurrentPage() " + page);
             return Mathf.Clamp(Mathf.RoundToInt(page), 0, pages);
         }
 
@@ -462,7 +462,7 @@ namespace UnityEngine.UI.Extensions
         private void PageChanged(int currentPage)
         {
             Debug.Log(currentPage);
-            //startingPage = currentPage;
+            startingPage = currentPage;
 
             if (nextButton)
             {
@@ -484,7 +484,7 @@ namespace UnityEngine.UI.Extensions
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            Debug.Log("-- BeginDrag");
+            //Debug.Log("-- BeginDrag");
             UpdateScrollbar(false);
 
             fastSwipeCounter = 0;
@@ -496,7 +496,7 @@ namespace UnityEngine.UI.Extensions
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            Debug.Log("-- EndDrag");
+            //Debug.Log("-- EndDrag");
             startDrag = true;
             float change = 0;
 

@@ -1,4 +1,5 @@
 ﻿using Sliders;
+using Sliders.Levels;
 using Sliders.Progress;
 using Sliders.UI;
 using System;
@@ -23,6 +24,9 @@ namespace Sliders.UI
         private static Highscore highscore;
         public Text pageText;
 
+        public Animation pageAnimation;
+        public Animation pageInfoAnimation;
+
         // Use this for initialization
         private void Awake()
         {
@@ -33,6 +37,7 @@ namespace Sliders.UI
         {
             UpdateTexts();
             UpdatePageCount();
+            FadeIn();
         }
 
         public static void Show()
@@ -40,6 +45,7 @@ namespace Sliders.UI
             //animations fade in / bounce in
             _instance.gameObject.SetActive(true);
             UpdateTexts();
+            FadeIn();
         }
 
         public static void Hide()
@@ -74,6 +80,15 @@ namespace Sliders.UI
             _instance.pageText.text = currentPage.ToString();
         }
 
+        public static void FadeIn()
+        {
+            Debug.Log("FADEIIIIN!");
+            _instance.pageAnimation.Play();
+            _instance.pageInfoAnimation.Play();
+        }
+
+        //Updates the scores in the text fields inside the levelselection for all levels
+        //called on GameState.scorescreen/finishscreen
         public static void UpdateTexts()
         {
             //edit to only update those visible in the cameraview, not neccessarily all UILevels
@@ -82,6 +97,18 @@ namespace Sliders.UI
             foreach (Highscore h in highscores)
             {
                 UpdateText(h.levelId, h);
+            }
+        }
+
+        //called on Game.GameState.scorescreen, has a timeframe of Game.scoreScreenDelay (default 1sec)
+        public static void UpdateStars()
+        {
+            Debug.Log("UpdateStars");
+            highscores = ProgressManager.GetProgress().highscores;
+
+            foreach (Highscore h in highscores)
+            {
+                _instance.GetUILevel(h.levelId).UpdateStars(h);
             }
         }
 
@@ -97,19 +124,22 @@ namespace Sliders.UI
             }
             else
             {
-                string timeString = "--.--";
-                double t = highscore.bestTime + 0.01F;
-
-                int secs = (int)t;
-                int milSecs = (int)((t - (int)t) * 100);
-                timeString = string.Format(Constants.timerFormat, secs, milSecs);
-
-                uiLevel.bestText.text = timeString;
+                uiLevel.bestText.text = FormatTime(highscore.bestTime + 0.01F);
+                uiLevel.ghostText.text = FormatTime(uiLevel.ghostTime + 0.01F);
                 uiLevel.levelNumberText.text = uiLevel.id.ToString();
             }
         }
 
-        private UILevel GetUILevel(int id)
+        private static String FormatTime(double t)
+        {
+            string timeString = "--.--";
+            int secs = (int)t;
+            int milSecs = (int)((t - (int)t) * 100);
+            timeString = string.Format(Constants.timerFormat, secs, milSecs);
+            return timeString;
+        }
+
+        public UILevel GetUILevel(int id)
         {
             UILevel uiLevel = null;
             UILevel[] uiLevels = gameObject.GetComponentsInChildren<UILevel>();

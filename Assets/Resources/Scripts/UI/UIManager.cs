@@ -24,6 +24,8 @@ namespace Sliders.UI
             Player.onPlayerAction.AddListener(PlayerAction);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
+
+            UILevelManager.UpdateTexts();
         }
 
         private void GameStateChanged(Game.GameState gameState)
@@ -37,17 +39,21 @@ namespace Sliders.UI
                     UIButtonManager.Hide(UIButtonManager._instance.playBtn);
                     break;
 
-                case Game.GameState.scorescreen:
+                case Game.GameState.deathscreen:
+                    UILevelManager.UpdateTexts();
                     UILevelManager.Show();
-                    break;
-
-                case Game.GameState.ready:
-                    UIButtonManager.Show(UIButtonManager._instance.playBtn);
                     break;
 
                 case Game.GameState.finishscreen:
                     UILevelManager.UpdateTexts();
                     UILevelManager.Show();
+                    break;
+
+                case Game.GameState.scorescreen:
+                    UILevelManager.UpdateStars();
+                    break;
+
+                case Game.GameState.ready:
                     break;
 
                 default:

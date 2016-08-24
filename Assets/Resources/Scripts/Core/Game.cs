@@ -12,32 +12,32 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { titlescreen, tutorial, ready, playing, pause, scorescreen, finishscreen, editor, settingsscreen }
+        public enum GameState { titlescreen, tutorial, ready, playing, pause, finishscreen, deathscreen, scorescreen, editor, settingsscreen }
 
-        public static GameState gameState;
+        public static GameState gameState = GameState.ready;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
 
         public static CamMove cm;
         public static Game _instance;
 
-        //delay time between the players death and the appearance of the next screen
-        public static float scoreScreenAppearDelay = 1F;
-        public static float finishScreenAppearDelay = 1F;
+        //delay time between the players death and the deathscreen
+        public static float deathDelay = 1F;
 
-        //The delay between when SetGameState() gets called and when the GameSTateChangeEvent gets fired.
-        public int switchDelay = 1;
+        //delay time between the switch of the gameState form deathscreen to scorescreen
+        public static float deathToScorescreenDelay = 1F;
+
+        public static float scoreScreenDelay = 1F;
 
         private void Awake()
         {
             _instance = this;
             ProgressManager.ClearProgress();
             ProgressManager.LoadProgressData();
-            SetGameState(GameState.ready);
+            //SetGameState(GameState.ready);
         }
 
         private void Start()
         {
-            SetGameState(GameState.ready);
         }
 
         private void OnApplicationQuit()
@@ -51,19 +51,26 @@ namespace Sliders
         {
             switch (gs)
             {
-                case GameState.scorescreen:
-                    Debug.Log("Game: SCORESREEN");
-                    //Executed before event is fired!
+                case GameState.deathscreen:
+                    Debug.Log("Game: DEATHSCREEN");
                     Timer.Pause();
-                    _instance.StartCoroutine(DelayedGameStateSwitch(gs, scoreScreenAppearDelay));
+                    _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
+                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.scorescreen, deathToScorescreenDelay + deathDelay));
+
                     break;
 
                 case GameState.finishscreen:
-                    //Executed before event is fired!
                     Debug.Log("Game: FINISHSCREEN");
                     Timer.Pause();
                     ProgressManager.GetProgress().EnterHighscore(LevelManager.GetID(), UITimer.GetTime());
-                    _instance.StartCoroutine(DelayedGameStateSwitch(gs, finishScreenAppearDelay));
+                    _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
+                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.scorescreen, deathToScorescreenDelay + deathDelay));
+                    break;
+
+                case GameState.scorescreen:
+                    Debug.Log("Game: SCORESCREEN");
+                    onGameStateChange.Invoke(gs);
+                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.ready, scoreScreenDelay));
                     break;
 
                 case GameState.playing:
@@ -81,10 +88,16 @@ namespace Sliders
             gameState = gs;
         }
 
-        public static IEnumerator DelayedGameStateSwitch(GameState gs, float delay)
+        public static IEnumerator DelayedGameStateInvoke(GameState gs, float delay)
         {
             yield return new WaitForSeconds(delay);
             onGameStateChange.Invoke(gs);
+        }
+
+        public static IEnumerator DelayedGameStateSet(GameState gs, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            SetGameState(gs);
         }
 
         public void Edit()

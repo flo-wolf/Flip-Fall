@@ -3,6 +3,7 @@ using Sliders.Levels;
 using Sliders.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -55,6 +56,8 @@ namespace Sliders
         private bool firstChargeDone = false;
         private int collisionCount = 0;
 
+        private static List<Collider2D> colliderList = new List<Collider2D>();
+
         private void Awake()
         {
             //instance = this;
@@ -82,7 +85,7 @@ namespace Sliders
                     StartCoroutine(AliveTimerCorutine());
                     break;
 
-                case Game.GameState.scorescreen:
+                case Game.GameState.deathscreen:
                     MoveToSpawn();
                     break;
 
@@ -114,6 +117,8 @@ namespace Sliders
         //The Player has hit an object, either the finish or an enemy
         private void OnTriggerEnter2D(Collider2D collider)
         {
+            colliderList.Add(collider);
+
             collisionCount++;
 
             //the collided object is on one of the layers marked as killMask => death
@@ -121,7 +126,7 @@ namespace Sliders
             {
                 Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
                 Die();
-                Game.SetGameState(Game.GameState.scorescreen);
+                Game.SetGameState(Game.GameState.deathscreen);
             }
             //the collided object is the finish => fin
             else if (finishMask == (finishMask | (1 << collider.gameObject.layer)))
@@ -136,20 +141,31 @@ namespace Sliders
         private void OnTriggerExit2D(Collider2D collider)
         {
             collisionCount--;
+            colliderList.Remove(colliderList.Find(x => x == collider));
+            if (collisionCount > 0)
+                colliderList = new List<Collider2D>();
             StartCoroutine(DelayedTriggerExit(collider));
+        }
+
+        private void OnTriggerStay2D(Collider2D collider)
+        {
+            if (!colliderList.Find(x => x == collider))
+                colliderList.Add(collider);
         }
 
         private IEnumerator DelayedTriggerExit(Collider2D collider)
         {
-            yield return new WaitForSeconds(triggerExitCheckDelay);
+            //yield return new WaitForSeconds(triggerExitCheckDelay);
 
-            Debug.Log("coll count exit " + collisionCount);
-            if ((moveMask == (moveMask | (1 << collider.gameObject.layer)) && IsAlive()) && collisionCount == -1)
+            Debug.Log("coll count exit " + collisionCount + " IsAlive() " + IsAlive() + " mask " + (moveMask == (moveMask | (1 << collider.gameObject.layer))));
+            Debug.Log("collisionList: " + colliderList.Count);
+            if ((moveMask == (moveMask | (1 << collider.gameObject.layer)) && IsAlive()) && (collisionCount == 0 || collisionCount == -1) && colliderList.Count == 0)
             {
                 Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
                 Die();
-                Game.SetGameState(Game.GameState.scorescreen);
+                Game.SetGameState(Game.GameState.deathscreen);
             }
+            yield break;
         }
 
         //Counts the time the Player is alive in this try
@@ -166,6 +182,7 @@ namespace Sliders
 
         private void Spawn()
         {
+            colliderList = new List<Collider2D>();
             collisionCount = 0;
             SetPlayerState(PlayerState.alive);
 

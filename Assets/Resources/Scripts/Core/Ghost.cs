@@ -15,21 +15,13 @@ namespace Sliders
         public GhostStateChangeEvent onGhostStateChange = new GhostStateChangeEvent();
 
         //public Player instance;
-        public CamMove cm;
-
         public GhostState ghostState;
-        public LayerMask finishMask;
-        public LayerMask killMask;
         public TrailRenderer trail; //Full color
         public TrailRenderer trail2; //Transparency - use shading instead
         public Rigidbody2D rBody;
-        public Material defaultMaterial;
-        public Material winMaterial;
-
-        public double time
-        {
-            get; set;
-        }
+        public Material defaultGhostMaterial;
+        public Material winGhostMaterial;
+        public double time;
 
         private Spawn spawn;
         private Quaternion spawnRotaion;
@@ -42,9 +34,9 @@ namespace Sliders
 
         private void Start()
         {
+            rBody = Player._instance.rBody;
             ReloadSpawnPoint();
             MoveToSpawn();
-            Game.onGameStateChange.AddListener(GameStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
             trail.sortingOrder = 2;
         }
@@ -71,45 +63,9 @@ namespace Sliders
             MoveToSpawn();
         }
 
-        //Everything in here happends after the delay on death. To execute before, enter calls in the Trigger function.
-        private void GameStateChanged(Game.GameState gameState)
-        {
-            Debug.Log("[Player]: GameState changed to: " + gameState);
-            switch (gameState)
-            {
-                case Game.GameState.playing:
-                    Spawn();
-                    break;
-
-                case Game.GameState.scorescreen:
-                    MoveToSpawn();
-                    break;
-
-                case Game.GameState.finishscreen:
-                    MoveToSpawn();
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
         private void SwitchFacingDirection()
         {
             facingLeft = !facingLeft;
-        }
-
-        //The Player has hit something!
-        private void OnTriggerEnter2D(Collider2D collider)
-        {
-            if (1 << collider.gameObject.layer == killMask.value && IsAlive())
-            {
-                Die();
-            }
-            else if (1 << collider.gameObject.layer == finishMask.value && IsAlive())
-            {
-                Fin();
-            }
         }
 
         private void Spawn()
@@ -144,7 +100,7 @@ namespace Sliders
 
         private void Fin()
         {
-            gameObject.GetComponent<MeshRenderer>().material = winMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = winGhostMaterial;
             charging = false;
             facingLeft = spawn.facingLeftOnSpawn;
             firstChargeDone = false;
@@ -162,7 +118,7 @@ namespace Sliders
         private void MoveToSpawn()
         {
             transform.position = spawnPosition;
-            gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = defaultGhostMaterial;
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();

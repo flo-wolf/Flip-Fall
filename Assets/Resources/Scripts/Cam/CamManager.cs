@@ -17,13 +17,6 @@ namespace Sliders.Cam
         public static float defaultTransitionDuration = 1F;
 
         //Duration camera events use after the player's death, i.e. zooming and rotation times
-        public float deathTransitionDuration = 1F;
-
-        //Duration between the appearance of the score screen and the transition back to the game start
-        public float scoreScreenTransitionDuration = 1F;
-
-        //Duration between the appearance of the finish screen and the transition back to the game start
-        public float finishScreenTransitionDuration = 1F;
 
         public float reflectRotationSwitchDuration = 1F;
 
@@ -70,15 +63,15 @@ namespace Sliders.Cam
             {
                 case Player.PlayerState.alive:
                     CamMove.StartFollowing();
-                    CamZoom.ZoomToVelocity(player, deathTransitionDuration);
+                    CamZoom.ZoomToVelocity(player, defaultTransitionDuration);
                     //CamShake.VelocityShake(player);
                     CamRotation.VelocityRotation(player); // currently deactivated in CamRotation
                     break;
 
                 case Player.PlayerState.dead:
-                    CamZoom.DeathZoom(deathTransitionDuration);
+                    CamZoom.DeathZoom(Game.deathDelay);
                     CamShake.DeathShake();
-                    CamRotation.RotateToDefault(deathTransitionDuration);
+                    CamRotation.RotateToDefault(Game.deathDelay);
                     //CamRotation.DeathRotation(); //change to camshake
                     //CamMove.StopFollowing();
                     break;
@@ -101,16 +94,16 @@ namespace Sliders.Cam
                 case Game.GameState.playing:
                     break;
 
-                case Game.GameState.scorescreen:
-                    CamZoom.ZoomToMinimum(scoreScreenTransitionDuration);
-                    CamRotation.RotateToDefault(scoreScreenTransitionDuration);
-                    CamMove.MoveCamTo(spawnPos, defaultTransitionDuration);
+                case Game.GameState.deathscreen:
+                    CamZoom.ZoomToMinimum(Game.scoreScreenDelay);
+                    CamRotation.RotateToDefault(Game.scoreScreenDelay);
+                    CamMove.MoveCamTo(spawnPos, Game.scoreScreenDelay);
                     break;
 
                 case Game.GameState.finishscreen:
-                    CamZoom.ZoomToMinimum(finishScreenTransitionDuration);
-                    CamRotation.RotateToDefault(scoreScreenTransitionDuration);
-                    CamMove.MoveCamTo(spawnPos, defaultTransitionDuration);
+                    CamZoom.ZoomToMinimum(Game.scoreScreenDelay);
+                    CamRotation.RotateToDefault(Game.scoreScreenDelay);
+                    CamMove.MoveCamTo(spawnPos, Game.scoreScreenDelay);
                     break;
 
                 default:

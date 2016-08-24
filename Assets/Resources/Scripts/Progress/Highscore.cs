@@ -1,4 +1,6 @@
-﻿using Sliders.Levels;
+﻿using Sliders.Audio;
+using Sliders.Levels;
+using Sliders.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,14 +20,14 @@ namespace Sliders.Progress
         public ScoreType scoreType { get; set; }
         public bool unlocked = true;
         public bool finished = false;
-        public double bestTime { get; set; }
+        public double bestTime = 9999;
         public int levelId = 0;
 
         public Highscore(int id, double time)
         {
             levelId = id;
             scoreType = ScoreType.unvalid;
-            bestTime = time;
+            PlaceTime(time);
         }
 
         public void SetScoreType(ScoreType st)
@@ -35,9 +37,10 @@ namespace Sliders.Progress
 
         public void PlaceTime(double t)
         {
+            Debug.Log("------------------------------ t: " + t);
             //as soon as ghosts are there do it like this
             //double ghostBest = LevelManager.GetLevel(levelId).GetGhost().time;
-            double ghostBest = 10;
+            double ghostBest = UILevelManager._instance.GetUILevel(levelId).ghostTime;
             if (bestTime > t)
             {
                 bestTime = t;
@@ -52,6 +55,7 @@ namespace Sliders.Progress
             {
                 //display too small time, maybe let the timer blink up red then make it disappear and replace with timer
             }
+            Debug.Log("id: " + levelId + " scoretype: " + scoreType);
         }
     }
 }

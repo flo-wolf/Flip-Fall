@@ -31,6 +31,7 @@ namespace Sliders.Audio
         public AudioClip buttonReleaseSound;
         public AudioClip levelChangeSound;
         public AudioClip timerSound;
+        public AudioClip unvalidSound;
         public AudioClip defaultButtonSound;
         public AudioClip scoreScreenAppearSound;
         public AudioClip camTransitionSound;
@@ -114,7 +115,7 @@ namespace Sliders.Audio
                     soundPlayer.PlaySingle(playSound);
                     break;
 
-                case Game.GameState.scorescreen:
+                case Game.GameState.deathscreen:
                     soundPlayer.PlaySingle(scoreScreenAppearSound);
                     break;
 
@@ -145,6 +146,11 @@ namespace Sliders.Audio
         public void PlayTimerSound()
         {
             soundPlayer.PlaySingle(timerSound);
+        }
+
+        public static void PlayUnvalidSound()
+        {
+            _instance.soundPlayer.PlaySingle(_instance.unvalidSound);
         }
 
         private void LevelChanged(Level level)

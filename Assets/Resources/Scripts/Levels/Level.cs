@@ -17,12 +17,10 @@ namespace Sliders.Levels
         public int id;
 
         public string title;
-        public Ghost ghost;
 
+        public Ghost ghost;
         public Spawn spawn;
         public Finish finish;
-        public DateTime created { get; set; }
-        public DateTime updated { get; set; }
 
         public void AddObject(GameObject go)
         {
@@ -45,18 +43,6 @@ namespace Sliders.Levels
         public Ghost GetGhost()
         {
             return ghost;
-        }
-
-        public void SetGoldTime(double newTime)
-        {
-        }
-
-        public void SetSilverTime(double newTime)
-        {
-        }
-
-        public void SetBronzeTime(double newTime)
-        {
         }
     }
 }
