@@ -42,6 +42,9 @@ namespace Sliders
         public float respawnDuration = 1f;
         public float aliveTime = 0f;
 
+        [Range(0.0f, 0.1f)]
+        public float triggerExitCheckDelay = 0.001F;
+
         private Spawn spawn;
         private Vector3 spawnPosition;
         private Quaternion spawnRotaion;
@@ -50,7 +53,6 @@ namespace Sliders
         private bool charging = false;
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
-
         private int collisionCount = 0;
 
         private void Awake()
@@ -134,8 +136,15 @@ namespace Sliders
         private void OnTriggerExit2D(Collider2D collider)
         {
             collisionCount--;
+            StartCoroutine(DelayedTriggerExit(collider));
+        }
 
-            if ((moveMask == (moveMask | (1 << collider.gameObject.layer)) && IsAlive()) && collisionCount == 0)
+        private IEnumerator DelayedTriggerExit(Collider2D collider)
+        {
+            yield return new WaitForSeconds(triggerExitCheckDelay);
+
+            Debug.Log("coll count exit " + collisionCount);
+            if ((moveMask == (moveMask | (1 << collider.gameObject.layer)) && IsAlive()) && collisionCount == -1)
             {
                 Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
                 Die();
