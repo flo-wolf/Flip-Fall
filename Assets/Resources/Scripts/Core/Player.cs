@@ -51,6 +51,8 @@ namespace Sliders
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
 
+        private int collisionCount = 0;
+
         private void Awake()
         {
             //instance = this;
@@ -110,16 +112,19 @@ namespace Sliders
         //The Player has hit an object, either the finish or an enemy
         private void OnTriggerEnter2D(Collider2D collider)
         {
+            collisionCount++;
+
             //the collided object is on one of the layers marked as killMask => death
             if (killMask == (killMask | (1 << collider.gameObject.layer)) && IsAlive())
             {
-                Debug.Log("DEATHMASK: " + collider.gameObject.layer);
+                Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
                 Die();
                 Game.SetGameState(Game.GameState.scorescreen);
             }
             //the collided object is the finish => fin
             else if (finishMask == (finishMask | (1 << collider.gameObject.layer)))
             {
+                Debug.Log("TriggerEnter - Fin - Collider: " + collider.gameObject);
                 Fin();
                 Game.SetGameState(Game.GameState.finishscreen);
             }
@@ -128,11 +133,11 @@ namespace Sliders
         //The Player has left the area allowed for moving(moveMask)
         private void OnTriggerExit2D(Collider2D collider)
         {
-            Debug.Log("Exit1 + collider: " + collider);
+            collisionCount--;
 
-            if ((moveMask == (moveMask | (1 << collider.gameObject.layer)) && IsAlive()) || collider == null)
+            if ((moveMask == (moveMask | (1 << collider.gameObject.layer)) && IsAlive()) && collisionCount == 0)
             {
-                Debug.Log("Die");
+                Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
                 Die();
                 Game.SetGameState(Game.GameState.scorescreen);
             }
@@ -152,6 +157,7 @@ namespace Sliders
 
         private void Spawn()
         {
+            collisionCount = 0;
             SetPlayerState(PlayerState.alive);
 
             aliveTime = 0;

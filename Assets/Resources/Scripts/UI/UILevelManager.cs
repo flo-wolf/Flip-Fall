@@ -89,7 +89,6 @@ namespace Sliders.UI
         //in the animationManager, check for changes in star amount - update them with animations
         public static void UpdateText(int levelId, Highscore highscore)
         {
-            Debug.Log("[UpdateText] of level: " + levelId);
             UILevel uiLevel = _instance.GetUILevel(levelId);
 
             if (uiLevel == null)
@@ -103,8 +102,6 @@ namespace Sliders.UI
 
                 int secs = (int)t;
                 int milSecs = (int)((t - (int)t) * 100);
-
-                Debug.Log("[UpdateText] bestTime: " + t + " milSecs: " + milSecs);
                 timeString = string.Format(Constants.timerFormat, secs, milSecs);
 
                 uiLevel.bestText.text = timeString;

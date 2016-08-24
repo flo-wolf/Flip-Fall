@@ -11,12 +11,39 @@ namespace Sliders.UI
         public Text bestText;
         public Text ghostText;
         public Text levelNumberText;
+        public Button levelButton;
+
+        public void Start()
+        {
+            if (levelButton == null)
+                levelButton = gameObject.GetComponentInChildren<Button>();
+
+            UpdateButton();
+        }
+
+        public void UpdateButton()
+        {
+            if (!LevelManager.LevelExists(id))
+            {
+                levelButton.interactable = false;
+                levelNumberText.text = "";
+            }
+            else
+            {
+                levelButton.interactable = true;
+                levelNumberText.text = id.ToString();
+            }
+        }
 
         public void PlayLevel()
         {
-            Debug.Log("MÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖp");
-            LevelManager.SetLevel(id);
-            Game.SetGameState(Game.GameState.playing);
+            //level can be set
+            if (LevelManager.LevelExists(id))
+            {
+                LevelManager.SetLevel(id);
+                Game.SetGameState(Game.GameState.playing);
+            }
+            // else - animate failure
         }
     }
 }
