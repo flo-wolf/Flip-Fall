@@ -35,7 +35,6 @@ namespace Sliders.UI
 
         private void Start()
         {
-            UpdateTexts();
             UpdatePageCount();
             FadeIn();
         }
@@ -44,7 +43,7 @@ namespace Sliders.UI
         {
             //animations fade in / bounce in
             _instance.gameObject.SetActive(true);
-            UpdateTexts();
+            _instance.UpdatePage();
             FadeIn();
         }
 
@@ -74,12 +73,6 @@ namespace Sliders.UI
             }
         }
 
-        public static void UpdatePageCount()
-        {
-            //edit to only update those visible in the cameraview, not neccessarily all UILevels
-            _instance.pageText.text = currentPage.ToString();
-        }
-
         public static void FadeIn()
         {
             Debug.Log("FADEIIIIN!");
@@ -87,62 +80,58 @@ namespace Sliders.UI
             _instance.pageInfoAnimation.Play();
         }
 
+        private static void UpdatePageCount()
+        {
+            //edit to only update those visible in the cameraview, not neccessarily all UILevels
+            _instance.pageText.text = currentPage.ToString();
+            _instance.UpdatePage();
+        }
+
         //Updates the scores in the text fields inside the levelselection for all levels
         //called on GameState.scorescreen/finishscreen
-        public static void UpdateTexts()
+        private void UpdatePage()
         {
             //edit to only update those visible in the cameraview, not neccessarily all UILevels
             highscores = ProgressManager.GetProgress().highscores;
 
-            foreach (Highscore h in highscores)
+            List<UILevel> pageUiLevels = GetCurrentPageUILevels();
+
+            foreach (UILevel l in pageUiLevels)
             {
-                UpdateText(h.levelId, h);
+                if (l != null && l.UILevelMatchesLevel())
+                {
+                    l.UpdateTexts();
+                    l.UpdateStars();
+                }
             }
         }
 
         //called on Game.GameState.scorescreen, has a timeframe of Game.scoreScreenDelay (default 1sec)
-        public static void UpdateStars()
-        {
-            Debug.Log("UpdateStars");
-            highscores = ProgressManager.GetProgress().highscores;
+        //private void UpdatePageStars()
+        //{
+        //    highscores = ProgressManager.GetProgress().highscores;
 
-            foreach (Highscore h in highscores)
+        //    foreach (Highscore h in highscores)
+        //    {
+        //        if (GetCurrentPageUILevels().Any(x => x.id == h.levelId))
+        //            GetUILevel(h.levelId).UpdateStars();
+        //    }
+        //}
+
+        private List<UILevel> GetCurrentPageUILevels()
+        {
+            List<UILevel> uiLevels = new List<UILevel>();
+            for (int i = 0; i < Constants.itemsPerPage; i++)
             {
-                _instance.GetUILevel(h.levelId).UpdateStars(h);
+                uiLevels.Add(GetUILevel(i * currentPage));
             }
+            return uiLevels;
         }
 
-        //fire updated text event and send the changes that were made (1 to 2 stars, new bestTime etc)
-        //in the animationManager, check for changes in star amount - update them with animations
-        public static void UpdateText(int levelId, Highscore highscore)
-        {
-            UILevel uiLevel = _instance.GetUILevel(levelId);
-
-            if (uiLevel == null)
-            {
-                Debug.LogError("There is no UI Element to display this highscore: " + highscore.levelId);
-            }
-            else
-            {
-                uiLevel.bestText.text = FormatTime(highscore.bestTime + 0.01F);
-                uiLevel.ghostText.text = FormatTime(uiLevel.ghostTime + 0.01F);
-                uiLevel.levelNumberText.text = uiLevel.id.ToString();
-            }
-        }
-
-        private static String FormatTime(double t)
-        {
-            string timeString = "--.--";
-            int secs = (int)t;
-            int milSecs = (int)((t - (int)t) * 100);
-            timeString = string.Format(Constants.timerFormat, secs, milSecs);
-            return timeString;
-        }
-
-        public UILevel GetUILevel(int id)
+        public static UILevel GetUILevel(int id)
         {
             UILevel uiLevel = null;
-            UILevel[] uiLevels = gameObject.GetComponentsInChildren<UILevel>();
+            UILevel[] uiLevels = _instance.gameObject.GetComponentsInChildren<UILevel>();
             foreach (UILevel lvl in uiLevels)
             {
                 if (lvl.id == id)

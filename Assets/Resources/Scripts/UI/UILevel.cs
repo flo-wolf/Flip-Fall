@@ -9,7 +9,6 @@ namespace Sliders.UI
     public class UILevel : MonoBehaviour
     {
         public int id;
-        public double ghostTime = 10F;
 
         //Stars
         public Image Star1;
@@ -23,14 +22,26 @@ namespace Sliders.UI
         public Text levelNumberText;
         public Button levelButton;
 
-        private Highscore.ScoreType oldScoreType;
+        private int starScore = 0;
 
         public void Start()
         {
             if (levelButton == null)
                 levelButton = gameObject.GetComponentInChildren<Button>();
-
             UpdateButton();
+
+            Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
+            if (h != null && h.starCount > 0)
+            {
+                starScore = h.starCount;
+            }
+            Highscore.onLevelStarChange.AddListener(HighscoreStarChanged);
+        }
+
+        private void HighscoreStarChanged(int stars, int levelId)
+        {
+            if (levelId == id)
+                SetStars(stars);
         }
 
         //if there is no level corresponding to the UILevel Element then deactivate the buttons functions
@@ -48,38 +59,67 @@ namespace Sliders.UI
             }
         }
 
-        public void UpdateStars(Highscore h)
+        public void SetStars(int newStars)
         {
-            Debug.Log("[UILevel] UpdateStars(" + h.scoreType + ")");
-            if (h.scoreType != oldScoreType && LevelManager.LevelExists(id))
+            if (newStars != starScore && UILevelMatchesLevel() && newStars > 0)
             {
-                oldScoreType = h.scoreType;
-                switch (h.scoreType)
-                {
-                    case Highscore.ScoreType.oneStar:
-                        Star1.enabled = true;
-                        Star2.enabled = false;
-                        Star3.enabled = false;
-                        break;
+                starScore = newStars;
+                UpdateStars();
+            }
+        }
 
-                    case Highscore.ScoreType.twoStar:
-                        Star1.enabled = true;
-                        Star2.enabled = true;
-                        Star3.enabled = false;
-                        break;
+        public void UpdateStars()
+        {
+            Debug.Log("[UILevel] UpdateStars()");
+            switch (starScore)
+            {
+                case 1:
+                    Star1.enabled = true;
+                    Star2.enabled = false;
+                    Star3.enabled = false;
+                    break;
 
-                    case Highscore.ScoreType.threeStar:
-                        Star1.enabled = true;
-                        Star2.enabled = true;
-                        Star3.enabled = true;
-                        break;
+                case 2:
+                    Star1.enabled = true;
+                    Star2.enabled = true;
+                    Star3.enabled = false;
+                    break;
 
-                    default:
-                        Star1.enabled = false;
-                        Star2.enabled = false;
-                        Star3.enabled = false;
-                        break;
-                }
+                case 3:
+                    Star1.enabled = true;
+                    Star2.enabled = true;
+                    Star3.enabled = true;
+                    break;
+
+                default:
+                    Star1.enabled = false;
+                    Star2.enabled = false;
+                    Star3.enabled = false;
+                    break;
+            }
+        }
+
+        public void UpdateTexts()
+        {
+            if (UILevelMatchesLevel())
+            {
+                ghostText.text = Constants.FormatTime(LevelManager.GetLevel(id).presetTime);
+                levelNumberText.text = id.ToString();
+
+                Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
+                if (h != null)
+                    bestText.text = Constants.FormatTime(h.bestTime + 0.01F);
+            }
+        }
+
+        //depreciated, updated are done through UpdateTexts()
+        public void SetBestText(Highscore h)
+        {
+            if (UILevelMatchesLevel())
+            {
+                bestText.text = Constants.FormatTime(h.bestTime + 0.01F);
+                ghostText.text = Constants.FormatTime(LevelManager.GetLevel(h.levelId).presetTime);
+                levelNumberText.text = id.ToString();
             }
         }
 
@@ -92,6 +132,15 @@ namespace Sliders.UI
                 Game.SetGameState(Game.GameState.playing);
             }
             // else - animate failure
+        }
+
+        public bool UILevelMatchesLevel()
+        {
+            if (LevelManager.LevelExists(id))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Sliders.Progress;
+using Sliders.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,12 +16,18 @@ namespace Sliders.Levels
 
         //id is unique, no doubles allowed!
         public int id;
+        public double presetTime = -1;
 
         public string title;
 
         public Ghost ghost;
         public Spawn spawn;
         public Finish finish;
+
+        public int GetID()
+        {
+            return id;
+        }
 
         public void AddObject(GameObject go)
         {

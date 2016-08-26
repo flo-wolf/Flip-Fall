@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 /// <summary>
@@ -15,47 +16,72 @@ namespace Sliders.Progress
     [Serializable]
     public class Highscore
     {
-        public enum ScoreType { oneStar, twoStar, threeStar, unvalid }
+        public int starCount = -1;
 
-        public ScoreType scoreType { get; set; }
+        /// <summary>
+        /// 1. stars
+        /// 2. levelId
+        /// </summary>
+        public static LevelStarChangeEvent onLevelStarChange = new LevelStarChangeEvent();
+
+        /// <summary>
+        /// 1. stars
+        /// 2. levelId
+        /// </summary>
+        public class LevelStarChangeEvent : UnityEvent<int, int> { }
+
         public bool unlocked = true;
         public bool finished = false;
-        public double bestTime = 9999;
+        public double bestTime = -1;
         public int levelId = 0;
 
         public Highscore(int id, double time)
         {
             levelId = id;
-            scoreType = ScoreType.unvalid;
             PlaceTime(time);
+            starCount = -1;
+            UpdateStarCount();
         }
 
-        public void SetScoreType(ScoreType st)
+        public void UpdateStarCount()
         {
-            scoreType = st;
+        }
+
+        private void SetStarCount(int stars)
+        {
+            if (stars > 0)
+            {
+                starCount = stars;
+                //starcount set event
+            }
         }
 
         public void PlaceTime(double t)
         {
-            Debug.Log("------------------------------ t: " + t);
-            //as soon as ghosts are there do it like this
-            //double ghostBest = LevelManager.GetLevel(levelId).GetGhost().time;
-            double ghostBest = UILevelManager._instance.GetUILevel(levelId).ghostTime;
-            if (bestTime > t)
+            double presetTime = LevelManager.GetLevel().presetTime;
+
+            if (t < bestTime || bestTime < 0 && presetTime > 0)
             {
                 bestTime = t;
-                if (t <= ghostBest)
-                    SetScoreType(ScoreType.threeStar);
-                else if (t <= ghostBest + (ghostBest * Constants.twoStarPercantage))
-                    SetScoreType(ScoreType.twoStar);
+                if (t < presetTime)
+                {
+                    SetStarCount(3);
+                }
+                else if (t < presetTime + Constants.twoStarPercantage)
+                {
+                    SetStarCount(2);
+                }
                 else
-                    SetScoreType(ScoreType.oneStar);
+                    SetStarCount(1);
             }
             else
             {
+                Debug.Log("[Highscore] Time trying to be placed is smaller than the existing best and/or there was no presetTime set");
                 //display too small time, maybe let the timer blink up red then make it disappear and replace with timer
             }
-            Debug.Log("id: " + levelId + " scoretype: " + scoreType);
+
+            onLevelStarChange.Invoke(starCount, levelId);
+            Debug.Log("[Highscore] New starCount: " + starCount + " of level: " + levelId);
         }
     }
 }

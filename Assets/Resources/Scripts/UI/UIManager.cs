@@ -1,4 +1,5 @@
 ﻿using Sliders.Levels;
+using Sliders.Progress;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,9 +24,6 @@ namespace Sliders.UI
             Game.onGameStateChange.AddListener(GameStateChanged);
             Player.onPlayerAction.AddListener(PlayerAction);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
-            LevelManager.onLevelChange.AddListener(LevelChanged);
-
-            UILevelManager.UpdateTexts();
         }
 
         private void GameStateChanged(Game.GameState gameState)
@@ -40,17 +38,14 @@ namespace Sliders.UI
                     break;
 
                 case Game.GameState.deathscreen:
-                    UILevelManager.UpdateTexts();
-                    UILevelManager.Show();
+
                     break;
 
                 case Game.GameState.finishscreen:
-                    UILevelManager.UpdateTexts();
-                    UILevelManager.Show();
                     break;
 
                 case Game.GameState.scorescreen:
-                    UILevelManager.UpdateStars();
+                    UILevelManager.Show();
                     break;
 
                 case Game.GameState.ready:
@@ -98,11 +93,6 @@ namespace Sliders.UI
                 default:
                     break;
             }
-        }
-
-        private void LevelChanged(Level level)
-        {
-            UILevelManager.UpdateTexts();
         }
     }
 }
