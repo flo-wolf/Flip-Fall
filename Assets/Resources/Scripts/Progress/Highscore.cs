@@ -45,6 +45,18 @@ namespace Sliders.Progress
 
         public void UpdateStarCount()
         {
+            double presetTime = LevelManager.GetLevel().presetTime;
+
+            if (bestTime < presetTime)
+            {
+                SetStarCount(3);
+            }
+            else if (bestTime < presetTime + Constants.twoStarPercantage)
+            {
+                SetStarCount(2);
+            }
+            else
+                SetStarCount(1);
         }
 
         private void SetStarCount(int stars)
