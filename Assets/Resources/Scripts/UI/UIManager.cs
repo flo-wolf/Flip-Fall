@@ -12,9 +12,9 @@ namespace Sliders.UI
 {
     public class UIManager : MonoBehaviour
     {
-        public enum UIState { levelSelection, home, settings, game, title, shop, editor, credits, buyPro }
+        //public enum UIState { levelSelection, home, settings, game, title, shop, editor, credits, buyPro }
+        //public static UIState uiState;
         public static UIManager _instance;
-        public static UIState uiState;
 
         public Text levelID;
 
@@ -32,20 +32,23 @@ namespace Sliders.UI
             {
                 case Game.GameState.playing:
                     //add fancy fadeouts, save
-                    UILevelManager.Hide();
-                    UITimer.Run();
+                    UILevelSelection.Hide();
+                    UIStarCount.Hide();
+                    UITimer.Show();
                     UIButtonManager.Hide(UIButtonManager._instance.playBtn);
                     break;
 
                 case Game.GameState.deathscreen:
-
+                    UILevelSelection.Show();
                     break;
 
                 case Game.GameState.finishscreen:
+                    UILevelSelection.Show();
                     break;
 
-                case Game.GameState.scorescreen:
-                    UILevelManager.Show();
+                case Game.GameState.levelselection:
+                    UITimer.Hide();
+                    UIStarCount.Show();
                     break;
 
                 case Game.GameState.ready:

@@ -95,15 +95,15 @@ namespace Sliders.Cam
                     break;
 
                 case Game.GameState.deathscreen:
-                    CamZoom.ZoomToMinimum(Game.scoreScreenDelay);
-                    CamRotation.RotateToDefault(Game.scoreScreenDelay);
-                    CamMove.MoveCamTo(spawnPos, Game.scoreScreenDelay);
+                    CamZoom.ZoomToMinimum(Game.levelselectionDelay);
+                    CamRotation.RotateToDefault(Game.levelselectionDelay);
+                    CamMove.MoveCamTo(spawnPos, Game.levelselectionDelay);
                     break;
 
                 case Game.GameState.finishscreen:
-                    CamZoom.ZoomToMinimum(Game.scoreScreenDelay);
-                    CamRotation.RotateToDefault(Game.scoreScreenDelay);
-                    CamMove.MoveCamTo(spawnPos, Game.scoreScreenDelay);
+                    CamZoom.ZoomToMinimum(Game.levelselectionDelay);
+                    CamRotation.RotateToDefault(Game.levelselectionDelay);
+                    CamMove.MoveCamTo(spawnPos, Game.levelselectionDelay);
                     break;
 
                 default:

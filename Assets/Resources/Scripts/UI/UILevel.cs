@@ -31,11 +31,9 @@ namespace Sliders.UI
             UpdateButton();
 
             Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
-            Debug.Log(h);
             if (h != null && h.starCount > 0)
             {
                 starScore = h.starCount;
-                Debug.Log("UILevel start id: " + id + " starScore: " + starScore);
             }
             Highscore.onLevelStarChange.AddListener(HighscoreStarChanged);
         }
@@ -72,7 +70,6 @@ namespace Sliders.UI
 
         public void UpdateStars()
         {
-            Debug.Log("[UILevel] UpdateStars() id: " + id + " starScore: " + starScore);
             switch (starScore)
             {
                 case 1:

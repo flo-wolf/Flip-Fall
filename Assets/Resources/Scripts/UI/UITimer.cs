@@ -15,6 +15,19 @@ namespace Sliders.UI
             _instance = this;
         }
 
+        public static void Show()
+        {
+            _instance.gameObject.SetActive(true);
+            Run();
+            //animation
+        }
+
+        public static void Hide()
+        {
+            _instance.gameObject.SetActive(false);
+            //animation
+        }
+
         // Use this for initialization
         public static void Run()
         {

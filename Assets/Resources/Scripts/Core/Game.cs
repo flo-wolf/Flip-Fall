@@ -8,11 +8,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+/// <summary>
+/// Controls the gameplay durimg MainState.playing
+/// </summary>
 namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { titlescreen, tutorial, ready, playing, pause, finishscreen, deathscreen, scorescreen, editor, settingsscreen }
+        public enum GameState { startup, title, tutorial, homescreen, ready, playing, pause, finishscreen, deathscreen, levelselection, editor, settingsscreen }
+
+        //create class main, make it completly static, surviving scene changes
+        // main class logs the current screenstate and allows easy switching, accessable by the controller script of each scene
+        //public enum MainState { startup, title, firstvisit, home, playing, pause, levelselection, editor, settings }
+        //
 
         public static GameState gameState = GameState.ready;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
@@ -23,10 +31,10 @@ namespace Sliders
         //delay time between the players death and the deathscreen
         public static float deathDelay = 1F;
 
-        //delay time between the switch of the gameState form deathscreen to scorescreen
-        public static float deathToScorescreenDelay = 1F;
+        //delay time between the switch of the gameState form deathscreen to levelselection
+        public static float deathTolevelselectionDelay = 1F;
 
-        public static float scoreScreenDelay = 1F;
+        public static float levelselectionDelay = 1F;
 
         private void Awake()
         {
@@ -55,7 +63,7 @@ namespace Sliders
                     Debug.Log("Game: DEATHSCREEN");
                     Timer.Pause();
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
-                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.scorescreen, deathToScorescreenDelay + deathDelay));
+                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
 
                     break;
 
@@ -64,13 +72,13 @@ namespace Sliders
                     Timer.Pause();
                     ProgressManager.GetProgress().EnterHighscore(LevelManager.GetID(), UITimer.GetTime());
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
-                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.scorescreen, deathToScorescreenDelay + deathDelay));
+                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
                     break;
 
-                case GameState.scorescreen:
-                    Debug.Log("Game: SCORESCREEN");
+                case GameState.levelselection:
+                    Debug.Log("Game: levelselection");
                     onGameStateChange.Invoke(gs);
-                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.ready, scoreScreenDelay));
+                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.ready, levelselectionDelay));
                     break;
 
                 case GameState.playing:

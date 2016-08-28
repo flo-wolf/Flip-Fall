@@ -14,9 +14,9 @@ using UnityEngine.UI;
 /// </summary>
 namespace Sliders.UI
 {
-    public class UILevelManager : MonoBehaviour
+    public class UILevelSelection : MonoBehaviour
     {
-        public static UILevelManager _instance;
+        public static UILevelSelection _instance;
         public static int currentPage = 1;
         public static int pageCount = 10;
 
@@ -25,7 +25,9 @@ namespace Sliders.UI
         public Text pageText;
 
         public Animation pageAnimation;
-        public Animation pageInfoAnimation;
+        public Animation pageInfoAnim;
+
+        private bool levelChosen;
 
         // Use this for initialization
         private void Awake()
@@ -49,8 +51,8 @@ namespace Sliders.UI
 
         public static void Hide()
         {
-            _instance.gameObject.SetActive(false);
             ProgressManager.SaveProgressData();
+            FadeOut();
         }
 
         public void NextPage(Button b)
@@ -75,9 +77,16 @@ namespace Sliders.UI
 
         public static void FadeIn()
         {
-            Debug.Log("FADEIIIIN!");
-            _instance.pageAnimation.Play();
-            _instance.pageInfoAnimation.Play();
+            Debug.Log("[UILevelSelection] FadeIn()");
+            _instance.pageAnimation.Play("pageShow");
+            _instance.pageInfoAnim.Play();
+        }
+
+        public static void FadeOut()
+        {
+            Debug.Log("[UILevelSelection] FadeOut()");
+            _instance.pageAnimation.Play("pageHide");
+            _instance.pageInfoAnim.Play();
         }
 
         private static void UpdatePageCount()
@@ -88,7 +97,7 @@ namespace Sliders.UI
         }
 
         //Updates the scores in the text fields inside the levelselection for all levels
-        //called on GameState.scorescreen/finishscreen
+        //called on GameState.levelselection/finishscreen
         private void UpdatePage()
         {
             //edit to only update those visible in the cameraview, not neccessarily all UILevels
@@ -105,18 +114,6 @@ namespace Sliders.UI
                 }
             }
         }
-
-        //called on Game.GameState.scorescreen, has a timeframe of Game.scoreScreenDelay (default 1sec)
-        //private void UpdatePageStars()
-        //{
-        //    highscores = ProgressManager.GetProgress().highscores;
-
-        //    foreach (Highscore h in highscores)
-        //    {
-        //        if (GetCurrentPageUILevels().Any(x => x.id == h.levelId))
-        //            GetUILevel(h.levelId).UpdateStars();
-        //    }
-        //}
 
         private List<UILevel> GetCurrentPageUILevels()
         {

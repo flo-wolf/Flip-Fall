@@ -79,7 +79,7 @@ namespace Sliders.Progress
                 {
                     SetStarCount(3);
                 }
-                else if (t < presetTime + Constants.twoStarPercantage)
+                else if (t < presetTime + (presetTime * Constants.twoStarPercantage))
                 {
                     SetStarCount(2);
                 }

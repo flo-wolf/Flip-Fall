@@ -33,7 +33,7 @@ namespace Sliders.Audio
         public AudioClip timerSound;
         public AudioClip unvalidSound;
         public AudioClip defaultButtonSound;
-        public AudioClip scoreScreenAppearSound;
+        public AudioClip levelselectionAppearSound;
         public AudioClip camTransitionSound;
 
         [Header("Music")]
@@ -116,7 +116,7 @@ namespace Sliders.Audio
                     break;
 
                 case Game.GameState.deathscreen:
-                    soundPlayer.PlaySingle(scoreScreenAppearSound);
+                    soundPlayer.PlaySingle(levelselectionAppearSound);
                     break;
 
                 case Game.GameState.finishscreen:
