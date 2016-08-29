@@ -1,22 +1,30 @@
+
+ToDo:
+
 #speedstripes and other levelobjets []
+#rename the project back to impulse []
+#use different scenes for each app component []
+	- Manage scene switches through a lasting static main class
+	- Fade Scenes
 #touch input invoking mirror and reflect functions []
+#next level unlocks after the current is finished []
 #calculate and display reached stars of a level []
-#save starcount into progress and display it []
-#you get one item out of a selection of shop items for free every six levels cleared. stars you get []
-#create a shop in which you exchange stars for editor items []
+# You get one item out of a selection of shop items for free every six levels cleared. stars you get []
+# Stars and shop []
+	- create a shop in which you exchange stars for editor items []
+	- save starcount into progress and display it [*]
+	- buy more stars for real life cash, you can also buy "shares"
 	- buy a "share" for 50 stars
 		- each player gets one share for free after 
 		- with a share you can distribute one of your custom levels onto a global market
 		- build up a steam workshop like submission and subscribe levelbrowser with ratings and popularity
 	- buy editor items
 	- buy game skins/color schemes
-#buy more stars for real life cash, you can also buy "shares"
-#ghosts []
+# Ghosts []
   - save ghost data
   - replay ghosts 
   - send and load ghosts
-  - 
-#RGB shift animations []
+# RGB shift animations []
   - idle rotation animation
   - death animation
   - charge animation
@@ -24,11 +32,7 @@
 #blur between levelselection and level, fading in and out through lerps []
   - GameCameraBLur fadein on death 
   - fadeout on play (fast lerp, <0.5sec)
-
-
-#cameratransition between level switches, deactivate the button while transitioning to next spawn in 1 sec.
-
-#rasterized leveleditor, use grid as layout bases
+#leveleditor, use grid as layout basis
 
 # 
 look on the paper to see all
@@ -37,10 +41,14 @@ look on the paper to see all
 ghosts saving:
 	hashmap: action, timestamp
 
-# game names:
+Game names:
 	- velocity
 	- megaball
 	- sliders
 	- charge it
 	- amazing arcade
 	- unbeatable
+
+
+
+#cameratransition between level switches, deactivate the button while transitioning to next spawn in 1 sec [*]

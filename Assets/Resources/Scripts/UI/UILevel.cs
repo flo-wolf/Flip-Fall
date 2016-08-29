@@ -125,7 +125,7 @@ namespace Sliders.UI
         public void PlayLevel()
         {
             //level can be set
-            if (LevelManager.LevelExists(id) && Game.gameState == Game.GameState.ready)
+            if (LevelManager.LevelExists(id) && Game.gameState == Game.GameState.levelselection)
             {
                 LevelManager.SetLevel(id);
                 Game.SetGameState(Game.GameState.playing);

@@ -102,6 +102,10 @@ namespace Sliders.Audio
                     soundPlayer.PlaySingle(deathSound);
                     break;
 
+                case Player.PlayerState.fin:
+                    soundPlayer.PlaySingle(finishSound);
+                    break;
+
                 default:
                     break;
             }
@@ -116,15 +120,15 @@ namespace Sliders.Audio
                     break;
 
                 case Game.GameState.deathscreen:
-                    soundPlayer.PlaySingle(levelselectionAppearSound);
                     break;
 
                 case Game.GameState.finishscreen:
-                    soundPlayer.PlaySingle(finishSound);
+
                     //play win sound
                     break;
 
-                case Game.GameState.ready:
+                case Game.GameState.levelselection:
+                    soundPlayer.PlaySingle(levelselectionAppearSound);
                     //soundPlayer.PlaySingle(spawnSound);
                     break;
 

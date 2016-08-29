@@ -76,7 +76,11 @@ namespace Sliders.Cam
                     //CamMove.StopFollowing();
                     break;
 
-                case Player.PlayerState.ready:
+                case Player.PlayerState.fin:
+                    CamZoom.DeathZoom(Game.deathDelay);
+                    CamRotation.RotateToDefault(Game.deathDelay);
+                    //CamRotation.DeathRotation(); //change to camshake
+                    //CamMove.StopFollowing();
                     break;
 
                 default:

@@ -17,9 +17,9 @@ namespace Sliders
     {
         public static Player _instance;
 
-        public enum PlayerState { alive, dead, ready, waiting };
+        public enum PlayerState { alive, dead, fin };
         public enum PlayerAction { reflect, charge, decharge };
-        private PlayerState playerState;
+        private PlayerState playerState = PlayerState.dead;
         private PlayerAction playerAction;
 
         public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
@@ -51,7 +51,9 @@ namespace Sliders
         private Quaternion spawnRotaion;
         private int speed;
         private bool facingLeft = true;
-        private bool charging = false;
+
+        [HideInInspector]
+        public bool charging = false;
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
         private int collisionCount = 0;
@@ -180,7 +182,7 @@ namespace Sliders
             }
         }
 
-        private void Spawn()
+        public void Spawn()
         {
             colliderList = new List<Collider2D>();
             collisionCount = 0;
@@ -197,7 +199,7 @@ namespace Sliders
             rBody.WakeUp();
         }
 
-        private void Die()
+        public void Die()
         {
             SetPlayerState(PlayerState.dead);
             charging = false;
@@ -216,7 +218,7 @@ namespace Sliders
 
         private void Fin()
         {
-            SetPlayerState(PlayerState.dead);
+            SetPlayerState(PlayerState.fin);
             gameObject.GetComponent<MeshRenderer>().material = winMaterial;
             charging = false;
             facingLeft = spawn.facingLeftOnSpawn;
@@ -240,7 +242,6 @@ namespace Sliders
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();
-            SetPlayerState(PlayerState.ready);
         }
 
         private void SwitchFacingDirection()
@@ -249,7 +250,7 @@ namespace Sliders
         }
 
         //Spieleraktion - X-Achsen-Spiegelung der Figurenflugbahn
-        private void Reflect()
+        public void Reflect()
         {
             rBody.velocity = new Vector2(rBody.velocity.x * (-1), rBody.velocity.y);
             SwitchFacingDirection();
@@ -257,7 +258,7 @@ namespace Sliders
         }
 
         //Spieleraktion - Gravitationsabbruch, Figur wird auf der Ebene gehalten und beschleunigt
-        private void Charge()
+        public void Charge()
         {
             rBody.gravityScale = 0f;
             rBody.velocity = new Vector2(rBody.velocity.x, 0f);
@@ -266,7 +267,7 @@ namespace Sliders
         }
 
         //Spieleraktion - Erneutes Hinzufügen der Gravitation
-        private void Decharge()
+        public void Decharge()
         {
             charging = false;
             rBody.gravityScale = gravity;
@@ -298,54 +299,6 @@ namespace Sliders
             }
         }
 
-        //Inputs, alles in den Input Manager!
-        private void Update()
-        {
-            if (IsAlive())
-            {
-                //Keyboard
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    Die();
-                }
-                else if (Input.GetKeyDown(KeyCode.M))
-                {
-                    Reflect();
-                }
-                else if (Input.GetKeyDown(KeyCode.Y) && !charging)
-                {
-                    Charge();
-                }
-                else if (Input.GetKeyUp(KeyCode.Y) && charging)
-                {
-                    Decharge();
-                }
-                /*
-                //Touch
-                foreach (Touch touch in Input.touches)
-                {
-                    Vector3 position = touch.position;
-
-                    //Right Touch
-                    if (position.x >= Camera.main.pixelWidth / 2 && touch.phase == TouchPhase.Began && firstChargeDone)
-                        Reflect();
-
-                    //Left Touch
-                    else if (position.x < Camera.main.pixelWidth / 2)
-                    {
-                        if (touch.phase == TouchPhase.Began && !charging)
-                        {
-                            Charge();
-                            firstChargeDone = true;
-                        }
-                        else if (touch.phase == TouchPhase.Ended && touch.phase != TouchPhase.Canceled && charging)
-                            Decharge();
-                    }
-                }
-                */
-            }
-        }
-
         public void SetPlayerState(PlayerState ps)
         {
             playerState = ps;
@@ -355,14 +308,6 @@ namespace Sliders
         public bool IsAlive()
         {
             if (playerState == PlayerState.alive)
-                return true;
-            else
-                return false;
-        }
-
-        public bool IsReady()
-        {
-            if (playerState == PlayerState.ready)
                 return true;
             else
                 return false;

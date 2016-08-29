@@ -22,7 +22,7 @@ namespace Sliders
         //public enum MainState { startup, title, firstvisit, home, playing, pause, levelselection, editor, settings }
         //
 
-        public static GameState gameState = GameState.ready;
+        public static GameState gameState = GameState.levelselection;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
 
         public static CamMove cm;
@@ -78,7 +78,7 @@ namespace Sliders
                 case GameState.levelselection:
                     Debug.Log("Game: levelselection");
                     onGameStateChange.Invoke(gs);
-                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.ready, levelselectionDelay));
+                    //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.ready, levelselectionDelay));
                     break;
 
                 case GameState.playing:

@@ -90,9 +90,6 @@ namespace Sliders.UI
                 case Player.PlayerState.dead:
                     break;
 
-                case Player.PlayerState.ready:
-                    break;
-
                 default:
                     break;
             }
