@@ -22,13 +22,14 @@ namespace Sliders.Progress
         //public List<Achievements>
         //public List<Unlocks>
         //public List<Settings>
-        private int lastUnlockedLevel = 1;
+        public int lastUnlockedLevel;
         private int lastPlayedLevelID;
         public int totalStars;
         //add: unlocks, achievements, stats etc...
 
         public ProgressData()
         {
+            lastUnlockedLevel = 1;
             totalStars = 0;
             if (LevelLoader.IsLoaded)
             {

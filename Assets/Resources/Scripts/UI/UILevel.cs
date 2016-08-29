@@ -47,7 +47,7 @@ namespace Sliders.UI
         //if there is no level corresponding to the UILevel Element then deactivate the buttons functions
         public void UpdateButton()
         {
-            if (!LevelManager.LevelExists(id))
+            if (!LevelManager.LevelExists(id) || id > ProgressManager.GetProgress().lastUnlockedLevel)
             {
                 levelButton.interactable = false;
                 levelNumberText.text = "";
@@ -100,7 +100,7 @@ namespace Sliders.UI
 
         public void UpdateTexts()
         {
-            if (UILevelMatchesLevel())
+            if (UILevelMatchesLevel() && id <= ProgressManager.GetProgress().lastUnlockedLevel)
             {
                 ghostText.text = Constants.FormatTime(LevelManager.GetLevel(id).presetTime);
                 levelNumberText.text = id.ToString();

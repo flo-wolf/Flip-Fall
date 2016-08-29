@@ -32,14 +32,13 @@ namespace Sliders.UI
 
         public void UpdateStarCount()
         {
-            //starText.text = ProgressManager.GetProgress().totalStars.ToString();
-
             int starCount = 0;
             List<Highscore> highscores = ProgressManager.GetProgress().highscores;
             foreach (Highscore h in highscores)
             {
                 starCount = starCount + h.starCount;
             }
+            ProgressManager.GetProgress().totalStars = starCount;
             starText.text = starCount.ToString();
         }
     }

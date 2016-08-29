@@ -64,12 +64,13 @@ namespace Sliders
                     Timer.Pause();
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
-
                     break;
 
                 case GameState.finishscreen:
                     Debug.Log("Game: FINISHSCREEN");
                     Timer.Pause();
+                    if (LevelManager.GetID() == ProgressManager.GetProgress().lastUnlockedLevel)
+                        ProgressManager.GetProgress().lastUnlockedLevel = ProgressManager.GetProgress().lastUnlockedLevel + 1;
                     ProgressManager.GetProgress().EnterHighscore(LevelManager.GetID(), UITimer.GetTime());
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));

@@ -30,7 +30,7 @@ namespace Sliders.Progress
         /// </summary>
         public class LevelStarChangeEvent : UnityEvent<int, int> { }
 
-        public bool unlocked = true;
+        public bool unlocked = false;
         public bool finished = false;
         public double bestTime = -1;
         public int levelId = 0;

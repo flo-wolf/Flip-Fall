@@ -111,6 +111,7 @@ namespace Sliders.UI
                 {
                     l.UpdateTexts();
                     l.UpdateStars();
+                    l.UpdateButton();
                 }
             }
         }

@@ -110,10 +110,5 @@ namespace Sliders.Progress
                 progress.highscores.Remove(progress.highscores.Find(x => x.levelId == _id));
             }
         }
-
-        public static bool IsLevelFinished(int _id)
-        {
-            return progress.highscores.Any(x => x.finished);
-        }
     }
 }
