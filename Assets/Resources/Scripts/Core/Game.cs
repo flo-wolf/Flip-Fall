@@ -60,33 +60,35 @@ namespace Sliders
             switch (gs)
             {
                 case GameState.deathscreen:
-                    Debug.Log("Game: DEATHSCREEN");
+                    Debug.Log("[Game] deathscreen");
                     Timer.Pause();
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
                     break;
 
                 case GameState.finishscreen:
-                    Debug.Log("Game: FINISHSCREEN");
+                    Debug.Log("[Game] finishscreen");
                     Timer.Pause();
                     if (LevelManager.GetID() == ProgressManager.GetProgress().lastUnlockedLevel)
-                        ProgressManager.GetProgress().lastUnlockedLevel = ProgressManager.GetProgress().lastUnlockedLevel + 1;
+                        ProgressManager.GetProgress().lastUnlockedLevel++;
                     ProgressManager.GetProgress().EnterHighscore(LevelManager.GetID(), UITimer.GetTime());
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
                     break;
 
                 case GameState.levelselection:
-                    Debug.Log("Game: levelselection");
+                    Debug.Log("[Game] levelselection");
                     onGameStateChange.Invoke(gs);
                     //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.ready, levelselectionDelay));
                     break;
 
                 case GameState.playing:
+                    Debug.Log("[Game] playing");
                     onGameStateChange.Invoke(gs);
                     break;
 
                 case GameState.ready:
+                    Debug.Log("[Game] levelselection");
                     onGameStateChange.Invoke(gs);
                     break;
 

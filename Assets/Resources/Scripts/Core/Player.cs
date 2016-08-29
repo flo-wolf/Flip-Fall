@@ -27,6 +27,9 @@ namespace Sliders
 
         //public Player instance;
         [Header("References")]
+        public ParticleSystem particleSystem;
+        private ParticleSystem.EmissionModule particleSystemEmit;
+
         public LayerMask finishMask;
         public LayerMask killMask;
         public LayerMask moveMask;
@@ -64,6 +67,7 @@ namespace Sliders
         {
             //instance = this;
             _instance = this;
+            particleSystemEmit = particleSystem.emission;
         }
 
         private void Start()
@@ -119,34 +123,40 @@ namespace Sliders
         //The Player has hit an object, either the finish or an enemy
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            colliderList.Add(collider);
-
+            if (!colliderList.Find(x => x == collider))
+                colliderList.Add(collider);
             collisionCount++;
 
+            if (finishMask == (finishMask | (1 << collider.gameObject.layer)) && IsAlive())
+            {
+                Debug.Log("TriggerEnter - Fin - Collider: " + collider.gameObject);
+                Fin();
+                Game.SetGameState(Game.GameState.finishscreen);
+            }
             //the collided object is on one of the layers marked as killMask => death
-            if (killMask == (killMask | (1 << collider.gameObject.layer)) && IsAlive())
+            else if (killMask == (killMask | (1 << collider.gameObject.layer)) && IsAlive())
             {
                 Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
                 Die();
                 Game.SetGameState(Game.GameState.deathscreen);
             }
             //the collided object is the finish => fin
-            else if (finishMask == (finishMask | (1 << collider.gameObject.layer)))
-            {
-                Debug.Log("TriggerEnter - Fin - Collider: " + collider.gameObject);
-                Fin();
-                Game.SetGameState(Game.GameState.finishscreen);
-            }
         }
 
         //The Player has left the area allowed for moving(moveMask)
         private void OnTriggerExit2D(Collider2D collider)
         {
-            collisionCount--;
             colliderList.Remove(colliderList.Find(x => x == collider));
-            if (collisionCount > 0)
-                colliderList = new List<Collider2D>();
-            StartCoroutine(DelayedTriggerExit(collider));
+            collisionCount--;
+
+            if ((moveMask == (moveMask | (1 << collider.gameObject.layer))) && (collisionCount <= 0) && colliderList.Count == 0 && IsAlive())
+            {
+                Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
+                Die();
+                Game.SetGameState(Game.GameState.deathscreen);
+            }
+
+            //StartCoroutine(DelayedTriggerExit(collider));
         }
 
         private void OnTriggerStay2D(Collider2D collider)
@@ -161,12 +171,7 @@ namespace Sliders
 
             Debug.Log("coll count exit " + collisionCount + " IsAlive() " + IsAlive() + " mask " + (moveMask == (moveMask | (1 << collider.gameObject.layer))));
             Debug.Log("collisionList: " + colliderList.Count);
-            if ((moveMask == (moveMask | (1 << collider.gameObject.layer)) && IsAlive()) && (collisionCount == 0 || collisionCount == -1) && colliderList.Count == 0)
-            {
-                Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
-                Die();
-                Game.SetGameState(Game.GameState.deathscreen);
-            }
+
             yield break;
         }
 
@@ -219,6 +224,12 @@ namespace Sliders
         private void Fin()
         {
             SetPlayerState(PlayerState.fin);
+
+            particleSystem.Clear();
+            particleSystem.Simulate(0.0f, true, true);
+            particleSystemEmit.enabled = true;
+            particleSystem.Play();
+
             gameObject.GetComponent<MeshRenderer>().material = winMaterial;
             charging = false;
             facingLeft = spawn.facingLeftOnSpawn;
@@ -237,6 +248,10 @@ namespace Sliders
         private void MoveToSpawn()
         {
             transform.position = spawnPosition;
+
+            particleSystemEmit.enabled = false;
+            particleSystem.Stop();
+
             aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
             rBody.velocity = Vector3.zero;

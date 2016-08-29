@@ -20,9 +20,19 @@ namespace Sliders.Levels
 
         public string title;
 
-        public Ghost ghost;
+        //private Ghost ghost;
+        [HideInInspector]
         public Spawn spawn;
+
+        [HideInInspector]
         public Finish finish;
+
+        private void Awake()
+        {
+            //ghost = gameObject.GetComponentInChildren<Ghost>();
+            spawn = gameObject.GetComponentInChildren<Spawn>();
+            finish = gameObject.GetComponentInChildren<Finish>();
+        }
 
         public int GetID()
         {
@@ -47,9 +57,9 @@ namespace Sliders.Levels
             return title;
         }
 
-        public Ghost GetGhost()
-        {
-            return ghost;
-        }
+        //public Ghost GetGhost()
+        //{
+        //    return ghost;
+        //}
     }
 }

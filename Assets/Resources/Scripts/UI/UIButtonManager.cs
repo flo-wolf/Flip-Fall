@@ -63,41 +63,53 @@ namespace Sliders.UI
 
         public void LeftHalfClicked()
         {
-            if (chargeOnLeftSide && !player.charging)
+            if (player.IsAlive())
             {
-                player.Charge();
-            }
-            else if (!chargeOnLeftSide)
-            {
-                player.Reflect();
+                if (chargeOnLeftSide && !player.charging)
+                {
+                    player.Charge();
+                }
+                else if (!chargeOnLeftSide)
+                {
+                    player.Reflect();
+                }
             }
         }
 
         public void LeftHalfReleased()
         {
-            if (chargeOnLeftSide && player.charging)
+            if (player.IsAlive())
             {
-                player.Decharge();
+                if (chargeOnLeftSide && player.charging)
+                {
+                    player.Decharge();
+                }
             }
         }
 
         public void RightHalfClicked()
         {
-            if (chargeOnLeftSide)
+            if (player.IsAlive())
             {
-                player.Reflect();
-            }
-            else if (!chargeOnLeftSide)
-            {
-                player.Charge();
+                if (chargeOnLeftSide)
+                {
+                    player.Reflect();
+                }
+                else if (!chargeOnLeftSide)
+                {
+                    player.Charge();
+                }
             }
         }
 
         public void RightHalfReleased()
         {
-            if (!chargeOnLeftSide && player.charging)
+            if (player.IsAlive())
             {
-                player.Decharge();
+                if (!chargeOnLeftSide && player.charging)
+                {
+                    player.Decharge();
+                }
             }
         }
 
