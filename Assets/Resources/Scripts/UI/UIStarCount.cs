@@ -1,5 +1,6 @@
 ﻿using Sliders.Progress;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +32,15 @@ namespace Sliders.UI
 
         public void UpdateStarCount()
         {
-            starText.text = ProgressManager.GetProgress().totalStars.ToString();
+            //starText.text = ProgressManager.GetProgress().totalStars.ToString();
+
+            int starCount = 0;
+            List<Highscore> highscores = ProgressManager.GetProgress().highscores;
+            foreach (Highscore h in highscores)
+            {
+                starCount = starCount + h.starCount;
+            }
+            starText.text = starCount.ToString();
         }
     }
 }
