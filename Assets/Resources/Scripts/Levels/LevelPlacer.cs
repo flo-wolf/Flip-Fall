@@ -15,14 +15,14 @@ namespace Sliders.Levels
 
         public class LevelPlaceEvent : UnityEvent<Level> { }
 
-        private void Start()
+        private void OnEnable()
         {
-            placingParent = LevelManager._instance.gameObject.transform;
+            placingParent = this.transform;
         }
 
         public static Level Place(Level level)
         {
-            Level t = new Level();
+            Level t = null;
             if (!IsPlaced(level.id))
             {
                 DestroyChildren(placingParent);

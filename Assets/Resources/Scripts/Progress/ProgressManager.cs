@@ -15,7 +15,8 @@ namespace Sliders.Progress
 {
     public static class ProgressManager
     {
-        public const string SavePath = "ProgressSave.dat";
+        public static string SavePath = "ProgressSave.dat";
+        public static string SavePathAndroid = Application.persistentDataPath + "/ProgressSave.dat";
 
         [SerializeField]
         private static ProgressData progress = new ProgressData();
@@ -46,9 +47,16 @@ namespace Sliders.Progress
 
         public static void LoadProgressData()
         {
-            if (File.Exists(SavePath))
+            string savePath;
+#if UNITY_ANDROID && !UNITY_EDITOR
+            savePath = SavePathAndroid;
+#else
+            savePath = SavePath;
+#endif
+
+            if (File.Exists(savePath))
             {
-                var fs = new FileStream(SavePath, FileMode.Open);
+                var fs = new FileStream(savePath, FileMode.Open);
                 try
                 {
                     var bf = new BinaryFormatter();
@@ -79,16 +87,23 @@ namespace Sliders.Progress
 
         public static void SaveProgressData()
         {
+            string savePath;
+#if UNITY_ANDROID && !UNITY_EDITOR
+            savePath = SavePathAndroid;
+#else
+            savePath = SavePath;
+#endif
+
             LevelManager.onLevelChange.AddListener(LevelStateChanged);
 
             FileStream file;
-            if (!File.Exists(SavePath))
+            if (!File.Exists(savePath))
             {
-                file = File.Create(SavePath);
+                file = File.Create(savePath);
             }
             else
             {
-                file = new FileStream(SavePath, FileMode.Open);
+                file = new FileStream(savePath, FileMode.Open);
             }
 
             var bf = new BinaryFormatter();

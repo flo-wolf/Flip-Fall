@@ -22,16 +22,21 @@ namespace Sliders.Levels
 
         public AudioClip changeLevelSound;
         public Level defaultlevel;
-        private Level activeLevel = new Level();
+        private Level activeLevel;
 
         private void Awake()
         {
             _instance = this;
         }
 
+        private void OnEnable()
+        {
+            _instance = this;
+            Reload();
+        }
+
         private void Start()
         {
-            Reload();
         }
 
         public void LoadLevel(int levelID)
@@ -57,7 +62,10 @@ namespace Sliders.Levels
 
         public static int GetID()
         {
-            return _instance.activeLevel.id;
+            if (_instance.activeLevel != null)
+                return _instance.activeLevel.id;
+            else
+                return -1;
         }
 
         public static int GetDefaultID()
@@ -73,6 +81,47 @@ namespace Sliders.Levels
         public static Spawn GetSpawn()
         {
             return _instance.activeLevel.spawn;
+        }
+
+        //Try to Place Level with ID newID, destroying all other levels in the scene
+        //if the level can be placed OR if the level is alrady placed it returns true
+        public static void SetLevel(int newID)
+        {
+            //add fadein animation
+
+            if (Resources.Load("Prefabs/Levels/" + newID))
+            {
+                if (GetID() != newID)
+                {
+                    _instance.activeLevel = LevelLoader.LoadLevel(newID);
+                    _instance.activeLevel = LevelPlacer.Place(GetLevel());
+                    ProgressManager.GetProgress().SetLastPlayedID(GetID());
+                    onLevelChange.Invoke(GetLevel());
+                }
+            }
+            else
+            {
+                Debug.LogError("ERROR setLevel() levelprefab not found");
+                Debug.Log("[LevelManager]: SetLevel(int) Level trying to be set does not exist!");
+            }
+        }
+
+        public static bool LevelExists(int newID)
+        {
+            if (Resources.Load("Prefabs/Levels/" + newID))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static Vector2 GetFinish()
+        {
+            Vector2 finishlocation = new Vector2();
+            return finishlocation;
         }
 
         //public void NextLevel()
@@ -98,44 +147,5 @@ namespace Sliders.Levels
         //    else
         //        Debug.Log("[LevelManager]: LastLevel() could not be found.");
         //}
-
-        //Try to Place Level with ID newID, destroying all other levels in the scene
-        //if the level can be placed OR if the level is alrady placed it returns true
-        public static void SetLevel(int newID)
-        {
-            //add fadein animation
-            if (Resources.Load("Prefabs/Levels/" + newID))
-            {
-                if (GetID() != newID)
-                {
-                    _instance.activeLevel = LevelLoader.LoadLevel(newID);
-                    _instance.activeLevel = LevelPlacer.Place(GetLevel());
-                    ProgressManager.GetProgress().SetLastPlayedID(GetID());
-                    onLevelChange.Invoke(GetLevel());
-                }
-            }
-            else
-            {
-                Debug.Log("[LevelManager]: SetLevel(int) Level trying to be set does not exist!");
-            }
-        }
-
-        public static bool LevelExists(int newID)
-        {
-            if (Resources.Load("Prefabs/Levels/" + newID))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public static Vector2 GetFinish()
-        {
-            Vector2 finishlocation = new Vector2();
-            return finishlocation;
-        }
     }
 }
