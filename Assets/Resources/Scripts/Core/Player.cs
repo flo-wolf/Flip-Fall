@@ -72,9 +72,9 @@ namespace Sliders
 
         private void Start()
         {
-            rBody.Sleep();
             ReloadSpawnPoint();
             MoveToSpawn();
+            rBody.Sleep();
             Game.onGameStateChange.AddListener(GameStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
             trail.sortingOrder = 2;
@@ -92,10 +92,14 @@ namespace Sliders
                     break;
 
                 case Game.GameState.deathscreen:
-                    MoveToSpawn();
+
                     break;
 
                 case Game.GameState.finishscreen:
+
+                    break;
+
+                case Game.GameState.levelselection:
                     MoveToSpawn();
                     break;
 
@@ -129,14 +133,14 @@ namespace Sliders
 
             if (finishMask == (finishMask | (1 << collider.gameObject.layer)) && IsAlive())
             {
-                Debug.Log("TriggerEnter - Fin - Collider: " + collider.gameObject);
+                //Debug.Log("TriggerEnter - Fin - Collider: " + collider.gameObject);
                 Fin();
                 Game.SetGameState(Game.GameState.finishscreen);
             }
             //the collided object is on one of the layers marked as killMask => death
             else if (killMask == (killMask | (1 << collider.gameObject.layer)) && IsAlive())
             {
-                Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
+                //Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
                 Die();
                 Game.SetGameState(Game.GameState.deathscreen);
             }
@@ -151,7 +155,7 @@ namespace Sliders
 
             if ((moveMask == (moveMask | (1 << collider.gameObject.layer))) && (collisionCount <= 0) && colliderList.Count == 0 && IsAlive())
             {
-                Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
+                //Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
                 Die();
                 Game.SetGameState(Game.GameState.deathscreen);
             }
@@ -169,8 +173,8 @@ namespace Sliders
         {
             //yield return new WaitForSeconds(triggerExitCheckDelay);
 
-            Debug.Log("coll count exit " + collisionCount + " IsAlive() " + IsAlive() + " mask " + (moveMask == (moveMask | (1 << collider.gameObject.layer))));
-            Debug.Log("collisionList: " + colliderList.Count);
+            //Debug.Log("coll count exit " + collisionCount + " IsAlive() " + IsAlive() + " mask " + (moveMask == (moveMask | (1 << collider.gameObject.layer))));
+            //Debug.Log("collisionList: " + colliderList.Count);
 
             yield break;
         }
@@ -318,6 +322,7 @@ namespace Sliders
         {
             playerState = ps;
             onPlayerStateChange.Invoke(playerState);
+            Debug.Log("[Player] PlayerState changed to: " + ps);
         }
 
         public bool IsAlive()

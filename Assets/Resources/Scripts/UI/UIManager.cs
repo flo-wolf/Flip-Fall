@@ -49,6 +49,7 @@ namespace Sliders.UI
                 case Game.GameState.levelselection:
                     UITimer.Hide();
                     UIStarCount.Show();
+                    UILevelSelection.Show();
                     break;
 
                 case Game.GameState.ready:

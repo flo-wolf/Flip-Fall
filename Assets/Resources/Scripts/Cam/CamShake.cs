@@ -20,15 +20,15 @@ namespace Sliders.Cam
             Debug.Log("awake");
         }
 
-        public static void Shake(float duration, float amount)
+        public static void Shake(float amount, float duration)
         {
             _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cShakeCoroutine(duration, amount));
+            _instance.StartCoroutine(_instance.cShakeCoroutine(amount, duration));
         }
 
         public static void DeathShake()
         {
-            _instance.StopAllCoroutines();
+            Shake(_instance.deathShakeAmount, _instance.deathShakeDuration);
             _instance.StartCoroutine(_instance.cShakeCoroutine(_instance.deathShakeDuration, _instance.deathShakeAmount));
         }
 
@@ -43,7 +43,7 @@ namespace Sliders.Cam
                 Debug.LogError("[VelocityShake] cant find rigidbody2D on gameobject");
         }
 
-        public IEnumerator cShakeCoroutine(float duration, float amount)
+        public IEnumerator cShakeCoroutine(float amount, float duration)
         {
             float endTime = Time.time + duration;
             Vector3 originalPos = Vector3.zero;

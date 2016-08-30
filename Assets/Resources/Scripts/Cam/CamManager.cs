@@ -62,6 +62,7 @@ namespace Sliders.Cam
             switch (playerState)
             {
                 case Player.PlayerState.alive:
+
                     CamMove.StartFollowing();
                     CamZoom.ZoomToVelocity(player, defaultTransitionDuration);
                     //CamShake.VelocityShake(player);
@@ -92,22 +93,26 @@ namespace Sliders.Cam
         private void GameStateChanged(Game.GameState gameState)
         {
             Vector3 spawnPos = LevelManager.GetSpawnPosition();
-
             switch (gameState)
             {
                 case Game.GameState.playing:
+
+                    CamZoom.ZoomToMinimum(Game.levelselectionDelay);
                     break;
 
                 case Game.GameState.deathscreen:
-                    CamZoom.ZoomToMinimum(Game.levelselectionDelay);
+
                     CamRotation.RotateToDefault(Game.levelselectionDelay);
-                    CamMove.MoveCamTo(spawnPos, Game.levelselectionDelay);
+                    //CamMove.MoveCamTo(spawnPos, Game.levelselectionDelay);
                     break;
 
                 case Game.GameState.finishscreen:
-                    CamZoom.ZoomToMinimum(Game.levelselectionDelay);
                     CamRotation.RotateToDefault(Game.levelselectionDelay);
-                    CamMove.MoveCamTo(spawnPos, Game.levelselectionDelay);
+                    //CamMove.MoveCamTo(spawnPos, Game.levelselectionDelay);
+                    break;
+
+                case Game.GameState.levelselection:
+                    CamMove.MoveCamTo(spawnPos);
                     break;
 
                 default:

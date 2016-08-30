@@ -19,6 +19,8 @@ namespace Sliders.UI
         public static UILevelSelection _instance;
         public static int currentPage = 1;
         public static int pageCount = 10;
+        public float fadeOutTime = 1F;
+        public float fadeInTime = 1F;
 
         private static List<Highscore> highscores;
         private static Highscore highscore;
@@ -80,6 +82,7 @@ namespace Sliders.UI
             Debug.Log("[UILevelSelection] FadeIn()");
             _instance.pageAnimation.Play("pageShow");
             _instance.pageInfoAnim.Play();
+            _instance.StartCoroutine(_instance.cEnablePages(_instance.fadeInTime));
         }
 
         public static void FadeOut()
@@ -87,6 +90,22 @@ namespace Sliders.UI
             Debug.Log("[UILevelSelection] FadeOut()");
             _instance.pageAnimation.Play("pageHide");
             _instance.pageInfoAnim.Play();
+
+            _instance.StartCoroutine(_instance.cDisablePages(_instance.fadeOutTime));
+        }
+
+        private IEnumerator cEnablePages(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            ScrollRect pagesScrollRect = gameObject.GetComponentInChildren<ScrollRect>();
+            pagesScrollRect.enabled = true;
+        }
+
+        private IEnumerator cDisablePages(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            ScrollRect pagesScrollRect = gameObject.GetComponentInChildren<ScrollRect>();
+            pagesScrollRect.enabled = false;
         }
 
         private static void UpdatePageCount()

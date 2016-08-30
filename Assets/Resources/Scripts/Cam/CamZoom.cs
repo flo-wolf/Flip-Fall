@@ -16,7 +16,8 @@ namespace Sliders.Cam
         //Zoom camera sizes
         public float maxZoom = 120F;
         public float minZoom = 80F;
-        public float deathZoom = 50F;
+        public float deathZoom = 1F;
+        public float winZoom = 1F;
 
         private float size;
         private float maxVelocity;
@@ -28,7 +29,6 @@ namespace Sliders.Cam
 
         private void Start()
         {
-            cam.orthographicSize = minZoom;
             size = cam.orthographicSize;
         }
 
@@ -61,8 +61,7 @@ namespace Sliders.Cam
 
         public static void DeathZoom(float duration)
         {
-            _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cDeathZoom(duration));
+            Zoom(_instance.deathZoom, duration);
         }
 
         //Adjust the current camera size smoothly to its according velocity size, calculated through the behaviour's velocity
@@ -142,19 +141,19 @@ namespace Sliders.Cam
             yield break;
         }
 
-        //zooms from the current camera size to the death camera size
-        public IEnumerator cDeathZoom(float duration)
-        {
-            float t = 0;
-            while (t < 1F)
-            {
-                t += Time.deltaTime * (Time.timeScale / duration);
+        ////zooms from the current camera size to the death camera size
+        //public IEnumerator cZoom(float duration)
+        //{
+        //    float t = 0;
+        //    while (t < 1F)
+        //    {
+        //        t += Time.deltaTime * (Time.timeScale / duration);
 
-                cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, deathZoom, t);
-                yield return new WaitForFixedUpdate();
-            }
-            yield break;
-        }
+        //        cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, deathZoom, t);
+        //        yield return new WaitForFixedUpdate();
+        //    }
+        //    yield break;
+        //}
 
         //makes a smooth transition betwen the current size and the appropiate velocity size
         public IEnumerator cZoomToVelocity(Rigidbody2D rb, float duration)

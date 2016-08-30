@@ -22,7 +22,7 @@ namespace Sliders
         //public enum MainState { startup, title, firstvisit, home, playing, pause, levelselection, editor, settings }
         //
 
-        public static GameState gameState = GameState.levelselection;
+        public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
 
         public static CamMove cm;
@@ -32,7 +32,7 @@ namespace Sliders
         public static float deathDelay = 1F;
 
         //delay time between the switch of the gameState form deathscreen to levelselection
-        public static float deathTolevelselectionDelay = 1F;
+        public static float deathTolevelselectionDelay = 0.1F;
 
         public static float levelselectionDelay = 1F;
 
@@ -46,6 +46,7 @@ namespace Sliders
 
         private void Start()
         {
+            SetGameState(GameState.levelselection);
         }
 
         private void OnApplicationQuit()

@@ -1,5 +1,6 @@
 ﻿using Sliders;
 using Sliders.Audio;
+using Sliders.Levels;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,8 +26,9 @@ namespace Sliders.Cam
 
         private void Start()
         {
-            Vector3 PlayerPOS = Player._instance.transform.transform.position;
-            cam.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y + Constants.cameraZ, Camera.main.transform.position.z);
+            Vector3 spawnPos = LevelManager.GetLevel().spawn.GetPosition();
+            spawnPos.z = Constants.cameraZ;
+            cam.transform.position = spawnPos;
         }
 
         public static void StartFollowing()
@@ -45,6 +47,12 @@ namespace Sliders.Cam
         {
             _instance.camMoveState = cs;
             onCamMoveStateChange.Invoke(_instance.camMoveState);
+        }
+
+        public static void MoveCamTo(Vector2 target)
+        {
+            Vector3 t = new Vector3(target.x, target.y, Constants.cameraZ);
+            Camera.main.transform.position = t;
         }
 
         //Smooth camera Transitions, calls Transition()

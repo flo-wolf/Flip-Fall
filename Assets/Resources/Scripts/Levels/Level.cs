@@ -1,4 +1,5 @@
-﻿using Sliders.Progress;
+﻿using Sliders.Objects;
+using Sliders.Progress;
 using Sliders.UI;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,18 @@ namespace Sliders.Levels
             //ghost = gameObject.GetComponentInChildren<Ghost>();
             spawn = gameObject.GetComponentInChildren<Spawn>();
             finish = gameObject.GetComponentInChildren<Finish>();
+
+            int sortingcount = -5;
+            MeshRenderer[] meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer mr in meshRenderers)
+            {
+                if (mr.transform.tag == "MoveArea")
+                {
+                    mr.sortingOrder = sortingcount;
+                    sortingcount--;
+                }
+            }
+            //sprite.sortingOrder = 2;
         }
 
         public int GetID()

@@ -42,10 +42,6 @@ namespace Sliders.Audio
         private void Awake()
         {
             _instance = this;
-        }
-
-        private void Start()
-        {
             Game.onGameStateChange.AddListener(GameStateChanged);
             Player.onPlayerAction.AddListener(PlayerAction);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
@@ -53,6 +49,10 @@ namespace Sliders.Audio
             LevelManager.onLevelChange.AddListener(LevelChanged);
             UIButtonManager.onButtonClick.AddListener(ButtonClicked);
             UIButtonManager.onButtonRelease.AddListener(ButtonReleased);
+        }
+
+        private void Start()
+        {
         }
 
         //Listener
@@ -95,7 +95,6 @@ namespace Sliders.Audio
             switch (playerState)
             {
                 case Player.PlayerState.alive:
-                    soundPlayer.PlaySingle(spawnSound);
                     break;
 
                 case Player.PlayerState.dead:
