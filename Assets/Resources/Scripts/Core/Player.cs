@@ -27,20 +27,25 @@ namespace Sliders
 
         //public Player instance;
         [Header("References")]
-        public ParticleSystem particleSystem;
-        private ParticleSystem.EmissionModule particleSystemEmit;
+        public ParticleSystem finishParticles;
+        private ParticleSystem.EmissionModule finishParticlesEmit;
+
+        public ParticleSystem trailParticles;
+        private ParticleSystem.EmissionModule trailParticlesEmit;
 
         public LayerMask finishMask;
         public LayerMask killMask;
         public LayerMask moveMask;
         public TrailRenderer trail; //Full color
         public TrailRenderer trail2; //Transparency - use shading instead
+
         public Rigidbody2D rBody;
         public Material defaultMaterial;
         public Material winMaterial;
 
         [Header("Settings")]
         public float gravity = 15F;
+        public float trialTime = 5F;
         public float maxChargeVelocity = 250F;
         public float chargeForcePerTick = 5F;
         public float respawnDuration = 1f;
@@ -67,7 +72,8 @@ namespace Sliders
         {
             //instance = this;
             _instance = this;
-            particleSystemEmit = particleSystem.emission;
+            finishParticlesEmit = finishParticles.emission;
+            trailParticlesEmit = trailParticles.emission;
         }
 
         private void Start()
@@ -77,7 +83,7 @@ namespace Sliders
             rBody.Sleep();
             Game.onGameStateChange.AddListener(GameStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
-            trail.sortingOrder = 2;
+            //trail.sortingOrder = 2;
         }
 
         //Everything in here happends after the delay on death. To execute before, enter calls in the Trigger function.
@@ -89,6 +95,7 @@ namespace Sliders
                 case Game.GameState.playing:
                     Spawn();
                     StartCoroutine(AliveTimerCorutine());
+                    finishParticles.gameObject.SetActive(false);
                     break;
 
                 case Game.GameState.deathscreen:
@@ -147,6 +154,16 @@ namespace Sliders
             //the collided object is the finish => fin
         }
 
+        public void OnParticleCollision(GameObject go)
+        {
+            if (killMask == (killMask | (1 << go.layer)) && IsAlive())
+            {
+                Die();
+                Game.SetGameState(Game.GameState.deathscreen);
+                Debug.Log("[Player] Death by particle");
+            }
+        }
+
         //The Player has left the area allowed for moving(moveMask)
         private void OnTriggerExit2D(Collider2D collider)
         {
@@ -195,13 +212,19 @@ namespace Sliders
         {
             colliderList = new List<Collider2D>();
             collisionCount = 0;
+
+            trailParticles.Clear();
+            trailParticles.Simulate(0.0f, true, true);
+            trailParticlesEmit.enabled = true;
+            trailParticles.Play();
+
             SetPlayerState(PlayerState.alive);
 
             aliveTime = 0;
-            trail.time = 0.5f;
-            trail.enabled = true;
-            trail2.time = 1f;
-            trail2.enabled = true;
+            //trail.time = trialTime;
+            //trail.enabled = true;
+            //trail2.time = 1f;
+            //trail2.enabled = true;
 
             rBody.gravityScale = gravity;
             rBody.velocity = new Vector3(0f, -0.00001f, 0f);
@@ -215,11 +238,21 @@ namespace Sliders
             facingLeft = spawn.facingLeftOnSpawn;
             firstChargeDone = false;
 
+            trailParticlesEmit.enabled = false;
+            trailParticles.Stop();
+            trailParticles.gameObject.SetActive(true);
+
+            finishParticles.gameObject.SetActive(true);
+            //finishParticles.Clear();
+            //finishParticles.Simulate(0.0f, true, true);
+            finishParticlesEmit.enabled = true;
+            finishParticles.Play();
+
             //Add here animations, fadeaway etc on death
-            trail.time = 0.0f;
-            trail.enabled = false;
-            trail2.time = 0.0f;
-            trail2.enabled = false;
+            //trail.time = 0.0f;
+            //trail.enabled = false;
+            //trail2.time = 0.0f;
+            //trail2.enabled = false;
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();
@@ -229,10 +262,14 @@ namespace Sliders
         {
             SetPlayerState(PlayerState.fin);
 
-            particleSystem.Clear();
-            particleSystem.Simulate(0.0f, true, true);
-            particleSystemEmit.enabled = true;
-            particleSystem.Play();
+            trailParticlesEmit.enabled = false;
+            trailParticles.Stop();
+
+            finishParticles.gameObject.SetActive(true);
+            //finishParticles.Clear();
+            //finishParticles.Simulate(0.0f, true, true);
+            finishParticlesEmit.enabled = true;
+            finishParticles.Play();
 
             gameObject.GetComponent<MeshRenderer>().material = winMaterial;
             charging = false;
@@ -240,10 +277,10 @@ namespace Sliders
             firstChargeDone = false;
 
             //Add here animations, fadeaway etc on death
-            trail.time = 0.0f;
-            trail.enabled = false;
-            trail2.time = 0.0f;
-            trail2.enabled = false;
+            //trail.time = 0.0f;
+            //trail.enabled = false;
+            //trail2.time = 0.0f;
+            //trail2.enabled = false;
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();
@@ -253,8 +290,8 @@ namespace Sliders
         {
             transform.position = spawnPosition;
 
-            particleSystemEmit.enabled = false;
-            particleSystem.Stop();
+            finishParticlesEmit.enabled = false;
+            finishParticles.Stop();
 
             aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
@@ -299,9 +336,9 @@ namespace Sliders
             if (IsAlive())
             {
                 Vector2 velocity = rBody.velocity;
-                //float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-                //Quaternion quad = Quaternion.AngleAxis(angle, Vector3.forward);
-                //transform.rotation = quad;
+                float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+                Quaternion quad = Quaternion.AngleAxis(angle, Vector3.forward);
+                transform.rotation = quad;
 
                 if (charging && Mathf.Abs(rBody.velocity.x) < maxChargeVelocity)
                 {

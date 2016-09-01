@@ -158,6 +158,8 @@ namespace Sliders.Cam
         //makes a smooth transition betwen the current size and the appropiate velocity size
         public IEnumerator cZoomToVelocity(Rigidbody2D rb, float duration)
         {
+            maxVelocity = Player._instance.maxChargeVelocity;
+            maxVelocity = 200;
             Vector2 velocity;
             float t = 0;
 
@@ -165,9 +167,9 @@ namespace Sliders.Cam
             {
                 t += Time.deltaTime * (Time.timeScale / duration);
                 velocity = rb.velocity;
-                velocity.x = System.Math.Abs(velocity.x);
+                //velocity.x = System.Math.Abs(velocity.x);
 
-                size = Mathf.SmoothStep(minZoom, maxZoom, Mathf.InverseLerp(cam.orthographicSize, maxVelocity, velocity.magnitude));
+                size = Mathf.Lerp(minZoom, maxZoom, Mathf.InverseLerp(minZoom, maxVelocity, velocity.magnitude));
                 cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
 
                 yield return new WaitForFixedUpdate();
@@ -179,6 +181,8 @@ namespace Sliders.Cam
         public IEnumerator cVelocityZoom(Rigidbody2D rb)
         {
             maxVelocity = Player._instance.maxChargeVelocity;
+            maxVelocity = 200;
+
             Vector2 velocity;
 
             while (true)
@@ -191,7 +195,7 @@ namespace Sliders.Cam
                     velocity.x = maxVelocity;
                 }
 
-                size = Mathf.SmoothStep(minZoom, maxZoom, Mathf.InverseLerp(cam.orthographicSize, maxVelocity, velocity.magnitude));
+                size = Mathf.Lerp(minZoom, maxZoom, Mathf.InverseLerp(minZoom, maxVelocity, velocity.magnitude));
                 cam.orthographicSize = size;
                 yield return new WaitForFixedUpdate();
             }

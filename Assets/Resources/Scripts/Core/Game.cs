@@ -29,10 +29,10 @@ namespace Sliders
         public static Game _instance;
 
         //delay time between the players death and the deathscreen
-        public static float deathDelay = 1F;
+        public static float deathDelay = 1.5F;
 
         //delay time between the switch of the gameState form deathscreen to levelselection
-        public static float deathTolevelselectionDelay = 0.1F;
+        public static float deathTolevelselectionDelay = 0.0F;
 
         public static float levelselectionDelay = 1F;
 
