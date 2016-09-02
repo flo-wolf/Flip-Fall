@@ -15,6 +15,11 @@ namespace Sliders
         public const int lastPage = 6; //placeholder, find better solution, used as levelselection scroll boundery check,
         public const int itemsPerPage = 6; //Do not modify
 
+        //Tags
+        public const string portalTag = "Portal";
+        public const string moveAreaTag = "MoveArea";
+        public const string finishTag = "Finish";
+
         /// <summary>
         /// Converts any Double into the 00:00 timer format used for displaying highscores
         /// </summary>

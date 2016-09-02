@@ -25,6 +25,7 @@ namespace Sliders.Cam
         private void Awake()
         {
             _instance = this;
+            //player = Player._instance;
         }
 
         private void Start()
@@ -49,6 +50,11 @@ namespace Sliders.Cam
                     break;
 
                 case Player.PlayerAction.decharge:
+                    break;
+
+                case Player.PlayerAction.teleport:
+                    CamMove.StopFollowing();
+                    CamMove.MoveCamTo(Player.destinationPortal.transform.position, player.teleportDuration);
                     break;
 
                 default:
@@ -77,7 +83,7 @@ namespace Sliders.Cam
                     //CamMove.StopFollowing();
                     break;
 
-                case Player.PlayerState.fin:
+                case Player.PlayerState.win:
                     CamZoom.DeathZoom(Game.deathDelay);
                     CamRotation.RotateToDefault(Game.deathDelay);
                     //CamRotation.DeathRotation(); //change to camshake

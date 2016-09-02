@@ -1,5 +1,6 @@
 ﻿using Sliders.Cam;
 using Sliders.Levels;
+using Sliders.Levels.Objects;
 using Sliders.UI;
 using System;
 using System.Collections;
@@ -17,13 +18,16 @@ namespace Sliders
     {
         public static Player _instance;
 
-        public enum PlayerState { alive, dead, fin };
-        public enum PlayerAction { reflect, charge, decharge };
-        private PlayerState playerState = PlayerState.dead;
+        public enum PlayerState { alive, dead, win, teleporting };
+        public enum PlayerAction { reflect, charge, decharge, teleport };
+        private PlayerState playerState;
         private PlayerAction playerAction;
 
         public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
         public static PlayerActionEvent onPlayerAction = new PlayerActionEvent();
+
+        public static Portal startPortal;
+        public static Portal destinationPortal;
 
         //public Player instance;
         [Header("References")]
@@ -49,6 +53,7 @@ namespace Sliders
         public float maxChargeVelocity = 250F;
         public float chargeForcePerTick = 5F;
         public float respawnDuration = 1f;
+        public float teleportDuration = 0.2F;
         public float aliveTime = 0f;
 
         [Range(0.0f, 0.1f)]
@@ -65,12 +70,12 @@ namespace Sliders
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
         private int collisionCount = 0;
+        private bool teleporting = false;
 
         private static List<Collider2D> colliderList = new List<Collider2D>();
 
         private void Awake()
         {
-            //instance = this;
             _instance = this;
             finishParticlesEmit = finishParticles.emission;
             trailParticlesEmit = trailParticles.emission;
@@ -78,6 +83,7 @@ namespace Sliders
 
         private void Start()
         {
+            playerState = PlayerState.dead;
             ReloadSpawnPoint();
             MoveToSpawn();
             rBody.Sleep();
@@ -134,24 +140,67 @@ namespace Sliders
         //The Player has hit an object, either the finish or an enemy
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (!colliderList.Find(x => x == collider))
+            if (!colliderList.Find(x => x == collider) && collider.tag == Constants.moveAreaTag)
+            {
                 colliderList.Add(collider);
-            collisionCount++;
+                collisionCount++;
+            }
 
-            if (finishMask == (finishMask | (1 << collider.gameObject.layer)) && IsAlive())
+            if (collider.gameObject.tag == Constants.finishTag && IsAlive())
             {
                 //Debug.Log("TriggerEnter - Fin - Collider: " + collider.gameObject);
-                Fin();
+                Win();
                 Game.SetGameState(Game.GameState.finishscreen);
             }
             //the collided object is on one of the layers marked as killMask => death
-            else if (killMask == (killMask | (1 << collider.gameObject.layer)) && IsAlive())
+            else if (killMask == (killMask | (1 << collider.gameObject.layer)) && IsAlive() && teleporting == false)
             {
                 //Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
                 Die();
                 Game.SetGameState(Game.GameState.deathscreen);
             }
+
+            if (collider.gameObject.tag == Constants.portalTag && teleporting == false)
+            {
+                Debug.Log("TriggerEnter - Portal - Collider: " + collider.gameObject);
+                PortalHit(collider.gameObject.GetComponent<Portal>());
+                teleporting = true;
+            }
             //the collided object is the finish => fin
+        }
+
+        //The Player has left the area allowed for moving(moveMask)
+        private void OnTriggerExit2D(Collider2D collider)
+        {
+            if (colliderList.Find(x => x == collider) && collider.tag == Constants.moveAreaTag)
+            {
+                colliderList.Remove(colliderList.Find(x => x == collider));
+                collisionCount--;
+            }
+
+            if ((moveMask == (moveMask | (1 << collider.gameObject.layer))) && (collisionCount <= 0) && colliderList.Count == 0 && IsAlive() && teleporting == false)
+            {
+                Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
+                Die();
+                Game.SetGameState(Game.GameState.deathscreen);
+            }
+
+            if (collider.gameObject.tag == Constants.portalTag)
+            {
+                teleporting = false;
+                PortalExit(collider.gameObject.GetComponent<Portal>());
+            }
+
+            //StartCoroutine(DelayedTriggerExit(collider));
+        }
+
+        private void OnTriggerStay2D(Collider2D collider)
+        {
+            if (!colliderList.Find(x => x == collider) && collider.tag == Constants.moveAreaTag)
+            {
+                colliderList.Add(collider);
+                collisionCount++;
+            }
         }
 
         public void OnParticleCollision(GameObject go)
@@ -162,28 +211,6 @@ namespace Sliders
                 Game.SetGameState(Game.GameState.deathscreen);
                 Debug.Log("[Player] Death by particle");
             }
-        }
-
-        //The Player has left the area allowed for moving(moveMask)
-        private void OnTriggerExit2D(Collider2D collider)
-        {
-            colliderList.Remove(colliderList.Find(x => x == collider));
-            collisionCount--;
-
-            if ((moveMask == (moveMask | (1 << collider.gameObject.layer))) && (collisionCount <= 0) && colliderList.Count == 0 && IsAlive())
-            {
-                //Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
-                Die();
-                Game.SetGameState(Game.GameState.deathscreen);
-            }
-
-            //StartCoroutine(DelayedTriggerExit(collider));
-        }
-
-        private void OnTriggerStay2D(Collider2D collider)
-        {
-            if (!colliderList.Find(x => x == collider))
-                colliderList.Add(collider);
         }
 
         private IEnumerator DelayedTriggerExit(Collider2D collider)
@@ -208,15 +235,60 @@ namespace Sliders
             }
         }
 
+        private Vector3 teleportVelocityMemory;
+
+        private void PortalHit(Portal portal)
+        {
+            if (portal != null && portal.active && portal != destinationPortal)
+            {
+                if (portal.twinPortal.active && portal.active)
+                {
+                    destinationPortal = portal.twinPortal;
+                    startPortal = portal;
+                    teleportVelocityMemory = rBody.velocity;
+                    //rBody.velocity = Vector3.zero;
+                    //onPlayerAction.Invoke(PlayerAction.teleport);
+                    transform.position = portal.twinPortal.transform.position;
+                    //StartCoroutine(cPlayerTeleport(portal.twinPortal.transform.position, teleportDuration));
+                }
+            }
+        }
+
+        private IEnumerator cPlayerTeleport(Vector3 pos, float duration)
+        {
+            yield return new WaitForSeconds(duration);
+            transform.position = pos;
+            //rBody.velocity = teleportVelocityMemory;
+            yield break;
+        }
+
+        private void PortalExit(Portal portal)
+        {
+            if (portal != startPortal)
+            {
+                if (portal.portalType == Portal.PortalType.oneway)
+                    portal.twinPortal.active = false;
+                else
+                {
+                    portal.twinPortal.active = true;
+                    portal.active = true;
+                }
+
+                destinationPortal = null;
+                startPortal = null;
+            }
+        }
+
         public void Spawn()
         {
-            colliderList = new List<Collider2D>();
+            colliderList.Clear();
             collisionCount = 0;
 
             trailParticles.Clear();
             trailParticles.Simulate(0.0f, true, true);
             trailParticlesEmit.enabled = true;
             trailParticles.Play();
+            teleporting = false;
 
             SetPlayerState(PlayerState.alive);
 
@@ -258,9 +330,9 @@ namespace Sliders
             rBody.Sleep();
         }
 
-        private void Fin()
+        private void Win()
         {
-            SetPlayerState(PlayerState.fin);
+            SetPlayerState(PlayerState.win);
 
             trailParticlesEmit.enabled = false;
             trailParticles.Stop();

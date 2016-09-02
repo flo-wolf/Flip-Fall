@@ -24,7 +24,7 @@ namespace Sliders.Audio
         public AudioClip deathSound;
         public AudioClip reflectSound;
         public AudioClip chargeSound;
-        public AudioClip finishSound;
+        public AudioClip winSound;
 
         [Header("UI Sounds")]
         public AudioClip buttonClickSound;
@@ -101,8 +101,8 @@ namespace Sliders.Audio
                     soundPlayer.PlaySingle(deathSound);
                     break;
 
-                case Player.PlayerState.fin:
-                    soundPlayer.PlaySingle(finishSound);
+                case Player.PlayerState.win:
+                    soundPlayer.PlaySingle(winSound);
                     break;
 
                 default:

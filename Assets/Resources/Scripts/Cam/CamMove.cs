@@ -96,7 +96,7 @@ namespace Sliders.Cam
                     break;
             }
 
-            SetCameraState(CamMoveState.resting);
+            SetCameraState(CamMoveState.following);
         }
 
         //instead of using transforms rather use joints and only transform one
