@@ -25,7 +25,14 @@ namespace Impulse.Levels
 
         private void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+
             _instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
 
         private void OnEnable()
@@ -93,7 +100,6 @@ namespace Impulse.Levels
                 if (GetID() != newID)
                 {
                     _instance.activeLevel = LevelLoader.LoadLevel(newID);
-                    _instance.activeLevel = LevelPlacer.Place(GetLevel());
                     ProgressManager.GetProgress().SetLastPlayedID(GetID());
                     onLevelChange.Invoke(GetLevel());
                 }

@@ -83,10 +83,11 @@ namespace Impulse
 
         private void Start()
         {
-            playerState = PlayerState.dead;
+            playerState = PlayerState.alive;
             ReloadSpawnPoint();
             MoveToSpawn();
-            rBody.Sleep();
+            Spawn();
+            finishParticles.gameObject.SetActive(false);
             Game.onGameStateChange.AddListener(GameStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
             //trail.sortingOrder = 2;
@@ -99,9 +100,7 @@ namespace Impulse
             switch (gameState)
             {
                 case Game.GameState.playing:
-                    Spawn();
-                    StartCoroutine(AliveTimerCorutine());
-                    finishParticles.gameObject.SetActive(false);
+
                     break;
 
                 case Game.GameState.deathscreen:
@@ -110,10 +109,6 @@ namespace Impulse
 
                 case Game.GameState.finishscreen:
 
-                    break;
-
-                case Game.GameState.levelselection:
-                    MoveToSpawn();
                     break;
 
                 default:
@@ -360,12 +355,12 @@ namespace Impulse
 
         private void MoveToSpawn()
         {
+            ReloadSpawnPoint();
             transform.position = spawnPosition;
+            Debug.Log("Spawnposition:" + spawnPosition);
 
             finishParticlesEmit.enabled = false;
             finishParticles.Stop();
-
-            aliveTime = 0;
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;

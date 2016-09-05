@@ -10,7 +10,7 @@ namespace Impulse.Audio
 {
     public class SoundPlayer : MonoBehaviour
     {
-        public static SoundPlayer _instance = null;     //Allows other scripts to call functions from SoundManager.
+        public static SoundPlayer _instance;     //Allows other scripts to call functions from SoundManager.
 
         public float playSingleVolume = 1F;
         public AudioSource sfxSource;                   //Drag a reference to the audio source which will play the sound effects.
@@ -24,14 +24,16 @@ namespace Impulse.Audio
 
         private void Awake()
         {
-            if (_instance == null)
-                _instance = this;
-            else if (_instance != this)
-                //Destroy this, this enforces our singleton pattern so there can only be one instance of SoundManager.
-                Destroy(gameObject);
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
 
             //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
-            DontDestroyOnLoad(gameObject);
         }
 
         //Used to play single sound clips.

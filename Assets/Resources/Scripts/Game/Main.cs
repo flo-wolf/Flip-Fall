@@ -18,7 +18,7 @@ namespace Impulse
 
         public static Main _instance;
 
-        public SceneChangeEvent onSceneChange = new SceneChangeEvent();
+        public static SceneChangeEvent onSceneChange = new SceneChangeEvent();
 
         private void Awake()
         {
@@ -28,7 +28,7 @@ namespace Impulse
 
         public static void SetScene(Scene newScene)
         {
-            _instance.onSceneChange.Invoke(newScene);
+            onSceneChange.Invoke(newScene);
             switch (newScene)
             {
                 case Scene.startup:

@@ -125,10 +125,10 @@ namespace Impulse.UI
         public void PlayLevel()
         {
             //level can be set
-            if (LevelManager.LevelExists(id) && Game.gameState == Game.GameState.levelselection)
+            if (LevelManager.LevelExists(id))
             {
                 LevelManager.SetLevel(id);
-                Game.SetGameState(Game.GameState.playing);
+                Main.SetScene(Main.Scene.game);
             }
             // else - animate failure
         }

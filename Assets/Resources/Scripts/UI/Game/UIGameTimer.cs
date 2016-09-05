@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 namespace Impulse.UI
 {
-    public class UITimer : MonoBehaviour
+    public class UIGameTimer : MonoBehaviour
     {
-        public static UITimer _instance;
+        public static UIGameTimer _instance;
         public Text textSec;
         public Text textMil;
 

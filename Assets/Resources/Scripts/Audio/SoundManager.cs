@@ -14,8 +14,6 @@ namespace Impulse.Audio
     {
         public static SoundManager _instance;
         public SoundPlayer soundPlayer;
-        public Player player;
-        public UITimer uiTimer;
 
         [Header("Game Sounds")]
         public AudioClip playSound;
@@ -40,14 +38,22 @@ namespace Impulse.Audio
 
         private void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+
             _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+
             Game.onGameStateChange.AddListener(GameStateChanged);
             Player.onPlayerAction.AddListener(PlayerAction);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
             CamMove.onCamMoveStateChange.AddListener(CamMoveStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
-            UIButtonManager.onButtonClick.AddListener(ButtonClicked);
-            UIButtonManager.onButtonRelease.AddListener(ButtonReleased);
+            UIGameButtons.onButtonClick.AddListener(ButtonClicked);
+            UIGameButtons.onButtonRelease.AddListener(ButtonReleased);
         }
 
         private void Start()
@@ -125,10 +131,10 @@ namespace Impulse.Audio
                     //play win sound
                     break;
 
-                case Game.GameState.levelselection:
-                    soundPlayer.PlaySingle(levelselectionAppearSound);
-                    //soundPlayer.PlaySingle(spawnSound);
-                    break;
+                //case Game.GameState.levelselection:
+                //    soundPlayer.PlaySingle(levelselectionAppearSound);
+                //    //soundPlayer.PlaySingle(spawnSound);
+                //    break;
 
                 default:
                     break;

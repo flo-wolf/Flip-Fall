@@ -15,15 +15,24 @@ namespace Impulse.UI
         //public enum UIState { levelSelection, home, settings, game, title, shop, editor, credits, buyPro }
         //public static UIState uiState;
         public static UIGameManager _instance;
-
-        public Text levelID;
+        public Animation fadeAnimation;
 
         private void Start()
         {
             _instance = this;
+            FadeIn();
+
             Game.onGameStateChange.AddListener(GameStateChanged);
             Player.onPlayerAction.AddListener(PlayerAction);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
+            Main.onSceneChange.AddListener(SceneChanging);
+
+            UIGameTimer.Show();
+        }
+
+        private void SceneChanging(Main.Scene scene)
+        {
+            FadeOut();
         }
 
         private void GameStateChanged(Game.GameState gameState)
@@ -31,25 +40,15 @@ namespace Impulse.UI
             switch (gameState)
             {
                 case Game.GameState.playing:
-                    //add fancy fadeouts, save
-                    UILevelSelection.Hide();
-                    UIStarCount.Hide();
-                    UITimer.Show();
-                    UIButtonManager.Hide(UIButtonManager._instance.playBtn);
+                    //
                     break;
 
                 case Game.GameState.deathscreen:
-                    UILevelSelection.Show();
+                    //show deathscreen
                     break;
 
                 case Game.GameState.finishscreen:
-                    UILevelSelection.Show();
-                    break;
-
-                case Game.GameState.levelselection:
-                    UITimer.Hide();
-                    UIStarCount.Show();
-                    UILevelSelection.Show();
+                    //show finishscreen
                     break;
 
                 default:
@@ -91,6 +90,16 @@ namespace Impulse.UI
                 default:
                     break;
             }
+        }
+
+        private void FadeIn()
+        {
+            fadeAnimation.Play("fadeFromBlack");
+        }
+
+        private void FadeOut()
+        {
+            fadeAnimation.Play("fadeToBlack");
         }
     }
 }

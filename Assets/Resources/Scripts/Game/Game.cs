@@ -15,7 +15,7 @@ namespace Impulse
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { playing, pause, finishscreen, deathscreen, levelselection, editor, settingsscreen }
+        public enum GameState { playing, pause, finishscreen, deathscreen }
 
         //create class main, make it completly static, surviving scene changes
         // main class logs the current screenstate and allows easy switching, accessable by the controller script of each scene
@@ -46,7 +46,8 @@ namespace Impulse
 
         private void Start()
         {
-            SetGameState(GameState.levelselection);
+            LevelPlacer.Place(LevelManager.GetLevel());
+            SetGameState(GameState.playing);
         }
 
         private void OnApplicationQuit()
@@ -64,7 +65,8 @@ namespace Impulse
                     Debug.Log("[Game] deathscreen");
                     Timer.Pause();
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
-                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
+                    //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
+                    Main.SetScene(Main.Scene.levelselection);
                     break;
 
                 case GameState.finishscreen:
@@ -72,15 +74,10 @@ namespace Impulse
                     Timer.Pause();
                     if (LevelManager.GetID() == ProgressManager.GetProgress().lastUnlockedLevel)
                         ProgressManager.GetProgress().lastUnlockedLevel++;
-                    ProgressManager.GetProgress().EnterHighscore(LevelManager.GetID(), UITimer.GetTime());
+                    ProgressManager.GetProgress().EnterHighscore(LevelManager.GetID(), UIGameTimer.GetTime());
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
-                    _instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
-                    break;
-
-                case GameState.levelselection:
-                    Debug.Log("[Game] levelselection");
-                    onGameStateChange.Invoke(gs);
-                    //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.ready, levelselectionDelay));
+                    //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
+                    Main.SetScene(Main.Scene.levelselection);
                     break;
 
                 case GameState.playing:
@@ -110,11 +107,6 @@ namespace Impulse
         {
             yield return new WaitForSeconds(delay);
             SetGameState(gs);
-        }
-
-        public void Edit()
-        {
-            SetGameState(GameState.editor);
         }
 
         public void CloseGame()

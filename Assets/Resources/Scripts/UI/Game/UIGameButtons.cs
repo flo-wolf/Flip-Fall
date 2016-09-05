@@ -6,21 +6,16 @@ using UnityEngine.UI;
 
 namespace Impulse.UI
 {
-    public class UIButtonManager : MonoBehaviour
+    public class UIGameButtons : MonoBehaviour
     {
-        public static UIButtonManager _instance;
+        public static UIGameButtons _instance;
         public static UIButtonClick onButtonClick = new UIButtonClick();
         public static UIButtonRelease onButtonRelease = new UIButtonRelease();
         public Player player;
 
-        public Button playBtn;
         public Button homeBtn;
-        public Button backBtn;
         public Button pauseBtn;
         public Button resumeBtn;
-        public Button storeBtn;
-        public Button infoBtn;
-        public Button unlockBtn;
 
         private bool chargeOnLeftSide = true;
 

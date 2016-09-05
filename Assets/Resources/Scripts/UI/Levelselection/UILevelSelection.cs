@@ -26,6 +26,7 @@ namespace Impulse.UI
         private static Highscore highscore;
         public Text pageText;
 
+        public Animation fadeAnimation;
         public Animation pageAnimation;
         public Animation pageInfoAnim;
 
@@ -39,8 +40,16 @@ namespace Impulse.UI
 
         private void Start()
         {
+            UIStarCount.Show();
+
             UpdatePageCount();
             FadeIn();
+            Main.onSceneChange.AddListener(SceneChanging);
+        }
+
+        private void SceneChanging(Main.Scene scene)
+        {
+            fadeAnimation.Play("fadeToBlack");
         }
 
         public static void Show()
@@ -63,7 +72,6 @@ namespace Impulse.UI
             {
                 currentPage++;
                 UpdatePageCount();
-                UIButtonManager.onButtonClick.Invoke(b);
             }
         }
 
@@ -73,13 +81,13 @@ namespace Impulse.UI
             {
                 currentPage--;
                 UpdatePageCount();
-                UIButtonManager.onButtonClick.Invoke(b);
             }
         }
 
         public static void FadeIn()
         {
             Debug.Log("[UILevelSelection] FadeIn()");
+            _instance.fadeAnimation.Play("fadeFromBlack");
             _instance.pageAnimation.Play("pageShow");
             _instance.pageInfoAnim.Play();
             _instance.StartCoroutine(_instance.cEnablePages(_instance.fadeInTime));

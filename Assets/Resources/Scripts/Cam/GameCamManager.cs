@@ -117,9 +117,9 @@ namespace Impulse.Cam
                     //CamMove.MoveCamTo(spawnPos, Game.levelselectionDelay);
                     break;
 
-                case Game.GameState.levelselection:
-                    CamMove.MoveCamTo(spawnPos);
-                    break;
+                //case Game.GameState.levelselection:
+                //    CamMove.MoveCamTo(spawnPos);
+                //    break;
 
                 default:
                     break;
