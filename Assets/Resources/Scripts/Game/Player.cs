@@ -40,8 +40,6 @@ namespace Impulse
         public LayerMask finishMask;
         public LayerMask killMask;
         public LayerMask moveMask;
-        public TrailRenderer trail; //Full color
-        public TrailRenderer trail2; //Transparency - use shading instead
 
         public Rigidbody2D rBody;
         public Material defaultMaterial;

@@ -22,8 +22,14 @@ namespace Impulse
 
         private void Awake()
         {
-            DontDestroyOnLoad(this);
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+
             _instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
 
         public static void SetScene(Scene newScene)

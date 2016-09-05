@@ -53,6 +53,7 @@ namespace Impulse.UI
 
         public void PauseBtnClicked(Button b)
         {
+            Game.SetGameState(Game.GameState.pause);
             onButtonClick.Invoke(b);
         }
 
