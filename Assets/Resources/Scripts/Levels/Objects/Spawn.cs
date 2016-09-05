@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Sliders.Levels
+namespace Impulse.Levels
 {
     public class Spawn : MonoBehaviour
     {

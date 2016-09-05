@@ -9,11 +9,11 @@
 //Post-Processing: Add a Retro CRT Distortion Effect Using RGB Shifting
 //Audio: Add "character-dive-in", "player-death", "level-done", (...)
 
-using Sliders.Cam;
+using Impulse.Cam;
 using System.Collections;
 using UnityEngine;
 
-namespace Sliders.Unused
+namespace Impulse.Unused
 {
     public enum GameState { menu, editor, playing }
 

@@ -1,4 +1,4 @@
-﻿using Sliders.Cam;
+﻿using Impulse.Cam;
 using System.Collections;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ using UnityEngine;
 /// Plays sounds, only referenced through the SoundManager
 /// </summary>
 
-namespace Sliders.Audio
+namespace Impulse.Audio
 {
     public class SoundPlayer : MonoBehaviour
     {

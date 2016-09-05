@@ -1,4 +1,4 @@
-﻿using Sliders;
+﻿using Impulse;
 using System.Collections;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ using UnityEngine;
 /// Camera Zoom Handler, triggered through CameraManager
 /// </summary>
 
-namespace Sliders.Cam
+namespace Impulse.Cam
 {
     public class CamZoom : MonoBehaviour
     {

@@ -1,11 +1,11 @@
-﻿using Sliders.Audio;
+﻿using Impulse.Audio;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Sliders.UI
+namespace Impulse.UI
 {
     public static class Timer
     {

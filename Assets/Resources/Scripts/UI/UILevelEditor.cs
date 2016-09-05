@@ -1,12 +1,12 @@
-﻿using Sliders.Levels;
-using Sliders.Progress;
+﻿using Impulse.Levels;
+using Impulse.Progress;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Sliders.UI
+namespace Impulse.UI
 {
     public class UILevelEditor : MonoBehaviour
     {

@@ -1,12 +1,12 @@
-﻿using Sliders.Objects;
-using Sliders.Progress;
-using Sliders.UI;
+﻿using Impulse.Objects;
+using Impulse.Progress;
+using Impulse.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Sliders.Levels
+namespace Impulse.Levels
 {
     [Serializable]
     public class Level : MonoBehaviour
@@ -69,10 +69,5 @@ namespace Sliders.Levels
         {
             return title;
         }
-
-        //public Ghost GetGhost()
-        //{
-        //    return ghost;
-        //}
     }
 }

@@ -1,5 +1,5 @@
-﻿using Sliders.Levels;
-using Sliders.UI;
+﻿using Impulse.Levels;
+using Impulse.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using UnityEngine;
 /// It also holds other variables important for the players progress like achievemnts or settings.
 /// </summary>
 
-namespace Sliders.Progress
+namespace Impulse.Progress
 {
     [Serializable]
     public class ProgressData
@@ -37,7 +37,7 @@ namespace Sliders.Progress
                 Debug.Log("[ProgressData] ProgressData(): LastPlayedID = " + lastPlayedLevelID);
             }
             else
-                lastPlayedLevelID = LevelManager.GetDefaultID();
+                lastPlayedLevelID = 1;
             highscores = new List<Highscore>();
         }
 

@@ -1,8 +1,8 @@
-﻿using Sliders;
-using Sliders.Cam;
-using Sliders.Levels;
-using Sliders.Progress;
-using Sliders.UI;
+﻿using Impulse;
+using Impulse.Cam;
+using Impulse.Levels;
+using Impulse.Progress;
+using Impulse.UI;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Controls the gameplay durimg MainState.playing
 /// </summary>
-namespace Sliders
+namespace Impulse
 {
     public class Game : MonoBehaviour
     {

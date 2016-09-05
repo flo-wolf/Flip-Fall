@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Sliders
+namespace Impulse
 {
     public class SmoothMovement : MonoBehaviour
     {

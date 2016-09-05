@@ -1,6 +1,6 @@
-﻿using Sliders.Cam;
-using Sliders.Levels;
-using Sliders.UI;
+﻿using Impulse.Cam;
+using Impulse.Levels;
+using Impulse.UI;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,14 +8,13 @@ using UnityEngine.UI;
 /// <summary>
 /// Listens to game events and plays sounds accordingly through the SoundPlayer class
 /// </summary>
-namespace Sliders.Audio
+namespace Impulse.Audio
 {
     public class SoundManager : MonoBehaviour
     {
         public static SoundManager _instance;
         public SoundPlayer soundPlayer;
         public Player player;
-        public CamManager camManager;
         public UITimer uiTimer;
 
         [Header("Game Sounds")]

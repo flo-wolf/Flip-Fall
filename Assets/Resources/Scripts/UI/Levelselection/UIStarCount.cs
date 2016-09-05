@@ -1,10 +1,10 @@
-﻿using Sliders.Progress;
+﻿using Impulse.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Sliders.UI
+namespace Impulse.UI
 {
     public class UIStarCount : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Sliders.ImageFX
+namespace Impulse.ImageFX
 {
     [ExecuteInEditMode]
     [AddComponentMenu("Image Effects/BlurFade")]

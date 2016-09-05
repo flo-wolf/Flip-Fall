@@ -1,12 +1,12 @@
-﻿using Sliders.Cam;
-using Sliders.Levels;
+﻿using Impulse.Cam;
+using Impulse.Levels;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Sliders
+namespace Impulse
 {
     public class Ghost : MonoBehaviour
     {

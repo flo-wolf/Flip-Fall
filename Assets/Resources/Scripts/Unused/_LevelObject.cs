@@ -3,7 +3,7 @@ using UnityEngine;
 
 //LevelObjects can either be logic items (triggers, start, end), shapes (custom mesh, boxes, triangles, circles), or enemies(spikes, chainsaws, lasers)
 
-namespace Sliders.Unused
+namespace Impulse.Unused
 {
     public class LevelObject : MonoBehaviour
     {

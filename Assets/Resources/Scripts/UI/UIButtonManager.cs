@@ -1,10 +1,10 @@
-﻿using Sliders;
+﻿using Impulse;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Sliders.UI
+namespace Impulse.UI
 {
     public class UIButtonManager : MonoBehaviour
     {

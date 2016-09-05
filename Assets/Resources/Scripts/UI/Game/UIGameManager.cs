@@ -1,5 +1,5 @@
-﻿using Sliders.Levels;
-using Sliders.Progress;
+﻿using Impulse.Levels;
+using Impulse.Progress;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// Manages all UI Elements through externally fired events and turns them on and off
 /// </summary>
 
-namespace Sliders.UI
+namespace Impulse.UI
 {
     public class UIGameManager : MonoBehaviour
     {

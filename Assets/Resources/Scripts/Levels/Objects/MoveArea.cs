@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Sliders.Objects
+namespace Impulse.Objects
 {
     public class MoveArea : MonoBehaviour
     {

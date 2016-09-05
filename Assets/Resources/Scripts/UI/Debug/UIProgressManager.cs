@@ -1,9 +1,9 @@
-﻿using Sliders;
-using Sliders.Progress;
+﻿using Impulse;
+using Impulse.Progress;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Sliders.UI
+namespace Impulse.UI
 {
     public class UIProgressManager : MonoBehaviour
     {

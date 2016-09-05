@@ -1,8 +1,8 @@
-﻿using Sliders;
+﻿using Impulse;
 using System.Collections;
 using UnityEngine;
 
-namespace Sliders.Cam
+namespace Impulse.Cam
 {
     public class CamShake : MonoBehaviour
     {

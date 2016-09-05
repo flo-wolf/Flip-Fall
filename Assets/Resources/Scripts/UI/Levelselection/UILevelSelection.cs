@@ -1,7 +1,7 @@
-﻿using Sliders;
-using Sliders.Levels;
-using Sliders.Progress;
-using Sliders.UI;
+﻿using Impulse;
+using Impulse.Levels;
+using Impulse.Progress;
+using Impulse.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Shows and hides all levels, gets moved by the
 /// </summary>
-namespace Sliders.UI
+namespace Impulse.UI
 {
     public class UILevelSelection : MonoBehaviour
     {

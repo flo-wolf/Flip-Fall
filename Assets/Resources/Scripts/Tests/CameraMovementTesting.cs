@@ -1,9 +1,9 @@
-﻿using Sliders;
-using Sliders.Cam;
+﻿using Impulse;
+using Impulse.Cam;
 using System.Collections;
 using UnityEngine;
 
-namespace Sliders.Tests
+namespace Impulse.Tests
 {
     public class CameraMovementTesting : MonoBehaviour
     {

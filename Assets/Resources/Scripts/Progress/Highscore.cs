@@ -1,6 +1,6 @@
-﻿using Sliders.Audio;
-using Sliders.Levels;
-using Sliders.UI;
+﻿using Impulse.Audio;
+using Impulse.Levels;
+using Impulse.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// <summary>
 /// A Levels Highscore, containing time, reached stars and id.
 /// </summary>
-namespace Sliders.Progress
+namespace Impulse.Progress
 {
     [Serializable]
     public class Highscore

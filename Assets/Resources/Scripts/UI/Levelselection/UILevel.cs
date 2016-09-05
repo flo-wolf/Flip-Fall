@@ -1,10 +1,10 @@
-﻿using Sliders.Levels;
-using Sliders.Progress;
+﻿using Impulse.Levels;
+using Impulse.Progress;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Sliders.UI
+namespace Impulse.UI
 {
     public class UILevel : MonoBehaviour
     {

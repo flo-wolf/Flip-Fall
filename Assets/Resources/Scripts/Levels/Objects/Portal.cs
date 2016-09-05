@@ -21,7 +21,7 @@ using UnityEngine.Events;
 /// A Portal can either be a one way transition into another area,
 /// It can also serve as a checkpoint upon entering.
 /// </summary>
-namespace Sliders.Levels.Objects
+namespace Impulse.Levels.Objects
 {
     public class Portal : MonoBehaviour
     {

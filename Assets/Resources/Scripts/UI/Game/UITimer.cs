@@ -1,8 +1,8 @@
-﻿using Sliders.Audio;
+﻿using Impulse.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Sliders.UI
+namespace Impulse.UI
 {
     public class UITimer : MonoBehaviour
     {

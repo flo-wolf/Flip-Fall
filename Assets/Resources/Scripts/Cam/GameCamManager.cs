@@ -1,17 +1,17 @@
-﻿using Sliders.Levels;
+﻿using Impulse.Levels;
 using System.Collections;
 using UnityEngine;
 
 /// <summary>
 /// Manages camera actions based on externally fired events
 /// </summary>
-namespace Sliders.Cam
+namespace Impulse.Cam
 {
     public enum InterpolationType { smoothstep, linear }
 
-    public class CamManager : MonoBehaviour
+    public class GameCamManager : MonoBehaviour
     {
-        public static CamManager _instance;
+        public static GameCamManager _instance;
         public Player player;
 
         public static float defaultTransitionDuration = 1F;

@@ -1,11 +1,11 @@
-﻿using Sliders;
-using Sliders.Audio;
-using Sliders.Levels;
+﻿using Impulse;
+using Impulse.Audio;
+using Impulse.Levels;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Sliders.Cam
+namespace Impulse.Cam
 {
     public class CamMove : MonoBehaviour
     {

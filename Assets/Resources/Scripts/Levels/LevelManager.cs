@@ -1,5 +1,5 @@
-﻿using Sliders.Levels;
-using Sliders.Progress;
+﻿using Impulse.Levels;
+using Impulse.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using UnityEngine.Events;
 * Levels are serializable and saved to a file.
 */
 
-namespace Sliders.Levels
+namespace Impulse.Levels
 {
     public class LevelManager : MonoBehaviour
     {
@@ -20,7 +20,6 @@ namespace Sliders.Levels
 
         public class LevelChangeEvent : UnityEvent<Level> { }
 
-        public AudioClip changeLevelSound;
         public Level defaultlevel;
         private Level activeLevel;
 
@@ -31,7 +30,6 @@ namespace Sliders.Levels
 
         private void OnEnable()
         {
-            _instance = this;
             Reload();
         }
 
@@ -62,6 +60,7 @@ namespace Sliders.Levels
 
         public static int GetID()
         {
+            Debug.Log(_instance);
             if (_instance.activeLevel != null)
                 return _instance.activeLevel.id;
             else

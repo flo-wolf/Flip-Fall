@@ -1,7 +1,7 @@
 ﻿#define AllowDoubles //Allow double entries in data?
 
-using Sliders.Levels;
-using Sliders.UI;
+using Impulse.Levels;
+using Impulse.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Sliders.Progress
+namespace Impulse.Progress
 {
     public static class ProgressManager
     {
@@ -63,7 +63,7 @@ namespace Sliders.Progress
                     SetProgress(bf.Deserialize(fs) as ProgressData);
                     if (progress.highscores.Count > 0)
                     {
-                        Debug.Log("[ProgressManager]: LoadProgressData() id of first highscore: " + progress.GetHighscore(LevelManager.GetID()));
+                        Debug.Log("[ProgressManager]: LoadProgressData()");
                     }
                 }
                 catch (SerializationException e)

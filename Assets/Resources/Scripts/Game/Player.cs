@@ -1,7 +1,7 @@
-﻿using Sliders.Cam;
-using Sliders.Levels;
-using Sliders.Levels.Objects;
-using Sliders.UI;
+﻿using Impulse.Cam;
+using Impulse.Levels;
+using Impulse.Levels.Objects;
+using Impulse.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using UnityEngine.UI;
 /// <summary>
 /// The Player controller class - handles player actions and events
 /// </summary>
-namespace Sliders
+namespace Impulse
 {
     public class Player : MonoBehaviour
     {

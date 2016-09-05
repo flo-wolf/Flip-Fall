@@ -1,11 +1,11 @@
-﻿using Sliders;
+﻿using Impulse;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Sliders.Levels
+namespace Impulse.Levels
 {
     public class LevelPlacer : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// Constants storage, do not change
 /// </summary>
-namespace Sliders
+namespace Impulse
 {
     public static class Constants
     {
