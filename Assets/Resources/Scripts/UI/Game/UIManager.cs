@@ -10,11 +10,11 @@ using UnityEngine.UI;
 
 namespace Sliders.UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIGameManager : MonoBehaviour
     {
         //public enum UIState { levelSelection, home, settings, game, title, shop, editor, credits, buyPro }
         //public static UIState uiState;
-        public static UIManager _instance;
+        public static UIGameManager _instance;
 
         public Text levelID;
 
@@ -50,9 +50,6 @@ namespace Sliders.UI
                     UITimer.Hide();
                     UIStarCount.Show();
                     UILevelSelection.Show();
-                    break;
-
-                case Game.GameState.ready:
                     break;
 
                 default:

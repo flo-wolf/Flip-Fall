@@ -15,7 +15,7 @@ namespace Sliders
 {
     public class Game : MonoBehaviour
     {
-        public enum GameState { startup, title, tutorial, homescreen, ready, playing, pause, finishscreen, deathscreen, levelselection, editor, settingsscreen }
+        public enum GameState { playing, pause, finishscreen, deathscreen, levelselection, editor, settingsscreen }
 
         //create class main, make it completly static, surviving scene changes
         // main class logs the current screenstate and allows easy switching, accessable by the controller script of each scene
@@ -88,10 +88,10 @@ namespace Sliders
                     onGameStateChange.Invoke(gs);
                     break;
 
-                case GameState.ready:
-                    Debug.Log("[Game] levelselection");
-                    onGameStateChange.Invoke(gs);
-                    break;
+                //case GameState.ready:
+                //    Debug.Log("[Game] levelselection");
+                //    onGameStateChange.Invoke(gs);
+                //    break;
 
                 default:
                     onGameStateChange.Invoke(gs);
