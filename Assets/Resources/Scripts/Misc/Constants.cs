@@ -20,6 +20,7 @@ namespace Impulse
         public const string portalTag = "Portal";
         public const string moveAreaTag = "MoveArea";
         public const string finishTag = "Finish";
+        public const string killTag = "Kill";
 
         /// <summary>
         /// Converts any Double into the 00:00 timer format used for displaying highscores

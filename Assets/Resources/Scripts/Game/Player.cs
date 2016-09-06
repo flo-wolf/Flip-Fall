@@ -52,7 +52,6 @@ namespace Impulse
         public float chargeForcePerTick = 5F;
         public float respawnDuration = 1f;
         public float teleportDuration = 0.2F;
-        public float aliveTime = 0f;
 
         [Range(0.0f, 0.1f)]
         public float triggerExitCheckDelay = 0.001F;
@@ -67,7 +66,6 @@ namespace Impulse
         public bool charging = false;
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
-        private int collisionCount = 0;
         private bool teleporting = false;
 
         private static List<Collider2D> colliderList = new List<Collider2D>();
@@ -133,45 +131,42 @@ namespace Impulse
         //The Player has hit an object, either the finish or an enemy
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (!colliderList.Find(x => x == collider) && collider.tag == Constants.moveAreaTag)
+            if (collider.tag == Constants.moveAreaTag && IsAlive())
             {
                 colliderList.Add(collider);
-                collisionCount++;
             }
-
-            if (collider.gameObject.tag == Constants.finishTag && IsAlive())
+            else if (collider.tag == Constants.finishTag && IsAlive())
             {
                 //Debug.Log("TriggerEnter - Fin - Collider: " + collider.gameObject);
                 Win();
                 Game.SetGameState(Game.GameState.finishscreen);
             }
+
             //the collided object is on one of the layers marked as killMask => death
-            else if (killMask == (killMask | (1 << collider.gameObject.layer)) && IsAlive() && teleporting == false)
+            if (collider.tag == Constants.killTag && IsAlive() && teleporting == false)
             {
-                //Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
+                Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
                 Die();
+                colliderList.Clear();
                 Game.SetGameState(Game.GameState.deathscreen);
             }
-
-            if (collider.gameObject.tag == Constants.portalTag && teleporting == false)
+            else if (collider.tag == Constants.portalTag && teleporting == false && IsAlive())
             {
                 Debug.Log("TriggerEnter - Portal - Collider: " + collider.gameObject);
                 PortalHit(collider.gameObject.GetComponent<Portal>());
                 teleporting = true;
             }
-            //the collided object is the finish => fin
         }
 
         //The Player has left the area allowed for moving(moveMask)
         private void OnTriggerExit2D(Collider2D collider)
         {
-            if (colliderList.Find(x => x == collider) && collider.tag == Constants.moveAreaTag)
+            if (colliderList.Count > 0 && collider.tag == Constants.moveAreaTag && teleporting == false)
             {
-                colliderList.Remove(colliderList.Find(x => x == collider));
-                collisionCount--;
+                colliderList.Remove(collider);
             }
 
-            if ((moveMask == (moveMask | (1 << collider.gameObject.layer))) && (collisionCount <= 0) && colliderList.Count == 0 && IsAlive() && teleporting == false)
+            if (collider.tag == Constants.moveAreaTag && colliderList.Count == 0 && IsAlive() && teleporting == false)
             {
                 Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
                 Die();
@@ -187,14 +182,14 @@ namespace Impulse
             //StartCoroutine(DelayedTriggerExit(collider));
         }
 
-        private void OnTriggerStay2D(Collider2D collider)
-        {
-            if (!colliderList.Find(x => x == collider) && collider.tag == Constants.moveAreaTag)
-            {
-                colliderList.Add(collider);
-                collisionCount++;
-            }
-        }
+        //private void OnTriggerStay2D(Collider2D collider)
+        //{
+        //    if (collider.tag == Constants.moveAreaTag)
+        //    {
+        //        colliderList.Add(collider);
+        //        collisionCount++;
+        //    }
+        //}
 
         public void OnParticleCollision(GameObject go)
         {
@@ -214,18 +209,6 @@ namespace Impulse
             //Debug.Log("collisionList: " + colliderList.Count);
 
             yield break;
-        }
-
-        //Counts the time the Player is alive in this try
-        private IEnumerator AliveTimerCorutine()
-        {
-            while (playerState == PlayerState.alive)
-            {
-                aliveTime += Time.fixedDeltaTime;
-                var time = TimeSpan.FromSeconds(aliveTime);
-
-                yield return new WaitForFixedUpdate();
-            }
         }
 
         private Vector3 teleportVelocityMemory;
@@ -275,7 +258,6 @@ namespace Impulse
         public void Spawn()
         {
             colliderList.Clear();
-            collisionCount = 0;
 
             trailParticles.Clear();
             trailParticles.Simulate(0.0f, true, true);
@@ -284,12 +266,6 @@ namespace Impulse
             teleporting = false;
 
             SetPlayerState(PlayerState.alive);
-
-            aliveTime = 0;
-            //trail.time = trialTime;
-            //trail.enabled = true;
-            //trail2.time = 1f;
-            //trail2.enabled = true;
 
             rBody.gravityScale = gravity;
             rBody.velocity = new Vector3(0f, -0.00001f, 0f);
