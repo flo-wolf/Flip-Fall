@@ -13,9 +13,13 @@ namespace Impulse.UI
         public static UIButtonRelease onButtonRelease = new UIButtonRelease();
         public Player player;
 
-        public Button homeBtn;
         public Button pauseBtn;
         public Button resumeBtn;
+
+        public Animator pauseAnimator;
+        public Animator resumeAnimator;
+
+        public float buttonSwitchDelay = 0.25F;
 
         private bool chargeOnLeftSide = true;
 
@@ -47,20 +51,53 @@ namespace Impulse.UI
             onButtonClick.Invoke(b);
         }
 
+        public void PauseBtnClicked()
+        {
+            if (Player._instance.IsAlive())
+            {
+                Time.timeScale = 0;
+                pauseAnimator.SetBool("fadeout", true);
+                StartCoroutine(cPauseResumeSwitch(pauseBtn, resumeBtn));
+                Game.SetGameState(Game.GameState.pause);
+            }
+        }
+
+        public void ResumeBtnClicked()
+        {
+            if (Player._instance.IsAlive())
+            {
+                Time.timeScale = 1;
+                resumeAnimator.SetBool("fadeout", true);
+                StartCoroutine(cPauseResumeSwitch(resumeBtn, pauseBtn));
+                Game.SetGameState(Game.GameState.playing);
+            }
+        }
+
+        private IEnumerator cPauseResumeSwitch(Button deactivateBtn, Button activateBtn)
+        {
+            //since we have paused the timescale "new WaitForSeconds" wont work, this is a nice workaround
+            yield return StartCoroutine(CoroutineUtilities.WaitForRealTime(buttonSwitchDelay));
+            deactivateBtn.gameObject.SetActive(false);
+            activateBtn.gameObject.SetActive(true);
+            yield break;
+        }
+
         public void LevelButtonClicked(Button b, UILevel level)
         {
             onButtonClick.Invoke(b);
         }
 
-        public void PauseBtnClicked(Button b)
+        private bool IsPaused()
         {
-            Game.SetGameState(Game.GameState.pause);
-            onButtonClick.Invoke(b);
+            if (Game.gameState == Game.GameState.pause)
+                return true;
+            else
+                return false;
         }
 
         public void LeftHalfClicked()
         {
-            if (player.IsAlive())
+            if (player.IsAlive() && !IsPaused())
             {
                 if (chargeOnLeftSide && !player.charging)
                 {
@@ -86,7 +123,7 @@ namespace Impulse.UI
 
         public void RightHalfClicked()
         {
-            if (player.IsAlive())
+            if (player.IsAlive() && !IsPaused())
             {
                 if (chargeOnLeftSide)
                 {
@@ -101,7 +138,7 @@ namespace Impulse.UI
 
         public void RightHalfReleased()
         {
-            if (player.IsAlive())
+            if (player.IsAlive() && !IsPaused())
             {
                 if (!chargeOnLeftSide && player.charging)
                 {
@@ -113,7 +150,7 @@ namespace Impulse.UI
         //Inputs, alles in den Input Manager!
         private void Update()
         {
-            if (player.IsAlive())
+            if (player.IsAlive() && !IsPaused())
             {
                 //Keyboard
                 if (Input.GetKeyDown(KeyCode.Return))
