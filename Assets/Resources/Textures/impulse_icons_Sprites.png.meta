@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a4146965247789043a57221118aa0dd8
-timeCreated: 1473072011
+timeCreated: 1473165251
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -40,6 +40,21 @@ TextureImporter:
     21300066: impulse_icons_Sprites_33
     21300068: impulse_icons_Sprites_34
     21300070: impulse_icons_Sprites_35
+    21300072: impulse_icons_Sprites_36
+    21300074: impulse_icons_Sprites_37
+    21300076: impulse_icons_Sprites_38
+    21300078: impulse_icons_Sprites_39
+    21300080: impulse_icons_Sprites_40
+    21300082: impulse_icons_Sprites_41
+    21300084: impulse_icons_Sprites_42
+    21300086: impulse_icons_Sprites_43
+    21300088: impulse_icons_Sprites_44
+    21300090: impulse_icons_Sprites_45
+    21300092: impulse_icons_Sprites_46
+    21300094: impulse_icons_Sprites_47
+    21300096: impulse_icons_Sprites_48
+    21300098: impulse_icons_Sprites_49
+    21300100: impulse_icons_Sprites_50
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -196,9 +211,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 792
-        y: 1881
-        width: 128
-        height: 124
+        y: 1883
+        width: 125
+        height: 125
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -416,10 +431,10 @@ TextureImporter:
       name: impulse_icons_Sprites_23
       rect:
         serializedVersion: 2
-        x: 858
-        y: 1657
-        width: 217
-        height: 212
+        x: 1287
+        y: 1497
+        width: 228
+        height: 221
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -452,52 +467,13 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: impulse_icons_Sprites_26
-      rect:
-        serializedVersion: 2
-        x: 4
-        y: 1513
-        width: 172
-        height: 200
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: impulse_icons_Sprites_27
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 1525
-        width: 200
-        height: 176
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
       name: impulse_icons_Sprites_28
       rect:
         serializedVersion: 2
-        x: 416
-        y: 1481
-        width: 375
-        height: 248
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: impulse_icons_Sprites_29
-      rect:
-        serializedVersion: 2
-        x: 44
-        y: 444
-        width: 736
-        height: 288
+        x: 1690
+        y: 641
+        width: 359
+        height: 235
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -507,10 +483,10 @@ TextureImporter:
       name: impulse_icons_Sprites_30
       rect:
         serializedVersion: 2
-        x: 168
+        x: 25
         y: 28
-        width: 504
-        height: 480
+        width: 738
+        height: 286
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -520,49 +496,10 @@ TextureImporter:
       name: impulse_icons_Sprites_31
       rect:
         serializedVersion: 2
-        x: 1057
-        y: 324
-        width: 952
-        height: 941
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: impulse_icons_Sprites_32
-      rect:
-        serializedVersion: 2
-        x: 1172
-        y: 141
-        width: 177
-        height: 171
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: impulse_icons_Sprites_33
-      rect:
-        serializedVersion: 2
-        x: 1461
-        y: 112
-        width: 168
-        height: 160
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: impulse_icons_Sprites_34
-      rect:
-        serializedVersion: 2
-        x: 1741
-        y: 148
-        width: 172
-        height: 172
+        x: 1428
+        y: 0
+        width: 621
+        height: 630
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -572,10 +509,257 @@ TextureImporter:
       name: impulse_icons_Sprites_35
       rect:
         serializedVersion: 2
-        x: 830
-        y: 1419
-        width: 265
-        height: 232
+        x: 767
+        y: 1507
+        width: 214
+        height: 209
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_32
+      rect:
+        serializedVersion: 2
+        x: 1369
+        y: 628
+        width: 315
+        height: 315
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_26
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1500
+        width: 230
+        height: 215
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_27
+      rect:
+        serializedVersion: 2
+        x: 1565
+        y: 1287
+        width: 191
+        height: 175
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_33
+      rect:
+        serializedVersion: 2
+        x: 1757
+        y: 1288
+        width: 202
+        height: 175
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_34
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 1504
+        width: 224
+        height: 208
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_37
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 1504
+        width: 249
+        height: 211
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_38
+      rect:
+        serializedVersion: 2
+        x: 848
+        y: 1737
+        width: 100
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_39
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 1509
+        width: 232
+        height: 209
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_40
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 1265
+        width: 232
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_41
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 1265
+        width: 232
+        height: 216
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_42
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 1261
+        width: 228
+        height: 216
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_43
+      rect:
+        serializedVersion: 2
+        x: 756
+        y: 1269
+        width: 232
+        height: 216
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_44
+      rect:
+        serializedVersion: 2
+        x: 1020
+        y: 1257
+        width: 221
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_45
+      rect:
+        serializedVersion: 2
+        x: 1273
+        y: 1261
+        width: 236
+        height: 228
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_46
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 1021
+        width: 480
+        height: 236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_47
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 997
+        width: 625
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_48
+      rect:
+        serializedVersion: 2
+        x: 1253
+        y: 1021
+        width: 500
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_49
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 808
+        width: 198
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_50
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 809
+        width: 163
+        height: 203
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

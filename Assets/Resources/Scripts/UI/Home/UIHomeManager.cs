@@ -13,6 +13,11 @@ namespace Impulse.UI
 
         private void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
             _instance = this;
         }
 
@@ -21,9 +26,21 @@ namespace Impulse.UI
             FadeIn();
         }
 
-        public void GameButton()
+        public void LevelSelectButton()
         {
-            Main.SetScene(Main.Scene.game);
+            Main.SetScene(Main.Scene.levelselection);
+            FadeOut();
+        }
+
+        public void TutorialButton()
+        {
+            Main.SetScene(Main.Scene.tutorial);
+            FadeOut();
+        }
+
+        public void SettingsButton()
+        {
+            Main.SetScene(Main.Scene.levelselection);
             FadeOut();
         }
 

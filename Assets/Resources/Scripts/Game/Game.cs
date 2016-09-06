@@ -38,10 +38,12 @@ namespace Impulse
 
         private void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
             _instance = this;
-            ProgressManager.ClearProgress();
-            ProgressManager.LoadProgressData();
-            //SetGameState(GameState.ready);
         }
 
         private void Start()

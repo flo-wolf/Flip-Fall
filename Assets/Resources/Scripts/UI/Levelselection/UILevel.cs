@@ -16,8 +16,10 @@ namespace Impulse.UI
         public Image Star3;
 
         //Times
-        public Text bestText;
-        public Text ghostText;
+        public Text timeSecText;
+        public Text timeMilText;
+        public Text topTimeSecText;
+        public Text topTimeMilText;
 
         public Text levelNumberText;
         public Button levelButton;
@@ -100,27 +102,39 @@ namespace Impulse.UI
 
         public void UpdateTexts()
         {
+            Debug.Log("UILevel updatetexts: " + id);
+
             if (UILevelMatchesLevel() && id <= ProgressManager.GetProgress().lastUnlockedLevel)
             {
-                ghostText.text = Constants.FormatTime(LevelManager.GetLevel(id).presetTime);
+                double topTime = LevelManager.GetLevel(id).presetTime;
+
+                topTimeSecText.text = ((int)topTime).ToString();
+                topTimeMilText.text = ((topTime - (int)topTime) * 100).ToString();
                 levelNumberText.text = id.ToString();
 
                 Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
                 if (h != null)
-                    bestText.text = Constants.FormatTime(h.bestTime + 0.01F);
+                {
+                    double bestTime = h.bestTime;
+                    bestTime = Mathf.Round((float)bestTime * 100f) / 100f;
+
+                    Debug.Log("bestTime: " + bestTime);
+                    timeSecText.text = ((int)bestTime).ToString();
+                    timeMilText.text = ((bestTime - (int)bestTime) * 100).ToString();
+                }
             }
         }
 
-        //depreciated, updated are done through UpdateTexts()
-        public void SetBestText(Highscore h)
-        {
-            if (UILevelMatchesLevel())
-            {
-                bestText.text = Constants.FormatTime(h.bestTime + 0.01F);
-                ghostText.text = Constants.FormatTime(LevelManager.GetLevel(h.levelId).presetTime);
-                levelNumberText.text = id.ToString();
-            }
-        }
+        ////depreciated, updated are done through UpdateTexts()
+        //public void SetBestText(Highscore h)
+        //{
+        //    if (UILevelMatchesLevel())
+        //    {
+        //        bestText.text = Constants.FormatTime(h.bestTime + 0.01F);
+        //        ghostText.text = Constants.FormatTime(LevelManager.GetLevel(h.levelId).presetTime);
+        //        levelNumberText.text = id.ToString();
+        //    }
+        //}
 
         public void PlayLevel()
         {

@@ -43,6 +43,7 @@ namespace Impulse.UI
 
         public void HomeBtnClicked(Button b)
         {
+            Main.SetScene(Main.Scene.home);
             onButtonClick.Invoke(b);
         }
 

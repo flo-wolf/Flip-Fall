@@ -19,7 +19,13 @@ namespace Impulse.UI
 
         private void Start()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
             _instance = this;
+
             FadeIn();
 
             Game.onGameStateChange.AddListener(GameStateChanged);

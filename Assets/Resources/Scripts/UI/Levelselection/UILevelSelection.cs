@@ -10,147 +10,96 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Shows and hides all levels, gets moved by the
+/// Handles the UI Elememnts for the levelselection scene
+/// Singletone
 /// </summary>
 namespace Impulse.UI
 {
     public class UILevelSelection : MonoBehaviour
     {
         public static UILevelSelection _instance;
-        public static int currentPage = 1;
-        public static int pageCount = 10;
-        public float fadeOutTime = 1F;
-        public float fadeInTime = 1F;
+        public static UILevel currentUILevel;
 
         private static List<Highscore> highscores;
         private static Highscore highscore;
-        public Text pageText;
 
         public Animation fadeAnimation;
         public Animation pageAnimation;
-        public Animation pageInfoAnim;
+
+        public float fadeOutTime = 1F;
+        public float fadeInTime = 1F;
 
         private bool levelChosen;
 
-        // Use this for initialization
         private void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
             _instance = this;
         }
 
         private void Start()
         {
-            UIStarCount.Show();
-
-            UpdatePageCount();
-            FadeIn();
             Main.onSceneChange.AddListener(SceneChanging);
+            UpdateLevelView();
+            //FadeIn();
+            _instance.fadeAnimation.Play("fadeFromBlack");
         }
 
         private void SceneChanging(Main.Scene scene)
         {
             fadeAnimation.Play("fadeToBlack");
+            //FadeOut();
         }
 
-        public static void Show()
+        public void NextLevel(Button b)
         {
-            //animations fade in / bounce in
-            _instance.gameObject.SetActive(true);
-            _instance.UpdatePage();
-            FadeIn();
-        }
-
-        public static void Hide()
-        {
-            ProgressManager.SaveProgressData();
-            FadeOut();
-        }
-
-        public void NextPage(Button b)
-        {
-            if (currentPage + 1 <= pageCount)
+            if (currentUILevel.id + 1 <= Constants.lastLevel)
             {
-                currentPage++;
-                UpdatePageCount();
+                UpdateLevelView();
             }
         }
 
-        public void LastPage(Button b)
+        public void LastLevel(Button b)
         {
-            if (currentPage - 1 >= 1)
+            if (currentUILevel.id - 1 >= 1)
             {
-                currentPage--;
-                UpdatePageCount();
+                UpdateLevelView();
             }
         }
 
         public static void FadeIn()
         {
             Debug.Log("[UILevelSelection] FadeIn()");
-            _instance.fadeAnimation.Play("fadeFromBlack");
             _instance.pageAnimation.Play("pageShow");
-            _instance.pageInfoAnim.Play();
-            _instance.StartCoroutine(_instance.cEnablePages(_instance.fadeInTime));
         }
 
         public static void FadeOut()
         {
             Debug.Log("[UILevelSelection] FadeOut()");
             _instance.pageAnimation.Play("pageHide");
-            _instance.pageInfoAnim.Play();
-
-            _instance.StartCoroutine(_instance.cDisablePages(_instance.fadeOutTime));
         }
 
-        private IEnumerator cEnablePages(float delay)
+        public void HomeBtnClicked()
         {
-            yield return new WaitForSeconds(delay);
-            ScrollRect pagesScrollRect = gameObject.GetComponentInChildren<ScrollRect>();
-            pagesScrollRect.enabled = true;
-        }
-
-        private IEnumerator cDisablePages(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            ScrollRect pagesScrollRect = gameObject.GetComponentInChildren<ScrollRect>();
-            pagesScrollRect.enabled = false;
-        }
-
-        private static void UpdatePageCount()
-        {
-            //edit to only update those visible in the cameraview, not neccessarily all UILevels
-            _instance.pageText.text = currentPage.ToString();
-            _instance.UpdatePage();
+            Main.SetScene(Main.Scene.home);
         }
 
         //Updates the scores in the text fields inside the levelselection for all levels
         //called on GameState.levelselection/finishscreen
-        private void UpdatePage()
+        private void UpdateLevelView()
         {
-            //edit to only update those visible in the cameraview, not neccessarily all UILevels
-            highscores = ProgressManager.GetProgress().highscores;
-
-            List<UILevel> pageUiLevels = GetCurrentPageUILevels();
-
-            foreach (UILevel l in pageUiLevels)
+            UIStarCount.Show();
+            UILevel l = GetUILevel(LevelManager.GetID());
+            if (l != null && l.UILevelMatchesLevel())
             {
-                if (l != null && l.UILevelMatchesLevel())
-                {
-                    l.UpdateTexts();
-                    l.UpdateStars();
-                    l.UpdateButton();
-                }
+                l.UpdateTexts();
+                l.UpdateStars();
+                l.UpdateButton();
             }
-        }
-
-        private List<UILevel> GetCurrentPageUILevels()
-        {
-            List<UILevel> uiLevels = new List<UILevel>();
-            for (int i = 0; i < Constants.itemsPerPage; i++)
-            {
-                uiLevels.Add(GetUILevel(i * currentPage));
-            }
-            return uiLevels;
         }
 
         public static UILevel GetUILevel(int id)
