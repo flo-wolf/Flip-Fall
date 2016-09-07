@@ -35,11 +35,11 @@ namespace Impulse.UI
             _instance = this;
 
             FadeIn();
+            Main.onSceneChange.AddListener(SceneChanging);
 
             reflectSprite = reflectImage.sprite;
             chargeSprite = chargeImage.sprite;
             SetSprites();
-            Main.onSceneChange.AddListener(SceneChanging);
         }
 
         private void SceneChanging(Main.Scene scene)
@@ -57,11 +57,6 @@ namespace Impulse.UI
             fadeAnimation.Play("fadeToBlack");
         }
 
-        public void HomeButtonClicked()
-        {
-            Main.SetScene(Main.Scene.home);
-        }
-
         private void SetSprites()
         {
             bool chargeLeft = ProgressManager.GetProgress().settings.chargeOnLeftSide;
@@ -73,6 +68,11 @@ namespace Impulse.UI
                 reflectSprite = reflectImage.sprite;
                 chargeSprite = chargeImage.sprite;
             }
+        }
+
+        public void HomeButtonClicked()
+        {
+            Main.SetScene(Main.Scene.home);
         }
 
         public void SwitchControls()

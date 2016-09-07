@@ -49,6 +49,11 @@ namespace Impulse.UI
             fadeAnimation.Play("fadeFromBlack");
         }
 
+        public void HomeButton()
+        {
+            Main.SetScene(Main.Scene.home);
+        }
+
         private void FadeOut()
         {
             fadeAnimation.Play("fadeToBlack");

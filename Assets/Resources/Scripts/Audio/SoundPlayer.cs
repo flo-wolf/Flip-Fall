@@ -1,4 +1,5 @@
 ﻿using Impulse.Cam;
+using Impulse.Progress;
 using System.Collections;
 using UnityEngine;
 
@@ -22,6 +23,10 @@ namespace Impulse.Audio
 
         public AudioListener audioListener;
 
+        //storage, values gathered rom progress.settings on each scene change
+        private float musicVolume;
+        private float fxVolume;
+
         private void Awake()
         {
             if (_instance != null && _instance != this)
@@ -34,6 +39,13 @@ namespace Impulse.Audio
             DontDestroyOnLoad(this.gameObject);
 
             //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
+            Main.onSceneChange.AddListener(SceneChanged);
+        }
+
+        public void SceneChanged(Main.Scene s)
+        {
+            musicVolume = ProgressManager.GetProgress().settings.musicVolume;
+            fxVolume = ProgressManager.GetProgress().settings.fxVolume;
         }
 
         //Used to play single sound clips.
@@ -46,7 +58,7 @@ namespace Impulse.Audio
             sfxSource.pitch = 1;
 
             //Play the clip.
-            sfxSource.PlayOneShot(clip, playSingleVolume);
+            sfxSource.PlayOneShot(clip, fxVolume);
         }
 
         //RandomizeSfx chooses randomly between various audio clips and slightly changes their pitch.
@@ -62,7 +74,7 @@ namespace Impulse.Audio
             sfxSourceRdmPitch.pitch = randomPitch;
 
             //Set the clip to the clip at our randomly chosen index.
-            sfxSourceRdmPitch.PlayOneShot(clips[randomIndex], playSingleVolume);
+            sfxSourceRdmPitch.PlayOneShot(clips[randomIndex], fxVolume);
         }
     }
 }
