@@ -17,6 +17,8 @@ namespace Impulse.Progress
     public class ProgressData
     {
         public List<Highscore> highscores = new List<Highscore>();
+        public Settings settings = new Settings();
+
         //public HighscoreEvent;
 
         //public List<Achievements>

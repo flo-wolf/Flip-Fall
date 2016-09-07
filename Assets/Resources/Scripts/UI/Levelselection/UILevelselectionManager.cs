@@ -15,9 +15,9 @@ using UnityEngine.UI;
 /// </summary>
 namespace Impulse.UI
 {
-    public class UILevelSelection : MonoBehaviour
+    public class UILevelselectionManager : MonoBehaviour
     {
-        public static UILevelSelection _instance;
+        public static UILevelselectionManager _instance;
         public static UILevel currentUILevel;
 
         private static List<Highscore> highscores;

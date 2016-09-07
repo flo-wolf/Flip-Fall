@@ -83,6 +83,11 @@ namespace Impulse
             yield break;
         }
 
+        private void OnApplicationQuit()
+        {
+            ProgressManager.SaveProgressData();
+        }
+
         public class SceneChangeEvent : UnityEvent<Scene> { }
     }
 }

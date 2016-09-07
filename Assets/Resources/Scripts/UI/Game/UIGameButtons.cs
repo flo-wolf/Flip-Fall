@@ -1,4 +1,5 @@
 ﻿using Impulse;
+using Impulse.Progress;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -31,6 +32,7 @@ namespace Impulse.UI
         private void Start()
         {
             player = Player._instance;
+            chargeOnLeftSide = ProgressManager.GetProgress().settings.chargeOnLeftSide;
         }
 
         public static void Show(Button b)

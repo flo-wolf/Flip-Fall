@@ -23,6 +23,8 @@ namespace Impulse.UI
 
         public Text levelNumberText;
         public Button levelButton;
+        public Button prevBtn;
+        public Button lastBtn;
 
         private int starScore = 0;
 

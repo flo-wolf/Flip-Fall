@@ -40,7 +40,7 @@ namespace Impulse.UI
 
         public void SettingsButton()
         {
-            Main.SetScene(Main.Scene.levelselection);
+            Main.SetScene(Main.Scene.settings);
             FadeOut();
         }
 
