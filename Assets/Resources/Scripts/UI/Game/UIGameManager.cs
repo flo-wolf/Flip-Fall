@@ -26,7 +26,7 @@ namespace Impulse.UI
             }
             _instance = this;
 
-            FadeIn();
+            //FadeIn();
 
             Game.onGameStateChange.AddListener(GameStateChanged);
             Player.onPlayerAction.AddListener(PlayerAction);

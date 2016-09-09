@@ -32,6 +32,7 @@ namespace Impulse.Audio
         public AudioClip defaultButtonSound;
         public AudioClip levelselectionAppearSound;
         public AudioClip camTransitionSound;
+        public AudioClip uiLevelSwitchSound;
 
         [Header("Music")]
         public AudioClip backgroundSound;
@@ -54,10 +55,26 @@ namespace Impulse.Audio
             LevelManager.onLevelChange.AddListener(LevelChanged);
             UIGameButtons.onButtonClick.AddListener(ButtonClicked);
             UIGameButtons.onButtonRelease.AddListener(ButtonReleased);
+            //UILevelselectionManager.onUILevelSwitch.AddListener(UILevelSwitched);
+            UILevelDrag.onBounceBack.AddListener(UILevelBouncedBack);
+            Main.onSceneChange.AddListener(SceneChanging);
         }
 
         private void Start()
         {
+        }
+
+        private void SceneChanging(Main.Scene scene)
+        {
+            switch (scene)
+            {
+                case Main.Scene.game:
+                    break;
+
+                default:
+                    soundPlayer.PlaySingle(reflectSound);
+                    break;
+            }
         }
 
         //Listener
@@ -164,6 +181,23 @@ namespace Impulse.Audio
         private void LevelChanged(Level level)
         {
             soundPlayer.PlaySingle(levelChangeSound);
+        }
+
+        public static void UILevelSwitched()
+        {
+            Debug.Log("1111");
+            _instance.soundPlayer.PlaySingle(_instance.uiLevelSwitchSound);
+        }
+
+        //CHANGE SOUND IN HERE!
+        public static void UILevelBouncedBack()
+        {
+            _instance.soundPlayer.PlaySingle(_instance.uiLevelSwitchSound);
+        }
+
+        public static void PlayCamTransitionSound()
+        {
+            _instance.soundPlayer.PlaySingle(_instance.camTransitionSound);
         }
     }
 }

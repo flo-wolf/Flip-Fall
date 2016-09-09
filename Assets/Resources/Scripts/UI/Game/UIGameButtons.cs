@@ -18,7 +18,7 @@ namespace Impulse.UI
         public Button resumeBtn;
 
         public Animator pauseAnimator;
-        public Animator resumeAnimator;
+        public Animation timerAnimator;
 
         public float buttonSwitchDelay = 0.25F;
 
@@ -27,12 +27,22 @@ namespace Impulse.UI
         private void Awake()
         {
             _instance = this;
+            pauseAnimator.SetBool("fadeout", false);
         }
 
         private void Start()
         {
             player = Player._instance;
             chargeOnLeftSide = ProgressManager.GetProgress().settings.chargeOnLeftSide;
+            timerAnimator.Play("uiLevelselectionFadeIn");
+            pauseAnimator.SetBool("fadeout", false);
+            Main.onSceneChange.AddListener(SceneChanged);
+        }
+
+        public void SceneChanged(Main.Scene sc)
+        {
+            timerAnimator.Play("uiLevelselectionFadeOut");
+            pauseAnimator.SetBool("fadeout", true);
         }
 
         public static void Show(Button b)
@@ -69,7 +79,7 @@ namespace Impulse.UI
             if (Player._instance.IsAlive())
             {
                 Time.timeScale = 1;
-                resumeAnimator.SetBool("fadeout", true);
+                pauseAnimator.SetBool("fadeout", false);
                 StartCoroutine(cPauseResumeSwitch(resumeBtn, pauseBtn));
                 Game.SetGameState(Game.GameState.playing);
             }

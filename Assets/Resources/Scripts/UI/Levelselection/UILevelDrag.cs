@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Impulse.UI
@@ -9,15 +10,21 @@ namespace Impulse.UI
     public class UILevelDrag : MonoBehaviour
     {
         public static UILevelDrag _instance;
-        public GameObject dragObject;
         public float fallBackDuration = 0.5F;
 
         //if a drag's length is smaller than the percantage value of the screen width it wont switch to the next item
         public float minScreenWidthPercentToSwitch = 0.3f;
 
+        //the object that is to be dragged
+        private GameObject dragObject;
+
         private Vector2 touchCache;
-        private Vector3 originDragObjectPos;
         private Vector3 newDragObjectPos;
+        private Vector3 defaultPosition = new Vector3(0, 0, 0);
+
+        public static BounceBackEvent onBounceBack = new BounceBackEvent();
+
+        public class BounceBackEvent : UnityEvent { }
 
         //Drag length registration
         private Vector2 dragBeginPos;
@@ -49,7 +56,21 @@ namespace Impulse.UI
         {
             screenHeight = Screen.height;
             screenWidth = Screen.width;
-            originDragObjectPos = dragObject.transform.position;
+
+            _instance.dragObject = UILevelPlacer.placingParent;
+            _instance.dragging = false;
+            _instance.dragLength = 0;
+            _instance.collectInput = true;
+            // UpdateDragObject();
+        }
+
+        public static void UpdateDragObject()
+        {
+            _instance.dragObject = UILevelPlacer.placingParent;
+            //_instance.dragging = false;
+            ////_instance.dragLength = 0;
+            ////_instance.collectInput = true;
+            _instance.StartCoroutine(_instance.lerpBackToOrigin());
         }
 
         private void Update()
@@ -74,10 +95,26 @@ namespace Impulse.UI
                     //Drag is long enough to switch to the next level
                     if (Mathf.Abs(dragLength) >= screenWidth * minScreenWidthPercentToSwitch)
                     {
-                        StartCoroutine(lerpBackToOrigin());
-                        //UILevelselectionManager.SwitchLeft();
+                        //drag to the right
+                        if (dragLength > 0)
+                        {
+                            if (!UILevelselectionManager.LastLevel())
+                            {
+                                StartCoroutine(lerpBackToOrigin());
+                            }
+                        }
+                        //drag to the left
+                        else
+                        {
+                            if (!UILevelselectionManager.NextLevel())
+                            {
+                                StartCoroutine(lerpBackToOrigin());
+                            }
+                        }
+                        onBounceBack.Invoke();
                     }
-                    newDragObjectPos = new Vector3(originDragObjectPos.x + dragLength, originDragObjectPos.y, originDragObjectPos.z);
+                    newDragObjectPos = new Vector3(defaultPosition.x + dragLength, defaultPosition.y, defaultPosition.z);
+                    //Debug.Log(dragLength + " " + originDragObjectPos.x);
                     touched = true;
                 }
                 else if (Input.GetMouseButtonUp(0))
@@ -88,6 +125,8 @@ namespace Impulse.UI
                     if (dragLength <= screenWidth * minScreenWidthPercentToSwitch)
                     {
                         StartCoroutine(lerpBackToOrigin());
+                        if (dragLength > 20 || dragLength < -20)
+                            onBounceBack.Invoke();
                     }
                 }
 #endif
@@ -112,7 +151,7 @@ namespace Impulse.UI
                         {
                             StartCoroutine(lerpBackToOrigin());
                         }
-                        newDragObjectPos = new Vector3(originDragObjectPos.x + dragLength, originDragObjectPos.y, originDragObjectPos.z);
+                        newDragObjectPos = new Vector3(defaultPosition.x + dragLength, defaultPosition.y, defaultPosition.z);
                         touched = true;
                     }
 
@@ -133,7 +172,8 @@ namespace Impulse.UI
         {
             if (touched)
             {
-                dragObject.transform.position = newDragObjectPos;
+                //Debug.Log(newDragObjectPos);
+                dragObject.transform.localPosition = newDragObjectPos;
                 touched = false;
             }
         }
@@ -142,11 +182,11 @@ namespace Impulse.UI
         {
             collectInput = false;
             float t = 0;
-            Vector3 dragPos = dragObject.transform.position;
+            Vector3 dragPos = dragObject.transform.localPosition;
             while (t < 1F)
             {
                 t += Time.deltaTime * (Time.timeScale / fallBackDuration);
-                dragObject.transform.position = Vector3.Lerp(dragPos, originDragObjectPos, t);
+                dragObject.transform.localPosition = Vector3.Lerp(dragPos, new Vector3(0, 0, 0), t);
                 yield return 0;
             }
             dragLength = 0;

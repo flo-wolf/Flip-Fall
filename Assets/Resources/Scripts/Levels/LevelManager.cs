@@ -67,7 +67,6 @@ namespace Impulse.Levels
 
         public static int GetID()
         {
-            Debug.Log(_instance);
             if (_instance.activeLevel != null)
                 return _instance.activeLevel.id;
             else

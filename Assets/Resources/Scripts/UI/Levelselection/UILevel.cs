@@ -22,45 +22,26 @@ namespace Impulse.UI
         public Text topTimeMilText;
 
         public Text levelNumberText;
-        public Button levelButton;
-        public Button prevBtn;
-        public Button lastBtn;
 
         private int starScore = 0;
 
         public void Start()
         {
-            if (levelButton == null)
-                levelButton = gameObject.GetComponentInChildren<Button>();
-            UpdateButton();
-
             Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
             if (h != null && h.starCount > 0)
             {
                 starScore = h.starCount;
             }
             Highscore.onLevelStarChange.AddListener(HighscoreStarChanged);
+
+            UpdateTexts();
+            UpdateStars();
         }
 
         private void HighscoreStarChanged(int stars, int levelId)
         {
             if (levelId == id)
                 SetStars(stars);
-        }
-
-        //if there is no level corresponding to the UILevel Element then deactivate the buttons functions
-        public void UpdateButton()
-        {
-            if (!LevelManager.LevelExists(id) || id > ProgressManager.GetProgress().lastUnlockedLevel)
-            {
-                levelButton.interactable = false;
-                levelNumberText.text = "";
-            }
-            else
-            {
-                levelButton.interactable = true;
-                levelNumberText.text = id.ToString();
-            }
         }
 
         public void SetStars(int newStars)
@@ -106,8 +87,9 @@ namespace Impulse.UI
         {
             Debug.Log("UILevel updatetexts: " + id);
 
-            if (UILevelMatchesLevel() && id <= ProgressManager.GetProgress().lastUnlockedLevel)
+            if (UILevelMatchesLevel())
             {
+                Debug.Log("UILevel 1");
                 double topTime = LevelManager.GetLevel(id).presetTime;
 
                 topTimeSecText.text = ((int)topTime).ToString();
@@ -117,12 +99,17 @@ namespace Impulse.UI
                 Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
                 if (h != null)
                 {
+                    Debug.Log("UILevel 2");
                     double bestTime = h.bestTime;
                     bestTime = Mathf.Round((float)bestTime * 100f) / 100f;
 
-                    Debug.Log("bestTime: " + bestTime);
                     timeSecText.text = ((int)bestTime).ToString();
                     timeMilText.text = ((bestTime - (int)bestTime) * 100).ToString();
+                }
+                else
+                {
+                    timeSecText.text = "--";
+                    timeMilText.text = "--";
                 }
             }
         }
@@ -137,17 +124,6 @@ namespace Impulse.UI
         //        levelNumberText.text = id.ToString();
         //    }
         //}
-
-        public void PlayLevel()
-        {
-            //level can be set
-            if (LevelManager.LevelExists(id))
-            {
-                LevelManager.SetLevel(id);
-                Main.SetScene(Main.Scene.game);
-            }
-            // else - animate failure
-        }
 
         public bool UILevelMatchesLevel()
         {

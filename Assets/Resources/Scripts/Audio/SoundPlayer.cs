@@ -35,6 +35,9 @@ namespace Impulse.Audio
                 return;
             }
 
+            musicVolume = ProgressManager.GetProgress().settings.musicVolume;
+            fxVolume = ProgressManager.GetProgress().settings.fxVolume;
+
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
 
