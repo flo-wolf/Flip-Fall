@@ -85,6 +85,7 @@ namespace Impulse.Levels
 
         public static Spawn GetSpawn()
         {
+            Debug.Log("activeLevel: " + _instance.activeLevel);
             return _instance.activeLevel.spawn;
         }
 

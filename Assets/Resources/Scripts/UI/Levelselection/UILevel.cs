@@ -99,12 +99,18 @@ namespace Impulse.UI
                 Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
                 if (h != null)
                 {
+                    if (ProgressManager.GetProgress().lastUnlockedLevel <= id)
+                        ProgressManager.GetProgress().lastUnlockedLevel++;
                     Debug.Log("UILevel 2");
                     double bestTime = h.bestTime;
                     bestTime = Mathf.Round((float)bestTime * 100f) / 100f;
 
-                    timeSecText.text = ((int)bestTime).ToString();
-                    timeMilText.text = ((bestTime - (int)bestTime) * 100).ToString();
+                    string secs = ((int)bestTime).ToString();
+                    timeSecText.text = secs;
+
+                    string milSecs = ((bestTime - (int)bestTime) * 100).ToString();
+                    milSecs = milSecs.Substring(2);
+                    timeMilText.text = milSecs;
                 }
                 else
                 {

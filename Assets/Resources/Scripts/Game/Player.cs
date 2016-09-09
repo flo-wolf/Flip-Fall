@@ -123,6 +123,7 @@ namespace Impulse
         private void ReloadSpawnPoint()
         {
             spawn = LevelManager.GetSpawn();
+            Debug.Log(spawn);
             spawnPosition = spawn.GetPosition();
             spawnPosition.z = Constants.playerZ;
             facingLeft = spawn.facingLeftOnSpawn;

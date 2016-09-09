@@ -36,6 +36,24 @@ namespace Impulse.Levels
             return level;
         }
 
+        public static int GetLastExistingLevel()
+        {
+            Level l = null;
+            int currentHighest = 1;
+            for (int i = 0; i < Constants.lastLevel; i++)
+            {
+                GameObject go = (GameObject)Resources.Load("Prefabs/Levels/" + i);
+
+                if (go != null)
+                {
+                    l = go.GetComponent<Level>();
+                    if (l.id > currentHighest)
+                        currentHighest = l.id;
+                }
+            }
+            return currentHighest;
+        }
+
         public static void SaveLevel(Level level)
         {
 #if UNITY_EDITOR

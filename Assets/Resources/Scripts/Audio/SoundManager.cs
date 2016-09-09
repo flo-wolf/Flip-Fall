@@ -137,7 +137,7 @@ namespace Impulse.Audio
             switch (gameState)
             {
                 case Game.GameState.playing:
-                    soundPlayer.PlaySingle(playSound);
+                    //soundPlayer.PlaySingle(playSound);
                     break;
 
                 case Game.GameState.deathscreen:
