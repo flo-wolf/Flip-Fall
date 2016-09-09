@@ -13,6 +13,9 @@ namespace Impulse.UI
     {
         public static UISettingsManager _instance;
         public Animation fadeAnimation;
+        public Animation homeAnimation;
+        public Animation resetAnimation;
+        public Animation testSaveAnimation;
 
         public Slider fxSlider;
         public Slider musicSlider;
@@ -61,11 +64,23 @@ namespace Impulse.UI
         public void UnlockAllButtonClicked()
         {
             ProgressManager.GetProgress().lastUnlockedLevel = LevelLoader.GetLastExistingLevel();
+            SoundManager.ButtonClicked();
+            testSaveAnimation.Play("buttonClick");
+        }
+
+        public void ResetProgress()
+        {
+            ProgressManager.ClearProgress();
+            SoundManager.ButtonClicked();
+            resetAnimation.Play("buttonClick");
         }
 
         public void HomeButtonClicked()
         {
             Main.SetScene(Main.Scene.home);
+            ProgressManager.ClearProgress();
+            SoundManager.ButtonClicked();
+            homeAnimation.Play("buttonClick");
         }
 
         public void FXSliderChanged(Slider s)
@@ -76,11 +91,6 @@ namespace Impulse.UI
         public void MusicSliderChanged(Slider s)
         {
             ProgressManager.GetProgress().settings.musicVolume = s.value;
-        }
-
-        public void ResetProgress()
-        {
-            ProgressManager.ClearProgress();
         }
     }
 }

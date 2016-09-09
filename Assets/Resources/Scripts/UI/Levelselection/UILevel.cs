@@ -85,31 +85,40 @@ namespace Impulse.UI
 
         public void UpdateTexts()
         {
-            Debug.Log("UILevel updatetexts: " + id);
+            Debug.Log("UILevel Updatetexts of id: " + id);
 
             if (UILevelMatchesLevel())
             {
-                Debug.Log("UILevel 1");
                 double topTime = LevelManager.GetLevel(id).presetTime;
 
-                topTimeSecText.text = ((int)topTime).ToString();
-                topTimeMilText.text = ((topTime - (int)topTime) * 100).ToString();
                 levelNumberText.text = id.ToString();
+
+                //Preset (top) time seconds
+                string topSec = ((int)topTime).ToString();
+                topTimeSecText.text = topSec;
+
+                //Preset (top) time milseconds
+                string topMilSec = ((topTime - (int)topTime) * 100).ToString();
+                if (topMilSec.Length == 1)
+                    topMilSec = topMilSec + "0";
+                topTimeMilText.text = topMilSec;
 
                 Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
                 if (h != null)
                 {
                     if (ProgressManager.GetProgress().lastUnlockedLevel <= id)
                         ProgressManager.GetProgress().lastUnlockedLevel++;
-                    Debug.Log("UILevel 2");
+
                     double bestTime = h.bestTime;
                     bestTime = Mathf.Round((float)bestTime * 100f) / 100f;
 
+                    //Personal best time seconds
                     string secs = ((int)bestTime).ToString();
                     timeSecText.text = secs;
 
+                    //Personal best time milseconds
                     string milSecs = ((bestTime - (int)bestTime) * 100).ToString();
-                    milSecs = milSecs.Substring(2);
+                    milSecs = milSecs.Substring(0, 2);
                     timeMilText.text = milSecs;
                 }
                 else

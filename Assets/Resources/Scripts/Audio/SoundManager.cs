@@ -72,7 +72,7 @@ namespace Impulse.Audio
                     break;
 
                 default:
-                    soundPlayer.PlaySingle(reflectSound);
+                    //soundPlayer.PlaySingle(reflectSound);
                     break;
             }
         }
@@ -163,6 +163,11 @@ namespace Impulse.Audio
             soundPlayer.PlaySingle(buttonClickSound);
         }
 
+        public static void ButtonClicked()
+        {
+            _instance.soundPlayer.PlaySingle(_instance.buttonClickSound);
+        }
+
         private void ButtonReleased(Button b)
         {
             soundPlayer.PlaySingle(buttonReleaseSound);
@@ -180,7 +185,7 @@ namespace Impulse.Audio
 
         private void LevelChanged(Level level)
         {
-            soundPlayer.PlaySingle(levelChangeSound);
+            //soundPlayer.PlaySingle(levelChangeSound);
         }
 
         public static void UILevelSwitched()

@@ -1,4 +1,5 @@
-﻿using Impulse.Levels;
+﻿using Impulse.Audio;
+using Impulse.Levels;
 using Impulse.Progress;
 using System.Collections;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace Impulse.UI
         //public static UIState uiState;
         public static UITutorialManager _instance;
         public Animation fadeAnimation;
+        public Animation switchAnimation;
+        public Animation homeAnimation;
 
         public Image reflectImage;
         public Image chargeImage;
@@ -72,12 +75,16 @@ namespace Impulse.UI
 
         public void HomeButtonClicked()
         {
+            SoundManager.ButtonClicked();
+            homeAnimation.Play("buttonClick");
             Main.SetScene(Main.Scene.home);
         }
 
         public void SwitchControls()
         {
             Debug.Log("Switched Controls");
+            SoundManager.ButtonClicked();
+            switchAnimation.Play("buttonClick");
             ProgressManager.GetProgress().settings.chargeOnLeftSide = !ProgressManager.GetProgress().settings.chargeOnLeftSide;
             reflectImage.sprite = chargeSprite;
             chargeImage.sprite = reflectSprite;

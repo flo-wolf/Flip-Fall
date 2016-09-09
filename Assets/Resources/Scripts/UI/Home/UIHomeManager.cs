@@ -1,4 +1,5 @@
 ﻿using Impulse;
+using Impulse.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,9 @@ namespace Impulse.UI
         public static UIHomeManager _instance;
 
         public Animation fadeAnimation;
+        public Animation levelAnimation;
+        public Animation settingsAnimation;
+        public Animation tutorialAnimation;
 
         private void Awake()
         {
@@ -29,18 +33,24 @@ namespace Impulse.UI
         public void LevelSelectButton()
         {
             Main.SetScene(Main.Scene.levelselection);
+            levelAnimation.Play("buttonClick");
+            SoundManager.ButtonClicked();
             FadeOut();
         }
 
         public void TutorialButton()
         {
             Main.SetScene(Main.Scene.tutorial);
+            tutorialAnimation.Play("buttonClick");
+            SoundManager.ButtonClicked();
             FadeOut();
         }
 
         public void SettingsButton()
         {
             Main.SetScene(Main.Scene.settings);
+            settingsAnimation.Play("buttonClick");
+            SoundManager.ButtonClicked();
             FadeOut();
         }
 

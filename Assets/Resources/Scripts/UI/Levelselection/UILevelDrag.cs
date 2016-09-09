@@ -134,22 +134,40 @@ namespace Impulse.UI
                 if (Input.touchCount >= 1)
                 {
                     Touch touch = Input.touches[0];
+                    Vector2 touchCache = touch.position;
 
                     //finger is on screen
                     if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
                     {
-                        touchCache = touch.position;
                         if (!dragging)
                         {
                             dragBeginPos = touchCache;
                             dragging = true;
                         }
 
+                        //claculate the length of the current drag
                         dragLength = (dragBeginPos.x - touchCache.x) * -1;
 
+                        //Drag is long enough to switch to the next level
                         if (Mathf.Abs(dragLength) >= screenWidth * minScreenWidthPercentToSwitch)
                         {
-                            StartCoroutine(lerpBackToOrigin());
+                            //drag to the right
+                            if (dragLength > 0)
+                            {
+                                if (!UILevelselectionManager.LastLevel())
+                                {
+                                    StartCoroutine(lerpBackToOrigin());
+                                }
+                            }
+                            //drag to the left
+                            else
+                            {
+                                if (!UILevelselectionManager.NextLevel())
+                                {
+                                    StartCoroutine(lerpBackToOrigin());
+                                }
+                            }
+                            onBounceBack.Invoke();
                         }
                         newDragObjectPos = new Vector3(defaultPosition.x + dragLength, defaultPosition.y, defaultPosition.z);
                         touched = true;
@@ -159,9 +177,12 @@ namespace Impulse.UI
                     else if (touch.phase == TouchPhase.Ended)
                     {
                         dragging = false;
+
                         if (dragLength <= screenWidth * minScreenWidthPercentToSwitch)
                         {
                             StartCoroutine(lerpBackToOrigin());
+                            if (dragLength > 20 || dragLength < -20)
+                                onBounceBack.Invoke();
                         }
                     }
                 }
@@ -194,5 +215,100 @@ namespace Impulse.UI
             collectInput = true;
             yield break;
         }
+
+        //        private void Update()
+        //        {
+        //            if (collectInput)
+        //            {
+        //                //If running game in editor
+        //#if UNITY_EDITOR
+        //                //If mouse button 0 is down
+        //                if (Input.GetMouseButton(0))
+        //                {
+        //                    Vector2 mouseCache = Input.mousePosition;
+        //                    if (!dragging)
+        //                    {
+        //                        dragBeginPos = mouseCache;
+        //                        dragging = true;
+        //                    }
+
+        //                    //claculate the length of the current drag
+        //                    dragLength = (dragBeginPos.x - mouseCache.x) * -1;
+
+        //                    //Drag is long enough to switch to the next level
+        //                    if (Mathf.Abs(dragLength) >= screenWidth * minScreenWidthPercentToSwitch)
+        //                    {
+        //                        //drag to the right
+        //                        if (dragLength > 0)
+        //                        {
+        //                            if (!UILevelselectionManager.LastLevel())
+        //                            {
+        //                                StartCoroutine(lerpBackToOrigin());
+        //                            }
+        //                        }
+        //                        //drag to the left
+        //                        else
+        //                        {
+        //                            if (!UILevelselectionManager.NextLevel())
+        //                            {
+        //                                StartCoroutine(lerpBackToOrigin());
+        //                            }
+        //                        }
+        //                        onBounceBack.Invoke();
+        //                    }
+        //                    newDragObjectPos = new Vector3(defaultPosition.x + dragLength, defaultPosition.y, defaultPosition.z);
+        //                    //Debug.Log(dragLength + " " + originDragObjectPos.x);
+        //                    touched = true;
+        //                }
+        //                else if (Input.GetMouseButtonUp(0))
+        //                {
+        //                    Vector2 mouseCache = Input.mousePosition;
+        //                    dragging = false;
+
+        //                    if (dragLength <= screenWidth * minScreenWidthPercentToSwitch)
+        //                    {
+        //                        StartCoroutine(lerpBackToOrigin());
+        //                        if (dragLength > 20 || dragLength < -20)
+        //                            onBounceBack.Invoke();
+        //                    }
+        //                }
+        //#endif
+        //                //If a touch is detected
+        //                if (Input.touchCount >= 1)
+        //                {
+        //                    Touch touch = Input.touches[0];
+
+        //                    //finger is on screen
+        //                    if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
+        //                    {
+        //                        touchCache = touch.position;
+        //                        if (!dragging)
+        //                        {
+        //                            dragBeginPos = touchCache;
+        //                            dragging = true;
+        //                        }
+
+        //                        dragLength = (dragBeginPos.x - touchCache.x) * -1;
+
+        //                        if (Mathf.Abs(dragLength) >= screenWidth * minScreenWidthPercentToSwitch)
+        //                        {
+        //                            StartCoroutine(lerpBackToOrigin());
+        //                        }
+        //                        newDragObjectPos = new Vector3(defaultPosition.x + dragLength, defaultPosition.y, defaultPosition.z);
+        //                        touched = true;
+        //                    }
+
+        //                    //finger got released
+        //                    else if (touch.phase == TouchPhase.Ended)
+        //                    {
+        //                        dragging = false;
+        //                        if (dragLength <= screenWidth * minScreenWidthPercentToSwitch)
+        //                        {
+        //                            StartCoroutine(lerpBackToOrigin());
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
     }
 }

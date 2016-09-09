@@ -29,6 +29,7 @@ namespace Impulse.UI
         //References
         public Animation fadeAnimation;
         public Animation uiLevelAnimation;
+        public Animation homeAnimation;
         public Animation playButtonAnimation;
         public float fadeOutTime = 1F;
         public float fadeInTime = 1F;
@@ -53,17 +54,24 @@ namespace Impulse.UI
             UpdateLevelView();
             UILevelDrag.UpdateDragObject();
             fadeAnimation.Play("fadeFromBlack");
-            uiLevelAnimation.Play("uiLevelselectionFadeIn");
+            //uiLevelAnimation.Play("uiLevelselectionFadeIn");
         }
 
         private void SceneChanging(Main.Scene scene)
         {
-            currentUILevel = UILevelPlacer.LoadUILevel(ProgressManager.GetProgress().lastUnlockedLevel);
-            UpdateLevelView();
-            UILevelDrag.UpdateDragObject();
-            //fadeAnimation.Play("fadeToBlack");
-            uiLevelAnimation.Play("uiLevelselectionFadeOut");
-            //FadeOut();
+            if (scene == Main.Scene.game)
+            {
+                //currentUILevel = UILevelPlacer.LoadUILevel(ProgressManager.GetProgress().lastUnlockedLevel);
+                //UpdateLevelView();
+                //UILevelDrag.UpdateDragObject();
+                //fadeAnimation.Play("fadeToBlack");
+                uiLevelAnimation.Play("uiLevelselectionFadeOut");
+                //FadeOut();
+            }
+            else
+            {
+                fadeAnimation.Play("fadeToBlack");
+            }
         }
 
         //display the next UILevel - if it exists and if it is unlocked, then place it
@@ -96,6 +104,8 @@ namespace Impulse.UI
 
         public void HomeBtnClicked()
         {
+            SoundManager.ButtonClicked();
+            homeAnimation.Play("buttonClick");
             Main.SetScene(Main.Scene.home);
         }
 
@@ -109,6 +119,7 @@ namespace Impulse.UI
         public void PlayLevel()
         {
             //level can be set
+            SoundManager.ButtonClicked();
             if (LevelManager.LevelExists(currentUILevel.id))
             {
                 LevelManager.SetLevel(currentUILevel.id);
