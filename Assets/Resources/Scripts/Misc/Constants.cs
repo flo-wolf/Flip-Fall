@@ -7,7 +7,7 @@ namespace Impulse
 {
     public static class Constants
     {
-        public const float twoStarPercantage = 0.1F;
+        public const float twoStarPercantage = 0.2F;
         public const float cameraZ = -20f;
         public const float playerZ = 0f;
         public const float ghostZ = 0f;

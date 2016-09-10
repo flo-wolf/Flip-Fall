@@ -155,6 +155,7 @@ namespace Impulse
             {
                 Debug.Log("TriggerEnter - Portal - Collider: " + collider.gameObject);
                 PortalHit(collider.gameObject.GetComponent<Portal>());
+
                 teleporting = true;
             }
         }
@@ -229,6 +230,8 @@ namespace Impulse
                     //StartCoroutine(cPlayerTeleport(portal.twinPortal.transform.position, teleportDuration));
                 }
             }
+            teleporting = false;
+            colliderList.Clear();
         }
 
         private IEnumerator cPlayerTeleport(Vector3 pos, float duration)
