@@ -13,7 +13,7 @@ using UnityEngine.Events;
 
 namespace Impulse.Progress
 {
-    public static class ProgressManager
+    public class ProgressManager : MonoBehaviour
     {
         public static string SavePath = "ProgressSave.dat";
         public static string SavePathAndroid = Application.persistentDataPath + "/ProgressSave.dat";
@@ -107,7 +107,11 @@ namespace Impulse.Progress
             }
 
             var bf = new BinaryFormatter();
-            Debug.Log("[ProgressManager]: SaveProgressData() id of current level " + progress.GetLastPlayedID());
+            if (progress.GetHighscore(progress.lastPlayedLevelID) != null)
+            {
+                Debug.Log("[ProgressManager]: SaveProgressData() besttime of level " + progress.lastPlayedLevelID + ": " + progress.GetHighscore(progress.lastPlayedLevelID).bestTime);
+            }
+
             bf.Serialize(file, progress);
             file.Close();
         }

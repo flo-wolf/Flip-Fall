@@ -101,11 +101,17 @@ namespace Impulse.UI
                 string topMilSec = ((topTime - (int)topTime) * 100).ToString();
                 if (topMilSec.Length == 1)
                     topMilSec = topMilSec + "0";
+                else if (topMilSec.Length == 0)
+                {
+                    topMilSec = topMilSec + "00";
+                }
                 topTimeMilText.text = topMilSec;
 
                 Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
                 if (h != null)
                 {
+                    Debug.Log("id: " + id);
+
                     if (ProgressManager.GetProgress().lastUnlockedLevel <= id)
                         ProgressManager.GetProgress().lastUnlockedLevel++;
 

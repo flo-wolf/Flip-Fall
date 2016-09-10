@@ -50,7 +50,7 @@ namespace Impulse.UI
         private void Start()
         {
             Main.onSceneChange.AddListener(SceneChanging);
-            currentUILevel = UILevelPlacer.LoadUILevel(ProgressManager.GetProgress().lastUnlockedLevel);
+            currentUILevel = UILevelPlacer.LoadUILevel(ProgressManager.GetProgress().lastPlayedLevelID);
             UpdateLevelView();
             UILevelDrag.UpdateDragObject();
             fadeAnimation.Play("fadeFromBlack");

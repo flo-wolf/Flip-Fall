@@ -50,6 +50,12 @@ namespace Impulse
         {
             LevelPlacer.Place(LevelManager.GetLevel());
             SetGameState(GameState.playing);
+            Main.onSceneChange.AddListener(SceneChanged);
+        }
+
+        private void SceneChanged(Main.Scene s)
+        {
+            ProgressManager.GetProgress().lastPlayedLevelID = LevelManager.GetID();
         }
 
         private void OnApplicationQuit()
@@ -74,7 +80,7 @@ namespace Impulse
                 case GameState.finishscreen:
                     Debug.Log("[Game] finishscreen");
                     Timer.Pause();
-                    if (LevelManager.GetID() == ProgressManager.GetProgress().lastUnlockedLevel)
+                    if (LevelManager.GetID() == ProgressManager.GetProgress().lastPlayedLevelID)
 
                         //this is now set in the UILevelitself
                         //ProgressManager.GetProgress().lastUnlockedLevel++;

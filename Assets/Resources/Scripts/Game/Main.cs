@@ -26,7 +26,6 @@ namespace Impulse
 
         private void Awake()
         {
-            ProgressManager.ClearProgress();
             ProgressManager.LoadProgressData();
 
             if (_instance != null && _instance != this)

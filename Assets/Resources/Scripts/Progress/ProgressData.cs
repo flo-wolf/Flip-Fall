@@ -25,7 +25,7 @@ namespace Impulse.Progress
         //public List<Unlocks>
         //public List<Settings>
         public int lastUnlockedLevel;
-        private int lastPlayedLevelID;
+        public int lastPlayedLevelID;
         public int totalStars;
         //add: unlocks, achievements, stats etc...
 
