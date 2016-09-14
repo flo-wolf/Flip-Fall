@@ -16,12 +16,15 @@ namespace Impulse.Levels
     public class LevelManager : MonoBehaviour
     {
         public static LevelManager _instance;
+        public static List<Level> levels;
         public static LevelChangeEvent onLevelChange = new LevelChangeEvent();
 
-        public class LevelChangeEvent : UnityEvent<Level> { }
+        public class LevelChangeEvent : UnityEvent<int> { }
 
-        public Level defaultlevel;
-        private Level activeLevel;
+        public static int activeLevel = 1;
+        public static int lastPlayedID;
+        public static int lastID;
+        public static int firstID;
 
         private void Awake()
         {
@@ -33,24 +36,25 @@ namespace Impulse.Levels
 
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
+
+            levels = LevelLoader.LoadLevels();
+            firstID = levels.First<Level>().id;
+            lastID = levels.Last<Level>().id;
         }
 
+        //This has to be OnEnable for loading order purposes.
         private void OnEnable()
         {
-            Reload();
+            lastPlayedID = ProgressManager.GetProgress().lastPlayedLevelID;
         }
 
         private void Start()
         {
         }
 
-        public void LoadLevel(int levelID)
-        {
-        }
-
         public static Level GetLevel()
         {
-            return _instance.activeLevel;
+            return levels[activeLevel];
         }
 
         public static Level GetLevel(int id)
@@ -58,77 +62,33 @@ namespace Impulse.Levels
             return LevelLoader.LoadLevel(id);
         }
 
-        public static void Reload()
-        {
-            int lastID = ProgressManager.GetProgress().GetLastPlayedID();
-            Debug.Log("[LevelManager]: Reload() lastID: " + lastID);
-            SetLevel(lastID);
-        }
-
-        public static int GetID()
-        {
-            if (_instance.activeLevel != null)
-                return _instance.activeLevel.id;
-            else
-                return -1;
-        }
-
-        public static int GetDefaultID()
-        {
-            return _instance.defaultlevel.id;
-        }
-
         public static Vector3 GetSpawnPosition()
         {
             return GetSpawn().GetPosition();
         }
 
+        public void SetLevel(int newID)
+        {
+            activeLevel = newID;
+            ProgressManager.GetProgress().lastPlayedLevelID = activeLevel;
+            onLevelChange.Invoke(newID);
+        }
+
         public static Spawn GetSpawn()
         {
-            Debug.Log("activeLevel: " + _instance.activeLevel);
-            return _instance.activeLevel.spawn;
+            Debug.Log("activeLevel: " + activeLevel);
+            return levels[activeLevel].spawn;
         }
 
-        //Try to Place Level with ID newID, destroying all other levels in the scene
-        //if the level can be placed OR if the level is alrady placed it returns true
-        public static void SetLevel(int newID)
-        {
-            //add fadein animation
-
-            if (Resources.Load("Prefabs/Levels/" + newID))
-            {
-                if (GetID() != newID)
-                {
-                    _instance.activeLevel = LevelLoader.LoadLevel(newID);
-                    ProgressManager.GetProgress().SetLastPlayedID(GetID());
-                    onLevelChange.Invoke(GetLevel());
-                }
-            }
-            else
-            {
-                Debug.LogError("ERROR setLevel() levelprefab not found");
-                Debug.Log("[LevelManager]: SetLevel(int) Level trying to be set does not exist!");
-            }
-        }
-
+        //Does this level exitst?
         public static bool LevelExists(int newID)
         {
-            if (Resources.Load("Prefabs/Levels/" + newID))
-            {
+            if (levels.Any<Level>(x => x.id == newID))
                 return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-        public static Vector2 GetFinish()
-        {
-            Vector2 finishlocation = new Vector2();
-            return finishlocation;
-        }
-
+        //
         //public void NextLevel()
         //{
         //    Debug.Log("[LevelManager]: NextLevel()");

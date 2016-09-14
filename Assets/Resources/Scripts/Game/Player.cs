@@ -114,7 +114,7 @@ namespace Impulse
 
         //Whenever the Level gets changed the LevelManager fires the LevelChangeEvent, calling this method.
         //Resets the Player to the Spawn
-        private void LevelChanged(Level level)
+        private void LevelChanged(int levelID)
         {
             ReloadSpawnPoint();
             MoveToSpawn();

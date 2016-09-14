@@ -1,4 +1,5 @@
 ﻿using Impulse.Progress;
+using Impulse.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -13,13 +14,31 @@ namespace Impulse.Levels
     {
         public static bool IsLoaded { get; private set; }
 
+        public static List<Level> LoadLevels()
+        {
+            int min = Constants.firstLevel;
+            int max = Constants.lastLevel;
+            int levelsLoadingLength = max - min + 1;
+
+            List<Level> levelsLoading = new List<Level>();
+            for (int i = min; i <= max; i++)
+            {
+                levelsLoading.Add(LoadLevel(i));
+            }
+            return levelsLoading;
+        }
+
         public static Level LoadLevel(int id)
         {
+            Debug.Log(id);
             Level level = null;
             try
             {
                 GameObject go = (GameObject)Resources.Load("Prefabs/Levels/" + id);
-                level = go.GetComponent<Level>();
+                if (go != null)
+                {
+                    level = go.GetComponent<Level>();
+                }
             }
             catch (UnityException e)
             {
@@ -36,23 +55,26 @@ namespace Impulse.Levels
             return level;
         }
 
-        public static int GetLastExistingLevel()
-        {
-            Level l = null;
-            int currentHighest = 1;
-            for (int i = 0; i < Constants.lastLevel; i++)
-            {
-                GameObject go = (GameObject)Resources.Load("Prefabs/Levels/" + i);
+        //public static int LoadLevels()
+        //{
+        //    //= new Level[levelsLoadingLength
 
-                if (go != null)
-                {
-                    l = go.GetComponent<Level>();
-                    if (l.id > currentHighest)
-                        currentHighest = l.id;
-                }
-            }
-            return currentHighest;
-        }
+        //    Level l = null;
+        //    int currentHighest = 1;
+        //    for (int i = 0; i < Constants.lastLevel; i++)
+        //    {
+        //        GameObject go = (GameObject)Resources.Load("Prefabs/Levels/" + i);
+
+        //        if (go != null)
+        //        {
+        //            l = go.GetComponent<Level>();
+
+        //            if (l.id > currentHighest)
+        //                currentHighest = l.id;
+        //        }
+        //    }
+        //    return currentHighest;
+        //}
 
         public static void SaveLevel(Level level)
         {

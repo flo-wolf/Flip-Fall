@@ -62,6 +62,7 @@ namespace Impulse.Audio
 
         private void Start()
         {
+            soundPlayer.PlayMusic(backgroundSound);
         }
 
         private void SceneChanging(Main.Scene scene)
@@ -183,7 +184,7 @@ namespace Impulse.Audio
             _instance.soundPlayer.PlaySingle(_instance.unvalidSound);
         }
 
-        private void LevelChanged(Level level)
+        private void LevelChanged(int levelID)
         {
             //soundPlayer.PlaySingle(levelChangeSound);
         }

@@ -35,22 +35,12 @@ namespace Impulse.Progress
             totalStars = 0;
             if (LevelLoader.IsLoaded)
             {
-                lastPlayedLevelID = LevelManager.GetID();
+                lastPlayedLevelID = LevelManager.lastPlayedID;
                 Debug.Log("[ProgressData] ProgressData(): LastPlayedID = " + lastPlayedLevelID);
             }
             else
                 lastPlayedLevelID = 1;
             highscores = new List<Highscore>();
-        }
-
-        public void SetLastPlayedID(int id)
-        {
-            lastPlayedLevelID = id;
-        }
-
-        public int GetLastPlayedID()
-        {
-            return lastPlayedLevelID;
         }
 
         //Updates existing highscores (if the score is better) or creates a new one if it doesnt exist already
@@ -95,7 +85,7 @@ namespace Impulse.Progress
 
         public Highscore GetCurrentHighscore()
         {
-            return GetHighscore(LevelManager.GetID());
+            return GetHighscore(LevelManager.activeLevel);
         }
     }
 }

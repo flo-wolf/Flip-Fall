@@ -1,10 +1,11 @@
 ﻿using Impulse.Cam;
 using Impulse.Progress;
+using Impulse.UI;
 using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Plays sounds, only referenced through the SoundManager
+/// Sound playing component of the SoundManager
 /// </summary>
 
 namespace Impulse.Audio
@@ -13,7 +14,6 @@ namespace Impulse.Audio
     {
         public static SoundPlayer _instance;     //Allows other scripts to call functions from SoundManager.
 
-        public float playSingleVolume = 1F;
         public AudioSource sfxSource;                   //Drag a reference to the audio source which will play the sound effects.
         public AudioSource sfxSourceRdmPitch;
         public AudioSource musicSource;                 //Drag a reference to the audio source which will play the music.
@@ -24,8 +24,8 @@ namespace Impulse.Audio
         public AudioListener audioListener;
 
         //storage, values gathered rom progress.settings on each scene change
-        private float musicVolume;
-        private float fxVolume;
+        private float musicVolume = 1;
+        private float fxVolume = 1;
 
         private void Awake()
         {
@@ -43,6 +43,14 @@ namespace Impulse.Audio
 
             //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
             Main.onSceneChange.AddListener(SceneChanged);
+            UISettingsManager.onMusicVolumeChange.AddListener(AdjustMusicVolume);
+        }
+
+        public void AdjustMusicVolume(float newVolume)
+        {
+            musicVolume = newVolume;
+
+            musicSource.volume = newVolume;
         }
 
         public void SceneChanged(Main.Scene s)
@@ -62,6 +70,19 @@ namespace Impulse.Audio
 
             //Play the clip.
             sfxSource.PlayOneShot(clip, fxVolume);
+        }
+
+        //Used to play single sound clips.
+        public void PlayMusic(AudioClip clip)
+        {
+            if (sfxSource.clip == null)
+            {
+            }
+            //Set the clip of our efxSource audio source to the clip passed in as a parameter.
+            musicSource.pitch = 1;
+
+            //Play the clip.
+            musicSource.PlayOneShot(clip, musicVolume);
         }
 
         //RandomizeSfx chooses randomly between various audio clips and slightly changes their pitch.

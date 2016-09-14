@@ -14,7 +14,8 @@ namespace Impulse
         public const int scoreboardSize = 10;
         public const string timerFormat = "{0:D1}.{1:D2}";
         public const float velocityThreshhold = 5F;
-        public const int lastLevel = 20;
+        public const int firstLevel = 1;
+        public const int lastLevel = 6;
 
         //Tags
         public const string portalTag = "Portal";

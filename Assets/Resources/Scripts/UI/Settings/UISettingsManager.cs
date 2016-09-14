@@ -5,6 +5,7 @@ using Impulse.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Impulse.UI
@@ -12,6 +13,10 @@ namespace Impulse.UI
     public class UISettingsManager : MonoBehaviour
     {
         public static UISettingsManager _instance;
+        public static MusicVolumeChangeEvent onMusicVolumeChange = new MusicVolumeChangeEvent();
+
+        public class MusicVolumeChangeEvent : UnityEvent<float> { }
+
         public Animation fadeAnimation;
         public Animation homeAnimation;
         public Animation resetAnimation;
@@ -54,6 +59,7 @@ namespace Impulse.UI
         {
             fxSlider.value = ProgressManager.GetProgress().settings.fxVolume;
             musicSlider.value = ProgressManager.GetProgress().settings.musicVolume;
+            onMusicVolumeChange.Invoke(musicSlider.value);
         }
 
         public void DeactivateImageFX()
@@ -63,7 +69,7 @@ namespace Impulse.UI
         //THIS COULD LEAD TO PROBLEMS, if so change lastlevel to last level able to find under prefabs/levels
         public void UnlockAllButtonClicked()
         {
-            ProgressManager.GetProgress().lastUnlockedLevel = LevelLoader.GetLastExistingLevel();
+            ProgressManager.GetProgress().lastUnlockedLevel = LevelManager.lastID;
             SoundManager.ButtonClicked();
             testSaveAnimation.Play("buttonClick");
         }
@@ -85,11 +91,13 @@ namespace Impulse.UI
 
         public void FXSliderChanged(Slider s)
         {
+            onMusicVolumeChange.Invoke(musicSlider.value);
             ProgressManager.GetProgress().settings.fxVolume = s.value;
         }
 
         public void MusicSliderChanged(Slider s)
         {
+            onMusicVolumeChange.Invoke(musicSlider.value);
             ProgressManager.GetProgress().settings.musicVolume = s.value;
         }
     }

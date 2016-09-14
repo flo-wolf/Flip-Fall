@@ -23,13 +23,7 @@ namespace Impulse.UI
             //listen for level selection changes in the dropdown menu
             dropdown.onValueChanged.AddListener(delegate
             {
-                dropdownValueChangedHandler(dropdown);
             });
-        }
-
-        private void dropdownValueChangedHandler(Dropdown target)
-        {
-            LevelManager.SetLevel(target.value);
         }
 
         public void LoadLevels()

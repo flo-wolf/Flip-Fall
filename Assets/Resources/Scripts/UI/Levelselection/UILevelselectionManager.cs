@@ -20,7 +20,7 @@ namespace Impulse.UI
     public class UILevelselectionManager : MonoBehaviour
     {
         public static UILevelselectionManager _instance;
-        public static UILevel currentUILevel;
+        public static int activeUILevel;
 
         public static UILevelSwitchEvent onUILevelSwitch = new UILevelSwitchEvent();
 
@@ -47,10 +47,15 @@ namespace Impulse.UI
             _instance = this;
         }
 
+        private void OnEnable()
+        {
+            activeUILevel = LevelManager.lastPlayedID;
+        }
+
         private void Start()
         {
             Main.onSceneChange.AddListener(SceneChanging);
-            currentUILevel = UILevelPlacer.LoadUILevel(ProgressManager.GetProgress().lastPlayedLevelID);
+
             UpdateLevelView();
             UILevelDrag.UpdateDragObject();
             fadeAnimation.Play("fadeFromBlack");
@@ -77,12 +82,14 @@ namespace Impulse.UI
         //display the next UILevel - if it exists and if it is unlocked, then place it
         public static bool NextLevel()
         {
-            Debug.Log("NextLevel() currentUILevel.id " + currentUILevel.id);
-            if (currentUILevel.id + 1 <= ProgressManager.GetProgress().lastUnlockedLevel)
+            if (activeUILevel + 1 <= ProgressManager.GetProgress().lastUnlockedLevel)
             {
-                currentUILevel = UILevelPlacer.LoadUILevel(currentUILevel.id + 1);
+                activeUILevel++;
+                UILevelPlacer.PlaceUILevel(activeUILevel);
+
                 _instance.UpdateLevelView();
                 UILevelDrag.UpdateDragObject();
+                Debug.Log("NextLevel() currentUILevel.id " + activeUILevel);
                 return true;
             }
             return false;
@@ -91,12 +98,13 @@ namespace Impulse.UI
         //display the last UILevel - if it exists and if it is unlocked, then place it
         public static bool LastLevel()
         {
-            Debug.Log("LastLevel() currentUILevel.id " + currentUILevel.id);
-            if (currentUILevel.id - 1 > 0)
+            if (activeUILevel - 1 >= Constants.firstLevel)
             {
-                currentUILevel = UILevelPlacer.LoadUILevel(currentUILevel.id - 1);
+                activeUILevel--;
+                UILevelPlacer.PlaceUILevel(activeUILevel);
                 _instance.UpdateLevelView();
                 UILevelDrag.UpdateDragObject();
+                Debug.Log("LastLevel() currentUILevel.id " + activeUILevel);
                 return true;
             }
             return false;
@@ -112,17 +120,17 @@ namespace Impulse.UI
         //called on GameState.levelselection/finishscreen
         private void UpdateLevelView()
         {
-            currentUILevel.UpdateTexts();
-            currentUILevel.UpdateStars();
+            UILevelPlacer.uiLevels[activeUILevel].UpdateTexts();
+            UILevelPlacer.uiLevels[activeUILevel].UpdateStars();
         }
 
         public void PlayLevel()
         {
             //level can be set
             SoundManager.ButtonClicked();
-            if (LevelManager.LevelExists(currentUILevel.id))
+            if (LevelManager.LevelExists(activeUILevel))
             {
-                LevelManager.SetLevel(currentUILevel.id);
+                LevelManager.activeLevel = activeUILevel;
                 playButtonAnimation.Play("playButtonDisappear");
                 SoundManager.PlayCamTransitionSound();
                 Main.SetScene(Main.Scene.game);
