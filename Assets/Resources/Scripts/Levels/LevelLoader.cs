@@ -80,7 +80,7 @@ namespace Impulse.Levels
         {
 #if UNITY_EDITOR
             Object prefab = UnityEditor.EditorUtility.CreateEmptyPrefab("Assets/Resources/Prefabs/" + level.id + ".prefab");
-            UnityEditor.EditorUtility.ReplacePrefab(LevelManager.GetLevel().gameObject, prefab, UnityEditor.ReplacePrefabOptions.ReplaceNameBased);
+            UnityEditor.EditorUtility.ReplacePrefab(LevelManager.GetActiveLevel().gameObject, prefab, UnityEditor.ReplacePrefabOptions.ReplaceNameBased);
             //activelevel
 #endif
         }

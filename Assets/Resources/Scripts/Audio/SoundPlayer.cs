@@ -35,15 +35,18 @@ namespace Impulse.Audio
                 return;
             }
 
-            musicVolume = ProgressManager.GetProgress().settings.musicVolume;
-            fxVolume = ProgressManager.GetProgress().settings.fxVolume;
-
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
 
             //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
             Main.onSceneChange.AddListener(SceneChanged);
             UISettingsManager.onMusicVolumeChange.AddListener(AdjustMusicVolume);
+        }
+
+        private void OnEnable()
+        {
+            musicSource.volume = ProgressManager.GetProgress().settings.musicVolume;
+            fxVolume = ProgressManager.GetProgress().settings.fxVolume;
         }
 
         public void AdjustMusicVolume(float newVolume)
@@ -82,7 +85,7 @@ namespace Impulse.Audio
             musicSource.pitch = 1;
 
             //Play the clip.
-            musicSource.PlayOneShot(clip, musicVolume);
+            musicSource.PlayOneShot(clip, 1);
         }
 
         //RandomizeSfx chooses randomly between various audio clips and slightly changes their pitch.

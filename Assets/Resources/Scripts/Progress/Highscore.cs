@@ -45,7 +45,7 @@ namespace Impulse.Progress
 
         public void UpdateStarCount()
         {
-            double presetTime = LevelManager.GetLevel().presetTime;
+            double presetTime = LevelManager.GetActiveLevel().presetTime;
 
             if (bestTime < presetTime)
             {
@@ -70,7 +70,7 @@ namespace Impulse.Progress
 
         public void PlaceTime(double t)
         {
-            double presetTime = LevelManager.GetLevel().presetTime;
+            double presetTime = LevelManager.GetActiveLevel().presetTime;
 
             if (t < bestTime || bestTime < 0 && presetTime > 0)
             {

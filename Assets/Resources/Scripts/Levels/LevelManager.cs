@@ -52,9 +52,9 @@ namespace Impulse.Levels
         {
         }
 
-        public static Level GetLevel()
+        public static Level GetActiveLevel()
         {
-            return levels[activeLevel];
+            return levels.Find(x => x.id == activeLevel);
         }
 
         public static Level GetLevel(int id)
@@ -67,7 +67,7 @@ namespace Impulse.Levels
             return GetSpawn().GetPosition();
         }
 
-        public void SetLevel(int newID)
+        public static void SetLevel(int newID)
         {
             activeLevel = newID;
             ProgressManager.GetProgress().lastPlayedLevelID = activeLevel;

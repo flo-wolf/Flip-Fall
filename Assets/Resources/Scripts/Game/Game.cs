@@ -48,7 +48,7 @@ namespace Impulse
 
         private void Start()
         {
-            LevelPlacer.Place(LevelManager.GetLevel());
+            LevelPlacer.Place(LevelManager.GetActiveLevel());
             SetGameState(GameState.playing);
             Main.onSceneChange.AddListener(SceneChanged);
         }

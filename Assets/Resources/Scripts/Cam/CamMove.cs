@@ -26,7 +26,7 @@ namespace Impulse.Cam
 
         private void Start()
         {
-            Vector3 spawnPos = LevelManager.GetLevel().spawn.GetPosition();
+            Vector3 spawnPos = LevelManager.GetActiveLevel().spawn.GetPosition();
             spawnPos.z = Constants.cameraZ;
             cam.transform.position = spawnPos;
         }

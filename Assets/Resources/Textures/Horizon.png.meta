@@ -30,12 +30,12 @@ TextureImporter:
     21300050: Horizon_25
     21300052: Horizon_26
     21300054: Horizon_27
-  serializedVersion: 2
+  serializedVersion: 4
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
     mipMapFadeDistanceStart: 1
@@ -43,11 +43,12 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 1
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
   seamlessCubemap: 0
   textureFormat: -3
   maxTextureSize: 1024
@@ -59,19 +60,51 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 1
+  alphaUsage: 1
   alphaIsTransparency: 0
-  textureType: 5
-  buildTargetSettings: []
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 1024
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 1024
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: Horizon_0
+    - serializedVersion: 2
+      name: Horizon_0
       rect:
         serializedVersion: 2
         x: 0
@@ -79,9 +112,12 @@ TextureImporter:
         width: 400
         height: 36
       alignment: 2
-      pivot: {x: .5, y: 1}
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_1
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_1
       rect:
         serializedVersion: 2
         x: 0
@@ -89,9 +125,12 @@ TextureImporter:
         width: 400
         height: 34
       alignment: 2
-      pivot: {x: .5, y: 1}
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_2
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_2
       rect:
         serializedVersion: 2
         x: 0
@@ -101,7 +140,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_3
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_3
       rect:
         serializedVersion: 2
         x: 0
@@ -111,7 +153,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_4
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_4
       rect:
         serializedVersion: 2
         x: 0
@@ -121,7 +166,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_5
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_5
       rect:
         serializedVersion: 2
         x: 0
@@ -131,7 +179,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_6
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_6
       rect:
         serializedVersion: 2
         x: 0
@@ -141,7 +192,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_7
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_7
       rect:
         serializedVersion: 2
         x: 0
@@ -151,7 +205,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_8
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_8
       rect:
         serializedVersion: 2
         x: 0
@@ -161,7 +218,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_9
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_9
       rect:
         serializedVersion: 2
         x: 0
@@ -171,7 +231,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_10
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_10
       rect:
         serializedVersion: 2
         x: 0
@@ -181,7 +244,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_11
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_11
       rect:
         serializedVersion: 2
         x: 0
@@ -191,7 +257,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_12
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_12
       rect:
         serializedVersion: 2
         x: 0
@@ -201,7 +270,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_13
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_13
       rect:
         serializedVersion: 2
         x: 0
@@ -211,7 +283,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_14
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_14
       rect:
         serializedVersion: 2
         x: 0
@@ -221,7 +296,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_15
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_15
       rect:
         serializedVersion: 2
         x: 0
@@ -231,7 +309,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_16
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_16
       rect:
         serializedVersion: 2
         x: 0
@@ -241,7 +322,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_17
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_17
       rect:
         serializedVersion: 2
         x: 0
@@ -251,7 +335,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_18
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_18
       rect:
         serializedVersion: 2
         x: 0
@@ -261,7 +348,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_19
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_19
       rect:
         serializedVersion: 2
         x: 0
@@ -271,7 +361,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_20
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_20
       rect:
         serializedVersion: 2
         x: 0
@@ -281,7 +374,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_21
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_21
       rect:
         serializedVersion: 2
         x: 0
@@ -291,7 +387,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_22
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_22
       rect:
         serializedVersion: 2
         x: 0
@@ -301,7 +400,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_23
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_23
       rect:
         serializedVersion: 2
         x: 0
@@ -311,7 +413,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_24
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_24
       rect:
         serializedVersion: 2
         x: 0
@@ -321,7 +426,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_25
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_25
       rect:
         serializedVersion: 2
         x: 0
@@ -331,7 +439,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_26
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_26
       rect:
         serializedVersion: 2
         x: 0
@@ -341,7 +452,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Horizon_27
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Horizon_27
       rect:
         serializedVersion: 2
         x: 0
@@ -351,5 +465,10 @@ TextureImporter:
       alignment: 2
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    outline: []
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

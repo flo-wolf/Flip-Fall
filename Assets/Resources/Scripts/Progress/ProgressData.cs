@@ -18,6 +18,7 @@ namespace Impulse.Progress
     {
         public List<Highscore> highscores = new List<Highscore>();
         public Settings settings = new Settings();
+        public Unlocks unlocks = new Unlocks();
 
         //public HighscoreEvent;
 

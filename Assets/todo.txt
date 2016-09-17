@@ -1,9 +1,10 @@
 Open Tasks:
 # Speedstripes and other levelobjets []
-# Rename the project back to impulse []
-# Use different scenes for each app component []
+# Rename the project back to impulse [*]
+# Use different scenes for each app component [*]
 	- Manage scene switches through a lasting static main class
 	- Fade Scenes
+# add rotating quad cannon like in supermeatboy => https://youtu.be/klfVLRh0KH0?t=34m39s
 # Stars and shop []
 	- create a shop in which you exchange stars for editor items []
 	- save starcount into progress and display it [*]
@@ -36,6 +37,7 @@ Finished Tasks:
 # cameratransition between level switches, deactivate the button while transitioning to next spawn in 1 sec [*]
 
 Game names:
+	- dimension four /dimension4 -> dimensionfour.com domain is free -> four dimenions @ 10 levels
 	- velocity
 	- megaball
 	- sliders

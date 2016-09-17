@@ -130,7 +130,7 @@ namespace Impulse.UI
             SoundManager.ButtonClicked();
             if (LevelManager.LevelExists(activeUILevel))
             {
-                LevelManager.activeLevel = activeUILevel;
+                LevelManager.SetLevel(activeUILevel);
                 playButtonAnimation.Play("playButtonDisappear");
                 SoundManager.PlayCamTransitionSound();
                 Main.SetScene(Main.Scene.game);
