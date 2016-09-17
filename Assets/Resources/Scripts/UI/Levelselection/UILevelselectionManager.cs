@@ -95,6 +95,18 @@ namespace Impulse.UI
             return false;
         }
 
+        public static void NextWasUnlocked()
+        {
+            _instance.StartCoroutine(_instance.UnlockNext());
+        }
+
+        public IEnumerator UnlockNext()
+        {
+            yield return new WaitForSeconds(0.5F);
+            NextLevel();
+            yield break;
+        }
+
         //display the last UILevel - if it exists and if it is unlocked, then place it
         public static bool LastLevel()
         {

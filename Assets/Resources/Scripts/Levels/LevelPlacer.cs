@@ -15,6 +15,8 @@ namespace Impulse.Levels
 
         public class LevelPlaceEvent : UnityEvent<Level> { }
 
+        public static Level placedLevel;
+
         private void OnEnable()
         {
             placingParent = this.transform;
@@ -29,6 +31,8 @@ namespace Impulse.Levels
                 t = (Level)Instantiate(level, new Vector3(-0f, -2.0f, 7.8f), Quaternion.identity);
                 t.gameObject.transform.parent = placingParent;
                 Debug.Log("[LevelPlacer]: Place(): Level " + level.id + " placed.");
+
+                placedLevel = t;
             }
             else
             {

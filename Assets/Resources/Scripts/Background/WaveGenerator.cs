@@ -1,4 +1,6 @@
 ﻿using Impulse.Audio;
+using Impulse.Progress;
+using Impulse.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +17,7 @@ public class WaveGenerator : MonoBehaviour
     public float uPeak = 0.2F;
     private float amplitude;
     private float randAmplitude;
-    public float randomStrength = 10;
+    public float backgroundSpeed = 10;
 
     private float newestAudioValue = 0F;
     private float lerpedAudioValue = 0F;
@@ -40,7 +42,16 @@ public class WaveGenerator : MonoBehaviour
     {
         GetComponent<MeshRenderer>().sortingOrder = id;
         height = GetComponent<MeshFilter>().mesh.bounds.extents.y;
+        backgroundSpeed = ProgressManager.GetProgress().settings.backgroundSpeed;
+
+        UISettingsManager.onHorizonSpeedChange.AddListener(HorizonSpeedChanged);
         //StartCoroutine(CalcAudio());
+    }
+
+    private void HorizonSpeedChanged(float f)
+    {
+        Debug.Log(f);
+        backgroundSpeed = f;
     }
 
     private void FixedUpdate()
@@ -79,7 +90,7 @@ public class WaveGenerator : MonoBehaviour
                     else
                         newestAudioValue = 0;
 
-                    amplitude = Mathf.Lerp(lastPoints[i].y, 0.5F + newestAudioValue, Time.deltaTime * randomStrength);
+                    amplitude = Mathf.Lerp(lastPoints[i].y, 0.5F + newestAudioValue, Time.deltaTime * backgroundSpeed);
                     //Debug.Log(amplitude);
 
                     //if (lerpedAudioValue > hWave)
@@ -96,7 +107,7 @@ public class WaveGenerator : MonoBehaviour
                     //there is no audio, switch to random input
                     else
                     {
-                        randAmplitude = Mathf.Lerp(lastPoints[i].y, 0.5F + Mathf.Abs(Random.Range(lPeak, uPeak)), Time.deltaTime * randomStrength);
+                        randAmplitude = Mathf.Lerp(lastPoints[i].y, 0.5F + Mathf.Abs(Random.Range(lPeak, uPeak)), Time.deltaTime * backgroundSpeed);
                         points[i] = new Vector3(0.5f * (float)i, Mathf.Abs(Mathf.Lerp(lastPoints[i].y, randAmplitude, Time.time)), 0f);
                         //Debug.Log("2");
                         //Random.Range(lastPoints[i].y - wavePeak, lastPoints[i].y + wavePeak)

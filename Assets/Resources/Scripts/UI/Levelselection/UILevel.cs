@@ -113,7 +113,10 @@ namespace Impulse.UI
                     Debug.Log("id: " + id);
 
                     if (ProgressManager.GetProgress().lastUnlockedLevel <= id)
+                    {
                         ProgressManager.GetProgress().lastUnlockedLevel++;
+                        UILevelselectionManager.NextWasUnlocked();
+                    }
 
                     double bestTime = h.bestTime;
                     bestTime = Mathf.Round((float)bestTime * 100f) / 100f;

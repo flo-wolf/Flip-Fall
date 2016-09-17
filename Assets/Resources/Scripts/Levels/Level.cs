@@ -28,6 +28,9 @@ namespace Impulse.Levels
         [HideInInspector]
         public Finish finish;
 
+        // used for collision detection in Player class
+        public List<Bounds> moveBounds = new List<Bounds>();
+
         private void Awake()
         {
             //ghost = gameObject.GetComponentInChildren<Ghost>();
@@ -40,6 +43,12 @@ namespace Impulse.Levels
             {
                 if (mr.transform.tag == "MoveArea")
                 {
+                    // should be worldspace, dont use the meshfilter.bounds, it'll be local space
+                    Bounds b = mr.gameObject.GetComponent<Renderer>().bounds;
+
+                    moveBounds.Add(b);
+                    Debug.Log(b + " -- id --- " + moveBounds.Count);
+
                     mr.sortingOrder = sortingcount;
                     sortingcount--;
                 }

@@ -17,6 +17,10 @@ namespace Impulse.UI
 
         public class MusicVolumeChangeEvent : UnityEvent<float> { }
 
+        public static HorizonSpeedChangeEvent onHorizonSpeedChange = new HorizonSpeedChangeEvent();
+
+        public class HorizonSpeedChangeEvent : UnityEvent<float> { }
+
         public Animation fadeAnimation;
         public Animation homeAnimation;
         public Animation resetAnimation;
@@ -91,14 +95,21 @@ namespace Impulse.UI
 
         public void FXSliderChanged(Slider s)
         {
-            onMusicVolumeChange.Invoke(musicSlider.value);
+            onMusicVolumeChange.Invoke(s.value);
             ProgressManager.GetProgress().settings.fxVolume = s.value;
         }
 
         public void MusicSliderChanged(Slider s)
         {
-            onMusicVolumeChange.Invoke(musicSlider.value);
+            onMusicVolumeChange.Invoke(s.value);
             ProgressManager.GetProgress().settings.musicVolume = s.value;
+        }
+
+        public void SpeedSliderChanged(Slider s)
+        {
+            Debug.Log("Speedslider");
+            onHorizonSpeedChange.Invoke(s.value);
+            ProgressManager.GetProgress().settings.backgroundSpeed = s.value;
         }
     }
 }

@@ -5,6 +5,7 @@ using Impulse.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -62,6 +63,9 @@ namespace Impulse
         private int speed;
         private bool facingLeft = true;
 
+        private CircleCollider2D circleCollider;
+        private List<Bounds> bounds;
+
         [HideInInspector]
         public bool charging = false;
         private Vector2 chargeVelocity;
@@ -79,13 +83,15 @@ namespace Impulse
 
         private void Start()
         {
-            playerState = PlayerState.alive;
+            circleCollider = GetComponent<CircleCollider2D>();
             ReloadSpawnPoint();
             MoveToSpawn();
             Spawn();
             finishParticles.gameObject.SetActive(false);
             Game.onGameStateChange.AddListener(GameStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
+
+            bounds = LevelPlacer.placedLevel.moveBounds;
             //trail.sortingOrder = 2;
         }
 
@@ -116,6 +122,7 @@ namespace Impulse
         //Resets the Player to the Spawn
         private void LevelChanged(int levelID)
         {
+            bounds = LevelPlacer.placedLevel.moveBounds;
             ReloadSpawnPoint();
             MoveToSpawn();
         }
@@ -129,7 +136,7 @@ namespace Impulse
             facingLeft = spawn.facingLeftOnSpawn;
         }
 
-        //The Player has hit an object, either the finish or an enemy
+        // Player has hit an object, either the finish or an enemy
         private void OnTriggerEnter2D(Collider2D collider)
         {
             if (collider.tag == Constants.moveAreaTag && IsAlive())
@@ -138,12 +145,12 @@ namespace Impulse
             }
             else if (collider.tag == Constants.finishTag && IsAlive())
             {
-                //Debug.Log("TriggerEnter - Fin - Collider: " + collider.gameObject);
+                // Debug.Log("TriggerEnter - Fin - Collider: " + collider.gameObject);
                 Win();
                 Game.SetGameState(Game.GameState.finishscreen);
             }
 
-            //the collided object is on one of the layers marked as killMask => death
+            // collided object is on one of the layers marked as killMask => death
             if (collider.tag == Constants.killTag && IsAlive() && teleporting == false)
             {
                 Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
@@ -160,36 +167,25 @@ namespace Impulse
             }
         }
 
-        //The Player has left the area allowed for moving(moveMask)
-        private void OnTriggerExit2D(Collider2D collider)
-        {
-            if (colliderList.Count > 0 && collider.tag == Constants.moveAreaTag && teleporting == false)
-            {
-                colliderList.Remove(collider);
-            }
-
-            if (collider.tag == Constants.moveAreaTag && colliderList.Count == 0 && IsAlive() && teleporting == false)
-            {
-                Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
-                Die();
-                Game.SetGameState(Game.GameState.deathscreen);
-            }
-
-            if (collider.gameObject.tag == Constants.portalTag)
-            {
-                teleporting = false;
-                PortalExit(collider.gameObject.GetComponent<Portal>());
-            }
-
-            //StartCoroutine(DelayedTriggerExit(collider));
-        }
-
-        //private void OnTriggerStay2D(Collider2D collider)
+        //// Player has left the area allowed for moving(moveMask)
+        //private void OnTriggerExit2D(Collider2D collider)
         //{
-        //    if (collider.tag == Constants.moveAreaTag)
+        //    if (colliderList.Count > 0 && collider.tag == Constants.moveAreaTag && teleporting == false)
         //    {
-        //        colliderList.Add(collider);
-        //        collisionCount++;
+        //        colliderList.Remove(collider);
+        //    }
+
+        //    if (collider.tag == Constants.moveAreaTag && colliderList.Count == 0 && IsAlive() && teleporting == false)
+        //    {
+        //        Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
+        //        Die();
+        //        Game.SetGameState(Game.GameState.deathscreen);
+        //    }
+
+        //    if (collider.gameObject.tag == Constants.portalTag)
+        //    {
+        //        teleporting = false;
+        //        PortalExit(collider.gameObject.GetComponent<Portal>());
         //    }
         //}
 
@@ -201,16 +197,6 @@ namespace Impulse
                 Game.SetGameState(Game.GameState.deathscreen);
                 Debug.Log("[Player] Death by particle");
             }
-        }
-
-        private IEnumerator DelayedTriggerExit(Collider2D collider)
-        {
-            //yield return new WaitForSeconds(triggerExitCheckDelay);
-
-            //Debug.Log("coll count exit " + collisionCount + " IsAlive() " + IsAlive() + " mask " + (moveMask == (moveMask | (1 << collider.gameObject.layer))));
-            //Debug.Log("collisionList: " + colliderList.Count);
-
-            yield break;
         }
 
         private Vector3 teleportVelocityMemory;
@@ -301,6 +287,8 @@ namespace Impulse
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();
+
+            Game.SetGameState(Game.GameState.deathscreen);
         }
 
         private void Win()
@@ -397,7 +385,55 @@ namespace Impulse
                     }
                     rBody.velocity = velocity;
                 }
+                if (!IsOnMoveArea())
+                    Die();
             }
+        }
+
+        public void Update()
+        {
+        }
+
+        public bool IsOnMoveArea()
+        {
+            int counter = 0;
+            foreach (Bounds b in bounds)
+            {
+                for (int i = 1; i <= 4; i++)
+                {
+                    Vector3 checkPos = transform.position;
+                    checkPos.z = b.center.z + b.extents.z;
+                    switch (i)
+                    {
+                        //right
+                        case 1:
+                            checkPos.x = checkPos.x + circleCollider.bounds.extents.x;
+                            break;
+                        //left
+                        case 2:
+                            checkPos.x = checkPos.x - circleCollider.bounds.extents.x;
+                            break;
+                        //up
+                        case 3:
+                            checkPos.y = checkPos.y + circleCollider.bounds.extents.y;
+                            break;
+                        //down
+                        case 4:
+                            checkPos.y = checkPos.y - circleCollider.bounds.extents.y;
+                            break;
+                    }
+                    if (b.Contains(checkPos))
+                    {
+                        counter++;
+                    }
+                }
+                if (counter >= 4)
+                {
+                    return true;
+                }
+            }
+            // not on movearea
+            return false;
         }
 
         public void SetPlayerState(PlayerState ps)
@@ -424,5 +460,13 @@ namespace Impulse
         public class PlayerStateChangeEvent : UnityEvent<PlayerState> { }
 
         public class PlayerActionEvent : UnityEvent<PlayerAction> { }
+    }
+
+    public static class Boundsxtension
+    {
+        public static bool ContainBounds(this Bounds bounds, Bounds target)
+        {
+            return bounds.Contains(target.min) && bounds.Contains(target.max);
+        }
     }
 }

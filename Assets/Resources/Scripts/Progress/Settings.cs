@@ -14,9 +14,11 @@ namespace Impulse.Progress
         public float fxVolume;
         public float musicVolume;
         public bool imageEffects;
+        public float backgroundSpeed;
 
         public Settings()
         {
+            backgroundSpeed = 20F;
             chargeOnLeftSide = true;
             fxVolume = 1F;
             musicVolume = 1F;
