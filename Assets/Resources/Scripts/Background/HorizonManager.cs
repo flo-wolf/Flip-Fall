@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class HorizonManager : MonoBehaviour
 {
+    public static HorizonManager _instance;
+
     public enum Skin { red, blackWhite, orange, sunset, blue, green, rainbow }
 
     //skin currently active
@@ -16,6 +18,13 @@ public class HorizonManager : MonoBehaviour
 
     private void Start()
     {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        _instance = this;
+
         DontDestroyOnLoad(this);
         SetSkin(GetLastSkin());
     }

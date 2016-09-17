@@ -129,9 +129,9 @@ namespace Impulse
 
         private void ReloadSpawnPoint()
         {
-            spawn = LevelManager.GetSpawn();
+            spawn = LevelPlacer.placedLevel.spawn;
             Debug.Log(spawn);
-            spawnPosition = spawn.GetPosition();
+            spawnPosition = spawn.transform.position;
             spawnPosition.z = Constants.playerZ;
             facingLeft = spawn.facingLeftOnSpawn;
         }

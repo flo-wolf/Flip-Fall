@@ -24,15 +24,10 @@ namespace Impulse.Audio
             DontDestroyOnLoad(this);
         }
 
-        private void OnEnable()
-        {
-            source = SoundPlayer._instance.musicSource;
-        }
-
         private void Update()
         {
             float[] spectrum = new float[256];
-            source.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
+            SoundPlayer._instance.musicSource.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
             currentValue = spectrum[0];
         }
 

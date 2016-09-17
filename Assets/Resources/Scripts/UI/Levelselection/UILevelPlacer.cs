@@ -111,7 +111,7 @@ namespace Impulse.UI
                 l = (UILevel)Instantiate(uiLevels.Find(x => x.id == id), new Vector3(0, 0, 0), Quaternion.identity);
                 l.gameObject.transform.SetParent(placingParent.transform);
                 l.gameObject.transform.localPosition = new Vector3(0, 0, 0);
-                Debug.Log("[UILevelPlacer]: Place(): Level " + uiLevels[id].id + " placed.");
+                Debug.Log("[UILevelPlacer]: Place(): Level " + uiLevels.Find(x => x.id == id).id + " placed.");
             }
             else
             {

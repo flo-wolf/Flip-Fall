@@ -102,7 +102,8 @@ namespace Impulse.UI
 
         public IEnumerator UnlockNext()
         {
-            yield return new WaitForSeconds(0.5F);
+            // add delay here
+            yield return new WaitForSeconds(0);
             NextLevel();
             yield break;
         }
@@ -132,8 +133,8 @@ namespace Impulse.UI
         //called on GameState.levelselection/finishscreen
         private void UpdateLevelView()
         {
-            UILevelPlacer.uiLevels[activeUILevel].UpdateTexts();
-            UILevelPlacer.uiLevels[activeUILevel].UpdateStars();
+            UILevelPlacer.uiLevels.Find(x => x.id == activeUILevel).UpdateTexts();
+            UILevelPlacer.uiLevels.Find(x => x.id == activeUILevel).UpdateStars();
         }
 
         public void PlayLevel()

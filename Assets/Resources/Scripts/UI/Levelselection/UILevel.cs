@@ -89,7 +89,7 @@ namespace Impulse.UI
 
             if (UILevelMatchesLevel())
             {
-                double topTime = LevelManager.GetLevel(id).presetTime;
+                double topTime = LevelManager.levels.Find(x => x.id == id).presetTime;
 
                 levelNumberText.text = id.ToString();
 
