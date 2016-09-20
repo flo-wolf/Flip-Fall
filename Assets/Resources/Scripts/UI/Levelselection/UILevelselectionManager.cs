@@ -12,7 +12,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 /// <summary>
-/// Handles the UI Elememnts for the levelselection scene
+/// Manages all UI Elememnts of the levelselection scene
 /// Singletone
 /// </summary>
 namespace Impulse.UI
@@ -49,17 +49,25 @@ namespace Impulse.UI
 
         private void OnEnable()
         {
-            activeUILevel = LevelManager.lastPlayedID;
+            activeUILevel = ProgressManager.GetProgress().lastPlayedLevelID;
+            Debug.Log(activeUILevel);
         }
 
         private void Start()
         {
             Main.onSceneChange.AddListener(SceneChanging);
+            LevelManager.onLevelChange.AddListener(LevelChanging);
 
             UpdateLevelView();
             UILevelDrag.UpdateDragObject();
             fadeAnimation.Play("fadeFromBlack");
             //uiLevelAnimation.Play("uiLevelselectionFadeIn");
+        }
+
+        // adjust UILevelID whenever the level changes
+        private void LevelChanging(int newLevelID)
+        {
+            activeUILevel = newLevelID;
         }
 
         private void SceneChanging(Main.Scene scene)
@@ -79,7 +87,7 @@ namespace Impulse.UI
             }
         }
 
-        //display the next UILevel - if it exists and if it is unlocked, then place it
+        // display the next UILevel - if it exists and if it is unlocked, then place it
         public static bool NextLevel()
         {
             if (activeUILevel + 1 <= ProgressManager.GetProgress().lastUnlockedLevel)
@@ -108,7 +116,7 @@ namespace Impulse.UI
             yield break;
         }
 
-        //display the last UILevel - if it exists and if it is unlocked, then place it
+        // display the last UILevel - if it exists and if it is unlocked, then place it
         public static bool LastLevel()
         {
             if (activeUILevel - 1 >= Constants.firstLevel)
@@ -130,9 +138,10 @@ namespace Impulse.UI
             Main.SetScene(Main.Scene.home);
         }
 
-        //called on GameState.levelselection/finishscreen
+        // called on GameState.levelselection/finishscreen
         private void UpdateLevelView()
         {
+            Debug.Log("ACTIVEUILEVEL : " + activeUILevel);
             UILevelPlacer.uiLevels.Find(x => x.id == activeUILevel).UpdateTexts();
             UILevelPlacer.uiLevels.Find(x => x.id == activeUILevel).UpdateStars();
         }

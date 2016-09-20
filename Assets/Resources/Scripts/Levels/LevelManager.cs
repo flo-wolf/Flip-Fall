@@ -21,7 +21,7 @@ namespace Impulse.Levels
 
         public class LevelChangeEvent : UnityEvent<int> { }
 
-        public static int activeLevel = 1;
+        private static int activeLevel = 1;
         public static int lastPlayedID;
         public static int lastID;
         public static int firstID;
@@ -50,6 +50,11 @@ namespace Impulse.Levels
 
         private void Start()
         {
+        }
+
+        public static int GetActiveID()
+        {
+            return activeLevel;
         }
 
         public static Level GetActiveLevel()

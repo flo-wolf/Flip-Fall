@@ -69,7 +69,6 @@ public class HorizonPart : MonoBehaviour
 
     public void MoveVerticies()
     {
-        //Debug.Log("111111111111111");
         Vector3[] newVerts = originalVert;
 
         int id = 0;

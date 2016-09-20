@@ -86,7 +86,7 @@ namespace Impulse.Progress
 
         public Highscore GetCurrentHighscore()
         {
-            return GetHighscore(LevelManager.activeLevel);
+            return GetHighscore(LevelManager.GetActiveID());
         }
     }
 }
