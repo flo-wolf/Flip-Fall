@@ -1,5 +1,6 @@
 ﻿using Impulse.Levels;
 using Impulse.Progress;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -112,6 +113,7 @@ namespace Impulse.UI
                 {
                     Debug.Log("id: " + id);
 
+                    // this doesn't belong in here, even through it does its job right
                     if (ProgressManager.GetProgress().lastUnlockedLevel <= id)
                     {
                         ProgressManager.GetProgress().lastUnlockedLevel++;
@@ -119,15 +121,14 @@ namespace Impulse.UI
                     }
 
                     double bestTime = h.bestTime;
-                    bestTime = Mathf.Round((float)bestTime * 100f) / 100f;
 
                     //Personal best time seconds
-                    string secs = ((int)bestTime).ToString();
-                    timeSecText.text = secs;
+                    string bestTimeString = string.Format("{0:0}", bestTime);
+                    timeSecText.text = bestTimeString;
 
                     //Personal best time milseconds
-                    string milSecs = ((bestTime - (int)bestTime) * 100).ToString();
-                    milSecs = milSecs.Substring(0, 2);
+                    string milSecs = string.Format("{0:0.00}", bestTime);
+                    milSecs = milSecs.Substring(milSecs.IndexOf(".") + 1);
                     timeMilText.text = milSecs;
                 }
                 else
@@ -137,17 +138,6 @@ namespace Impulse.UI
                 }
             }
         }
-
-        ////depreciated, updated are done through UpdateTexts()
-        //public void SetBestText(Highscore h)
-        //{
-        //    if (UILevelMatchesLevel())
-        //    {
-        //        bestText.text = Constants.FormatTime(h.bestTime + 0.01F);
-        //        ghostText.text = Constants.FormatTime(LevelManager.GetLevel(h.levelId).presetTime);
-        //        levelNumberText.text = id.ToString();
-        //    }
-        //}
 
         public bool UILevelMatchesLevel()
         {
