@@ -36,7 +36,7 @@ namespace Impulse.Audio
             }
 
             _instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
 
             //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
             Main.onSceneChange.AddListener(SceneChanged);

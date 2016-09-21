@@ -10,6 +10,7 @@ namespace Impulse.UI
     public class UILevelPlacer : MonoBehaviour
     {
         public static GameObject placingParent;
+        public GameObject cacheParent;
 
         //NO NOT SET THIS, its a reference to the prefab needed for instantiation
         private static GameObject uiLevelPrefab;
@@ -61,6 +62,7 @@ namespace Impulse.UI
                     createdUILevels.Add(l);
                 }
             }
+
             return createdUILevels;
         }
 
@@ -71,6 +73,8 @@ namespace Impulse.UI
             {
                 uiLevel = Instantiate(uiLevelPrefab.GetComponent<UILevel>(), new Vector3(0, 0, 0), Quaternion.identity);
                 uiLevel.id = id;
+                uiLevel.gameObject.name = "Cached UILevel " + id;
+                uiLevel.gameObject.transform.SetParent(_instance.cacheParent.transform);
             }
             catch (UnityException e)
             {
@@ -91,6 +95,7 @@ namespace Impulse.UI
         //Place the rotating Levels that are currently not in focus around the given level by id
         private static void PlaceSurroundingLevels(int id)
         {
+            //uiLevels.Find(x => x.id == id - 1).transform.localScale =
         }
 
         public static void PlaceUILevel(int id)

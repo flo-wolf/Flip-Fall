@@ -1,4 +1,4 @@
-﻿Shader "Custom/ShieldEffect" {
+﻿Shader "Custom/AttractorFading" {
 	Properties{
 		_Position("Collision", Vector) = (-1, -1, -1, -1)
 		_MaxDistance("Effect Size", float) = 40
@@ -9,7 +9,7 @@
 	}
 
 		SubShader{
-		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
+		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" "DisableBatching" = "True" }
 		LOD 2000
 		Cull Off
 

@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 namespace Impulse.LevelObjects
 {
-    public class ObjectPuller : MonoBehaviour
+    public class Attractor : MonoBehaviour
     {
         public float pullRadius = 1000f;
         public float maxPullForce = 1000f;
