@@ -22,6 +22,12 @@ namespace Impulse
         public enum Scene { welcome, home, levelselection, tutorial, game, settings, editor, shop }
         public float sceneSwitchDelay = 0.5F;
 
+        public static StartupEvent onStartup = new StartupEvent();
+
+        public class StartupEvent : UnityEvent { }
+
+        public bool started = false;
+
         public static SceneChangeEvent onSceneChange = new SceneChangeEvent();
 
         private void Awake()
@@ -35,6 +41,15 @@ namespace Impulse
             }
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
+        }
+
+        private void OnEnable()
+        {
+            if (!started)
+            {
+                onStartup.Invoke();
+                started = true;
+            }
         }
 
         public static void SetScene(Scene newScene)

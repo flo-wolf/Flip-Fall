@@ -20,7 +20,6 @@ namespace Impulse.Cam
         public float maxRotationAngle = 10F;
         public float defaultRotationAngle = 0F;
         public float rotationSpeed = 0.3F;
-        public int rotationCount = 2;
 
         private Quaternion minRotation;
         private Quaternion maxRotation;

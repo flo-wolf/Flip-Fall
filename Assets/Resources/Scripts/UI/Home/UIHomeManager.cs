@@ -4,12 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///  Manages all UI Elements of the Home Scene.
+/// </summary>
+
 namespace Impulse.UI
 {
     public class UIHomeManager : MonoBehaviour
     {
         public static UIHomeManager _instance;
 
+        // Animations
+        public Animation startupAnimation;
         public Animation fadeAnimation;
         public Animation levelAnimation;
         public Animation settingsAnimation;
@@ -23,6 +29,12 @@ namespace Impulse.UI
                 return;
             }
             _instance = this;
+            Main.onStartup.AddListener(AppStartup);
+        }
+
+        public void AppStartup()
+        {
+            startupAnimation.Play("fadeFromBlack");
         }
 
         private void Start()
