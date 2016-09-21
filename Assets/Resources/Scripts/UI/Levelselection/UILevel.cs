@@ -94,18 +94,13 @@ namespace Impulse.UI
 
                 levelNumberText.text = id.ToString();
 
-                //Preset (top) time seconds
+                // Preset top time seconds
                 string topSec = ((int)topTime).ToString();
                 topTimeSecText.text = topSec;
 
-                //Preset (top) time milseconds
-                string topMilSec = ((topTime - (int)topTime) * 100).ToString();
-                if (topMilSec.Length == 1)
-                    topMilSec = topMilSec + "0";
-                else if (topMilSec.Length == 0)
-                {
-                    topMilSec = topMilSec + "00";
-                }
+                // top time milseconds
+                string topMilSec = string.Format("{0:0.00}", topTime);
+                topMilSec = topMilSec.Substring(topMilSec.IndexOf(".") + 1);
                 topTimeMilText.text = topMilSec;
 
                 Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
@@ -121,12 +116,15 @@ namespace Impulse.UI
                     }
 
                     double bestTime = h.bestTime;
+                    Debug.Log("UpdateTexts() h.bestTime " + bestTime);
 
-                    //Personal best time seconds
-                    string bestTimeString = string.Format("{0:0}", bestTime);
+                    // Personal best seconds
+                    string bestTimeString = ((int)bestTime).ToString();
                     timeSecText.text = bestTimeString;
 
-                    //Personal best time milseconds
+                    Debug.Log("UpdateTexts() bestTimeString " + bestTimeString);
+
+                    // Personal best milseconds
                     string milSecs = string.Format("{0:0.00}", bestTime);
                     milSecs = milSecs.Substring(milSecs.IndexOf(".") + 1);
                     timeMilText.text = milSecs;

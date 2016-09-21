@@ -34,9 +34,6 @@ namespace Impulse.UI
         public float fadeOutTime = 1F;
         public float fadeInTime = 1F;
 
-        private static List<Highscore> highscores;
-        private static Highscore highscore;
-
         private void Awake()
         {
             if (_instance != null && _instance != this)

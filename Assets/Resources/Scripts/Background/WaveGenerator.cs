@@ -45,13 +45,46 @@ public class WaveGenerator : MonoBehaviour
         backgroundSpeed = ProgressManager.GetProgress().settings.backgroundSpeed;
 
         UISettingsManager.onHorizonSpeedChange.AddListener(HorizonSpeedChanged);
-        //StartCoroutine(CalcAudio());
+
+        Prewarm();
     }
 
     private void HorizonSpeedChanged(float f)
     {
         Debug.Log(f);
         backgroundSpeed = f;
+    }
+
+    private void Prewarm()
+    {
+        MeshFilter filter = GetComponent<MeshFilter>();
+        mesh = filter.mesh;
+        mesh.Clear();
+
+        // Generate 64 random points for the top (i.e. the actual wave)
+        points = new Vector3[64];
+        for (int i = 0; i < points.Length; i++)
+        {
+            points[i] = new Vector3(0.5f * (float)i, 0.6f, 0f);
+        }
+
+        lastPoints = points;
+
+        //add buttom curves and fill verticie and triangle arrays
+        int resolution = 40;
+        for (int i = 0; i < resolution; i++)
+        {
+            float t = (float)i / (float)(resolution - 1);
+            // Get the point on our curve using the 4 points generated above
+            Vector3 p = CalculateBezierPoint(t, points[i], points[i + 1], points[i + 2], points[i + 3]);
+            AddWavePoint(p);
+        }
+
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
+
+        vertices.Clear();
+        triangles.Clear();
     }
 
     private void FixedUpdate()
@@ -68,9 +101,8 @@ public class WaveGenerator : MonoBehaviour
         MeshFilter filter = GetComponent<MeshFilter>();
         mesh = filter.mesh;
         mesh.Clear();
-        float hWave = 10F;
 
-        // Generate 4 (or more) random points for the top (i.e. the actual wave)
+        // Generate 64 random points for the top (i.e. the actual wave)
         points = new Vector3[64];
         for (int i = 0; i < points.Length; i++)
         {
@@ -124,8 +156,8 @@ public class WaveGenerator : MonoBehaviour
         }
         lastPoints = points;
 
-        // Number of points to draw, how smooth the curve is. has to be smaller than points.Legth+4.
-        int resolution = 20;
+        // Number of points to draw, how smooth the curve is. has to be smaller than points.Legth+3.
+        int resolution = 40;
         for (int i = 0; i < resolution; i++)
         {
             float t = (float)i / (float)(resolution - 1);
