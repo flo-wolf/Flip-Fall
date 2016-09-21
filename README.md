@@ -1,16 +1,29 @@
-# Sliders
-This is a free arcade-esque android game being developed with Unity5.
 
-##Gameplay
-Manipulate and toggle gravity! A round player object has to be raced through a chain of levels, while avoiding all kinds of danger. A tap and hold onto the left half of the screen stops the downwards pull of gravitation. When that tap breaks up, gravity gets activated again, the balls velocity however also gets reset, stealing a lot of its downwards potential and thus also precious time. A tap onto the right half of the screen switches the horizontal orientations of velocity, making the ball e.g. fall in a curve to the right instead of a curve to the left.
+# Arcadia - Fall and Fail
+This is a hardcore level-based arcade mobile platformer with innovative gameplay mechanics, frustration and addiction guaranteed!
 
-##Rules
+Current Beta Demo available here for free! 
+Please keep in mind, this is a one-man hobby project, work in progress. Feedback heavily appreciated!
+
+### Features
+* Colourful Sound Visualization and audiovisual feedback on all game events.
+* 10 Free Demo Levels, more coming on release.
+* Camera rotation, movement and scale animated depending on the Player's velocity.
+* Over 15 different levelobjects, ranging from gravity-attractors over turrets to portals and speed-strips.
+* Inbuilt Level Editing, create and share your own creations and let friends feel the frustration of failure!
+* Progress Serialization, including user preferences, highscores and unlocks.
+
+### How to Play
+Use both hands to play this game.
+Both sides of the screen modify the players movement differently.
+
+Left - Charge
+: Hold to stop the player from falling down. While holding, the player gets accelerated horizontally.
+
+Right - Reflect
+: Tap to instantly mirror the Player's movement direction.
+
 Finish a level to unlock the next one. 
-Earn medals by beating a level within time. 
-More medals unlock new usable items for the level editor. 
-Avoid everything that is not round. 
-Collect everything that is round.
-
-##
-Future features featuring the Feaches' future feature future features.
-50 Free levels, easy to Learn, hard to master. Difficulty and enemy appearances rise from level to level. Inbuilt Level Editing. Distribute your own creations and play community content.
+Earn stars by beating a level within the developers time. 
+Stars can be used to unlock new items for the level editor as well as color themes.
+All unlockable items are optional and do not give you an advantage while playing.
