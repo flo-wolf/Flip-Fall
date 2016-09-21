@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c65e80bb8a97f894fa0f7fc9e565c1ef
+timeCreated: 1474480583
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Transuranium
+  fontNames:
+  - Transuranium
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

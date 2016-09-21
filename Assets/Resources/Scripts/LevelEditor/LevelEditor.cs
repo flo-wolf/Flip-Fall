@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Impulse
 {
-    public class LevelEditor : MonoBehaviour
+    public class Leveleditor : MonoBehaviour
     {
         //look at tileeditor sctipt to get an idea how a level editor could be build up like
 

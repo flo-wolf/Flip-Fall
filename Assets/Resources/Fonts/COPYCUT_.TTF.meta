@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: af6f6973304e6df4ab8e051c168f52e4
+timeCreated: 1474481514
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Copycut
+  fontNames:
+  - Copycut
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

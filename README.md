@@ -18,10 +18,10 @@ Use both hands to play this game.
 Both sides of the screen modify the players movement differently.
 
 Left - Charge
-: Hold to stop the player from falling down. While holding, the player gets accelerated horizontally.
+* Hold to stop the player from falling down. While holding, the player gets accelerated horizontally.
 
 Right - Reflect
-: Tap to instantly mirror the Player's movement direction.
+* Tap to instantly mirror the Player's movement direction.
 
 Finish a level to unlock the next one. 
 Earn stars by beating a level within the developers time. 

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Impulse.UI
 {
-    public class UILevelEditor : MonoBehaviour
+    public class UILeveleditorManager : MonoBehaviour
     {
         public Text levelInfoText;
         public Dropdown dropdown;
