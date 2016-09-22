@@ -45,6 +45,10 @@ namespace Impulse
 
         private void OnEnable()
         {
+        }
+
+        private void Start()
+        {
             if (!started)
             {
                 onStartup.Invoke();
@@ -100,6 +104,15 @@ namespace Impulse
         private void OnApplicationQuit()
         {
             ProgressManager.SaveProgressData();
+        }
+
+        // Listening for Android-back-key presses
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SetScene(Scene.home);
+            }
         }
 
         public class SceneChangeEvent : UnityEvent<Scene> { }

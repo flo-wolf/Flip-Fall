@@ -34,6 +34,7 @@ namespace Impulse.UI
 
         public void AppStartup()
         {
+            startupAnimation["fadeFromBlack"].speed = 0.5F;
             startupAnimation.Play("fadeFromBlack");
         }
 
