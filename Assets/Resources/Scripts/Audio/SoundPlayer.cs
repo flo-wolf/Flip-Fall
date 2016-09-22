@@ -23,8 +23,7 @@ namespace Impulse.Audio
 
         public AudioListener audioListener;
 
-        //storage, values gathered rom progress.settings on each scene change
-        private float musicVolume = 1;
+        //storage, values gathered from progress.settings on each scene change
         private float fxVolume = 1;
 
         private void Awake()
@@ -51,23 +50,18 @@ namespace Impulse.Audio
 
         public void AdjustMusicVolume(float newVolume)
         {
-            musicVolume = newVolume;
-
             musicSource.volume = newVolume;
         }
 
         public void SceneChanged(Main.Scene s)
         {
-            musicVolume = ProgressManager.GetProgress().settings.musicVolume;
+            musicSource.volume = ProgressManager.GetProgress().settings.musicVolume;
             fxVolume = ProgressManager.GetProgress().settings.fxVolume;
         }
 
         //Used to play single sound clips.
         public void PlaySingle(AudioClip clip)
         {
-            if (sfxSource.clip == null)
-            {
-            }
             //Set the clip of our efxSource audio source to the clip passed in as a parameter.
             sfxSource.pitch = 1;
 
@@ -78,9 +72,8 @@ namespace Impulse.Audio
         //Used to play single sound clips.
         public void PlayMusic(AudioClip clip)
         {
-            if (sfxSource.clip == null)
-            {
-            }
+            musicSource.volume = ProgressManager.GetProgress().settings.musicVolume;
+
             //Set the clip of our efxSource audio source to the clip passed in as a parameter.
             musicSource.pitch = 1;
 

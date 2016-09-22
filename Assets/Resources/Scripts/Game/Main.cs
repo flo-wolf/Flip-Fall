@@ -20,6 +20,8 @@ namespace Impulse
         /// Indicates which scene is curretly active -  switch with SetScene()
         /// </summary>
         public enum Scene { welcome, home, levelselection, tutorial, game, settings, editor, shop }
+        public static Scene currentScene;
+
         public float sceneSwitchDelay = 0.5F;
 
         public static StartupEvent onStartup = new StartupEvent();
@@ -41,6 +43,8 @@ namespace Impulse
             }
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
+
+            currentScene = Scene.home;
         }
 
         private void OnEnable()
@@ -59,6 +63,7 @@ namespace Impulse
         public static void SetScene(Scene newScene)
         {
             ProgressManager.SaveProgressData();
+            currentScene = newScene;
             onSceneChange.Invoke(newScene);
             switch (newScene)
             {
@@ -109,9 +114,12 @@ namespace Impulse
         // Listening for Android-back-key presses
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (started && Input.GetKeyDown(KeyCode.Escape))
             {
-                SetScene(Scene.home);
+                if (currentScene == Scene.home)
+                    Application.Quit();
+                else
+                    SetScene(Scene.home);
             }
         }
 
