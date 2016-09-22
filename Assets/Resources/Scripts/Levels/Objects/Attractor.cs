@@ -12,8 +12,12 @@ namespace Impulse.LevelObjects
 {
     public class Attractor : MonoBehaviour
     {
+        // Set by transform scale
         public float pullRadius = 1000f;
+
         public float maxPullForce = 1000f;
+
+        public Material moveZoneMaterial;
 
         // amplifies the pull fprce by this value when the player comes closer
         public float pullAmplifier = 2F;
@@ -24,7 +28,6 @@ namespace Impulse.LevelObjects
         private Vector2 center;
 
         public float EffectTime = 0F;
-        private MeshRenderer mr;
 
         [ExecuteInEditMode]
         public void SetScale()
@@ -35,14 +38,20 @@ namespace Impulse.LevelObjects
         public void Start()
         {
             playerRb = Player._instance.GetComponent<Rigidbody2D>();
-            mr = this.GetComponent<MeshRenderer>();
             center = transform.position;
             SetScale();
 
             // reset shader input
-            mr.sharedMaterial.SetFloat("_EffectDistance", pullRadius * 2);
-            mr.sharedMaterial.SetVector("_ShieldColor", new Vector4(0.7f, 1f, 1f, 0f));
-            mr.sharedMaterial.SetFloat("_EffectRadius", pullRadius);
+            moveZoneMaterial.SetFloat("_PlayerDistance", pullRadius * 2);
+            moveZoneMaterial.SetFloat("_AttractorRadius", pullRadius);
+        }
+
+        [ExecuteInEditMode]
+        private void OnDrawGizmos()
+        {
+#if UNITY_EDITOR
+            Gizmos.DrawWireSphere(transform.position, pullRadius);
+#endif
         }
 
         public void FixedUpdate()
@@ -55,11 +64,11 @@ namespace Impulse.LevelObjects
                 // apply force on player towards this
                 playerRb.AddForce(forceDirection.normalized * maxPullForce * Time.fixedDeltaTime * pullAmplifier);
 
-                // update shader input
-                mr.sharedMaterial.SetVector("_ShieldColor", new Vector4(0.7f, 1, 1, 0.00f));
-                mr.sharedMaterial.SetVector("_Position", transform.InverseTransformPoint(transform.position));
                 float dist = Mathf.Abs(Vector3.Distance(collider.transform.position, transform.position));
-                mr.sharedMaterial.SetFloat("_EffectDistance", dist);
+
+                // update shader input
+                moveZoneMaterial.SetVector("_AttractionCenter", transform.InverseTransformPoint(transform.position));
+                moveZoneMaterial.SetFloat("_PlayerDistance", dist);
             }
         }
     }

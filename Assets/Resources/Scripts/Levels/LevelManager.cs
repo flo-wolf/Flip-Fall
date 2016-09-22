@@ -46,6 +46,10 @@ namespace Impulse.Levels
         private void OnEnable()
         {
             lastPlayedID = ProgressManager.GetProgress().lastPlayedLevelID;
+            if (lastPlayedID <= ProgressManager.GetProgress().lastUnlockedLevel)
+                activeLevel = lastPlayedID;
+            else
+                activeLevel = 1;
         }
 
         private void Start()
