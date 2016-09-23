@@ -103,12 +103,13 @@ namespace Impulse.Levels
             moveAreaGo.tag = Constants.moveAreaTag;
             moveAreaGo.layer = LayerMask.NameToLayer("LevelMask");
             moveAreaGo.transform.parent = this.transform;
+            moveAreaGo.transform.localPosition = new Vector3(moveAreaGo.transform.localPosition.x, moveAreaGo.transform.localPosition.y, 0);
             mr.material = material;
 
-            if (LevelRenderMask._instance.renderTexture != null)
-            {
-                material.SetTexture("_MainTex", LevelRenderMask._instance.renderTexture);
-            }
+            //if (LevelRenderMask._instance.renderTexture != null)
+            //{
+            //    material.SetTexture("_MainTex", LevelRenderMask._instance.renderTexture);
+            //}
 
             mf.sharedMesh = mergedMesh;
 

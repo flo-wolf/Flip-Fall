@@ -19,7 +19,10 @@ public class CamCopy : MonoBehaviour
     private void FixedUpdate()
     {
         this.transform.position = targetCam.transform.position;
-        this.transform.rotation = targetCam.transform.rotation;
+        //rotate by 180, because moveArea shader flips levelObjects upside down => PLATFORM SPECIFIC!!!
+        //transform.rotation = new Quaternion(targetCam.transform.rotation.x, targetCam.transform.rotation.y, targetCam.transform.rotation.z + 180, targetCam.transform.rotation.w);
+
+        transform.rotation = targetCam.transform.rotation;
         cam.orthographicSize = targetCam.orthographicSize;
     }
 }

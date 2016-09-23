@@ -14,6 +14,9 @@ namespace Impulse.Cam
         public static GameCamManager _instance;
         public Player player;
 
+        public Camera levelMaskCamera;
+        public Camera levelObjectCamera;
+
         public static float defaultTransitionDuration = 1F;
 
         //Duration camera events use after the player's death, i.e. zooming and rotation times
@@ -22,10 +25,18 @@ namespace Impulse.Cam
 
         public float rotateToVelocityDuration = 1F;
 
-        private void Awake()
+        private void OnEnable()
         {
             _instance = this;
+            levelObjectCamera.targetTexture = LevelRenderMask._instance.renderTexture;
             //player = Player._instance;
+        }
+
+        private void FixedUpdate()
+        {
+            //renderTexture = new RenderTexture(1080, 1920, 16, RenderTextureFormat.ARGB32);
+            //renderTexture.Create();
+            //levelObjectCamera.targetTexture = renderTexture;
         }
 
         private void Start()

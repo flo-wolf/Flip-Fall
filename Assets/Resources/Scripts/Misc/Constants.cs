@@ -9,7 +9,7 @@ namespace Impulse
     {
         public const float twoStarPercantage = 0.2F;
         public const float cameraZ = -20f;
-        public const float playerZ = 0f;
+        public const float playerZ = -1f;
         public const float ghostZ = 0f;
         public const int scoreboardSize = 10;
         public const string timerFormat = "{0:D1}.{1:D2}";
