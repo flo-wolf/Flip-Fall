@@ -42,7 +42,7 @@ namespace Impulse.LevelObjects
             SetScale();
 
             // reset shader input
-            moveZoneMaterial.SetFloat("_PlayerDistance", pullRadius * 2);
+            moveZoneMaterial.SetFloat("_PlayerDistance", pullRadius * 10);
             moveZoneMaterial.SetFloat("_AttractorRadius", pullRadius);
         }
 
@@ -67,6 +67,7 @@ namespace Impulse.LevelObjects
                 float dist = Mathf.Abs(Vector3.Distance(collider.transform.position, transform.position));
 
                 // update shader input
+                moveZoneMaterial.SetFloat("_AttractorRadius", pullRadius);
                 moveZoneMaterial.SetVector("_AttractionCenter", transform.InverseTransformPoint(transform.position));
                 moveZoneMaterial.SetFloat("_PlayerDistance", dist);
             }

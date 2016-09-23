@@ -44,6 +44,7 @@ namespace Impulse.Levels
         private void Awake()
         {
             material = Resources.Load("Materials/Game/MoveZone", typeof(Material)) as Material;
+            material.SetFloat("_PlayerDistance", 10000);
 
             spawn = gameObject.GetComponentInChildren<Spawn>();
             finish = gameObject.GetComponentInChildren<Finish>();

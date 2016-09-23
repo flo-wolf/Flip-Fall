@@ -273,6 +273,9 @@ namespace Impulse
             trailParticles.Stop();
             trailParticles.gameObject.SetActive(true);
 
+            GetComponent<MeshRenderer>().enabled = false;
+            //GetComponent<Animation>().Play("playerDeath");
+
             finishParticles.gameObject.SetActive(true);
             //finishParticles.Clear();
             //finishParticles.Simulate(0.0f, true, true);
