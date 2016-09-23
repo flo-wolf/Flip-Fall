@@ -110,7 +110,7 @@ namespace Impulse.UI
             //{
             //    Debug.LogError("UI level about to be placed is null");
             //}
-            if (!IsPlaced(l.id))
+            if (l != null && !IsPlaced(l.id))
             {
                 DestroyExistingUILevels();
                 l = (UILevel)Instantiate(uiLevels.Find(x => x.id == id), new Vector3(0, 0, 0), Quaternion.identity);
@@ -120,7 +120,7 @@ namespace Impulse.UI
             }
             else
             {
-                Debug.Log("[UILevelPlacer]: Place(): Cant place Level " + uiLevels[id].id + ", it already exists in the scene!");
+                //Debug.Log("[UILevelPlacer]: Place(): Cant place Level " + uiLevels[id].id + ", it already exists in the scene!");
             }
         }
 

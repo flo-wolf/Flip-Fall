@@ -66,6 +66,11 @@ namespace Impulse.Levels
             return levels.Find(x => x.id == activeLevel);
         }
 
+        public static Level GetLevel()
+        {
+            return LevelPlacer.placedLevel;
+        }
+
         public static Level GetLevel(int id)
         {
             return LevelLoader.LoadLevel(id);
