@@ -271,10 +271,10 @@ namespace Impulse
 
             trailParticlesEmit.enabled = false;
             trailParticles.Stop();
-            trailParticles.gameObject.SetActive(true);
+            trailParticles.gameObject.SetActive(false);
 
+            //disables player mesh, only leaving particle effectss
             GetComponent<MeshRenderer>().enabled = false;
-            //GetComponent<Animation>().Play("playerDeath");
 
             finishParticles.gameObject.SetActive(true);
             //finishParticles.Clear();
@@ -282,11 +282,6 @@ namespace Impulse
             finishParticlesEmit.enabled = true;
             finishParticles.Play();
 
-            //Add here animations, fadeaway etc on death
-            //trail.time = 0.0f;
-            //trail.enabled = false;
-            //trail2.time = 0.0f;
-            //trail2.enabled = false;
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();
@@ -312,11 +307,9 @@ namespace Impulse
             facingLeft = spawn.facingLeftOnSpawn;
             firstChargeDone = false;
 
-            //Add here animations, fadeaway etc on death
-            //trail.time = 0.0f;
-            //trail.enabled = false;
-            //trail2.time = 0.0f;
-            //trail2.enabled = false;
+            //disables player mesh, only leaving particle effectss
+            GetComponent<MeshRenderer>().enabled = false;
+
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
             rBody.Sleep();
