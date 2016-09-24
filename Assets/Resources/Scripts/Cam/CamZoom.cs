@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Camera Zoom Handler, triggered through CameraManager
+/// Controls the zoom of an array of cameras simultaniously
 /// </summary>
 
 namespace Impulse.Cam
@@ -11,7 +11,7 @@ namespace Impulse.Cam
     public class CamZoom : MonoBehaviour
     {
         public static CamZoom _instance;
-        public Camera cam;
+        public Camera[] cams;
 
         //Zoom camera sizes
         public float maxZoom = 120F;
@@ -29,7 +29,7 @@ namespace Impulse.Cam
 
         private void Start()
         {
-            size = cam.orthographicSize;
+            size = cams[0].orthographicSize;
         }
 
         //zooms in from the current camera size to the minimum camera size
@@ -82,7 +82,11 @@ namespace Impulse.Cam
             while (t < 1F)
             {
                 t += Time.deltaTime * (Time.timeScale / duration);
-                cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, minZoom, t);
+                foreach (Camera cam in cams)
+                {
+                    cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, minZoom, t);
+                }
+
                 yield return new WaitForFixedUpdate();
             }
             yield break;
@@ -95,7 +99,10 @@ namespace Impulse.Cam
             {
                 t += Time.deltaTime * (Time.timeScale / duration);
 
-                cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
+                foreach (Camera cam in cams)
+                {
+                    cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
+                }
 
                 yield return new WaitForFixedUpdate();
             }
@@ -112,15 +119,27 @@ namespace Impulse.Cam
                 switch (interpolationType)
                 {
                     case InterpolationType.smoothstep:
-                        cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
+                        foreach (Camera cam in cams)
+                        {
+                            cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
+                        }
+
                         break;
 
                     case InterpolationType.linear:
-                        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, size, t);
+                        foreach (Camera cam in cams)
+                        {
+                            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, size, t);
+                        }
+
                         break;
 
                     default:
-                        cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
+                        foreach (Camera cam in cams)
+                        {
+                            cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
+                        }
+
                         break;
                 }
 
@@ -135,7 +154,12 @@ namespace Impulse.Cam
             while (t < 1F)
             {
                 t += Time.deltaTime * (Time.timeScale / duration);
-                cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, maxZoom, t);
+
+                foreach (Camera cam in cams)
+                {
+                    cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, maxZoom, t);
+                }
+
                 yield return new WaitForFixedUpdate();
             }
             yield break;
@@ -170,7 +194,11 @@ namespace Impulse.Cam
                 //velocity.x = System.Math.Abs(velocity.x);
 
                 size = Mathf.Lerp(minZoom, maxZoom, Mathf.InverseLerp(minZoom, maxVelocity, velocity.magnitude));
-                cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
+
+                foreach (Camera cam in cams)
+                {
+                    cam.orthographicSize = Mathf.SmoothStep(cam.orthographicSize, size, t);
+                }
 
                 yield return new WaitForFixedUpdate();
             }
@@ -196,7 +224,12 @@ namespace Impulse.Cam
                 }
 
                 size = Mathf.Lerp(minZoom, maxZoom, Mathf.InverseLerp(minZoom, maxVelocity, velocity.magnitude));
-                cam.orthographicSize = size;
+
+                foreach (Camera cam in cams)
+                {
+                    cam.orthographicSize = size;
+                }
+
                 yield return new WaitForFixedUpdate();
             }
         }

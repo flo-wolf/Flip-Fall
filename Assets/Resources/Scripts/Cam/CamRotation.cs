@@ -12,7 +12,7 @@ namespace Impulse.Cam
     {
         public enum RotationType { defaultToMax, minToMax }
         public static CamRotation _instance;
-        public Camera cam;
+        public Camera[] cams;
         public Player player;
 
         [Header("Settings")]
@@ -108,7 +108,10 @@ namespace Impulse.Cam
                     lerpTime -= Time.fixedDeltaTime;
                 }
 
-                cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, maxRotationAngle, lerpTime);
+                foreach (Camera cam in cams)
+                {
+                    cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, maxRotationAngle, lerpTime);
+                }
 
                 yield return new WaitForFixedUpdate();
             }
@@ -124,8 +127,12 @@ namespace Impulse.Cam
             while (zooming)
             {
                 zoomLerpTime += Time.fixedDeltaTime;
-                rotation = new Vector3(0, 0, Mathf.SmoothStep(cam.transform.rotation.y, angle, zoomLerpTime));
-                cam.transform.Rotate(rotation);
+                rotation = new Vector3(0, 0, Mathf.SmoothStep(cams[0].transform.rotation.y, angle, zoomLerpTime));
+
+                foreach (Camera cam in cams)
+                {
+                    cam.transform.Rotate(rotation);
+                }
 
                 if (rotation.z == defaultRotationAngle)
                 {
@@ -147,7 +154,10 @@ namespace Impulse.Cam
             {
                 t += Time.deltaTime * (Time.timeScale / duration);
 
-                transform.rotation = Quaternion.Slerp(transform.rotation, defaultRotation, t);
+                foreach (Camera cam in cams)
+                {
+                    cam.transform.rotation = Quaternion.Slerp(cams[0].transform.rotation, defaultRotation, t);
+                }
 
                 yield return new WaitForFixedUpdate();
             }
@@ -174,8 +184,12 @@ namespace Impulse.Cam
                 else
                     currentVelocityRotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude)));
 
-                newRotation = Quaternion.Lerp(transform.rotation, currentVelocityRotation, t);
-                transform.rotation = newRotation;
+                newRotation = Quaternion.Lerp(cams[0].transform.rotation, currentVelocityRotation, t);
+
+                foreach (Camera cam in cams)
+                {
+                    cam.transform.rotation = newRotation;
+                }
 
                 yield return new WaitForFixedUpdate();
             }
@@ -219,8 +233,10 @@ namespace Impulse.Cam
 
                 //change Lerp to Smoothstep, since min and max are fixed values
                 //transform.rotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
-
-                transform.rotation = newRotation;
+                foreach (Camera cam in cams)
+                {
+                    cam.transform.rotation = newRotation;
+                }
 
                 //Debug.Log("newRotation" + newRotation);
 
@@ -258,9 +274,10 @@ namespace Impulse.Cam
                 //change Lerp to Smoothstep, since min and max are fixed values
                 //transform.rotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
 
-                transform.rotation = newRotation;
-
-                //Debug.Log("newRotation" + newRotation);
+                foreach (Camera cam in cams)
+                {
+                    cam.transform.rotation = newRotation;
+                }
 
                 yield return new WaitForFixedUpdate();
             }

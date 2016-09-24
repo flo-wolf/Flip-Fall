@@ -5,13 +5,16 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Controls the movement of an array of cameras simultaniously
+/// </summary>
+
 namespace Impulse.Cam
 {
     public class CamMove : MonoBehaviour
     {
         public static CamMove _instance;
-        public Camera cam;
-        public FixedJoint2D joint;
+        public Camera[] cams;
 
         public static CameraStateEvent onCamMoveStateChange = new CameraStateEvent();
         public enum CamMoveState { following, transitioning, resting }
@@ -28,7 +31,10 @@ namespace Impulse.Cam
         {
             Vector3 spawnPos = LevelManager.GetActiveLevel().spawn.GetPosition();
             spawnPos.z = Constants.cameraZ;
-            cam.transform.position = spawnPos;
+            foreach (Camera cam in cams)
+            {
+                cam.transform.position = spawnPos;
+            }
         }
 
         public static void StartFollowing()
@@ -105,7 +111,10 @@ namespace Impulse.Cam
             if (camMoveState == CamMoveState.following)
             {
                 Vector3 PlayerPOS = Player._instance.transform.transform.position;
-                cam.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y, Constants.cameraZ);
+                foreach (Camera cam in cams)
+                {
+                    cam.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y, Constants.cameraZ);
+                }
             }
         }
 

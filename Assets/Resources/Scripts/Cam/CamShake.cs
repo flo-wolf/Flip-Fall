@@ -7,7 +7,7 @@ namespace Impulse.Cam
     public class CamShake : MonoBehaviour
     {
         public static CamShake _instance;
-        public Camera cam;
+        public Camera[] cams;
 
         [Header("Shake Settings")]
         public float maxChargingShake = 5F;
@@ -51,16 +51,24 @@ namespace Impulse.Cam
 
             while (Time.time < endTime)
             {
-                originalPos = cam.transform.position;
+                originalPos = cams[0].transform.position;
                 newPos = originalPos + Random.insideUnitSphere * amount;
                 newPos.z = originalPos.z;
-                cam.transform.position = newPos;
+
+                foreach (Camera cam in cams)
+                {
+                    cam.transform.position = newPos;
+                }
+
                 duration -= Time.deltaTime;
 
                 yield return null;
             }
 
-            cam.transform.position = originalPos;
+            foreach (Camera cam in cams)
+            {
+                cam.transform.position = originalPos;
+            }
         }
 
         //creates increasing shake depending on the rigidbody's velocity
@@ -75,7 +83,7 @@ namespace Impulse.Cam
 
             while (true)
             {
-                originalPos = cam.transform.position;
+                originalPos = cams[0].transform.position;
                 velocity = rb.velocity;
                 velocity.x = System.Math.Abs(velocity.x);
 
@@ -87,7 +95,12 @@ namespace Impulse.Cam
                 amount = Mathf.SmoothStep(0, maxChargingShake, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
                 newPos = originalPos + Random.insideUnitSphere * amount;
                 newPos.z = 0;
-                cam.transform.position = newPos;
+
+                foreach (Camera cam in cams)
+                {
+                    cam.transform.position = newPos;
+                }
+
                 yield return new WaitForFixedUpdate();
             }
         }
