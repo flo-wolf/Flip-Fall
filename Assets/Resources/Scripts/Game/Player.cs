@@ -30,10 +30,9 @@ namespace Impulse
         public static Portal startPortal;
         public static Portal destinationPortal;
 
-        //public Player instance;
         [Header("References")]
-        public ParticleSystem finishParticles;
-        private ParticleSystem.EmissionModule finishParticlesEmit;
+        public ParticleSystem deathParticles;
+        private ParticleSystem.EmissionModule deathParticlesEmit;
 
         public ParticleSystem trailParticles;
         private ParticleSystem.EmissionModule trailParticlesEmit;
@@ -77,7 +76,8 @@ namespace Impulse
         private void Awake()
         {
             _instance = this;
-            finishParticlesEmit = finishParticles.emission;
+
+            deathParticlesEmit = deathParticles.emission;
             trailParticlesEmit = trailParticles.emission;
         }
 
@@ -87,7 +87,8 @@ namespace Impulse
             ReloadSpawnPoint();
             MoveToSpawn();
             Spawn();
-            finishParticles.gameObject.SetActive(false);
+            deathParticles.Stop();
+            deathParticles.gameObject.SetActive(false);
             Game.onGameStateChange.AddListener(GameStateChanged);
             LevelManager.onLevelChange.AddListener(LevelChanged);
 
@@ -167,31 +168,19 @@ namespace Impulse
             }
         }
 
-        //// Player has left the area allowed for moving(moveMask)
-        //private void OnTriggerExit2D(Collider2D collider)
-        //{
-        //    if (colliderList.Count > 0 && collider.tag == Constants.moveAreaTag && teleporting == false)
-        //    {
-        //        colliderList.Remove(collider);
-        //    }
-
-        //    if (collider.tag == Constants.moveAreaTag && colliderList.Count == 0 && IsAlive() && teleporting == false)
-        //    {
-        //        Debug.Log("TriggerExit - Die - Collider: " + collider.gameObject);
-        //        Die();
-        //        Game.SetGameState(Game.GameState.deathscreen);
-        //    }
-
-        //    if (collider.gameObject.tag == Constants.portalTag)
-        //    {
-        //        teleporting = false;
-        //        PortalExit(collider.gameObject.GetComponent<Portal>());
-        //    }
-        //}
+        // Player has left the area allowed for moving(moveMask)
+        private void OnTriggerExit2D(Collider2D collider)
+        {
+            if (collider.gameObject.tag == Constants.portalTag && teleporting)
+            {
+                teleporting = false;
+                //PortalExit(collider.gameObject.GetComponent<Portal>());
+            }
+        }
 
         public void OnParticleCollision(GameObject go)
         {
-            if (killMask == (killMask | (1 << go.layer)) && IsAlive())
+            if (go.tag == Constants.killTag && IsAlive())
             {
                 Die();
                 Game.SetGameState(Game.GameState.deathscreen);
@@ -276,11 +265,11 @@ namespace Impulse
             //disables player mesh, only leaving particle effectss
             GetComponent<MeshRenderer>().enabled = false;
 
-            finishParticles.gameObject.SetActive(true);
+            deathParticles.gameObject.SetActive(true);
             //finishParticles.Clear();
             //finishParticles.Simulate(0.0f, true, true);
-            finishParticlesEmit.enabled = true;
-            finishParticles.Play();
+            deathParticlesEmit.enabled = true;
+            deathParticles.Play();
 
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;
@@ -295,12 +284,13 @@ namespace Impulse
 
             trailParticlesEmit.enabled = false;
             trailParticles.Stop();
+            trailParticles.gameObject.SetActive(false);
 
-            finishParticles.gameObject.SetActive(true);
+            deathParticles.gameObject.SetActive(true);
             //finishParticles.Clear();
             //finishParticles.Simulate(0.0f, true, true);
-            finishParticlesEmit.enabled = true;
-            finishParticles.Play();
+            //deathParticlesEmit.enabled = true;
+            //deathParticles.Play();
 
             gameObject.GetComponent<MeshRenderer>().material = winMaterial;
             charging = false;
@@ -321,8 +311,8 @@ namespace Impulse
             transform.position = spawnPosition;
             Debug.Log("Spawnposition:" + spawnPosition);
 
-            finishParticlesEmit.enabled = false;
-            finishParticles.Stop();
+            deathParticlesEmit.enabled = false;
+            deathParticles.Stop();
             gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
             rBody.velocity = Vector3.zero;
             rBody.gravityScale = 0f;

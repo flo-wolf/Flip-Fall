@@ -8,6 +8,11 @@ public class Turret : MonoBehaviour
     public ParticleSystem shotPS;
     public Animation shotAnimation;
 
+    // implement thoe by changing the particle system accordingly.
+    public float startupDelay = 0F;
+    public float shotDelay = 1F;
+    public float shotSpeed = 1F;
+
     // Use this for initialization
     private void Start()
     {

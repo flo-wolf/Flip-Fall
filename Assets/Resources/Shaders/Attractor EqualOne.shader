@@ -1,11 +1,11 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "Custom/MoveZoneAttractor" {
+Shader "Custom/Attractor EqualOne" {
 	Properties{
 		// color settings
-		_MoveZoneColor("MoveZone Color (RGBA)", Color) = (0.7, 1, 1, 1)
-		_AttractorColor("Attractor Color (RGBA)", Color) = (0.7, 1, 1, 1)
-		_ColorMulti("Attractor Color Multiplier (0-1)", float) = 1
+		_Color("Default Color, not in radius (RGBA)", Color) = (0.7, 1, 1, 1)
+		_AttractedColor("Attracted Color (RGBA)", Color) = (0.7, 1, 1, 1)
+		_ColorMulti("Attracted Color Multiplier", float) = 1
 
 		// updated when player collides with an Attractor
 		_AttractorCenter("Attractor Center", Vector) = (-1, -1, -1, -1)
@@ -19,6 +19,13 @@ Shader "Custom/MoveZoneAttractor" {
 		Cull Off
 			ZWrite Off
 			Lighting Off
+
+		Stencil
+	{
+		Ref 1
+		Comp equal
+		Pass keep
+	}
 
 		CGPROGRAM
 #pragma surface surf Lambert vertex:vert alpha
@@ -34,18 +41,19 @@ Shader "Custom/MoveZoneAttractor" {
 		//float2 uv : TEXCOORD0;
 	};
 
+	float4 _Color;
+	float4 _AttractedColor;
 	float4 _AttractionCenter;
-	float4 _MoveZoneColor;
-	float4 _AttractorColor;
 	float _PlayerDistance;
 	float _AttractorRadius;
 	float _ColorMulti;
 
 	void vert(inout appdata_full v, out Input o)
 	{
+		//_Color = float4(0.7, 0.7, 0.7, 1);
 		o.customDist = distance(_AttractionCenter.xyz, v.vertex.xyz);
 		UNITY_INITIALIZE_OUTPUT(Input, o);
-		o.color = v.color * _MoveZoneColor;
+		o.color = _Color;
 
 		//o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 		//// Gets the xy position of the vertex in worldspace.
@@ -57,8 +65,9 @@ Shader "Custom/MoveZoneAttractor" {
 
 	void surf(Input IN, inout SurfaceOutput o)
 	{
-		o.Albedo = _MoveZoneColor.rgb;
-		o.Emission = _MoveZoneColor;
+		o.Albedo = _Color.rgb;
+		o.Emission = _Color;
+		o.Alpha = 1;
 
 		float2 uv = IN.worldPos.xy;
 
@@ -69,14 +78,14 @@ Shader "Custom/MoveZoneAttractor" {
 		{
 			//o.Alpha = (1 - (_EffectDistance / _EffectRadius)) + _AttractorColor.a;
 			//o.Emission = _AttractorColor.rgb
-			o.Albedo = _MoveZoneColor.rgb + ((1 - (_PlayerDistance / _AttractorRadius)) * _AttractorColor.rgb) * _ColorMulti;
-			o.Emission = _MoveZoneColor.rgb + ((1 - (_PlayerDistance / _AttractorRadius)) * _AttractorColor.rgb) * _ColorMulti;
+			o.Albedo = _Color.rgb + ((1 - (_PlayerDistance / _AttractorRadius)) * _AttractedColor.rgb) * _ColorMulti;
+			o.Emission = _Color.rgb + ((1 - (_PlayerDistance / _AttractorRadius)) * _AttractedColor.rgb) * _ColorMulti;
+			//o.Alpha = 0 + ((1 - (_PlayerDistance / _AttractorRadius)) * _AttractedColor.a) * _ColorMulti;
 		}
 		else
 		{
 			//o.Alpha = o.Alpha = _MoveZoneColor.a;
 		}
-		o.Alpha = _MoveZoneColor.a;
 	}
 
 ENDCG

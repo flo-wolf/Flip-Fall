@@ -17,7 +17,7 @@ namespace Impulse.LevelObjects
 
         public float maxPullForce = 1000f;
 
-        public Material moveZoneMaterial;
+        public Material attractorMaterial;
 
         // amplifies the pull fprce by this value when the player comes closer
         public float pullAmplifier = 2F;
@@ -42,8 +42,8 @@ namespace Impulse.LevelObjects
             SetScale();
 
             // reset shader input
-            moveZoneMaterial.SetFloat("_PlayerDistance", pullRadius * 10);
-            moveZoneMaterial.SetFloat("_AttractorRadius", pullRadius);
+            attractorMaterial.SetFloat("_PlayerDistance", pullRadius * 10);
+            attractorMaterial.SetFloat("_AttractorRadius", pullRadius);
         }
 
         [ExecuteInEditMode]
@@ -67,9 +67,9 @@ namespace Impulse.LevelObjects
                 float dist = Mathf.Abs(Vector3.Distance(collider.transform.position, transform.position));
 
                 // update shader input
-                moveZoneMaterial.SetFloat("_AttractorRadius", pullRadius);
-                moveZoneMaterial.SetVector("_AttractionCenter", transform.InverseTransformPoint(transform.position));
-                moveZoneMaterial.SetFloat("_PlayerDistance", dist);
+                attractorMaterial.SetFloat("_AttractorRadius", pullRadius);
+                attractorMaterial.SetVector("_AttractionCenter", transform.InverseTransformPoint(transform.position));
+                attractorMaterial.SetFloat("_PlayerDistance", dist);
             }
         }
     }

@@ -75,6 +75,7 @@ namespace Impulse
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
                     Main.SetScene(Main.Scene.levelselection);
+                    onGameStateChange.Invoke(gs);
                     break;
 
                 case GameState.finishscreen:
@@ -88,6 +89,7 @@ namespace Impulse
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
                     Main.SetScene(Main.Scene.levelselection);
+                    onGameStateChange.Invoke(gs);
                     break;
 
                 case GameState.playing:
