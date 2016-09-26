@@ -10,8 +10,10 @@ public class Turret : MonoBehaviour
     private Animation shotAnimation;
 
     // implement thoe by changing the particle system accordingly.
-    private float startupDelay = 0F;
-    private float shotDelay = 0.8F;
+    public float shotDelay = 1F;
+    public float startupDelay = 0F;
+
+    // not yet implemented
     private float shotSpeed = 1F;
 
     public bool constantFire = true;
@@ -46,6 +48,7 @@ public class Turret : MonoBehaviour
 
     private IEnumerator cFire()
     {
+        yield return new WaitForSeconds(startupDelay);
         while (constantFire)
         {
             yield return new WaitForSeconds(shotDelay);

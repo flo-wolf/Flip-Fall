@@ -62,7 +62,7 @@ public class WaveGenerator : MonoBehaviour
         mesh.Clear();
 
         // Generate 64 random points for the top (i.e. the actual wave)
-        points = new Vector3[64];
+        points = new Vector3[32];
         for (int i = 0; i < points.Length; i++)
         {
             points[i] = new Vector3(0.5f * (float)i, 0.6f, 0f);
@@ -71,7 +71,7 @@ public class WaveGenerator : MonoBehaviour
         lastPoints = points;
 
         //add buttom curves and fill verticie and triangle arrays
-        int resolution = 40;
+        int resolution = 29;
         for (int i = 0; i < resolution; i++)
         {
             float t = (float)i / (float)(resolution - 1);
@@ -103,7 +103,7 @@ public class WaveGenerator : MonoBehaviour
         mesh.Clear();
 
         // Generate 64 random points for the top (i.e. the actual wave)
-        points = new Vector3[64];
+        points = new Vector3[32];
         for (int i = 0; i < points.Length; i++)
         {
             // if there are no lastPoints to lerp from create random points
@@ -157,7 +157,7 @@ public class WaveGenerator : MonoBehaviour
         lastPoints = points;
 
         // Number of points to draw, how smooth the curve is. has to be smaller than points.Legth+3.
-        int resolution = 40;
+        int resolution = 29;
         for (int i = 0; i < resolution; i++)
         {
             float t = (float)i / (float)(resolution - 1);

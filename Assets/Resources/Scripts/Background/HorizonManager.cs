@@ -14,7 +14,7 @@ public class HorizonManager : MonoBehaviour
     public static Skin skin;
 
     //skin prefab references
-    public GameObject sunset;
+    public GameObject skinGO;
 
     private void Start()
     {
@@ -63,7 +63,7 @@ public class HorizonManager : MonoBehaviour
             switch (newSkin)
             {
                 case Skin.sunset:
-                    go = Instantiate(sunset, new Vector3(0f, 0f, 0f), Quaternion.identity);
+                    go = Instantiate(skinGO, new Vector3(0f, 0f, 0f), Quaternion.identity);
                     go.gameObject.transform.parent = transform;
                     go.gameObject.transform.localPosition = Vector3.zero;
                     break;
