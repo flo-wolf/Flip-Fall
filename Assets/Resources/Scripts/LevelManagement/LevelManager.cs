@@ -91,7 +91,7 @@ namespace Impulse.Levels
         public static Spawn GetSpawn()
         {
             Debug.Log("activeLevel: " + activeLevel);
-            return levels[activeLevel].spawn;
+            return GetLevel().spawn;
         }
 
         //Does this level exitst?

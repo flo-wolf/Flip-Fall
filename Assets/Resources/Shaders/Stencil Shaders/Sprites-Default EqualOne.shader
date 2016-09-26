@@ -20,7 +20,7 @@ Shader "Custom/Sprites/Default EqualOne"
 
 			Cull Off
 			Lighting Off
-			ZWrite Off
+			ZWrite On
 			Blend One OneMinusSrcAlpha
 
 			Stencil
@@ -61,6 +61,7 @@ Shader "Custom/Sprites/Default EqualOne"
 					v2f OUT;
 					OUT.vertex = UnityObjectToClipPos(IN.vertex);
 					OUT.texcoord = IN.texcoord;
+					//OUT.color = IN.color * _Color;
 					OUT.color = IN.color * _Color;
 					#ifdef PIXELSNAP_ON
 					OUT.vertex = UnityPixelSnap(OUT.vertex);
@@ -87,11 +88,11 @@ Shader "Custom/Sprites/Default EqualOne"
 				fixed4 frag(v2f IN) : SV_Target
 				{
 					fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
-					c.rgb *= c.a;
-					//c.a = _Color.a;
-					return c;
-				}
-			ENDCG
+				c.rgb *= c.a;
+				//c.a = _Color.a;
+				return c;
 			}
+		ENDCG
+		}
 		}
 }

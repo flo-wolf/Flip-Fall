@@ -57,6 +57,7 @@ public class Turret : MonoBehaviour
     {
         //shotPS.Stop();
         shotPS.Play();
+        shotAnimation["turretShooting"].time = shotDelay;
         shotAnimation.Play("turretShooting");
     }
 }
