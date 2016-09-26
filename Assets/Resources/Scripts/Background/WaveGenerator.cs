@@ -17,7 +17,7 @@ public class WaveGenerator : MonoBehaviour
     public float uPeak = 0.2F;
     private float amplitude;
     private float randAmplitude;
-    public float backgroundSpeed = 10;
+    public float backgroundSpeed;
 
     private float newestAudioValue = 0F;
     private float lerpedAudioValue = 0F;
@@ -42,7 +42,7 @@ public class WaveGenerator : MonoBehaviour
     {
         GetComponent<MeshRenderer>().sortingOrder = id;
         height = GetComponent<MeshFilter>().mesh.bounds.extents.y;
-        backgroundSpeed = ProgressManager.GetProgress().settings.backgroundSpeed;
+        backgroundSpeed = ProgressManager.GetProgress().settings.backgroundSpeed; //default 15
 
         UISettingsManager.onHorizonSpeedChange.AddListener(HorizonSpeedChanged);
 

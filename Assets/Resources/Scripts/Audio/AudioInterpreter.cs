@@ -27,8 +27,11 @@ namespace Impulse.Audio
         private void Update()
         {
             float[] spectrum = new float[256];
-            SoundPlayer._instance.musicSource.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
-            currentValue = spectrum[0];
+            if (SoundPlayer._instance != null)
+            {
+                SoundPlayer._instance.musicSource.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
+                currentValue = spectrum[0];
+            }
         }
 
         //Left out: draw debug curves of current audio input - Update()

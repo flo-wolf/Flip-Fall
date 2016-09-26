@@ -34,13 +34,13 @@ namespace Impulse.Progress
         {
             lastUnlockedLevel = 1;
             totalStars = 0;
-            if (LevelLoader.IsLoaded)
-            {
-                lastPlayedLevelID = LevelManager.lastPlayedID;
-                Debug.Log("[ProgressData] ProgressData(): LastPlayedID = " + lastPlayedLevelID);
-            }
-            else
-                lastPlayedLevelID = 1;
+            //if (LevelLoader.IsLoaded)
+            //{
+            //    lastPlayedLevelID = LevelManager.lastPlayedID;
+            //    Debug.Log("[ProgressData] ProgressData(): LastPlayedID = " + lastPlayedLevelID);
+            //}
+            //else
+            lastPlayedLevelID = 1;
             highscores = new List<Highscore>();
         }
 

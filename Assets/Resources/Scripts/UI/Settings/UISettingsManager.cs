@@ -46,11 +46,17 @@ namespace Impulse.UI
             FadeIn();
             SetSliders();
             Main.onSceneChange.AddListener(SceneChanging);
+            ProgressManager.onProgressChange.AddListener(ProgressChanged);
         }
 
         private void SceneChanging(Main.Scene scene)
         {
             FadeOut();
+        }
+
+        private void ProgressChanged(ProgressData p)
+        {
+            SetSliders();
         }
 
         private void FadeIn()
@@ -92,7 +98,6 @@ namespace Impulse.UI
         public void HomeButtonClicked()
         {
             Main.SetScene(Main.Scene.home);
-            ProgressManager.ClearProgress();
             SoundManager.ButtonClicked();
             homeAnimation.Play("buttonClick");
         }

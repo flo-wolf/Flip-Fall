@@ -18,7 +18,7 @@ namespace Impulse.Progress
 
         public Settings()
         {
-            backgroundSpeed = 20F;
+            backgroundSpeed = 15F;
             chargeOnLeftSide = true;
             fxVolume = 1F;
             musicVolume = 1F;
