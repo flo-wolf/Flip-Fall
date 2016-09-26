@@ -17,6 +17,10 @@ namespace Impulse.UI
 
         public class MusicVolumeChangeEvent : UnityEvent<float> { }
 
+        public static FXVolumeChangeEvent onFXVolumeChange = new FXVolumeChangeEvent();
+
+        public class FXVolumeChangeEvent : UnityEvent<float> { }
+
         public static HorizonSpeedChangeEvent onHorizonSpeedChange = new HorizonSpeedChangeEvent();
 
         public class HorizonSpeedChangeEvent : UnityEvent<float> { }
@@ -95,7 +99,7 @@ namespace Impulse.UI
 
         public void FXSliderChanged(Slider s)
         {
-            onMusicVolumeChange.Invoke(s.value);
+            onFXVolumeChange.Invoke(s.value);
             ProgressManager.GetProgress().settings.fxVolume = s.value;
         }
 

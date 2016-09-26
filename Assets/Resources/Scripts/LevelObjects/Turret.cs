@@ -1,4 +1,5 @@
 ﻿using Impulse;
+using Impulse.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,8 +57,9 @@ public class Turret : MonoBehaviour
     private void Fire()
     {
         //shotPS.Stop();
+        SoundManager.TurretShot(new Vector3(transform.position.x, transform.position.y, Constants.playerZ));
         shotPS.Play();
-        shotAnimation["turretShooting"].time = shotDelay;
+        shotAnimation["turretShooting"].time = shotDelay / 1.5F;
         shotAnimation.Play("turretShooting");
     }
 }

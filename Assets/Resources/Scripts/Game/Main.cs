@@ -1,4 +1,5 @@
 ﻿using Impulse.Progress;
+using Impulse.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -114,12 +115,26 @@ namespace Impulse
         // Listening for Android-back-key presses
         private void Update()
         {
-            if (started && Input.GetKeyDown(KeyCode.Escape))
+            if (started)
             {
-                if (currentScene == Scene.home)
-                    Application.Quit();
-                else
-                    SetScene(Scene.home);
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    if (currentScene == Scene.home)
+                        Application.Quit();
+                    else if (currentScene == Scene.game)
+                        SetScene(Scene.levelselection);
+                    else
+                        SetScene(Scene.home);
+                }
+#if UNITY_EDITOR
+                else if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    if (currentScene == Scene.levelselection && UILevelselectionManager._instance != null)
+                    {
+                        UILevelselectionManager._instance.PlayLevel();
+                    }
+                }
+#endif
             }
         }
 

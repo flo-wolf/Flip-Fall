@@ -39,6 +39,7 @@ namespace Impulse.Audio
 
             //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
             Main.onSceneChange.AddListener(SceneChanged);
+            UISettingsManager.onFXVolumeChange.AddListener(AdjustFXVolume);
             UISettingsManager.onMusicVolumeChange.AddListener(AdjustMusicVolume);
         }
 
@@ -53,13 +54,18 @@ namespace Impulse.Audio
             musicSource.volume = newVolume;
         }
 
+        public void AdjustFXVolume(float newVolume)
+        {
+            fxVolume = newVolume;
+        }
+
         public void SceneChanged(Main.Scene s)
         {
             musicSource.volume = ProgressManager.GetProgress().settings.musicVolume;
             fxVolume = ProgressManager.GetProgress().settings.fxVolume;
         }
 
-        //Used to play single sound clips.
+        // Used to play single sound clips.
         public void PlaySingle(AudioClip clip)
         {
             //Set the clip of our efxSource audio source to the clip passed in as a parameter.
@@ -69,7 +75,33 @@ namespace Impulse.Audio
             sfxSource.PlayOneShot(clip, fxVolume);
         }
 
-        //Used to play single sound clips.
+        public AudioSource PlaySingleAt(AudioClip clip, Vector3 pos, float distanceToPlayer)
+        {
+            float maxDistance = 135;
+            if (distanceToPlayer < maxDistance)
+            {
+                GameObject tempGO = new GameObject("TempFXAudio"); // create the temp object
+                tempGO.transform.position = pos; // set its position
+                tempGO.transform.parent = transform;
+                AudioSource aSource = tempGO.AddComponent<AudioSource>(); // add an audio source
+                aSource.clip = clip; // define the clip
+
+                float volumeMulti = Mathf.InverseLerp(0, maxDistance, distanceToPlayer);
+
+                aSource.volume = fxVolume * volumeMulti;
+                aSource.maxDistance = 135;
+                aSource.spatialBlend = 0F; // without thi the audio will be hearable everywhere
+                aSource.dopplerLevel = 0F;
+                aSource.reverbZoneMix = 0F;
+                // set other aSource properties here, if desired
+                aSource.Play(); // start the sound
+                Destroy(tempGO, clip.length); // destroy object after clip duration
+                return aSource; // return the AudioSource reference
+            }
+            return null;
+        }
+
+        // Used to play the background music
         public void PlayMusic(AudioClip clip)
         {
             musicSource.volume = ProgressManager.GetProgress().settings.musicVolume;
@@ -78,7 +110,8 @@ namespace Impulse.Audio
             musicSource.pitch = 1;
 
             //Play the clip.
-            musicSource.PlayOneShot(clip, 1);
+            musicSource.clip = clip;
+            musicSource.Play();
         }
 
         //RandomizeSfx chooses randomly between various audio clips and slightly changes their pitch.

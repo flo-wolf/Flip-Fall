@@ -152,7 +152,7 @@ namespace Impulse
             }
 
             // collided object is on one of the layers marked as killMask => death
-            if (collider.tag == Constants.killTag && IsAlive() && teleporting == false)
+            if ((collider.tag == Constants.killTag || collider.tag == Constants.turretTag) && IsAlive() && teleporting == false)
             {
                 Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
                 Die();
@@ -180,7 +180,7 @@ namespace Impulse
 
         public void OnParticleCollision(GameObject go)
         {
-            if (go.tag == Constants.killTag && IsAlive())
+            if ((go.tag == Constants.killTag || go.tag == Constants.turretTag) && IsAlive())
             {
                 Die();
                 Game.SetGameState(Game.GameState.deathscreen);

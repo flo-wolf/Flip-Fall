@@ -22,6 +22,7 @@ namespace Impulse
         public const string moveAreaTag = "MoveArea";
         public const string finishTag = "Finish";
         public const string killTag = "KillArea";
+        public const string turretTag = "Turret";
         public const string playerTag = "Player";
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace Impulse.Audio
     public class SoundManager : MonoBehaviour
     {
         public static SoundManager _instance;
-        public SoundPlayer soundPlayer;
+        private SoundPlayer soundPlayer;
 
         [Header("Game Sounds")]
         public AudioClip playSound;
@@ -22,6 +22,7 @@ namespace Impulse.Audio
         public AudioClip reflectSound;
         public AudioClip chargeSound;
         public AudioClip winSound;
+        public AudioClip turretShot;
 
         [Header("UI Sounds")]
         public AudioClip buttonClickSound;
@@ -62,6 +63,7 @@ namespace Impulse.Audio
 
         private void Start()
         {
+            soundPlayer = SoundPlayer._instance;
             soundPlayer.PlayMusic(backgroundSound);
         }
 
@@ -189,9 +191,14 @@ namespace Impulse.Audio
             //soundPlayer.PlaySingle(levelChangeSound);
         }
 
+        public static void TurretShot(Vector3 position)
+        {
+            float distanceToPlayer = Vector3.Distance(Player._instance.transform.position, position);
+            _instance.soundPlayer.PlaySingleAt(_instance.turretShot, position, distanceToPlayer);
+        }
+
         public static void UILevelSwitched()
         {
-            Debug.Log("1111");
             _instance.soundPlayer.PlaySingle(_instance.uiLevelSwitchSound);
         }
 
