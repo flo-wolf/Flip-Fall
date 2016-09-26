@@ -64,6 +64,8 @@ namespace Impulse
 
         private CircleCollider2D circleCollider;
         private List<Bounds> bounds;
+        private Vector3 deathPos;
+        private ParticleCollisionEvent[] collisionEvents = new ParticleCollisionEvent[16];
 
         [HideInInspector]
         public bool charging = false;
@@ -155,7 +157,9 @@ namespace Impulse
             if ((collider.tag == Constants.killTag || collider.tag == Constants.turretTag) && IsAlive() && teleporting == false)
             {
                 Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
-                Die();
+
+                //cannot get the contact point, otherise the trigger needs a rigidbody for collision data
+                Die(transform.position);
                 colliderList.Clear();
                 Game.SetGameState(Game.GameState.deathscreen);
             }
@@ -182,10 +186,28 @@ namespace Impulse
         {
             if ((go.tag == Constants.killTag || go.tag == Constants.turretTag) && IsAlive())
             {
-                Die();
+                //ParticleSystem particleSystem = go.GetComponent<ParticleSystem>();
+
+                Die(GetParticleCollisionLoc(go));
                 Game.SetGameState(Game.GameState.deathscreen);
                 Debug.Log("[Player] Death by particle");
             }
+        }
+
+        private Vector3 GetParticleCollisionLoc(GameObject go)
+        {
+            int safeLength = deathParticles.GetSafeCollisionEventSize();
+            if (collisionEvents.Length < safeLength)
+                collisionEvents = new ParticleCollisionEvent[safeLength];
+
+            int numCollisionEvents = deathParticles.GetCollisionEvents(go, collisionEvents);
+            int i = 0;
+            while (i < numCollisionEvents)
+            {
+                return collisionEvents[i].intersection;
+                i++;
+            }
+            return Vector3.zero;
         }
 
         private Vector3 teleportVelocityMemory;
@@ -237,7 +259,7 @@ namespace Impulse
         public void Spawn()
         {
             colliderList.Clear();
-
+            deathPos = Vector3.zero;
             trailParticles.Clear();
             trailParticles.Simulate(0.0f, true, true);
             trailParticlesEmit.enabled = true;
@@ -251,8 +273,10 @@ namespace Impulse
             rBody.WakeUp();
         }
 
-        public void Die()
+        public void Die(Vector3 pos)
         {
+            Debug.Log("DEATHPOS: " + pos + " playerpos " + transform.position + " deathpos " + deathPos);
+
             SetPlayerState(PlayerState.dead);
             charging = false;
             facingLeft = spawn.facingLeftOnSpawn;
@@ -265,6 +289,7 @@ namespace Impulse
             //disables player mesh, only leaving particle effectss
             GetComponent<MeshRenderer>().enabled = false;
 
+            deathParticles.gameObject.transform.position = deathPos;
             deathParticles.gameObject.SetActive(true);
             //finishParticles.Clear();
             //finishParticles.Simulate(0.0f, true, true);
@@ -371,8 +396,14 @@ namespace Impulse
                     }
                     rBody.velocity = velocity;
                 }
+
                 if (!IsOnMoveArea())
-                    Die();
+                {
+                    if (deathPos != null && deathPos != Vector3.zero)
+                        Die(deathPos);
+                    else
+                        Die(transform.position);
+                }
             }
         }
 
@@ -411,6 +442,10 @@ namespace Impulse
                     if (b.Contains(checkPos))
                     {
                         counter++;
+                    }
+                    else
+                    {
+                        deathPos = checkPos;
                     }
                 }
                 if (counter >= 4)

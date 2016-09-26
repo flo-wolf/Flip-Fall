@@ -47,7 +47,7 @@ namespace Impulse.UI
         private void OnEnable()
         {
             activeUILevel = ProgressManager.GetProgress().lastPlayedLevelID;
-            Debug.Log(activeUILevel);
+            //Debug.Log(activeUILevel);
         }
 
         private void Start()
@@ -138,7 +138,7 @@ namespace Impulse.UI
         // called on GameState.levelselection/finishscreen
         private void UpdateLevelView()
         {
-            Debug.Log("ACTIVEUILEVEL : " + activeUILevel);
+            //Debug.Log("ACTIVEUILEVEL : " + activeUILevel);
             UILevelPlacer.uiLevels.Find(x => x.id == activeUILevel).UpdateTexts();
             UILevelPlacer.uiLevels.Find(x => x.id == activeUILevel).UpdateStars();
         }

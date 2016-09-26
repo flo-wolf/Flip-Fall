@@ -86,7 +86,7 @@ namespace Impulse.UI
 
         public void UpdateTexts()
         {
-            Debug.Log("UILevel Updatetexts of id: " + id);
+            // Debug.Log("UILevel Updatetexts of id: " + id);
 
             if (UILevelMatchesLevel())
             {
@@ -106,7 +106,7 @@ namespace Impulse.UI
                 Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
                 if (h != null)
                 {
-                    Debug.Log("id: " + id);
+                    //Debug.Log("id: " + id);
 
                     // this doesn't belong in here, even through it does its job right
                     if (ProgressManager.GetProgress().lastUnlockedLevel <= id)
@@ -116,13 +116,13 @@ namespace Impulse.UI
                     }
 
                     double bestTime = h.bestTime;
-                    Debug.Log("UpdateTexts() h.bestTime " + bestTime);
+                    //Debug.Log("UpdateTexts() h.bestTime " + bestTime);
 
                     // Personal best seconds
                     string bestTimeString = ((int)bestTime).ToString();
                     timeSecText.text = bestTimeString;
 
-                    Debug.Log("UpdateTexts() bestTimeString " + bestTimeString);
+                    //Debug.Log("UpdateTexts() bestTimeString " + bestTimeString);
 
                     // Personal best milseconds
                     string milSecs = string.Format("{0:0.00}", bestTime);

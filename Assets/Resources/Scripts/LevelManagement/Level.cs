@@ -61,7 +61,7 @@ namespace Impulse.Levels
                     mr.gameObject.layer = LayerMask.NameToLayer("LevelMask");
 
                     moveBounds.Add(b);
-                    Debug.Log(b + " -- id --- " + moveBounds.Count);
+                    //Debug.Log(b + " -- id --- " + moveBounds.Count);
 
                     mr.sortingOrder = sortingcount;
                     sortingcount--;

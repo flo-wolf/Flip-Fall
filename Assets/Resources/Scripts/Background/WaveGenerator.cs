@@ -51,7 +51,7 @@ public class WaveGenerator : MonoBehaviour
 
     private void HorizonSpeedChanged(float f)
     {
-        Debug.Log(f);
+        //Debug.Log(f);
         backgroundSpeed = f;
     }
 

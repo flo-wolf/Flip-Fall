@@ -167,7 +167,7 @@ namespace Impulse.UI
                 //Keyboard
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    player.Die();
+                    player.Die(player.transform.position);
                 }
                 else if (Input.GetKeyDown(KeyCode.M))
                 {
