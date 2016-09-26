@@ -5,19 +5,24 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
-    public ParticleSystem shotPS;
-    public Animation shotAnimation;
+    private ParticleSystem shotPS;
+    private Animation shotAnimation;
 
     // implement thoe by changing the particle system accordingly.
-    public float startupDelay = 0F;
-    public float shotDelay = 1F;
-    public float shotSpeed = 1F;
+    private float startupDelay = 0F;
+    private float shotDelay = 0.8F;
+    private float shotSpeed = 1F;
+
+    public bool constantFire = true;
 
     // Use this for initialization
     private void Start()
     {
-        Player.onPlayerStateChange.AddListener(PlayerStateChanged);
+        shotAnimation = GetComponent<Animation>();
         shotPS = GetComponent<ParticleSystem>();
+
+        Player.onPlayerStateChange.AddListener(PlayerStateChanged);
+        StartCoroutine(cFire());
     }
 
     private void PlayerStateChanged(Player.PlayerState playerState)
@@ -25,9 +30,6 @@ public class Turret : MonoBehaviour
         switch (playerState)
         {
             case Player.PlayerState.alive:
-                shotPS.Clear();
-                shotPS.Stop();
-                shotPS.Play();
                 break;
 
             case Player.PlayerState.dead:
@@ -41,14 +43,20 @@ public class Turret : MonoBehaviour
         }
     }
 
-    private void Fire()
+    private IEnumerator cFire()
     {
-        shotPS.Play();
-        shotAnimation.Play();
+        while (constantFire)
+        {
+            yield return new WaitForSeconds(shotDelay);
+            Fire();
+        }
+        yield break;
     }
 
-    // Update is called once per frame
-    private void Update()
+    private void Fire()
     {
+        //shotPS.Stop();
+        shotPS.Play();
+        shotAnimation.Play("turretShooting");
     }
 }

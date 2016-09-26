@@ -1,6 +1,6 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "Custom/Attractor EqualOne" {
+Shader "Custom/LevelObjects/Attractor EqualOne" {
 	Properties{
 		// color settings
 		_Color("Default Color, not in radius (RGBA)", Color) = (0.7, 1, 1, 1)

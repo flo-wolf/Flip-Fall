@@ -28,7 +28,6 @@ namespace Impulse.Cam
         private void OnEnable()
         {
             _instance = this;
-            levelObjectCamera.targetTexture = LevelRenderMask._instance.renderTexture;
             //player = Player._instance;
         }
 

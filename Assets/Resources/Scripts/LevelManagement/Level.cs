@@ -120,11 +120,6 @@ namespace Impulse.Levels
 
         private void FixedUpdate()
         {
-            if (LevelRenderMask._instance.renderTexture != null)
-            {
-                material.SetTexture("_MainTex", LevelRenderMask._instance.renderTexture);
-                mr.material = material;
-            }
         }
 
         public int GetID()

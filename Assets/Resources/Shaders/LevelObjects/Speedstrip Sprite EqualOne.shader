@@ -1,9 +1,13 @@
-Shader "Custom/Sprites/Default EqualOne"
+Shader "Custom/LevelObjects/Speedstrip EqualOne"
 {
+	// blend in second color by interpolating between 0 and 1
 	Properties
 	{
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
-		_Color("Tint", Color) = (1,1,1,1)
+		_Color("Untouched Tint", Color) = (1,1,1,1)
+		_Color2("Touching Tint", Color) = (1,1,1,1)
+		_Blend("Is the Player on the Strip?",  Range(0, 1)) = 0.0
+
 		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
 	}
 
@@ -55,13 +59,17 @@ Shader "Custom/Sprites/Default EqualOne"
 				};
 
 				fixed4 _Color;
+				fixed4 _Color2;
+				float _Blend;
 
 				v2f vert(appdata_t IN)
 				{
 					v2f OUT;
 					OUT.vertex = UnityObjectToClipPos(IN.vertex);
 					OUT.texcoord = IN.texcoord;
-					OUT.color = IN.color * _Color;
+					OUT.color = IN.color *  lerp(_Color, _Color2, _Blend);
+					//OUT.color = IN.color * _Color * _Color2 * _BlendAmount;
+					//OUT.color.rgb = IN.color.rgb * _Color.rgb * _Color2.rgb * _BlendAmount;
 					#ifdef PIXELSNAP_ON
 					OUT.vertex = UnityPixelSnap(OUT.vertex);
 					#endif
@@ -88,6 +96,7 @@ Shader "Custom/Sprites/Default EqualOne"
 				{
 					fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
 					c.rgb *= c.a;
+					//c.a = _Color.a;
 					return c;
 				}
 			ENDCG
