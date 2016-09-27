@@ -8,13 +8,13 @@ public class HorizonManager : MonoBehaviour
 {
     public static HorizonManager _instance;
 
-    public enum Skin { red, blackWhite, orange, sunset, blue, green, rainbow }
+    public enum Skin { childhood, forrest, rainbow, sunset, silver, gold, darkness, ocean, toxic }
 
     //skin currently active
     public static Skin skin;
 
     //skin prefab references
-    public GameObject skinGO;
+    public GameObject[] skins;
 
     private void Start()
     {
@@ -32,46 +32,43 @@ public class HorizonManager : MonoBehaviour
     // get last skin from progress
     public Skin GetLastSkin()
     {
-        Skin lastSkin = Skin.sunset;
+        Skin lastSkin = ProgressManager.GetProgress().settings.skin;
         return lastSkin;
     }
 
     // checks if the skin is equipable/unlocked
-    public bool IsUnlocked(Skin newSkin)
+    public static bool IsUnlocked(Skin newSkin)
     {
         return true;
 
+        // NOT CALLED CURRENTLY, UNLOCKS NOT GETTING CHECKED!
         if (ProgressManager.GetProgress().unlocks.skins.Any(x => x == newSkin))
             return true;
         return false;
     }
 
-    public void SetSkin(Skin newSkin)
+    public static void SetSkin(Skin newSkin)
     {
-        Debug.Log("1");
         if (newSkin != skin && IsUnlocked(newSkin))
         {
             GameObject go = null;
 
-            foreach (Transform child in transform)
+            foreach (GameObject g in _instance.skins)
             {
-                Destroy(child.gameObject);
-            }
-
-            Debug.Log("2");
-
-            switch (newSkin)
-            {
-                case Skin.sunset:
-                    go = Instantiate(skinGO, new Vector3(0f, 0f, 0f), Quaternion.identity);
-                    go.gameObject.transform.parent = transform;
+                if (g.GetComponent<Horizon>().skin == newSkin)
+                {
+                    foreach (Transform child in _instance.transform)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                    go = Instantiate(g, new Vector3(0f, 0f, 0f), Quaternion.identity);
+                    go.gameObject.transform.parent = _instance.transform;
                     go.gameObject.transform.localPosition = Vector3.zero;
+                    skin = newSkin;
+                    ProgressManager.GetProgress().settings.skin = skin;
                     break;
-
-                default:
-                    break;
+                }
             }
         }
-        skin = newSkin;
     }
 }

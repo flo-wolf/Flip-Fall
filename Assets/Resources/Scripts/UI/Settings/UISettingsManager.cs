@@ -33,6 +33,9 @@ namespace Impulse.UI
         public Slider fxSlider;
         public Slider musicSlider;
 
+        // theme toggles
+        private Toggle[] toggles;
+
         // Use this for initialization
         private void Start()
         {
@@ -43,10 +46,41 @@ namespace Impulse.UI
             }
             _instance = this;
 
+            // if there are other different toggles this wont work, define horizontoggle root object -  search for horizontoggles
+            toggles = GetComponentsInChildren<Toggle>();
+
             FadeIn();
             SetSliders();
             Main.onSceneChange.AddListener(SceneChanging);
             ProgressManager.onProgressChange.AddListener(ProgressChanged);
+            UpdateToggles();
+        }
+
+        private void UpdateToggles()
+        {
+            foreach (Toggle t in toggles)
+            {
+                if (t.GetComponent<HorizonToggle>().skin == ProgressManager.GetProgress().settings.skin)
+                    t.isOn = true;
+                else
+                    t.isOn = false;
+            }
+        }
+
+        public void ToogleChanged(Toggle t)
+        {
+            if (t.isOn)
+            {
+                // set all other toggles to off
+                foreach (Toggle tog in toggles)
+                {
+                    if (tog != t)
+                        tog.isOn = false;
+                }
+
+                HorizonManager.Skin skin = t.GetComponent<HorizonToggle>().skin;
+                HorizonManager.SetSkin(skin);
+            }
         }
 
         private void SceneChanging(Main.Scene scene)

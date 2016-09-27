@@ -15,6 +15,7 @@ namespace Impulse.Progress
         public float musicVolume;
         public bool imageEffects;
         public float backgroundSpeed;
+        public HorizonManager.Skin skin;
 
         public Settings()
         {
@@ -22,6 +23,7 @@ namespace Impulse.Progress
             chargeOnLeftSide = true;
             fxVolume = 1F;
             musicVolume = 1F;
+            skin = HorizonManager.Skin.sunset;
             imageEffects = true;
         }
     }
