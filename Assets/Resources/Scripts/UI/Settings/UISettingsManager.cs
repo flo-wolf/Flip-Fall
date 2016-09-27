@@ -81,6 +81,26 @@ namespace Impulse.UI
                 HorizonManager.Skin skin = t.GetComponent<HorizonToggle>().skin;
                 HorizonManager.SetSkin(skin);
             }
+            if (!t.isOn)
+            {
+                foreach (Toggle tog in toggles)
+                {
+                    if (tog != t)
+                        tog.isOn = false;
+                }
+                int offCounter = 0;
+                for (int i = 0; i < toggles.Length; i++)
+                {
+                    if (!toggles[i].isOn)
+                    {
+                        offCounter++;
+                    }
+                    if (offCounter == toggles.Length)
+                    {
+                        t.isOn = true;
+                    }
+                }
+            }
         }
 
         private void SceneChanging(Main.Scene scene)

@@ -8,10 +8,11 @@ public class HorizonManager : MonoBehaviour
 {
     public static HorizonManager _instance;
 
-    public enum Skin { childhood, forrest, rainbow, sunset, silver, gold, darkness, ocean, toxic }
+    public enum Skin { unset, childhood, forrest, rainbow, sunset, silver, gold, darkness, ocean, toxic }
 
     //skin currently active
-    public static Skin skin;
+    public static Skin skin = Skin.unset;
+    public Skin defaultSkin;
 
     //skin prefab references
     public GameObject[] skins;
@@ -33,6 +34,11 @@ public class HorizonManager : MonoBehaviour
     public Skin GetLastSkin()
     {
         Skin lastSkin = ProgressManager.GetProgress().settings.skin;
+        if (skin == Skin.unset)
+        {
+            lastSkin = defaultSkin;
+            Debug.Log("def: " + defaultSkin);
+        }
         return lastSkin;
     }
 

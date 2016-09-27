@@ -23,7 +23,7 @@ namespace Impulse.Progress
             chargeOnLeftSide = true;
             fxVolume = 1F;
             musicVolume = 1F;
-            skin = HorizonManager.Skin.sunset;
+            skin = HorizonManager.Skin.unset;
             imageEffects = true;
         }
     }

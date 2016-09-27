@@ -16,9 +16,9 @@ namespace Impulse.Progress
     [Serializable]
     public class ProgressData
     {
-        public List<Highscore> highscores = new List<Highscore>();
-        public Settings settings = new Settings();
-        public Unlocks unlocks = new Unlocks();
+        public List<Highscore> highscores;
+        public Settings settings;
+        public Unlocks unlocks;
 
         //public HighscoreEvent;
 
@@ -32,6 +32,9 @@ namespace Impulse.Progress
 
         public ProgressData()
         {
+            settings = new Settings();
+            highscores = new List<Highscore>();
+            unlocks = new Unlocks();
             lastUnlockedLevel = 1;
             totalStars = 0;
             //if (LevelLoader.IsLoaded)

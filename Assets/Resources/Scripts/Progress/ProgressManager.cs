@@ -42,7 +42,13 @@ namespace Impulse.Progress
         public static void ClearProgress()
         {
             Debug.Log("[ProgressManager]: Clear Progress");
-            SetProgress(new ProgressData());
+
+            Settings s = new Settings();
+            s = progress.settings;
+            ProgressData resetStats = new ProgressData();
+            resetStats.settings = s;
+
+            SetProgress(resetStats);
         }
 
         public static void LoadProgressData()
