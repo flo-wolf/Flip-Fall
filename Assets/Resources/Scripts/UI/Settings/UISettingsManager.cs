@@ -1,7 +1,9 @@
 ﻿using Impulse;
 using Impulse.Audio;
+using Impulse.Background;
 using Impulse.Levels;
 using Impulse.Progress;
+using Impulse.Theme;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -78,8 +80,8 @@ namespace Impulse.UI
                         tog.isOn = false;
                 }
 
-                HorizonManager.Skin skin = t.GetComponent<HorizonToggle>().skin;
-                HorizonManager.SetSkin(skin);
+                ThemeManager.Skin skin = t.GetComponent<HorizonToggle>().skin;
+                ThemeManager.SetSkin(skin);
             }
             if (!t.isOn)
             {

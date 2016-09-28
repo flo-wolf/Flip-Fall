@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Impulse.Theme;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,10 @@ using UnityEngine;
 ///  used to allow toggeling between different horizon parts, identifer class
 /// </summary>
 
-public class HorizonToggle : MonoBehaviour
+namespace Impulse.UI
 {
-    public HorizonManager.Skin skin;
+    public class HorizonToggle : MonoBehaviour
+    {
+        public ThemeManager.Skin skin;
+    }
 }

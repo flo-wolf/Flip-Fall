@@ -4,6 +4,7 @@ Shader "Custom/Sprites/Default EqualOne"
 	{
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
 		_Color("Tint", Color) = (1,1,1,1)
+			[MaterialToggle] ColorOverride("Override other colors", Float) = 0
 		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
 	}
 
@@ -55,6 +56,7 @@ Shader "Custom/Sprites/Default EqualOne"
 				};
 
 				fixed4 _Color;
+				float ColorOverride;
 
 				v2f vert(appdata_t IN)
 				{
@@ -63,6 +65,11 @@ Shader "Custom/Sprites/Default EqualOne"
 					OUT.texcoord = IN.texcoord;
 					//OUT.color = IN.color * _Color;
 					OUT.color = IN.color * _Color;
+					if (ColorOverride == 1)
+					{
+						OUT.color = _Color;
+					}
+
 					#ifdef PIXELSNAP_ON
 					OUT.vertex = UnityPixelSnap(OUT.vertex);
 					#endif
@@ -88,7 +95,13 @@ Shader "Custom/Sprites/Default EqualOne"
 				fixed4 frag(v2f IN) : SV_Target
 				{
 					fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+
 				c.rgb *= c.a;
+
+				if (ColorOverride == 1)
+				{
+					c.rgb = _Color.rgb;
+				}
 				//c.a = _Color.a;
 				return c;
 			}

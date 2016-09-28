@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Impulse.Background;
+using Impulse.Theme;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +13,14 @@ namespace Impulse.Progress
     [Serializable]
     public class Unlocks
     {
-        public List<HorizonManager.Skin> skins;
+        public List<ThemeManager.Skin> skins;
 
         public Unlocks()
         {
-            skins = new List<HorizonManager.Skin>();
+            skins = new List<ThemeManager.Skin>();
         }
 
-        public void AddSkin(HorizonManager.Skin skin)
+        public void AddSkin(ThemeManager.Skin skin)
         {
             if (!skins.Any(x => x == skin))
                 skins.Add(skin);

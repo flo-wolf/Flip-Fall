@@ -38,7 +38,7 @@ namespace Impulse.UI
 
         private void SceneChanging(Main.Scene scene)
         {
-            FadeOut();
+            //FadeOut();
         }
 
         private void GameStateChanged(Game.GameState gameState)

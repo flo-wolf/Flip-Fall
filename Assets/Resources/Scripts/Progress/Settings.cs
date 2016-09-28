@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Impulse.Background;
+using Impulse.Theme;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +17,7 @@ namespace Impulse.Progress
         public float musicVolume;
         public bool imageEffects;
         public float backgroundSpeed;
-        public HorizonManager.Skin skin;
+        public ThemeManager.Skin skin;
 
         public Settings()
         {
@@ -23,7 +25,7 @@ namespace Impulse.Progress
             chargeOnLeftSide = true;
             fxVolume = 1F;
             musicVolume = 1F;
-            skin = HorizonManager.Skin.unset;
+            skin = ThemeManager.Skin.unset;
             imageEffects = true;
         }
     }

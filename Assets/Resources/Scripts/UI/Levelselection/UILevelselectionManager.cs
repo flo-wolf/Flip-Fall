@@ -57,7 +57,7 @@ namespace Impulse.UI
 
             UpdateLevelView();
             UILevelDrag.UpdateDragObject();
-            fadeAnimation.Play("fadeFromBlack");
+            //fadeAnimation.Play("fadeFromBlack");
             //uiLevelAnimation.Play("uiLevelselectionFadeIn");
         }
 
@@ -75,12 +75,12 @@ namespace Impulse.UI
                 //UpdateLevelView();
                 //UILevelDrag.UpdateDragObject();
                 //fadeAnimation.Play("fadeToBlack");
-                uiLevelAnimation.Play("uiLevelselectionFadeOut");
+                //uiLevelAnimation.Play("uiLevelselectionFadeOut");
                 //FadeOut();
             }
             else
             {
-                fadeAnimation.Play("fadeToBlack");
+                //fadeAnimation.Play("fadeToBlack");
             }
         }
 
