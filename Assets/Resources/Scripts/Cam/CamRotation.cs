@@ -13,7 +13,7 @@ namespace Impulse.Cam
         public enum RotationType { defaultToMax, minToMax }
         public static CamRotation _instance;
         public Camera[] cams;
-        public Player player;
+        private Player player;
 
         [Header("Settings")]
         public RotationType rotationType;
@@ -32,6 +32,11 @@ namespace Impulse.Cam
             _instance = this;
             minRotation = Quaternion.AngleAxis(-maxRotationAngle, Vector3.forward);
             maxRotation = Quaternion.AngleAxis(maxRotationAngle, Vector3.forward);
+        }
+
+        private void Start()
+        {
+            player = Player._instance;
         }
 
         public static void DeathRotation()
@@ -180,9 +185,9 @@ namespace Impulse.Cam
                 velocity = rb.velocity;
 
                 if (rotationType == RotationType.defaultToMax)
-                    currentVelocityRotation = Quaternion.Lerp(defaultRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude)));
+                    currentVelocityRotation = Quaternion.Lerp(defaultRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, Mathf.Abs(velocity.x))));
                 else
-                    currentVelocityRotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude)));
+                    currentVelocityRotation = Quaternion.Lerp(minRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, Mathf.Abs(velocity.x))));
 
                 newRotation = Quaternion.Lerp(cams[0].transform.rotation, currentVelocityRotation, t);
 
@@ -222,13 +227,13 @@ namespace Impulse.Cam
                     //velocity.x = maxVelocity;
                 }
 
-                if (velocity.x < 0)
+                if (velocity.x != 0)
                 {
-                    newRotation = Quaternion.Lerp(defaultRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, velocity.x)));
+                    newRotation = Quaternion.Lerp(defaultRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, Mathf.Abs(velocity.x))));
                 }
                 else
                 {
-                    newRotation = Quaternion.Lerp(defaultRotation, minRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, velocity.x)));
+                    newRotation = Quaternion.Lerp(defaultRotation, minRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, Mathf.Abs(velocity.x))));
                 }
 
                 //change Lerp to Smoothstep, since min and max are fixed values

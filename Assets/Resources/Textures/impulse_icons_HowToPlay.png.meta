@@ -1,12 +1,13 @@
 fileFormatVersion: 2
 guid: cb1b4eb72a64f954ea2cf7793d13c0eb
-timeCreated: 1473272289
+timeCreated: 1475085534
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: impulse_icons_HowToPlay_0
     21300002: impulse_icons_HowToPlay_1
     21300004: impulse_icons_HowToPlay_2
+    21300006: impulse_icons_HowToPlay_3
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -85,9 +86,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 266
         width: 500
-        height: 1920
+        height: 1097
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -98,9 +99,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 575
-        y: 0
+        y: 266
         width: 500
-        height: 1920
+        height: 1098
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,9 +112,22 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 499
-        y: 0
+        y: 265
         width: 76
-        height: 1920
+        height: 1098
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_HowToPlay_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1365
+        width: 1080
+        height: 278
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

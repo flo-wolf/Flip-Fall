@@ -51,7 +51,8 @@ namespace Impulse.Cam
             switch (playerAction)
             {
                 case Player.PlayerAction.reflect:
-                    CamRotation.ReflectRotationSwitch(player, reflectRotationSwitchDuration);
+                    if (player.rBody.velocity.x != 0)
+                        CamRotation.ReflectRotationSwitch(player, reflectRotationSwitchDuration);
                     break;
 
                 case Player.PlayerAction.charge:
@@ -60,6 +61,7 @@ namespace Impulse.Cam
                     break;
 
                 case Player.PlayerAction.decharge:
+                    CamRotation.RotateToVelocity(player, defaultTransitionDuration);
                     break;
 
                 case Player.PlayerAction.teleport:

@@ -37,15 +37,16 @@ Finished Tasks:
 # cameratransition between level switches, deactivate the button while transitioning to next spawn in 1 sec [*]
 
 Game names:
-	- dimension four /dimension4 -> dimensionfour.com domain is free -> four dimenions @ 10 levels
+	- Dimension Four /dimension4 -> dimensionfour.com domain is free -> four dimenions @ 10 levels
 	- velocity
-	- megaball
+	- megaball - already eixsts.
 	- sliders
+	- Impulse
 	- charge n' change (cnc)
 	- charge it
 	- amazing arcade
 	- unbeatable
-	- Gravity falls
+	- Gravity Falls (tv show exists with samename -> copyright trouble)
 	- Downwards
 	- Fall and Fail
 	- Fallen
@@ -54,7 +55,7 @@ Game names:
 	- Rebound
 	- Reverse Gravity
 	- Mirror my Cannonball
-	- Flip Side
+	- Flip Side (success through stranger things "flip side")
 	- Antipole
 	- Inverse
 	- Switch
@@ -66,3 +67,23 @@ Game names:
 	- Blasting Arcade
 	- Arcadia 
 	- Arcadia - Fall and Fail
+	- Fall and Fail
+	- Decsend (not taken in palystore!)
+	- Crash... (...and something else)
+	- Crash Course
+	- Freefall
+	- Falling ...(...and something else)
+	- Firefall -> a mixture between falling and firig.
+		- fireing can destroy particles.
+		- alliteration
+		- switch and unlock different weapontypes in the equippor. make a cloth icon and
+	- firefall : witchhunt, kill the witch at the end of every level
+	to finish it, by firing at it
+
+
+Cricteria for selecting a title:
+- does the name fit the game
+- coolness
+- avaliability
+- pop culture reference/catchword -> popularity
+- memorability

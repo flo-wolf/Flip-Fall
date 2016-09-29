@@ -37,7 +37,7 @@ namespace Impulse.UI
             }
             _instance = this;
 
-            FadeIn();
+            //FadeIn();
             Main.onSceneChange.AddListener(SceneChanging);
 
             reflectSprite = reflectImage.sprite;

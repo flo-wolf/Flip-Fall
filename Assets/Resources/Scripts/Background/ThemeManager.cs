@@ -40,7 +40,7 @@ namespace Impulse.Theme
         public Skin GetLastSkin()
         {
             Skin lastSkin = ProgressManager.GetProgress().settings.skin;
-            if (skin == Skin.unset)
+            if (lastSkin == Skin.unset)
             {
                 lastSkin = defaultSkin;
                 Debug.Log("def: " + defaultSkin);

@@ -14,10 +14,10 @@ namespace Impulse.UI
         public static UIButtonRelease onButtonRelease = new UIButtonRelease();
         public Player player;
 
-        public Button pauseBtn;
-        public Button resumeBtn;
+        public Toggle pauseToggle;
+        //public Button resumeBtn;
 
-        public Animator pauseAnimator;
+        //public Animator pauseAnimator;
         public Animation timerAnimator;
 
         public float buttonSwitchDelay = 0.25F;
@@ -27,7 +27,7 @@ namespace Impulse.UI
         private void Awake()
         {
             _instance = this;
-            pauseAnimator.SetBool("fadeout", false);
+            //pauseAnimator.SetBool("fadeout", false);
         }
 
         private void Start()
@@ -35,14 +35,14 @@ namespace Impulse.UI
             player = Player._instance;
             chargeOnLeftSide = ProgressManager.GetProgress().settings.chargeOnLeftSide;
             timerAnimator.Play("uiLevelselectionFadeIn");
-            pauseAnimator.SetBool("fadeout", false);
+            //pauseAnimator.SetBool("fadeout", false);
             Main.onSceneChange.AddListener(SceneChanged);
         }
 
         public void SceneChanged(Main.Scene sc)
         {
             timerAnimator.Play("uiLevelselectionFadeOut");
-            pauseAnimator.SetBool("fadeout", true);
+            //pauseAnimator.SetBool("fadeout", true);
         }
 
         public static void Show(Button b)
@@ -63,27 +63,37 @@ namespace Impulse.UI
             onButtonClick.Invoke(b);
         }
 
-        public void PauseBtnClicked()
+        public void PauseBtnClicked(Toggle t)
         {
             if (Player._instance.IsAlive())
             {
-                Time.timeScale = 0;
-                pauseAnimator.SetBool("fadeout", true);
-                StartCoroutine(cPauseResumeSwitch(pauseBtn, resumeBtn));
-                Game.SetGameState(Game.GameState.pause);
+                if (t.isOn)
+                {
+                    Time.timeScale = 0;
+                    //pauseAnimator.SetBool("fadeout", true);
+                    //StartCoroutine(cPauseResumeSwitch(pauseBtn, resumeBtn));
+                    Game.SetGameState(Game.GameState.pause);
+                }
+                else
+                {
+                    Time.timeScale = 1;
+                    //pauseAnimator.SetBool("fadeout", true);
+                    //StartCoroutine(cPauseResumeSwitch(pauseBtn, resumeBtn));
+                    Game.SetGameState(Game.GameState.playing);
+                }
             }
         }
 
-        public void ResumeBtnClicked()
-        {
-            if (Player._instance.IsAlive())
-            {
-                Time.timeScale = 1;
-                pauseAnimator.SetBool("fadeout", false);
-                StartCoroutine(cPauseResumeSwitch(resumeBtn, pauseBtn));
-                Game.SetGameState(Game.GameState.playing);
-            }
-        }
+        //public void ResumeBtnClicked()
+        //{
+        //    if (Player._instance.IsAlive())
+        //    {
+        //        Time.timeScale = 1;
+        //        //pauseAnimator.SetBool("fadeout", false);
+        //        //StartCoroutine(cPauseResumeSwitch(resumeBtn, pauseBtn));
+        //        Game.SetGameState(Game.GameState.playing);
+        //    }
+        //}
 
         private IEnumerator cPauseResumeSwitch(Button deactivateBtn, Button activateBtn)
         {

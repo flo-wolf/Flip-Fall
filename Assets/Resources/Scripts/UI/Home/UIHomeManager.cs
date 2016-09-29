@@ -48,7 +48,7 @@ namespace Impulse.UI
             Main.SetScene(Main.Scene.levelselection);
             levelAnimation.Play("buttonClick");
             SoundManager.ButtonClicked();
-            FadeOut();
+            //FadeOut();
         }
 
         public void TutorialButton()
@@ -56,7 +56,7 @@ namespace Impulse.UI
             Main.SetScene(Main.Scene.tutorial);
             tutorialAnimation.Play("buttonClick");
             SoundManager.ButtonClicked();
-            FadeOut();
+            //FadeOut();
         }
 
         public void SettingsButton()
@@ -64,7 +64,7 @@ namespace Impulse.UI
             Main.SetScene(Main.Scene.settings);
             settingsAnimation.Play("buttonClick");
             SoundManager.ButtonClicked();
-            FadeOut();
+            //FadeOut();
         }
 
         private void FadeIn()
