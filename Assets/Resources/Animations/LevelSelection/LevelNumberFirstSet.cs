@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KillUILevelNbr : StateMachineBehaviour
+public class LevelNumberFirstSet : StateMachineBehaviour
 {
     private int i = 0;
 

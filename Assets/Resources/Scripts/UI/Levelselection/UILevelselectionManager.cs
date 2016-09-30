@@ -46,6 +46,7 @@ namespace Impulse.UI
                 return;
             }
             _instance = this;
+            Debug.Log(ProgressManager.GetProgress().lastPlayedLevelID);
             activeUILevel = ProgressManager.GetProgress().lastPlayedLevelID;
         }
 
@@ -91,6 +92,8 @@ namespace Impulse.UI
             if (activeUILevel + 1 <= ProgressManager.GetProgress().lastUnlockedLevel)
             {
                 activeUILevel++;
+                ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
+
                 UILevelPlacer.PlaceUILevel(activeUILevel);
                 UILevelPlacer.placedLevel.UpdateUILevel();
                 UILevelDrag.UpdateDragObject();
@@ -107,17 +110,6 @@ namespace Impulse.UI
                     UILevelPlacer.PlaceLevelNumber(UILevelPlacer.placedLevel.id + i, i);
                 }
 
-                //// how many levels are currently allowed to exist
-                //int maxAllowed = 5;
-                //maxAllowed = UILevelPlacer.placedLevel.id
-
-                //// add missing uiLevelNumbers if there are less than the maxAllowed number
-                //if (UILevelPlacer.placedLevelNumbers.Count < maxAllowed)
-                //{
-                //}
-
-                Debug.Log("NextLevel() currentUILevel.id " + activeUILevel);
-
                 onUILevelSwitch.Invoke(activeUILevel);
 
                 return true;
@@ -131,6 +123,8 @@ namespace Impulse.UI
             if (activeUILevel - 1 >= Constants.firstLevel)
             {
                 activeUILevel--;
+                ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
+
                 UILevelPlacer.PlaceUILevel(activeUILevel);
                 UILevelPlacer.placedLevel.UpdateUILevel();
                 UILevelDrag.UpdateDragObject();
@@ -146,10 +140,6 @@ namespace Impulse.UI
                 {
                     UILevelPlacer.PlaceLevelNumber(UILevelPlacer.placedLevel.id + i, i);
                 }
-
-                //for(int i = 0; i<)
-
-                Debug.Log("LastLevel() currentUILevel.id " + activeUILevel);
                 return true;
             }
             return false;

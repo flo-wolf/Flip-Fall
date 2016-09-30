@@ -1,4 +1,5 @@
 ﻿using Impulse.Levels;
+using Impulse.Progress;
 using Impulse.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,6 +49,7 @@ namespace Impulse.UI
 
         private void Start()
         {
+            placedLevelNumbers = new List<UILevelNumber>();
             PlaceUILevel(UILevelselectionManager.activeUILevel);
             PlaceLevelNumbers(placedLevel.id);
             placedLevel.UpdateUILevel();
@@ -57,25 +59,27 @@ namespace Impulse.UI
         private static void PlaceLevelNumbers(int id)
         {
             Debug.Log("PlaceLevelNumbers(int id) " + id);
-            for (int i = 2; i >= 0; i--)
+            for (int i = 2; i >= -2; i--)
             {
-                if (UILevelMatchesLevel(id + i) && !placedLevelNumbers.Any(x => x.id == id))
+                int y = -i;
+                if (UILevelMatchesLevel(id + i) && !placedLevelNumbers.Any(x => x.id == (id + i)) && !placedLevelNumbers.Any(x => x.position == i) && ProgressManager.GetProgress().lastUnlockedLevel >= id + i)
                 {
-                    Debug.Log("matches: " + i);
-                    UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), uiLevelPrefab.transform.position, Quaternion.identity);
+                    //Debug.Log("matches: " + i);
+                    UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), Vector3.zero, Quaternion.identity);
                     nbr.position = i;
                     nbr.id = id + i;
                     nbr.gameObject.transform.parent = _instance.numberParent.transform;
+                    nbr.gameObject.transform.localPosition = Vector3.zero;
                     placedLevelNumbers.Add(nbr);
                 }
-                else if (UILevelMatchesLevel(id - i) && i != 0 && !placedLevelNumbers.Any(x => x.id == id))
+                else if (UILevelMatchesLevel(id + y) && !placedLevelNumbers.Any(x => x.id == (id + y)) && !placedLevelNumbers.Any(x => x.position == y) && ProgressManager.GetProgress().lastUnlockedLevel >= id + y)
                 {
-                    int y = -i;
-                    Debug.Log("matches: " + y);
-                    UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), uiLevelPrefab.transform.position, Quaternion.identity);
+                    //Debug.Log("matches: " + y);
+                    UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), Vector3.zero, Quaternion.identity);
                     nbr.position = y;
                     nbr.id = id + y;
                     nbr.gameObject.transform.parent = _instance.numberParent.transform;
+                    nbr.gameObject.transform.localPosition = Vector3.zero;
                     placedLevelNumbers.Add(nbr);
                 }
             }
@@ -85,14 +89,17 @@ namespace Impulse.UI
         {
             if (position < 3 && position > -3)
             {
-                if (UILevelMatchesLevel(id) && !placedLevelNumbers.Any(x => x.id == id) && !placedLevelNumbers.Any(x => x.position == position))
+                if (UILevelMatchesLevel(id) && !placedLevelNumbers.Any(x => x.id == id) && !placedLevelNumbers.Any(x => x.position == position) && ProgressManager.GetProgress().lastUnlockedLevel >= id)
                 {
-                    UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), uiLevelPrefab.transform.position, Quaternion.identity);
+                    UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), Vector3.zero, Quaternion.identity);
                     nbr.position = position;
                     nbr.id = id;
                     nbr.gameObject.transform.parent = _instance.numberParent.transform;
+                    nbr.gameObject.transform.localPosition = Vector3.zero;
                     placedLevelNumbers.Add(nbr);
                 }
+                else
+                    Debug.Log("Couldn't place UILevelNumber");
             }
         }
 

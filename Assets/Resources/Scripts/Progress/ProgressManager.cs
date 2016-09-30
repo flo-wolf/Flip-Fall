@@ -108,7 +108,7 @@ namespace Impulse.Progress
             savePath = SavePath;
 #endif
 
-            LevelManager.onLevelChange.AddListener(LevelStateChanged);
+            //LevelManager.onLevelChange.AddListener(LevelStateChanged);
 
             FileStream file;
             if (!File.Exists(savePath))

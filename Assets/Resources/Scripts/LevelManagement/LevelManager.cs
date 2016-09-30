@@ -83,6 +83,7 @@ namespace Impulse.Levels
 
         public static void SetLevel(int newID)
         {
+            Debug.Log("Setlevel " + newID);
             activeLevel = newID;
             ProgressManager.GetProgress().lastPlayedLevelID = activeLevel;
             onLevelChange.Invoke(newID);

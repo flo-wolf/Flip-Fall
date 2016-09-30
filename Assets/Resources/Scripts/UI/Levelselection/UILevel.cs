@@ -73,7 +73,6 @@ namespace Impulse.UI
 
             if (highscore != null)
             {
-                Debug.Log(highscore.levelId);
                 failsCount.text = string.Format("{0:0000}", highscore.fails);
             }
             else

@@ -14,6 +14,7 @@ namespace Impulse.UI
         public Text levelNumberText;
         private Animator animator;
 
+        private float despawnDelay = 0.5F;
         private Highscore highscore;
 
         public void Start()
@@ -27,37 +28,54 @@ namespace Impulse.UI
                 position = -1;
             }
 
-            Debug.Log("Nsssssssssss" + id + "  p " + position);
+            Debug.Log("[UILevelNumber] Start() ID: " + id + "  Position: " + position);
             animator.SetInteger("Position", position);
             animator.SetBool("FirstSet", false);
+
+            Main.onSceneChange.AddListener(SceneChanged);
+        }
+
+        private void SceneChanged(Main.Scene s)
+        {
+            animator.SetTrigger("fadeout");
         }
 
         public void Right()
         {
-            animator.SetTrigger("Right");
             position++;
+            animator.SetInteger("Position", position);
+            animator.SetTrigger("Right");
 
-            if (position >= 3)
+            if (position > 2)
             {
-                UILevelPlacer.placedLevelNumbers.Remove(this);
-                //UILevelPlacer.PlaceLevelNumber(this.id - 5, -2);
-                Destroy(this);
-                // destroy and remove out of list
+                StartCoroutine(cDestroyAfterAnimation());
+            }
+            else
+            {
             }
         }
 
         public void Left()
         {
-            animator.SetTrigger("Left");
             position--;
+            animator.SetInteger("Position", position);
+            animator.SetTrigger("Left");
 
-            if (position <= -3)
+            if (position < -2)
             {
-                UILevelPlacer.placedLevelNumbers.Remove(this);
-                //UILevelPlacer.PlaceLevelNumber(this.id + 5, 2);
-                Destroy(this);
-                // destroy and remove out of list
+                StartCoroutine(cDestroyAfterAnimation());
             }
+            else
+            {
+            }
+        }
+
+        private IEnumerator cDestroyAfterAnimation()
+        {
+            yield return new WaitForSeconds(despawnDelay);
+            UILevelPlacer.placedLevelNumbers.Remove(this);
+            Destroy(gameObject);
+            yield break;
         }
     }
 }
