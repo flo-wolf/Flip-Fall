@@ -24,13 +24,17 @@ namespace Impulse.UI
 
         public static UILevelSwitchEvent onUILevelSwitch = new UILevelSwitchEvent();
 
-        public class UILevelSwitchEvent : UnityEvent { }
+        public class UILevelSwitchEvent : UnityEvent<int> { }
 
         //References
         public Animation fadeAnimation;
         public Animation uiLevelAnimation;
         public Animation homeAnimation;
         public Animation playButtonAnimation;
+
+        //LevelNumber Animators
+        private List<Animator> LevelNumberAnims;
+
         public float fadeOutTime = 1F;
         public float fadeInTime = 1F;
 
@@ -42,20 +46,17 @@ namespace Impulse.UI
                 return;
             }
             _instance = this;
+            activeUILevel = ProgressManager.GetProgress().lastPlayedLevelID;
         }
 
         private void OnEnable()
         {
-            activeUILevel = ProgressManager.GetProgress().lastPlayedLevelID;
-            //Debug.Log(activeUILevel);
         }
 
         private void Start()
         {
             Main.onSceneChange.AddListener(SceneChanging);
             LevelManager.onLevelChange.AddListener(LevelChanging);
-
-            UpdateLevelView();
             UILevelDrag.UpdateDragObject();
             //fadeAnimation.Play("fadeFromBlack");
             //uiLevelAnimation.Play("uiLevelselectionFadeIn");
@@ -91,10 +92,64 @@ namespace Impulse.UI
             {
                 activeUILevel++;
                 UILevelPlacer.PlaceUILevel(activeUILevel);
-
-                _instance.UpdateLevelView();
+                UILevelPlacer.placedLevel.UpdateUILevel();
                 UILevelDrag.UpdateDragObject();
+
+                // move the numbers left, bringing the nextLevel into focus, removing those outside
+                for (int i = UILevelPlacer.placedLevelNumbers.Count - 1; i >= 0; i--)
+                {
+                    UILevelPlacer.placedLevelNumbers[i].Left();
+                }
+
+                //try to place leftover levels
+                for (int i = -2; i <= 2; i++)
+                {
+                    UILevelPlacer.PlaceLevelNumber(UILevelPlacer.placedLevel.id + i, i);
+                }
+
+                //// how many levels are currently allowed to exist
+                //int maxAllowed = 5;
+                //maxAllowed = UILevelPlacer.placedLevel.id
+
+                //// add missing uiLevelNumbers if there are less than the maxAllowed number
+                //if (UILevelPlacer.placedLevelNumbers.Count < maxAllowed)
+                //{
+                //}
+
                 Debug.Log("NextLevel() currentUILevel.id " + activeUILevel);
+
+                onUILevelSwitch.Invoke(activeUILevel);
+
+                return true;
+            }
+            return false;
+        }
+
+        // display the last UILevel - if it exists and if it is unlocked, then place it
+        public static bool LastLevel()
+        {
+            if (activeUILevel - 1 >= Constants.firstLevel)
+            {
+                activeUILevel--;
+                UILevelPlacer.PlaceUILevel(activeUILevel);
+                UILevelPlacer.placedLevel.UpdateUILevel();
+                UILevelDrag.UpdateDragObject();
+
+                // backwards iteration needed, because we might remove items during iterating from the collection
+                for (int i = UILevelPlacer.placedLevelNumbers.Count - 1; i >= 0; i--)
+                {
+                    UILevelPlacer.placedLevelNumbers[i].Right();
+                }
+
+                //try to place leftover levels
+                for (int i = -2; i <= 2; i++)
+                {
+                    UILevelPlacer.PlaceLevelNumber(UILevelPlacer.placedLevel.id + i, i);
+                }
+
+                //for(int i = 0; i<)
+
+                Debug.Log("LastLevel() currentUILevel.id " + activeUILevel);
                 return true;
             }
             return false;
@@ -113,34 +168,11 @@ namespace Impulse.UI
             yield break;
         }
 
-        // display the last UILevel - if it exists and if it is unlocked, then place it
-        public static bool LastLevel()
-        {
-            if (activeUILevel - 1 >= Constants.firstLevel)
-            {
-                activeUILevel--;
-                UILevelPlacer.PlaceUILevel(activeUILevel);
-                _instance.UpdateLevelView();
-                UILevelDrag.UpdateDragObject();
-                Debug.Log("LastLevel() currentUILevel.id " + activeUILevel);
-                return true;
-            }
-            return false;
-        }
-
         public void HomeBtnClicked()
         {
             SoundManager.ButtonClicked();
             homeAnimation.Play("buttonClick");
             Main.SetScene(Main.Scene.home);
-        }
-
-        // called on GameState.levelselection/finishscreen
-        private void UpdateLevelView()
-        {
-            //Debug.Log("ACTIVEUILEVEL : " + activeUILevel);
-            UILevelPlacer.uiLevels.Find(x => x.id == activeUILevel).UpdateTexts();
-            UILevelPlacer.uiLevels.Find(x => x.id == activeUILevel).UpdateStars();
         }
 
         public void PlayLevel()

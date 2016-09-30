@@ -21,22 +21,24 @@ namespace Impulse.UI
         public Text timeMilText;
         public Text topTimeSecText;
         public Text topTimeMilText;
+        public Text failsCount;
 
         public Text levelNumberText;
 
         private int starScore = 0;
+        private Highscore highscore;
 
         public void Start()
         {
-            Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
-            if (h != null && h.starCount > 0)
+            highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
+            if (highscore != null && highscore.starCount > 0)
             {
-                starScore = h.starCount;
+                starScore = highscore.starCount;
             }
-            Highscore.onLevelStarChange.AddListener(HighscoreStarChanged);
 
-            UpdateTexts();
-            UpdateStars();
+            Highscore.onStarChange.AddListener(HighscoreStarChanged);
+
+            UpdateUILevel();
         }
 
         private void HighscoreStarChanged(int stars, int levelId)
@@ -52,6 +54,30 @@ namespace Impulse.UI
                 starScore = newStars;
                 UpdateStars();
             }
+        }
+
+        public void UpdateUILevel()
+        {
+            highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
+
+            //levelNumberText.text = id.ToString();
+
+            UpdateFails();
+            UpdateStars();
+            UpdateTimes();
+        }
+
+        public void UpdateFails()
+        {
+            highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
+
+            if (highscore != null)
+            {
+                Debug.Log(highscore.levelId);
+                failsCount.text = string.Format("{0:0000}", highscore.fails);
+            }
+            else
+                failsCount.text = "0000";
         }
 
         public void UpdateStars()
@@ -84,15 +110,13 @@ namespace Impulse.UI
             }
         }
 
-        public void UpdateTexts()
+        public void UpdateTimes()
         {
             // Debug.Log("UILevel Updatetexts of id: " + id);
 
             if (UILevelMatchesLevel())
             {
                 double topTime = LevelManager.levels.Find(x => x.id == id).presetTime;
-
-                levelNumberText.text = id.ToString();
 
                 // Preset top time seconds
                 string topSec = ((int)topTime).ToString();

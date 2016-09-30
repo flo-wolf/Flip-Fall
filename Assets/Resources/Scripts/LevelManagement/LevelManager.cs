@@ -16,7 +16,7 @@ namespace Impulse.Levels
     public class LevelManager : MonoBehaviour
     {
         public static LevelManager _instance;
-        public static List<Level> levels;
+        public static List<Level> levels = new List<Level>();
         public static LevelChangeEvent onLevelChange = new LevelChangeEvent();
 
         public class LevelChangeEvent : UnityEvent<int> { }

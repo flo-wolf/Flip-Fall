@@ -49,6 +49,14 @@ namespace Impulse.Progress
             resetStats.settings = s;
 
             SetProgress(resetStats);
+
+            Player.onPlayerStateChange.AddListener(PlayerDeath);
+        }
+
+        private static void PlayerDeath(Player.PlayerState ps)
+        {
+            if (ps == Player.PlayerState.dead)
+                GetProgress().GetCurrentHighscore().fails++;
         }
 
         public static void LoadProgressData()

@@ -22,24 +22,26 @@ namespace Impulse.Progress
         /// 1. stars
         /// 2. levelId
         /// </summary>
-        public static LevelStarChangeEvent onLevelStarChange = new LevelStarChangeEvent();
+        public static HighscoreStarChangeEvent onStarChange = new HighscoreStarChangeEvent();
 
         /// <summary>
         /// 1. stars
         /// 2. levelId
         /// </summary>
-        public class LevelStarChangeEvent : UnityEvent<int, int> { }
+        public class HighscoreStarChangeEvent : UnityEvent<int, int> { }
 
         public bool unlocked = false;
         public bool finished = false;
         public double bestTime = -1;
         public int levelId = 0;
+        public int fails;
 
         public Highscore(int id, double time)
         {
             levelId = id;
             PlaceTime(time);
             starCount = -1;
+            fails = 0;
             UpdateStarCount();
         }
 
@@ -92,7 +94,7 @@ namespace Impulse.Progress
                 //display too small time, maybe let the timer blink up red then make it disappear and replace with timer
             }
 
-            onLevelStarChange.Invoke(starCount, levelId);
+            onStarChange.Invoke(starCount, levelId);
             Debug.Log("[Highscore] New starCount: " + starCount + " of level: " + levelId);
         }
     }
