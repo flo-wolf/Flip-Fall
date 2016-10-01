@@ -16,6 +16,7 @@ namespace Impulse.UI
         //public static UIState uiState;
         public static UIGameManager _instance;
         public Animation fadeAnimation;
+        public Animator animator;
 
         private void Start()
         {
@@ -38,6 +39,7 @@ namespace Impulse.UI
 
         private void SceneChanging(Main.Scene scene)
         {
+            animator.SetTrigger("fadeout");
             //FadeOut();
         }
 

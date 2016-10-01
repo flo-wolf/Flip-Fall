@@ -39,9 +39,12 @@ namespace Impulse.Progress
         public Highscore(int id, double time)
         {
             levelId = id;
-            PlaceTime(time);
-            starCount = -1;
+            bestTime = -1;
             fails = 0;
+            starCount = -1;
+
+            if (time > 0)
+                PlaceTime(time);
             UpdateStarCount();
         }
 

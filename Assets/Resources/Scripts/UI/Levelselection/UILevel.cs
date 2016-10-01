@@ -148,7 +148,7 @@ namespace Impulse.UI
                 topTimeMilText.text = topMilSec;
 
                 Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
-                if (h != null)
+                if (h != null && h.bestTime > 0)
                 {
                     //Debug.Log("id: " + id);
 
