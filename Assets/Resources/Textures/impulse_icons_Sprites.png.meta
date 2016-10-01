@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a4146965247789043a57221118aa0dd8
-timeCreated: 1475292480
+timeCreated: 1475335041
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -841,8 +841,8 @@ TextureImporter:
       name: impulse_icons_Sprites_30
       rect:
         serializedVersion: 2
-        x: 500
-        y: 13
+        x: 503
+        y: 15
         width: 272
         height: 272
       alignment: 0

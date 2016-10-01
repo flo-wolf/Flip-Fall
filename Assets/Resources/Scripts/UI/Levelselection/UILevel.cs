@@ -97,7 +97,7 @@ namespace Impulse.UI
                 failsCount.text = string.Format("{0:0000}", highscore.fails);
             }
             else
-                failsCount.text = "1111";
+                failsCount.text = "0000";
         }
 
         public void UpdateStars()

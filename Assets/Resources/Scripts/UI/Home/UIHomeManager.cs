@@ -15,6 +15,8 @@ namespace Impulse.UI
         public static UIHomeManager _instance;
 
         // Animations
+
+        public Animator animator;
         public Animation startupAnimation;
         public Animation fadeAnimation;
         public Animation levelAnimation;
@@ -30,9 +32,16 @@ namespace Impulse.UI
             }
             _instance = this;
             Main.onStartup.AddListener(AppStartup);
+
+            Main.onSceneChange.AddListener(SceneChanged);
         }
 
-        public void AppStartup()
+        private void SceneChanged(Main.Scene s)
+        {
+            //animator.SetTrigger("fadeout");
+        }
+
+        private void AppStartup()
         {
             startupAnimation["fadeFromBlack"].speed = 0.5F;
             startupAnimation.Play("fadeFromBlack");
@@ -46,7 +55,7 @@ namespace Impulse.UI
         public void LevelSelectButton()
         {
             Main.SetScene(Main.Scene.levelselection);
-            levelAnimation.Play("buttonClick");
+            animator.SetTrigger("play");
             SoundManager.ButtonClicked();
             //FadeOut();
         }
@@ -54,7 +63,7 @@ namespace Impulse.UI
         public void TutorialButton()
         {
             Main.SetScene(Main.Scene.tutorial);
-            tutorialAnimation.Play("buttonClick");
+            animator.SetTrigger("howto");
             SoundManager.ButtonClicked();
             //FadeOut();
         }
@@ -62,7 +71,7 @@ namespace Impulse.UI
         public void SettingsButton()
         {
             Main.SetScene(Main.Scene.settings);
-            settingsAnimation.Play("buttonClick");
+            animator.SetTrigger("settings");
             SoundManager.ButtonClicked();
             //FadeOut();
         }
