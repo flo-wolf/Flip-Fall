@@ -1,5 +1,5 @@
 
-# Arcadia - Fall and Fail
+# Impulse
 This is a hardcore level-based arcade mobile platformer with innovative gameplay mechanics, frustration and addiction guaranteed!
 
 Current Beta Demo available here for free! 
