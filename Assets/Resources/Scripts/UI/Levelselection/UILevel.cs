@@ -25,7 +25,7 @@ namespace Impulse.UI
 
         private Animator animator;
 
-        private int starScore = 0;
+        private int starScore = -1;
         private Highscore highscore;
 
         [HideInInspector]
@@ -39,6 +39,10 @@ namespace Impulse.UI
             if (highscore != null && highscore.starCount > 0)
             {
                 starScore = highscore.starCount;
+            }
+            else
+            {
+                starScore = 0;
             }
 
             Main.onSceneChange.AddListener(SceneChanged);
@@ -81,8 +85,9 @@ namespace Impulse.UI
 
         public void UpdateUILevel()
         {
+            Debug.Log("UPDATING STARS 1 " + starScore);
             highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
-
+            Debug.Log("UPDATING STARS 2 " + starScore);
             //levelNumberText.text = id.ToString();
 
             UpdateFails(highscore);
@@ -102,6 +107,7 @@ namespace Impulse.UI
 
         public void UpdateStars()
         {
+            Debug.Log("UPDATING STARS " + starScore);
             switch (starScore)
             {
                 case 1:

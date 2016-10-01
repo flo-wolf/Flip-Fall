@@ -16,8 +16,6 @@ namespace Impulse.Progress
     [Serializable]
     public class Highscore
     {
-        public int starCount = -1;
-
         /// <summary>
         /// 1. stars
         /// 2. levelId
@@ -34,6 +32,7 @@ namespace Impulse.Progress
         public bool finished = false;
         public double bestTime = -1;
         public int levelId = 0;
+        public int starCount = -1;
         public int fails = 0;
 
         public Highscore(int id, double time)
@@ -50,18 +49,20 @@ namespace Impulse.Progress
 
         public void UpdateStarCount()
         {
-            double presetTime = LevelManager.GetActiveLevel().presetTime;
-
-            if (bestTime < presetTime)
+            if (bestTime > 0)
             {
-                SetStarCount(3);
+                double presetTime = LevelManager.GetActiveLevel().presetTime;
+                if (bestTime < presetTime)
+                {
+                    SetStarCount(3);
+                }
+                else if (bestTime < presetTime + Constants.twoStarPercantage)
+                {
+                    SetStarCount(2);
+                }
+                else
+                    SetStarCount(1);
             }
-            else if (bestTime < presetTime + Constants.twoStarPercantage)
-            {
-                SetStarCount(2);
-            }
-            else
-                SetStarCount(1);
         }
 
         private void SetStarCount(int stars)

@@ -72,8 +72,16 @@ namespace Impulse
             {
                 case GameState.deathscreen:
                     Timer.Pause();
-                    ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), -1);
-                    ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+
+                    if (ProgressManager.GetProgress().highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                    {
+                        ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                    }
+                    else
+                    {
+                        ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), -1);
+                        ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                    }
 
                     //_instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
