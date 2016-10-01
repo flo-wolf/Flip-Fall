@@ -19,7 +19,6 @@ namespace Impulse.UI
 
         //NO NOT SET THIS, its a reference to the prefab needed for instantiation
         private static GameObject uiLevelPrefab;
-
         private static GameObject uiLevelNumberPrefab;
 
         //Stored uiLevels
@@ -50,7 +49,7 @@ namespace Impulse.UI
         private void Start()
         {
             placedLevelNumbers = new List<UILevelNumber>();
-            PlaceUILevel(UILevelselectionManager.activeUILevel);
+            PlaceUILevel(UILevelselectionManager.activeUILevel, false);
             PlaceLevelNumbers(placedLevel.id);
             placedLevel.UpdateUILevel();
         }
@@ -89,7 +88,7 @@ namespace Impulse.UI
         {
             if (position < 3 && position > -3)
             {
-                if (UILevelMatchesLevel(id) && !placedLevelNumbers.Any(x => x.id == id) && !placedLevelNumbers.Any(x => x.position == position) && ProgressManager.GetProgress().lastUnlockedLevel >= id)
+                if (UILevelMatchesLevel(id) && !placedLevelNumbers.Any(x => x.id == id) && ProgressManager.GetProgress().lastUnlockedLevel >= id)
                 {
                     UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), Vector3.zero, Quaternion.identity);
                     nbr.position = position;
@@ -110,7 +109,7 @@ namespace Impulse.UI
             return false;
         }
 
-        public static void PlaceUILevel(int id)
+        public static void PlaceUILevel(int id, bool levelSwitch)
         {
             if (!IsPlaced(id))
             {
@@ -118,6 +117,7 @@ namespace Impulse.UI
                 UILevel l = (UILevel)Instantiate(uiLevelPrefab.GetComponent<UILevel>(), new Vector3(0, 0, 0), Quaternion.identity);
                 l.id = id;
                 l.gameObject.transform.SetParent(placingParent.transform);
+                l.createdByLevelswitch = levelSwitch;
                 //l.gameObject.transform.localPosition = new Vector3(0, 0, 0);
                 l.gameObject.transform.localPosition = new Vector3(0, uiLevelPrefab.transform.position.y, 0);
                 placedLevel = l;

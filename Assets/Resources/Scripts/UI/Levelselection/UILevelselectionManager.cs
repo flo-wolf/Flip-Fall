@@ -27,8 +27,7 @@ namespace Impulse.UI
         public class UILevelSwitchEvent : UnityEvent<int> { }
 
         //References
-        public Animation fadeAnimation;
-        public Animation uiLevelAnimation;
+        public Animator animator;
         public Animation homeAnimation;
         public Animation playButtonAnimation;
 
@@ -46,7 +45,6 @@ namespace Impulse.UI
                 return;
             }
             _instance = this;
-            Debug.Log(ProgressManager.GetProgress().lastPlayedLevelID);
             activeUILevel = ProgressManager.GetProgress().lastPlayedLevelID;
         }
 
@@ -71,6 +69,8 @@ namespace Impulse.UI
 
         private void SceneChanging(Main.Scene scene)
         {
+            animator.SetTrigger("fadeout");
+
             if (scene == Main.Scene.game)
             {
                 //currentUILevel = UILevelPlacer.LoadUILevel(ProgressManager.GetProgress().lastUnlockedLevel);
@@ -94,7 +94,7 @@ namespace Impulse.UI
                 activeUILevel++;
                 ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
 
-                UILevelPlacer.PlaceUILevel(activeUILevel);
+                UILevelPlacer.PlaceUILevel(activeUILevel, true);
                 UILevelPlacer.placedLevel.UpdateUILevel();
                 UILevelDrag.UpdateDragObject();
 
@@ -125,7 +125,10 @@ namespace Impulse.UI
                 activeUILevel--;
                 ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
 
-                UILevelPlacer.PlaceUILevel(activeUILevel);
+                UILevelPlacer.placedLevel.FadeOut();
+
+                //delay this
+                UILevelPlacer.PlaceUILevel(activeUILevel, true);
                 UILevelPlacer.placedLevel.UpdateUILevel();
                 UILevelDrag.UpdateDragObject();
 
@@ -150,10 +153,11 @@ namespace Impulse.UI
             _instance.StartCoroutine(_instance.UnlockNext());
         }
 
+        // ADD LEVEL UNLOCK ANIMATIONS AND DELAY
         public IEnumerator UnlockNext()
         {
             // add delay here
-            yield return new WaitForSeconds(0);
+            yield return new WaitForSeconds(1);
             NextLevel();
             yield break;
         }

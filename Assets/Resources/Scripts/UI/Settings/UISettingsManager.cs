@@ -27,7 +27,7 @@ namespace Impulse.UI
 
         public class HorizonSpeedChangeEvent : UnityEvent<float> { }
 
-        public Animation fadeAnimation;
+        public Animator animator;
         public Animation homeAnimation;
         public Animation resetAnimation;
         public Animation testSaveAnimation;
@@ -51,7 +51,6 @@ namespace Impulse.UI
             // if there are other different toggles this wont work, define horizontoggle root object -  search for horizontoggles
             toggles = GetComponentsInChildren<Toggle>();
 
-            FadeIn();
             SetSliders();
             Main.onSceneChange.AddListener(SceneChanging);
             ProgressManager.onProgressChange.AddListener(ProgressChanged);
@@ -107,22 +106,12 @@ namespace Impulse.UI
 
         private void SceneChanging(Main.Scene scene)
         {
-            FadeOut();
+            animator.SetTrigger("fadeout");
         }
 
         private void ProgressChanged(ProgressData p)
         {
             SetSliders();
-        }
-
-        private void FadeIn()
-        {
-            fadeAnimation.Play("fadeFromBlack");
-        }
-
-        private void FadeOut()
-        {
-            fadeAnimation.Play("fadeToBlack");
         }
 
         private void SetSliders()

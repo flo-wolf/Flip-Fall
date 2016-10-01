@@ -193,8 +193,9 @@ namespace Impulse.UI
         {
             if (touched)
             {
-                //Debug.Log(newDragObjectPos);
-                dragObject.transform.localPosition = newDragObjectPos;
+                // commented out to diable UILevelInfo dragging
+
+                //dragObject.transform.localPosition = newDragObjectPos;
                 touched = false;
             }
         }
@@ -204,12 +205,18 @@ namespace Impulse.UI
             collectInput = false;
             float t = 0;
             Vector3 dragPos = dragObject.transform.localPosition;
-            while (t < 1F)
-            {
-                t += Time.deltaTime * (Time.timeScale / fallBackDuration);
-                dragObject.transform.localPosition = Vector3.Lerp(dragPos, new Vector3(0, 0, 0), t);
-                yield return 0;
-            }
+
+            // commented out to diable UILevelInfo dragging
+
+            yield return new WaitForSeconds(fallBackDuration);
+
+            //while (t < 1F)
+            //{
+            //    t += Time.deltaTime * (Time.timeScale / fallBackDuration);
+            //    dragObject.transform.localPosition = Vector3.Lerp(dragPos, new Vector3(0, 0, 0), t);
+            //    yield return 0;
+            //}
+
             dragLength = 0;
             dragging = false;
             collectInput = true;

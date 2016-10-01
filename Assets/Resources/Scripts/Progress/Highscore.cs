@@ -34,7 +34,7 @@ namespace Impulse.Progress
         public bool finished = false;
         public double bestTime = -1;
         public int levelId = 0;
-        public int fails;
+        public int fails = 0;
 
         public Highscore(int id, double time)
         {

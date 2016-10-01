@@ -16,9 +16,10 @@ namespace Impulse.UI
         //public enum UIState { levelSelection, home, settings, game, title, shop, editor, credits, buyPro }
         //public static UIState uiState;
         public static UITutorialManager _instance;
-        public Animation fadeAnimation;
+
+        public Animator animator;
+
         public Animation switchAnimation;
-        public Animation homeAnimation;
 
         public Image reflectImage;
         public Image chargeImage;
@@ -47,17 +48,7 @@ namespace Impulse.UI
 
         private void SceneChanging(Main.Scene scene)
         {
-            FadeOut();
-        }
-
-        private void FadeIn()
-        {
-            fadeAnimation.Play("fadeFromBlack");
-        }
-
-        private void FadeOut()
-        {
-            fadeAnimation.Play("fadeToBlack");
+            animator.SetTrigger("fadeout");
         }
 
         private void SetSprites()
@@ -76,7 +67,6 @@ namespace Impulse.UI
         public void HomeButtonClicked()
         {
             SoundManager.ButtonClicked();
-            homeAnimation.Play("buttonClick");
             Main.SetScene(Main.Scene.home);
         }
 

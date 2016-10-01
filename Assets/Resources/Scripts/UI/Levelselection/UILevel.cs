@@ -23,22 +23,45 @@ namespace Impulse.UI
         public Text topTimeMilText;
         public Text failsCount;
 
-        public Text levelNumberText;
+        private Animator animator;
 
         private int starScore = 0;
         private Highscore highscore;
 
+        [HideInInspector]
+        public bool createdByLevelswitch = false;
+
         public void Start()
         {
+            animator = GetComponent<Animator>();
+
             highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
             if (highscore != null && highscore.starCount > 0)
             {
                 starScore = highscore.starCount;
             }
 
+            Main.onSceneChange.AddListener(SceneChanged);
+
             Highscore.onStarChange.AddListener(HighscoreStarChanged);
 
             UpdateUILevel();
+
+            if (createdByLevelswitch)
+                animator.SetTrigger("levelswitch");
+            else
+                animator.SetTrigger("fadein");
+        }
+
+        private void SceneChanged(Main.Scene s)
+        {
+            FadeOut();
+            createdByLevelswitch = false;
+        }
+
+        public void FadeOut()
+        {
+            animator.SetTrigger("fadeout");
         }
 
         private void HighscoreStarChanged(int stars, int levelId)
@@ -62,21 +85,19 @@ namespace Impulse.UI
 
             //levelNumberText.text = id.ToString();
 
-            UpdateFails();
+            UpdateFails(highscore);
             UpdateStars();
             UpdateTimes();
         }
 
-        public void UpdateFails()
+        public void UpdateFails(Highscore h)
         {
-            highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
-
-            if (highscore != null)
+            if (h != null)
             {
                 failsCount.text = string.Format("{0:0000}", highscore.fails);
             }
             else
-                failsCount.text = "0000";
+                failsCount.text = "1111";
         }
 
         public void UpdateStars()

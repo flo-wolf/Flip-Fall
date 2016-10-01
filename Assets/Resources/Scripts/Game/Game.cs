@@ -4,6 +4,7 @@ using Impulse.Levels;
 using Impulse.Progress;
 using Impulse.UI;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -70,22 +71,25 @@ namespace Impulse
             switch (gs)
             {
                 case GameState.deathscreen:
-                    Debug.Log("[Game] deathscreen");
                     Timer.Pause();
-                    _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
+                    if (ProgressManager.GetProgress().highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                    {
+                        ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                    }
+
+                    //_instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
-                    Main.SetScene(Main.Scene.levelselection);
+
                     onGameStateChange.Invoke(gs);
+                    Main.SetScene(Main.Scene.levelselection);
                     break;
 
                 case GameState.finishscreen:
                     Debug.Log("[Game] finishscreen");
                     Timer.Pause();
                     if (LevelManager.GetActiveID() == ProgressManager.GetProgress().lastPlayedLevelID)
-
-                        //this is now set in the UILevelitself
-                        //ProgressManager.GetProgress().lastUnlockedLevel++;
                         ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
+
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
                     Main.SetScene(Main.Scene.levelselection);

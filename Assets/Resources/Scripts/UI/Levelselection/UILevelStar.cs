@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Impulse.UI
 {
-    public class UIStar : MonoBehaviour
+    public class UILevelStar : MonoBehaviour
     {
         private Toggle starToggle;
         private int starScore = 0;

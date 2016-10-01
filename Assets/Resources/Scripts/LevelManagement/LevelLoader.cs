@@ -30,7 +30,7 @@ namespace Impulse.Levels
 
         public static Level LoadLevel(int id)
         {
-            Debug.Log(id);
+            Debug.Log("Loaded Level " + id);
             Level level = null;
             try
             {

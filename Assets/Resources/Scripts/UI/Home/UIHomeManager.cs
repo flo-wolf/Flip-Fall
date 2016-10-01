@@ -40,7 +40,7 @@ namespace Impulse.UI
 
         private void Start()
         {
-            FadeIn();
+            //FadeIn();
         }
 
         public void LevelSelectButton()

@@ -50,9 +50,6 @@ namespace Impulse.UI
             {
                 StartCoroutine(cDestroyAfterAnimation());
             }
-            else
-            {
-            }
         }
 
         public void Left()
@@ -65,11 +62,9 @@ namespace Impulse.UI
             {
                 StartCoroutine(cDestroyAfterAnimation());
             }
-            else
-            {
-            }
         }
 
+        // destroy the object after the fade-out animation has finished
         private IEnumerator cDestroyAfterAnimation()
         {
             yield return new WaitForSeconds(despawnDelay);

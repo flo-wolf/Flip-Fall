@@ -168,7 +168,8 @@ namespace Impulse.Audio
 
         public static void ButtonClicked()
         {
-            _instance.soundPlayer.PlaySingle(_instance.buttonClickSound);
+            if (_instance.soundPlayer != null)
+                _instance.soundPlayer.PlaySingle(_instance.buttonClickSound);
         }
 
         private void ButtonReleased(Button b)

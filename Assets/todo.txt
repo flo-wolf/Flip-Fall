@@ -39,7 +39,7 @@ Finished Tasks:
 Game names:
 	- Dimension Four /dimension4 -> dimensionfour.com domain is free -> four dimenions @ 10 levels
 	- velocity
-	- megaball - already eixsts.
+	- megaball - already eixsts, classic retro game.
 	- sliders
 	- Impulse
 	- charge n' change (cnc)
@@ -66,6 +66,7 @@ Game names:
 	- Cannonblaster
 	- Blasting Arcade
 	- Arcadia 
+	- Mirror Dash
 	- Arcadia - Fall and Fail
 	- Fall and Fail
 	- Decsend (not taken in palystore!)
@@ -81,7 +82,7 @@ Game names:
 	to finish it, by firing at it
 
 
-Cricteria for selecting a title:
+Criteria for selecting a title:
 - does the name fit the game
 - coolness
 - avaliability

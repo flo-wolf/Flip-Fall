@@ -6,10 +6,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-/*
-* This class manages all incoming calls of other game components regarding leveldata modification and saving.
-* Levels are serializable and saved to a file.
-*/
+/// <summary>
+/// This class manages all incoming calls of other game components regarding leveldata modification and saving.
+/// Levels are serializable and saved to a file.
+/// </summary>
 
 namespace Impulse.Levels
 {
@@ -102,30 +102,5 @@ namespace Impulse.Levels
                 return true;
             return false;
         }
-
-        //
-        //public void NextLevel()
-        //{
-        //    Debug.Log("[LevelManager]: NextLevel()");
-        //    int nextID = activeLevel.id + 1;
-        //    if (Resources.Load("Prefabs/Levels/" + nextID))
-        //    {
-        //        SetLevel(nextID);
-        //    }
-        //    else
-        //        Debug.Log("[LevelManager]: NextLevel() could not be found.");
-        //}
-
-        //public void LastLevel()
-        //{
-        //    Debug.Log("[LevelManager]: LastLevel()");
-        //    int nextID = activeLevel.id - 1;
-        //    if (Resources.Load("Prefabs/Levels/" + nextID))
-        //    {
-        //        SetLevel(nextID);
-        //    }
-        //    else
-        //        Debug.Log("[LevelManager]: LastLevel() could not be found.");
-        //}
     }
 }

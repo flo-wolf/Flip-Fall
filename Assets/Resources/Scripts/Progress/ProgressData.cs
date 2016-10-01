@@ -86,10 +86,5 @@ namespace Impulse.Progress
             Debug.LogError("[ProgressData] You try to load a Highscore that doesnt exist!");
             return null;
         }
-
-        public Highscore GetCurrentHighscore()
-        {
-            return GetHighscore(LevelManager.GetActiveID());
-        }
     }
 }
