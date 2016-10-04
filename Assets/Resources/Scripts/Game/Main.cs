@@ -103,7 +103,9 @@ namespace Impulse
         private IEnumerator cSetScene(string sceneName)
         {
             yield return new WaitForSeconds(sceneSwitchDelay);
-            SceneManager.LoadScene(sceneName);
+            AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName);
+            //ao.allowSceneActivation = true;
+            //SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
             yield break;
         }
 
