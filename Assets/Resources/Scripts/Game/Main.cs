@@ -45,10 +45,6 @@ namespace Impulse
             currentScene = Scene.home;
         }
 
-        private void OnEnable()
-        {
-        }
-
         private void Start()
         {
             if (!started)
@@ -99,9 +95,11 @@ namespace Impulse
 
         private IEnumerator cSetScene(string sceneName)
         {
-            yield return new WaitForSeconds(sceneSwitchDelay);
             AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName);
-            //ao.allowSceneActivation = true;
+            ao.allowSceneActivation = false;
+            yield return new WaitForSeconds(sceneSwitchDelay);
+            ao.allowSceneActivation = true;
+            //
             //SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
             yield break;
         }

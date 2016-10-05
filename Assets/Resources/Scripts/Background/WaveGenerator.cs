@@ -40,7 +40,7 @@ namespace Impulse.Background
         private List<int> triangles = new List<int>();
 
         // original height of the mesh around which the waves will allocate
-        public float height = 100F;
+        public float height = 1F;
 
         private void Awake()
         {

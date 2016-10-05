@@ -290,7 +290,8 @@ namespace Impulse
             //disables player mesh, only leaving particle effectss
             GetComponent<MeshRenderer>().enabled = false;
 
-            deathParticles.gameObject.transform.position = deathPos;
+            Vector3 deathParticlePos = new Vector3(deathPos.x, deathPos.y, Constants.playerZ);
+            deathParticles.gameObject.transform.position = deathParticlePos;
             deathParticles.gameObject.SetActive(true);
             //finishParticles.Clear();
             //finishParticles.Simulate(0.0f, true, true);

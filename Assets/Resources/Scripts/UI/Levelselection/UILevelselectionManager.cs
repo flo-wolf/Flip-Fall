@@ -28,8 +28,6 @@ namespace Impulse.UI
 
         //References
         public Animator animator;
-        public Animation homeAnimation;
-        public Animation playButtonAnimation;
 
         //LevelNumber Animators
         private List<Animator> LevelNumberAnims;
@@ -165,7 +163,6 @@ namespace Impulse.UI
         public void HomeBtnClicked()
         {
             SoundManager.ButtonClicked();
-            homeAnimation.Play("buttonClick");
             Main.SetScene(Main.Scene.home);
         }
 
@@ -176,7 +173,6 @@ namespace Impulse.UI
             if (LevelManager.LevelExists(activeUILevel))
             {
                 LevelManager.SetLevel(activeUILevel);
-                playButtonAnimation.Play("playButtonDisappear");
                 SoundManager.PlayCamTransitionSound();
                 Main.SetScene(Main.Scene.game);
             }
