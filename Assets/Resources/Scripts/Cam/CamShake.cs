@@ -17,8 +17,11 @@ namespace Impulse.Cam
         public float deathShakeAmount = 10f;
         public float deathShakeDuration = 0.2f;
 
-        // shake while inside attractor
+        // maximum shake while inside attractor
         public float attractorShake = 10F;
+
+        // player distance defining strength of shake (0=no shake, 1=attractorShake)
+        public static float attractorDistance = 0F;
 
         private void Awake()
         {
@@ -40,6 +43,14 @@ namespace Impulse.Cam
 
         public static void AttractorShake()
         {
+            _instance.StopAllCoroutines();
+            _instance.StartCoroutine(_instance.cAttractorShake());
+        }
+
+        public static void AttractorShakeBreak()
+        {
+            _instance.StopCoroutine(_instance.cAttractorShake());
+            _instance.transform.position = Vector3.zero;
         }
 
         public static void VelocityShake(MonoBehaviour behaviour)
@@ -116,34 +127,22 @@ namespace Impulse.Cam
         }
 
         // creates increasing shake depending on the players distance to the center of the attractor
-        public IEnumerator cAttractorShake(Rigidbody2D rb)
+        public IEnumerator cAttractorShake()
         {
-            float maxVelocity = Player._instance.maxChargeVelocity;
-            Vector2 velocity;
+            Debug.Log("shake shake shake");
             Vector3 originalPos = Vector3.zero;
             Vector3 newPos = Vector3.zero;
 
-            float amount;
-
             while (true)
             {
-                originalPos = cams[0].transform.position;
-                velocity = rb.velocity;
-                velocity.x = System.Math.Abs(velocity.x);
+                originalPos = Vector3.zero;
 
-                if (velocity.x > (maxVelocity - Constants.velocityThreshhold))
-                {
-                    velocity.x = maxVelocity;
-                }
+                newPos = originalPos + Random.insideUnitSphere * (attractorShake * attractorDistance);
 
-                amount = Mathf.SmoothStep(0, maxChargingShake, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
-                newPos = originalPos + Random.insideUnitSphere * amount;
                 newPos.z = 0;
 
-                foreach (Camera cam in cams)
-                {
-                    cam.transform.position = newPos;
-                }
+                transform.localPosition = newPos;
+                Debug.Log(transform.localPosition);
 
                 yield return new WaitForFixedUpdate();
             }

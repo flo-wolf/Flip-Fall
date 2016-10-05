@@ -113,7 +113,7 @@ namespace Impulse.Cam
                 Vector3 PlayerPOS = Player._instance.transform.transform.position;
                 foreach (Camera cam in cams)
                 {
-                    cam.transform.position = new Vector3(PlayerPOS.x, PlayerPOS.y, Constants.cameraZ);
+                    cam.transform.localPosition = new Vector3(PlayerPOS.x, PlayerPOS.y, Constants.cameraZ);
                 }
             }
         }

@@ -99,8 +99,6 @@ namespace Impulse
             ao.allowSceneActivation = false;
             yield return new WaitForSeconds(sceneSwitchDelay);
             ao.allowSceneActivation = true;
-            //
-            //SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
             yield break;
         }
 

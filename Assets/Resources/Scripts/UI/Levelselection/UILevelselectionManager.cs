@@ -89,6 +89,7 @@ namespace Impulse.UI
         {
             if (activeUILevel + 1 <= ProgressManager.GetProgress().lastUnlockedLevel)
             {
+                Debug.Log("ProgressManager.GetProgress().lastUnlockedLevel " + ProgressManager.GetProgress().lastUnlockedLevel);
                 activeUILevel++;
                 ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
 

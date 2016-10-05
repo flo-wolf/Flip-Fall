@@ -1,22 +1,25 @@
 ﻿using Impulse;
+using Impulse.Cam;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// A point that pulls the player towards it with a set force,
-/// that increases when the player comes closer and decreases when the player moves away.
-/// Can even be used to elevate the player upwards if the attraction (pullForce) is greater than the downwards gravity.
+/// A circle that pulls the player towards its center with a set force.
+/// Force depends on the players distance to the center of the circle.
+/// Can be used to elevate the player upwards if the attraction (pullForce) is greater than the gravity pulling the player downwards.
 /// </summary>
 namespace Impulse.LevelObjects
 {
     public class Attractor : MonoBehaviour
     {
-        // Set by transform scale
+        // attractor radius aka. area of effect, sets the scale of the gameObject
         public float pullRadius = 1000f;
 
+        // maximum pull
         public float maxPullForce = 1000f;
 
+        // attractor shader material
         public Material attractorMaterial;
 
         // amplifies the pull fprce by this value when the player comes closer
@@ -27,7 +30,8 @@ namespace Impulse.LevelObjects
         private Rigidbody2D playerRb;
         private Vector2 center;
 
-        public float EffectTime = 0F;
+        private bool colliding = false;
+        private bool shaking = false;
 
         [ExecuteInEditMode]
         public void SetScale()
@@ -46,6 +50,7 @@ namespace Impulse.LevelObjects
             attractorMaterial.SetFloat("_AttractorRadius", pullRadius);
         }
 
+        // draws an outline around the attractor to make it visible in the editor
         [ExecuteInEditMode]
         private void OnDrawGizmos()
         {
@@ -56,20 +61,38 @@ namespace Impulse.LevelObjects
 
         public void FixedUpdate()
         {
+            // player is inside the attractor
+            colliding = false;
             foreach (Collider2D collider in Physics2D.OverlapCircleAll(center, pullRadius, 1 << LayerMask.NameToLayer("Player")))
             {
-                // calculate direction from target to this
+                colliding = true;
+
+                // calculate direction from player to center of this
                 Vector2 forceDirection = center - new Vector2(collider.transform.position.x, collider.transform.position.y);
 
-                // apply force on player towards this
+                // apply force on player towards center of this
                 playerRb.AddForce(forceDirection.normalized * maxPullForce * Time.fixedDeltaTime * pullAmplifier);
 
+                // calculate distance to the center of this
                 float dist = Mathf.Abs(Vector3.Distance(collider.transform.position, transform.position));
 
-                // update shader input
+                // update shader
                 attractorMaterial.SetFloat("_AttractorRadius", pullRadius);
                 attractorMaterial.SetVector("_AttractionCenter", transform.InverseTransformPoint(transform.position));
                 attractorMaterial.SetFloat("_PlayerDistance", dist);
+
+                // update camera shake
+                float shake = Mathf.InverseLerp(pullRadius, 0, dist);
+                CamShake.attractorDistance = shake;
+            }
+            if (colliding == true && shaking == false)
+            {
+                CamShake.AttractorShake();
+                shaking = true;
+            }
+            else if (colliding == false)
+            {
+                CamShake.AttractorShakeBreak();
             }
         }
     }

@@ -159,7 +159,7 @@ namespace Impulse.UI
                     //Debug.Log("id: " + id);
 
                     // this doesn't belong in here, even through it does its job right
-                    if (ProgressManager.GetProgress().lastUnlockedLevel <= id)
+                    if (ProgressManager.GetProgress().lastUnlockedLevel <= id && ProgressManager.GetProgress().lastUnlockedLevel + 1 <= Constants.lastLevel)
                     {
                         ProgressManager.GetProgress().lastUnlockedLevel++;
                         UILevelselectionManager.NextWasUnlocked();
