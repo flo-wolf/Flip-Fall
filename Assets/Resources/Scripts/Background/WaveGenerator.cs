@@ -4,16 +4,18 @@ using Impulse.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Impulse.Background
 {
     public class WaveGenerator : MonoBehaviour
     {
-        public int id;
+        public static WaveGenerator _instance;
+        public static WaveMeshUpdateEvent onMeshUpdate = new WaveMeshUpdateEvent();
+
+        public class WaveMeshUpdateEvent : UnityEvent<Mesh> { }
 
         // toggle audio wave gathering
-        public bool updating = true;
-        public float updatingDelay = 0.5F;
         public float wavePeak = 0.2F;
         public float lPeak = 0.1F;
         public float uPeak = 0.2F;
@@ -24,8 +26,8 @@ namespace Impulse.Background
         private float newestAudioValue = 0F;
         private float lerpedAudioValue = 0F;
 
-        // Reference to the mesh we will generate
-        private Mesh mesh = null;
+        // final mesh, applied to all HorizonParts
+        public static Mesh waveMesh;
 
         // The wave points along the top of the mesh
         private Vector3[] points = null;
@@ -38,36 +40,43 @@ namespace Impulse.Background
         private List<int> triangles = new List<int>();
 
         // original height of the mesh around which the waves will allocate
-        private float height;
+        public float height = 100F;
+
+        private void Awake()
+        {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
 
         private void Start()
         {
-            GetComponent<MeshRenderer>().sortingOrder = id;
-            height = GetComponent<MeshFilter>().mesh.bounds.extents.y;
-            backgroundSpeed = ProgressManager.GetProgress().settings.backgroundSpeed; //default 15
+            waveMesh = new Mesh();
 
+            backgroundSpeed = ProgressManager.GetProgress().settings.backgroundSpeed;
             UISettingsManager.onHorizonSpeedChange.AddListener(HorizonSpeedChanged);
 
-            Prewarm();
+            onMeshUpdate.Invoke(Prewarm());
         }
 
         private void HorizonSpeedChanged(float f)
         {
-            //Debug.Log(f);
             backgroundSpeed = f;
         }
 
-        private void Prewarm()
+        private Mesh Prewarm()
         {
-            MeshFilter filter = GetComponent<MeshFilter>();
-            mesh = filter.mesh;
-            mesh.Clear();
+            waveMesh.Clear();
 
             // Generate 64 random points for the top (i.e. the actual wave)
             points = new Vector3[32];
             for (int i = 0; i < points.Length; i++)
             {
-                points[i] = new Vector3(0.5f * (float)i, 0.6f, 0f);
+                points[i] = new Vector3(0.5f * i, height, 0f);
             }
 
             lastPoints = points;
@@ -82,27 +91,23 @@ namespace Impulse.Background
                 AddWavePoint(p);
             }
 
-            mesh.vertices = vertices.ToArray();
-            mesh.triangles = triangles.ToArray();
+            waveMesh.vertices = vertices.ToArray();
+            waveMesh.triangles = triangles.ToArray();
 
             vertices.Clear();
             triangles.Clear();
+
+            return waveMesh;
         }
 
         private void FixedUpdate()
         {
-            //Debug.Log(lerpedAudioValue);
-
-            // Update the mesh and insert the newest spectrumdata as the newest vertex
-            UpdateMesh();
+            onMeshUpdate.Invoke(UpdateMesh());
         }
 
-        private void UpdateMesh()
+        private Mesh UpdateMesh()
         {
-            // Get a reference to the mesh component and clear it
-            MeshFilter filter = GetComponent<MeshFilter>();
-            mesh = filter.mesh;
-            mesh.Clear();
+            waveMesh.Clear();
 
             // Generate 64 random points for the top (i.e. the actual wave)
             points = new Vector3[32];
@@ -124,26 +129,22 @@ namespace Impulse.Background
                         else
                             newestAudioValue = 0;
 
-                        amplitude = Mathf.Lerp(lastPoints[i].y, 0.5F + newestAudioValue, Time.deltaTime * backgroundSpeed);
-                        //Debug.Log(amplitude);
-
+                        amplitude = Mathf.Lerp(lastPoints[i].y, height + newestAudioValue, Time.deltaTime * backgroundSpeed);
                         //if (lerpedAudioValue > hWave)
                         //    hWave = lerpedAudioValue;
-
                         //amplitude = Mathf.Lerp(lPeak, uPeak, Mathf.InverseLerp(0, hWave, lerpedAudioValue));
 
-                        //there is audio hearable
+                        //there is audio
                         if (amplitude < 1 && newestAudioValue > 0.05)
                         {
-                            //Debug.Log(lerpedAudioValue);
                             points[i] = new Vector3(0.5f * (float)i, Mathf.Abs(Mathf.Lerp(lastPoints[i].y, amplitude, Time.time)), 0f);
                         }
+
                         //there is no audio, switch to random input
                         else
                         {
-                            randAmplitude = Mathf.Lerp(lastPoints[i].y, 0.5F + Mathf.Abs(Random.Range(lPeak, uPeak)), Time.deltaTime * backgroundSpeed);
+                            randAmplitude = Mathf.Lerp(lastPoints[i].y, height + Mathf.Abs(Random.Range(lPeak, uPeak)), Time.deltaTime * backgroundSpeed);
                             points[i] = new Vector3(0.5f * (float)i, Mathf.Abs(Mathf.Lerp(lastPoints[i].y, randAmplitude, Time.time)), 0f);
-                            //Debug.Log("2");
                             //Random.Range(lastPoints[i].y - wavePeak, lastPoints[i].y + wavePeak)
                         }
                     }
@@ -153,7 +154,6 @@ namespace Impulse.Background
                         points[i] = new Vector3(0.5f * (float)i, lastPoints[i - 1].y, 0f);
                     }
                 }
-
                 //AddWavePoint(points[i]);
             }
             lastPoints = points;
@@ -169,11 +169,13 @@ namespace Impulse.Background
             }
 
             // Assign the vertices and triangles to the mesh
-            mesh.vertices = vertices.ToArray();
-            mesh.triangles = triangles.ToArray();
+            waveMesh.vertices = vertices.ToArray();
+            waveMesh.triangles = triangles.ToArray();
 
             vertices.Clear();
             triangles.Clear();
+
+            return waveMesh;
         }
 
         private Vector3 CalculateBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
@@ -209,19 +211,6 @@ namespace Impulse.Background
                 triangles.Add(start + 3);
                 triangles.Add(start + 2);
             }
-        }
-
-        private IEnumerator CalcAudio()
-        {
-            while (updating)
-            {
-                if (AudioInterpreter.currentValue < 1F && AudioInterpreter.currentValue > 0)
-                    newestAudioValue = AudioInterpreter.currentValue * 100;
-                else
-                    newestAudioValue = 0;
-                yield return new WaitForSeconds(updatingDelay);
-            }
-            yield break;
         }
     }
 }

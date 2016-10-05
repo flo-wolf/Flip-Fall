@@ -7,6 +7,7 @@ namespace Impulse.Theme
     public class Theme : MonoBehaviour
     {
         public ThemeManager.Skin horizonSkin;
+        public Color backgorundColor;
         public Material playerMaterial;
         public Material finishMaterial;
         public Material turretMaterial;

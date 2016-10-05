@@ -18,6 +18,7 @@ namespace Impulse.Theme
 
         //skin currently active
         public static Skin skin = Skin.unset;
+        public static Theme theme;
         public Skin defaultSkin;
 
         //skin prefab references
@@ -34,6 +35,17 @@ namespace Impulse.Theme
 
             DontDestroyOnLoad(this);
             SetSkin(GetLastSkin());
+
+            GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
+            bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;
+
+            //set background cam color
+        }
+
+        private void OnLevelWasLoaded()
+        {
+            GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
+            bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;
         }
 
         // get last skin from progress
@@ -67,7 +79,8 @@ namespace Impulse.Theme
 
                 foreach (GameObject g in _instance.skins)
                 {
-                    if (g.GetComponent<Theme>().horizonSkin == newSkin)
+                    theme = g.GetComponent<Theme>();
+                    if (theme.horizonSkin == newSkin)
                     {
                         foreach (Transform child in _instance.transform)
                         {
@@ -78,6 +91,7 @@ namespace Impulse.Theme
                         go.gameObject.transform.localPosition = Vector3.zero;
                         skin = newSkin;
                         ProgressManager.GetProgress().settings.skin = skin;
+
                         break;
                     }
                 }

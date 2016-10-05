@@ -10,9 +10,15 @@ namespace Impulse.Cam
         public Camera[] cams;
 
         [Header("Shake Settings")]
+        // shake while charging
         public float maxChargingShake = 5F;
+
+        // shake on death
         public float deathShakeAmount = 10f;
         public float deathShakeDuration = 0.2f;
+
+        // shake while inside attractor
+        public float attractorShake = 10F;
 
         private void Awake()
         {
@@ -30,6 +36,10 @@ namespace Impulse.Cam
         {
             Shake(_instance.deathShakeAmount, _instance.deathShakeDuration);
             _instance.StartCoroutine(_instance.cShakeCoroutine(_instance.deathShakeDuration, _instance.deathShakeAmount));
+        }
+
+        public static void AttractorShake()
+        {
         }
 
         public static void VelocityShake(MonoBehaviour behaviour)
@@ -73,6 +83,40 @@ namespace Impulse.Cam
 
         //creates increasing shake depending on the rigidbody's velocity
         public IEnumerator cVelocityShake(Rigidbody2D rb)
+        {
+            float maxVelocity = Player._instance.maxChargeVelocity;
+            Vector2 velocity;
+            Vector3 originalPos = Vector3.zero;
+            Vector3 newPos = Vector3.zero;
+
+            float amount;
+
+            while (true)
+            {
+                originalPos = cams[0].transform.position;
+                velocity = rb.velocity;
+                velocity.x = System.Math.Abs(velocity.x);
+
+                if (velocity.x > (maxVelocity - Constants.velocityThreshhold))
+                {
+                    velocity.x = maxVelocity;
+                }
+
+                amount = Mathf.SmoothStep(0, maxChargingShake, Mathf.InverseLerp(0, maxVelocity, velocity.magnitude));
+                newPos = originalPos + Random.insideUnitSphere * amount;
+                newPos.z = 0;
+
+                foreach (Camera cam in cams)
+                {
+                    cam.transform.position = newPos;
+                }
+
+                yield return new WaitForFixedUpdate();
+            }
+        }
+
+        // creates increasing shake depending on the players distance to the center of the attractor
+        public IEnumerator cAttractorShake(Rigidbody2D rb)
         {
             float maxVelocity = Player._instance.maxChargeVelocity;
             Vector2 velocity;

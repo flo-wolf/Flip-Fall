@@ -9,6 +9,9 @@ namespace Impulse.Audio
         public static AudioInterpreter _instance;
         public static AudioSource source;
 
+        public float updateDelay = 0.1F;
+        public bool updating = true;
+
         public static float[] spectrum;
         public static float currentValue;
 
@@ -24,13 +27,22 @@ namespace Impulse.Audio
             DontDestroyOnLoad(this);
         }
 
-        private void Update()
+        private void Start()
         {
-            float[] spectrum = new float[256];
-            if (SoundPlayer._instance != null)
+            StartCoroutine(InterpreterUpdate());
+        }
+
+        private IEnumerator InterpreterUpdate()
+        {
+            while (updating)
             {
-                SoundPlayer._instance.musicSource.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
-                currentValue = spectrum[0];
+                yield return new WaitForSeconds(updateDelay);
+                float[] spectrum = new float[256];
+                if (SoundPlayer._instance != null)
+                {
+                    SoundPlayer._instance.musicSource.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
+                    currentValue = spectrum[0];
+                }
             }
         }
 

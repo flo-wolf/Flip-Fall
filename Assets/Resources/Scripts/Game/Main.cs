@@ -26,12 +26,9 @@ namespace Impulse
         public float sceneSwitchDelay = 0.5F;
 
         public static StartupEvent onStartup = new StartupEvent();
-
-        public class StartupEvent : UnityEvent { }
+        public static SceneChangeEvent onSceneChange = new SceneChangeEvent();
 
         public bool started = false;
-
-        public static SceneChangeEvent onSceneChange = new SceneChangeEvent();
 
         private void Awake()
         {
@@ -139,6 +136,8 @@ namespace Impulse
 #endif
             }
         }
+
+        public class StartupEvent : UnityEvent { }
 
         public class SceneChangeEvent : UnityEvent<Scene> { }
     }
