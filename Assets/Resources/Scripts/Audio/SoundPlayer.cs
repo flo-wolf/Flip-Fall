@@ -20,6 +20,10 @@ namespace Impulse.Audio
 
         public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
         public float highPitchRange = 1.05f;            //The highest a sound effect will be randomly pitched.
+        public float maxSfxDistance = 135;
+
+        public static float rumbleVolume = 0f;
+        public static bool rumbleAlive = true;
 
         public AudioListener audioListener;
 
@@ -63,6 +67,7 @@ namespace Impulse.Audio
         {
             musicSource.volume = ProgressManager.GetProgress().settings.musicVolume;
             fxVolume = ProgressManager.GetProgress().settings.fxVolume;
+            rumbleAlive = false;
         }
 
         // Used to play single sound clips.
@@ -75,10 +80,44 @@ namespace Impulse.Audio
             sfxSource.PlayOneShot(clip, fxVolume);
         }
 
+        public void PlayAttractorRumble(AudioClip clip, Vector3 pos)
+        {
+            StartCoroutine(_instance.cPlayAttractorRumble(clip, pos));
+        }
+
+        private IEnumerator cPlayAttractorRumble(AudioClip clip, Vector3 pos)
+        {
+            float distanceToPlayer = Vector3.Distance(Player._instance.transform.position, pos);
+
+            GameObject tempGO = new GameObject("TempFXAudio - " + clip.name); // create the temp object
+            tempGO.transform.position = pos; // set its position
+            tempGO.transform.parent = transform;
+            AudioSource aSource = tempGO.AddComponent<AudioSource>(); // add an audio source
+            aSource.clip = clip; // define the clip
+
+            aSource.volume = fxVolume * rumbleVolume;
+            aSource.maxDistance = 135;
+            aSource.spatialBlend = 0F; // without thi the audio will be hearable everywhere
+            aSource.dopplerLevel = 0F;
+            aSource.reverbZoneMix = 0F;
+            aSource.loop = true;
+            aSource.Play(); // start the sound
+
+            while (rumbleAlive)
+            {
+                Debug.Log(rumbleAlive);
+                aSource.volume = fxVolume * rumbleVolume;
+                yield return new WaitForFixedUpdate();
+            }
+
+            Debug.Log(tempGO.name + " was destroyed.");
+            Destroy(tempGO); // destroy object after clip duration
+            yield break;
+        }
+
         public AudioSource PlaySingleAt(AudioClip clip, Vector3 pos, float distanceToPlayer)
         {
-            float maxDistance = 135;
-            if (distanceToPlayer < maxDistance)
+            if (distanceToPlayer < maxSfxDistance)
             {
                 GameObject tempGO = new GameObject("TempFXAudio"); // create the temp object
                 tempGO.transform.position = pos; // set its position
@@ -86,7 +125,7 @@ namespace Impulse.Audio
                 AudioSource aSource = tempGO.AddComponent<AudioSource>(); // add an audio source
                 aSource.clip = clip; // define the clip
 
-                float volumeMulti = Mathf.InverseLerp(0, maxDistance, distanceToPlayer);
+                float volumeMulti = Mathf.InverseLerp(0, maxSfxDistance, distanceToPlayer);
 
                 aSource.volume = fxVolume * volumeMulti;
                 aSource.maxDistance = 135;

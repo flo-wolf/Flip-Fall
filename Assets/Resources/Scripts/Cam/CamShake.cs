@@ -142,7 +142,6 @@ namespace Impulse.Cam
                 newPos.z = 0;
 
                 transform.localPosition = newPos;
-                Debug.Log(transform.localPosition);
 
                 yield return new WaitForFixedUpdate();
             }

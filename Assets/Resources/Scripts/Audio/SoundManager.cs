@@ -34,6 +34,7 @@ namespace Impulse.Audio
         public AudioClip levelselectionAppearSound;
         public AudioClip camTransitionSound;
         public AudioClip uiLevelSwitchSound;
+        public AudioClip attractorRumble;
 
         [Header("Music")]
         public AudioClip backgroundSound;
@@ -180,6 +181,11 @@ namespace Impulse.Audio
         public void PlayTimerSound()
         {
             soundPlayer.PlaySingle(timerSound);
+        }
+
+        public static void PlayRumbleSound(Vector3 pos)
+        {
+            _instance.soundPlayer.PlayAttractorRumble(_instance.attractorRumble, pos);
         }
 
         public static void PlayUnvalidSound()
