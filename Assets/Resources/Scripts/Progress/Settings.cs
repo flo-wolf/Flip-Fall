@@ -24,7 +24,7 @@ namespace Impulse.Progress
             backgroundSpeed = 15F;
             chargeOnLeftSide = true;
             fxVolume = 1F;
-            musicVolume = 1F;
+            musicVolume = 0.2F;
             skin = ThemeManager.Skin.unset;
             imageEffects = true;
         }

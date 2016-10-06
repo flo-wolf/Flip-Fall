@@ -190,7 +190,6 @@ namespace Impulse
                 //ParticleSystem particleSystem = go.GetComponent<ParticleSystem>();
 
                 Die(GetParticleCollisionLoc(go));
-                Game.SetGameState(Game.GameState.deathscreen);
                 Debug.Log("[Player] Death by particle");
             }
         }
