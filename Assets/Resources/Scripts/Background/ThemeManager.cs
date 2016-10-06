@@ -92,6 +92,9 @@ namespace Impulse.Theme
                         skin = newSkin;
                         ProgressManager.GetProgress().settings.skin = skin;
 
+                        GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
+                        bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;
+
                         break;
                     }
                 }
