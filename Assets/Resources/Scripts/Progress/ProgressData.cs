@@ -16,15 +16,18 @@ namespace Impulse.Progress
     [Serializable]
     public class ProgressData
     {
+        // level highscores and stars
         public List<Highscore> highscores;
+
+        // sound settings etc.
         public Settings settings;
+
+        // bought/unlocked items
         public Unlocks unlocks;
 
-        //public HighscoreEvent;
+        // reached achievements
+        public Achievements achievements;
 
-        //public List<Achievements>
-        //public List<Unlocks>
-        //public List<Settings>
         public int lastUnlockedLevel;
         public int lastPlayedLevelID;
         public int totalStars;

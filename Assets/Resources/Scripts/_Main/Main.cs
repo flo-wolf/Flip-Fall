@@ -71,6 +71,11 @@ namespace Impulse
                         _instance.StartCoroutine(_instance.cSetScene("Home"));
                     break;
 
+                case Scene.shop:
+                    if (SceneManager.GetActiveScene().name != "Shop")
+                        _instance.StartCoroutine(_instance.cSetScene("Shop"));
+                    break;
+
                 case Scene.levelselection:
                     if (SceneManager.GetActiveScene().name != "Levelselection")
                         _instance.StartCoroutine(_instance.cSetScene("Levelselection"));
@@ -89,6 +94,19 @@ namespace Impulse
                 case Scene.settings:
                     if (SceneManager.GetActiveScene().name != "Settings")
                         _instance.StartCoroutine(_instance.cSetScene("Settings"));
+                    break;
+
+                case Scene.editor:
+                    if (ProgressManager.GetProgress().unlocks.editorUnlocked)
+                    {
+                        if (SceneManager.GetActiveScene().name != "Editor")
+                            _instance.StartCoroutine(_instance.cSetScene("Editor"));
+                    }
+                    else
+                    {
+                        if (SceneManager.GetActiveScene().name != "EditorUnlock")
+                            _instance.StartCoroutine(_instance.cSetScene("EditorUnlock"));
+                    }
                     break;
             }
         }

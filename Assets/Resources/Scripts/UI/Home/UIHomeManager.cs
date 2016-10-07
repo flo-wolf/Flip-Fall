@@ -76,14 +76,23 @@ namespace Impulse.UI
             //FadeOut();
         }
 
+        public void EditorButton()
+        {
+            Main.SetScene(Main.Scene.editor);
+            animator.SetTrigger("editor");
+            SoundManager.ButtonClicked();
+        }
+
+        public void ShopButton()
+        {
+            Main.SetScene(Main.Scene.shop);
+            animator.SetTrigger("shop");
+            SoundManager.ButtonClicked();
+        }
+
         private void FadeIn()
         {
             fadeAnimation.Play("fadeFromBlack");
-        }
-
-        public void HomeButton()
-        {
-            Main.SetScene(Main.Scene.home);
         }
 
         private void FadeOut()

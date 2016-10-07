@@ -14,16 +14,23 @@ namespace Impulse.Progress
     public class Unlocks
     {
         public List<ThemeManager.Skin> skins;
+        public bool editorUnlocked;
 
         public Unlocks()
         {
             skins = new List<ThemeManager.Skin>();
+            editorUnlocked = false;
         }
 
-        public void AddSkin(ThemeManager.Skin skin)
+        public void UnlockSkin(ThemeManager.Skin skin)
         {
             if (!skins.Any(x => x == skin))
                 skins.Add(skin);
+        }
+
+        public void UnlockEditor()
+        {
+            editorUnlocked = true;
         }
     }
 }

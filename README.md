@@ -1,8 +1,7 @@
-# Impulse
-This is a hardcore level-based arcade mobile platformer with innovative gameplay mechanics, frustration and addiction guaranteed!
-
-Current Beta Demo available here for free! 
-Please keep in mind, this is a one-man hobby project, work in progress. Feedback heavily appreciated!
+# Flip Fall
+This game is not easy, prepare to feel the sensation of failure.
+Current beta available here for free, feedback heavily appreciated!
+Release planned for the 1st of November.
 
 ### Features
 * 13 Free Demo Levels, introducing all current gameplay mechanics.
@@ -12,19 +11,19 @@ Please keep in mind, this is a one-man hobby project, work in progress. Feedback
 * Progress and achievement serialization, keeping your files safe and sound.
 
 ### Upcoming
-* Inbuilt level editing, create and share your own creations and let friends feel the frustration of failure!
-* Endless gamemode.
-* More level objects, including multi-barrel turrets, falling spikes, crushers and many more.
+* Inbuilt level editing - Create, edit, play and share your creations!
+* Multiple other gamemodes, including coop and endless.
+* More levels and levelobjects, including multi-barrel turrets, falling spikes, direction switchers, crushers and many more.
 
 ### How to Play
-Use both hands to play this game.
+Use your two thumbs to play this game.
 Both sides of the screen modify the players movement differently.
 
-Left - Charge
-* Hold to stop the player from falling down. While holding, the player gets accelerated horizontally.
-
-Right - Reflect
+Right Half - Flip
 * Tap to instantly mirror the Player's movement direction.
+
+Left Half - Charge
+* Tap and hold to stop the player from falling down. While holding, the player gets accelerated horizontally.
 
 ### Rules
 * Finish a level to unlock the next one. 

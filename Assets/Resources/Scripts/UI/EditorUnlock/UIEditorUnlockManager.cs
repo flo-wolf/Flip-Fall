@@ -11,11 +11,11 @@ using UnityEngine.UI;
 
 namespace Impulse.UI
 {
-    public class UIShopManager : MonoBehaviour
+    public class UIEditorUnlockManager : MonoBehaviour
     {
         //public enum UIState { levelSelection, home, settings, game, title, shop, editor, credits, buyPro }
         //public static UIState uiState;
-        public static UIShopManager _instance;
+        public static UIEditorUnlockManager _instance;
 
         public Animator animator;
 
