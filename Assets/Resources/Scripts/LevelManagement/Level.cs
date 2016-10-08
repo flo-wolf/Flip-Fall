@@ -27,8 +27,11 @@ namespace Impulse.Levels
 
         // mergedMeshRenderer
         private MeshRenderer mr;
-        private Mesh mergedMesh;
         private GameObject moveAreaGo;
+
+        [HideInInspector]
+        public Mesh mergedMesh;
+        public List<Vector2[]> levelPolys;
 
         //private Ghost ghost;
         [HideInInspector]
@@ -43,6 +46,9 @@ namespace Impulse.Levels
 
         private void Awake()
         {
+            mergedMesh = new Mesh();
+            levelPolys = new List<Vector2[]>();
+
             material = Resources.Load("Materials/Game/MoveZone", typeof(Material)) as Material;
             material.SetFloat("_PlayerDistance", 10000);
 
@@ -60,7 +66,18 @@ namespace Impulse.Levels
 
                     mr.gameObject.layer = LayerMask.NameToLayer("LevelMask");
 
+                    Mesh m = new Mesh();
+                    m = mr.gameObject.GetComponent<MeshFilter>().mesh;
+                    Vector2[] poly = new Vector2[m.vertexCount];
+
+                    for (int v = 0; v < m.vertexCount; v++)
+                    {
+                        poly[v] = new Vector2(mr.transform.TransformPoint(m.vertices[v]).x, mr.transform.TransformPoint(m.vertices[v]).y);
+                    }
+
+                    levelPolys.Add(poly);
                     moveBounds.Add(b);
+
                     //Debug.Log(b + " -- id --- " + moveBounds.Count);
 
                     mr.sortingOrder = sortingcount;
@@ -69,14 +86,14 @@ namespace Impulse.Levels
             }
         }
 
-        public void Start()
+        public void OnEnable()
         {
             MergeMoveArea();
         }
 
-        // Merges all movearea blocks into one, delete old MoveAreas
-        // saves runtime recources and allows for easier boundary calcultions,
-        // while still containing all blocks in the prefab for easy editing
+        // Merges all movearea blocks into one, deletes old MoveAreas
+        // saves runtime resources and allows for easier boundary calcultions,
+        // while still containing all seperated blocks in the prefab for easy editing
         private void MergeMoveArea()
         {
             MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();

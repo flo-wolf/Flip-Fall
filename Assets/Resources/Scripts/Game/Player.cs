@@ -65,6 +65,7 @@ namespace Impulse
 
         private CircleCollider2D circleCollider;
         private List<Bounds> bounds;
+
         private Vector3 deathPos;
         private ParticleCollisionEvent[] collisionEvents = new ParticleCollisionEvent[16];
 
@@ -96,6 +97,11 @@ namespace Impulse
             LevelManager.onLevelChange.AddListener(LevelChanged);
 
             bounds = LevelPlacer.placedLevel.moveBounds;
+
+            // get level polygons for collision detection
+
+            Debug.Log("levelPoly length " + LevelPlacer.placedLevel.mergedMesh.vertexCount);
+
             //trail.sortingOrder = 2;
         }
 
@@ -415,12 +421,13 @@ namespace Impulse
         public bool IsOnMoveArea()
         {
             int counter = 0;
-            foreach (Bounds b in bounds)
+            Vector2 checkPos = transform.position;
+
+            foreach (Vector2[] poly in LevelPlacer.placedLevel.levelPolys)
             {
+                Debug.Log("lolz");
                 for (int i = 1; i <= 4; i++)
                 {
-                    Vector3 checkPos = transform.position;
-                    checkPos.z = b.center.z + b.extents.z;
                     switch (i)
                     {
                         //right
@@ -440,8 +447,9 @@ namespace Impulse
                             checkPos.y = checkPos.y - circleCollider.bounds.extents.y;
                             break;
                     }
-                    if (b.Contains(checkPos))
+                    if (IsPointInPolygon(checkPos, poly))
                     {
+                        Debug.Log("I AM ON POLYGON " + i);
                         counter++;
                     }
                     else
@@ -454,9 +462,35 @@ namespace Impulse
                     return true;
                 }
             }
+
             // not on movearea
             return false;
         }
+
+        public bool IsPointInPolygon(Vector2 v, Vector2[] p)
+        {
+            int j = p.Length - 1;
+            bool c = false;
+            for (int i = 0; i < p.Length; j = i++) c ^= p[i].y > v.y ^ p[j].y > v.y && v.x < (p[j].x - p[i].x) * (v.y - p[i].y) / (p[j].y - p[i].y) + p[i].x;
+
+            Debug.Log(c);
+            return c;
+        }
+
+        //private static bool ContainsPoint(Vector2[] polyPoints, Vector2 p)
+        //{
+        //    int j = polyPoints.Length - 1;
+        //    bool inside = false;
+
+        //    for (int i = 0; i < polyPoints.Length; i++)
+        //    {
+        //        Debug.Log(polyPoints[i] + " -p- " + p + " -i- " + i);
+        //        if (((polyPoints[i].y <= p.y && p.y < polyPoints[j].y) || (polyPoints[j].y <= p.y && p.y < polyPoints[i].y)) &&
+        //        (p.x < (polyPoints[j].x - polyPoints[i].x) * (p.y - polyPoints[i].y) / (polyPoints[j].y - polyPoints[i].y) + polyPoints[i].x))
+        //            inside = !inside;
+        //    }
+        //    return inside;
+        //}
 
         public void SetPlayerState(PlayerState ps)
         {
