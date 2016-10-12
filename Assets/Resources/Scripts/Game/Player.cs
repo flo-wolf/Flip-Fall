@@ -76,6 +76,7 @@ namespace Impulse
         private bool teleporting = false;
 
         private static List<Collider2D> colliderList = new List<Collider2D>();
+        private static PolygonCollider2D levelCollider;
 
         private void Awake()
         {
@@ -97,6 +98,7 @@ namespace Impulse
             LevelManager.onLevelChange.AddListener(LevelChanged);
 
             bounds = LevelPlacer.placedLevel.moveBounds;
+            levelCollider = LevelPlacer.placedLevel.polyCollider;
 
             // get level polygons for collision detection
 
@@ -423,84 +425,47 @@ namespace Impulse
             int counter = 0;
             Vector2 checkPos = transform.position;
 
-            foreach (Vector2[] poly in LevelPlacer.placedLevel.levelPolys)
+            for (int i = 1; i <= 4; i++)
             {
-                Debug.Log("lolz");
-                for (int i = 1; i <= 4; i++)
+                switch (i)
                 {
-                    switch (i)
-                    {
-                        //right
-                        case 1:
-                            checkPos.x = checkPos.x + circleCollider.bounds.extents.x;
-                            break;
-                        //left
-                        case 2:
-                            checkPos.x = checkPos.x - circleCollider.bounds.extents.x;
-                            break;
-                        //up
-                        case 3:
-                            checkPos.y = checkPos.y + circleCollider.bounds.extents.y;
-                            break;
-                        //down
-                        case 4:
-                            checkPos.y = checkPos.y - circleCollider.bounds.extents.y;
-                            break;
-                    }
-                    if (IsPointInPolygon(checkPos, poly))
-                    {
-                        //Debug.Log("I AM ON POLYGON " + i);
-                        counter++;
-                    }
-                    else
-                    {
-                        deathPos = checkPos;
-                    }
+                    //right
+                    case 1:
+                        checkPos.x = checkPos.x + circleCollider.bounds.extents.x;
+                        break;
+                    //left
+                    case 2:
+                        checkPos.x = checkPos.x - circleCollider.bounds.extents.x;
+                        break;
+                    //up
+                    case 3:
+                        checkPos.y = checkPos.y + circleCollider.bounds.extents.y;
+                        break;
+                    //down
+                    case 4:
+                        checkPos.y = checkPos.y - circleCollider.bounds.extents.y;
+                        break;
                 }
-                if (counter >= 4)
+
+                //Debug.Log("checkPos " + checkPos);
+
+                if (IsInside(levelCollider, checkPos))
                 {
-                    return true;
+                    counter++;
                 }
+                else
+                {
+                    deathPos = checkPos;
+                }
+            }
+            if (counter >= 4)
+            {
+                return true;
             }
 
             // not on movearea
             return false;
         }
-
-        public bool IsPointInPolygon(Vector2 v, Vector2[] p)
-        {
-            //p = { (0.0F, 1.0F), (0.0F, 2.0F), (2.0F, 2.0F), (2.0F, 1.0F), (1.0F, 0.0F)};
-            //p = new Vector2[5];
-            //p[0] = new Vector2(0, 1);
-            //p[1] = new Vector2(0, 2);
-            //p[2] = new Vector2(2, 2);
-            //p[3] = new Vector2(2, 1);
-            //p[4] = new Vector2(1, 0);
-
-            //v = new Vector2(0.5F, 0.5F);   // See if this point is inside the polygon
-
-            int j = p.Length - 1;
-            bool c = false;
-            for (int i = 0; i < p.Length; j = i++) c ^= p[i].y > v.y ^ p[j].y > v.y && v.x < (p[j].x - p[i].x) * (v.y - p[i].y) / (p[j].y - p[i].y) + p[i].x;
-
-            //Debug.Log(c);
-            return c;
-        }
-
-        //private static bool ContainsPoint(Vector2[] polyPoints, Vector2 p)
-        //{
-        //    int j = polyPoints.Length - 1;
-        //    bool inside = false;
-
-        //    for (int i = 0; i < polyPoints.Length; i++)
-        //    {
-        //        Debug.Log(polyPoints[i] + " -p- " + p + " -i- " + i);
-        //        if (((polyPoints[i].y <= p.y && p.y < polyPoints[j].y) || (polyPoints[j].y <= p.y && p.y < polyPoints[i].y)) &&
-        //        (p.x < (polyPoints[j].x - polyPoints[i].x) * (p.y - polyPoints[i].y) / (polyPoints[j].y - polyPoints[i].y) + polyPoints[i].x))
-        //            inside = !inside;
-        //    }
-        //    return inside;
-        //}
 
         public void SetPlayerState(PlayerState ps)
         {
@@ -520,6 +485,29 @@ namespace Impulse
         public bool IsFacingLeft()
         {
             return facingLeft;
+        }
+
+        static public bool IsInside(PolygonCollider2D coll, Vector2 p)
+        {
+            bool inside = false;
+
+            for (int c = 0; c < coll.pathCount; c++)
+            {
+                Vector2[] pPoints = coll.GetPath(c);
+
+                inside = false;
+                for (int i = 0, j = coll.points.Length - 1; i < coll.points.Length; j = i++)
+                {
+                    if ((pPoints[i].y > p.y) != (pPoints[j].y > p.y) &&
+                         p.x < (pPoints[j].x - pPoints[i].x) * (p.y - pPoints[i].y) / (pPoints[j].y - pPoints[i].y) + pPoints[i].x)
+                    {
+                        inside = !inside;
+                    }
+                }
+                if (inside)
+                    return inside;
+            }
+            return inside;
         }
 
         //Fired whenever the playerstate gets changed through SetPlayerState()
