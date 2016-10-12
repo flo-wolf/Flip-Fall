@@ -5,7 +5,6 @@ using UnityEngine;
 //create MoveArea class and inherit this from it
 namespace Impulse.Levels
 {
-    [ExecuteInEditMode]
     public class MoveTriangle : MonoBehaviour
     {
         public MeshFilter mf;
@@ -16,6 +15,7 @@ namespace Impulse.Levels
 
         private void Awake()
         {
+            mf = GetComponent<MeshFilter>();
             if (mf != null)
             {
                 //modify collider points to snipping tringle
@@ -42,7 +42,7 @@ namespace Impulse.Levels
                 msh.triangles = indices;
                 msh.RecalculateNormals();
                 msh.RecalculateBounds();
-                this.GetComponent<MeshFilter>().mesh = msh;
+                mf.mesh = msh;
                 // mesh.mesh.triangles = newTriangles;
             }
         }

@@ -1,31 +1,24 @@
 # Flip Fall
-This game is not easy, prepare to feel the sensation of failure.
-Current beta available here for free, feedback heavily appreciated!
-Release planned for the 1st of November.
+### Overview
+Use your two thumbs to play this game. Both sides of the screen modify the player's movement differently.
+The player constantly falls down. He can be pushed to the sides. One half of the screen can be pressed to apply the force, the other half for changing the direction the player gets pushed into, which is either the left or right. 
+You can even hold the force button to stop the player from falling down completely! But be aware, it takes practice!
+
+First Screen Half - Flip
+Tap to instantly mirror the Player, all current and future forces now get applied to the opposite side.
+
+Second Screen Half  - Push
+Pushes the player into the current direction. Releasing stops the force input.
 
 ### Features
-* 13 Free Demo Levels, introducing all current gameplay mechanics.
-* Colourful sound visualization and audiovisual feedback.
-* Immersive camera rotation, zooming, shaking and movement.
-* A vast variety of level objects, including portals, turrets, gravity-attractors, speed-strips and many more.
-* Progress and achievement serialization, keeping your files safe and sound.
+13 Free Demo Levels with increasing difficulty.
+Plax through a vast variety of level objects like portals, turrets, gravity-attractors, speed-strips and much more.
+Achievements and Leaderboards let you keep track of your progress.
+Colourful themes with visualized sounds as the key aspect of the overall design.
+Immersive camera rotation, zooming, shaking and movement.
+Progress encryption, keeping your files safe and sound.
 
 ### Upcoming
-* Inbuilt level editing - Create, edit, play and share your creations!
-* Multiple other gamemodes, including coop and endless.
-* More levels and levelobjects, including multi-barrel turrets, falling spikes, direction switchers, crushers and many more.
-
-### How to Play
-Use your two thumbs to play this game.
-Both sides of the screen modify the players movement differently.
-
-Right Half - Flip
-* Tap to instantly mirror the Player's movement direction.
-
-Left Half - Charge
-* Tap and hold to stop the player from falling down. While holding, the player gets accelerated horizontally.
-
-### Rules
-* Finish a level to unlock the next one. 
-* Earn stars by beating a level within a preset time. 
-* Stars can be used to unlock new items for the level editor and/or cosmetic color themes.
+Inbuilt level editing - Create, edit, play and share your creations!
+Multiple other game modes, including multiplayer and endless.
+More levels and a variety of new objects and themes.
