@@ -52,12 +52,18 @@ namespace Impulse.UI
             //FadeIn();
         }
 
+        public void AchievementButton()
+        {
+            Main.SetScene(Main.Scene.achievements);
+            animator.SetTrigger("achievements");
+            SoundManager.ButtonClicked();
+        }
+
         public void LevelSelectButton()
         {
             Main.SetScene(Main.Scene.levelselection);
             animator.SetTrigger("play");
             SoundManager.ButtonClicked();
-            //FadeOut();
         }
 
         public void TutorialButton()
@@ -65,7 +71,6 @@ namespace Impulse.UI
             Main.SetScene(Main.Scene.tutorial);
             animator.SetTrigger("howto");
             SoundManager.ButtonClicked();
-            //FadeOut();
         }
 
         public void SettingsButton()
@@ -73,7 +78,6 @@ namespace Impulse.UI
             Main.SetScene(Main.Scene.settings);
             animator.SetTrigger("settings");
             SoundManager.ButtonClicked();
-            //FadeOut();
         }
 
         public void EditorButton()

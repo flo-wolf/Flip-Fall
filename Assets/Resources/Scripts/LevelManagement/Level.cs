@@ -4,6 +4,7 @@ using Impulse.Progress;
 using Impulse.UI;
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -84,6 +85,13 @@ namespace Impulse.Levels
                     sortingcount--;
                 }
             }
+
+            Vector3[] line = new Vector3[levelPolys[0].Length];
+            for (int i = 0; i < levelPolys[0].Length; i++)
+            {
+                line[i] = new Vector3(levelPolys[0][i].x, levelPolys[0][i].y, Constants.playerZ);
+            }
+            Handles.DrawPolyLine(line);
         }
 
         public void OnEnable()

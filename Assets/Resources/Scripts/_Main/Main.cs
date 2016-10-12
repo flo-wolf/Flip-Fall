@@ -20,7 +20,7 @@ namespace Impulse
         /// <summary>
         /// Indicates which scene is curretly active -  switch with SetScene()
         /// </summary>
-        public enum Scene { welcome, home, levelselection, tutorial, game, settings, editor, shop }
+        public enum Scene { welcome, home, levelselection, tutorial, game, settings, editor, shop, achievements }
         public static Scene currentScene;
 
         public float sceneSwitchDelay = 0.5F;
@@ -94,6 +94,11 @@ namespace Impulse
                 case Scene.settings:
                     if (SceneManager.GetActiveScene().name != "Settings")
                         _instance.StartCoroutine(_instance.cSetScene("Settings"));
+                    break;
+
+                case Scene.achievements:
+                    if (SceneManager.GetActiveScene().name != "Achievements")
+                        _instance.StartCoroutine(_instance.cSetScene("Achievements"));
                     break;
 
                 case Scene.editor:

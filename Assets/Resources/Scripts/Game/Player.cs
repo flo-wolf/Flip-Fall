@@ -449,7 +449,7 @@ namespace Impulse
                     }
                     if (IsPointInPolygon(checkPos, poly))
                     {
-                        Debug.Log("I AM ON POLYGON " + i);
+                        //Debug.Log("I AM ON POLYGON " + i);
                         counter++;
                     }
                     else
@@ -469,11 +469,21 @@ namespace Impulse
 
         public bool IsPointInPolygon(Vector2 v, Vector2[] p)
         {
+            //p = { (0.0F, 1.0F), (0.0F, 2.0F), (2.0F, 2.0F), (2.0F, 1.0F), (1.0F, 0.0F)};
+            //p = new Vector2[5];
+            //p[0] = new Vector2(0, 1);
+            //p[1] = new Vector2(0, 2);
+            //p[2] = new Vector2(2, 2);
+            //p[3] = new Vector2(2, 1);
+            //p[4] = new Vector2(1, 0);
+
+            //v = new Vector2(0.5F, 0.5F);   // See if this point is inside the polygon
+
             int j = p.Length - 1;
             bool c = false;
             for (int i = 0; i < p.Length; j = i++) c ^= p[i].y > v.y ^ p[j].y > v.y && v.x < (p[j].x - p[i].x) * (v.y - p[i].y) / (p[j].y - p[i].y) + p[i].x;
 
-            Debug.Log(c);
+            //Debug.Log(c);
             return c;
         }
 
