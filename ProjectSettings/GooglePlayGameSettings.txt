@@ -1,0 +1,10 @@
+lastUpgrade=00935
+proj.pluginVersion=0.9.35
+proj.AppId=177732224296
+and.BundleId=com.florianwolf.flipfall
+proj.classDir=Assets
+proj.ConstantsClassName=GPGSIds
+and.ResourceData=%3c%3fxml+version%3d%221.0%22+encoding%3d%22utf-8%22%3f%3e%0d%0a%3c%21--%0d%0aGoogle+Play+game+services+IDs.%0d%0aSave+this+file+as+res%2fvalues%2fgames-ids.xml+in+your+project.%0d%0a--%3e%0d%0a%3cresources%3e%0d%0a++%3cstring+name%3d%22app_id%22%3e177732224296%3c%2fstring%3e%0d%0a++%3cstring+name%3d%22package_name%22%3ecom.florianwolf.flipfall%3c%2fstring%3e%0d%0a++%3cstring+name%3d%22achievement_unlock_all_levels%22%3eCgkIqIqqjZYFEAIQAQ%3c%2fstring%3e%0d%0a++%3cstring+name%3d%22achievement_unlock_all_themes%22%3eCgkIqIqqjZYFEAIQBQ%3c%2fstring%3e%0d%0a++%3cstring+name%3d%22achievement_level_10%22%3eCgkIqIqqjZYFEAIQBg%3c%2fstring%3e%0d%0a++%3cstring+name%3d%22achievement_level_20%22%3eCgkIqIqqjZYFEAIQBw%3c%2fstring%3e%0d%0a++%3cstring+name%3d%22achievement_level_30%22%3eCgkIqIqqjZYFEAIQCA%3c%2fstring%3e%0d%0a++%3cstring+name%3d%22leaderboard_test_highscore%22%3eCgkIqIqqjZYFEAIQAg%3c%2fstring%3e%0d%0a++%3cstring+name%3d%22event_testtime%22%3eCgkIqIqqjZYFEAIQAA%3c%2fstring%3e%0d%0a%3c%2fresources%3e%0d%0a
+and.ClientId=
+proj.requireGPlus=false
+android.SetupDone=true

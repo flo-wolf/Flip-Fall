@@ -215,7 +215,7 @@ namespace Impulse
                 return collisionEvents[i].intersection;
                 i++;
             }
-            return Vector3.zero;
+            return transform.position;
         }
 
         private Vector3 teleportVelocityMemory;
@@ -296,6 +296,9 @@ namespace Impulse
 
             //disables player mesh, only leaving particle effectss
             GetComponent<MeshRenderer>().enabled = false;
+
+            if (deathPos == Vector3.zero)
+                deathPos = transform.position;
 
             Vector3 deathParticlePos = new Vector3(deathPos.x, deathPos.y, Constants.playerZ);
             deathParticles.gameObject.transform.position = deathParticlePos;
@@ -424,8 +427,9 @@ namespace Impulse
         {
             int counter = 0;
             Vector2 checkPos = transform.position;
+            Debug.Log(" bounds.x " + circleCollider.bounds.extents.x);
 
-            for (int i = 1; i <= 4; i++)
+            for (int i = 1; i <= 6; i++)
             {
                 switch (i)
                 {
@@ -445,6 +449,16 @@ namespace Impulse
                     case 4:
                         checkPos.y = checkPos.y - circleCollider.bounds.extents.y;
                         break;
+                    //lower left
+                    case 5:
+                        checkPos.x = checkPos.x - (circleCollider.bounds.extents.x * (2 / 3));
+                        checkPos.y = checkPos.y - (circleCollider.bounds.extents.y * (2 / 3));
+                        break;
+                    //lower right
+                    case 6:
+                        checkPos.x = checkPos.x + (circleCollider.bounds.extents.x * (2 / 3));
+                        checkPos.y = checkPos.y - (circleCollider.bounds.extents.y * (2 / 3));
+                        break;
                 }
 
                 //Debug.Log("checkPos " + checkPos);
@@ -458,7 +472,7 @@ namespace Impulse
                     deathPos = checkPos;
                 }
             }
-            if (counter >= 4)
+            if (counter >= 6)
             {
                 return true;
             }

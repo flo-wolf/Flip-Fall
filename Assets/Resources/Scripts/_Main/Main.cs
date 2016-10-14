@@ -1,10 +1,13 @@
-﻿using Impulse.Progress;
+﻿using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using Impulse.Progress;
 using Impulse.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms;
 
 /// <summary>
 /// Main Application Controller. Switches scenes upon calling SetScene() after a delay, giving other classes a timeframe
@@ -32,6 +35,10 @@ namespace Impulse
 
         private void Awake()
         {
+            // activate google play
+            PlayGamesPlatform.Activate();
+
+            // initialize progress (replace by google save)
             ProgressManager.LoadProgressData();
 
             if (_instance != null && _instance != this)
@@ -67,8 +74,7 @@ namespace Impulse
                     break;
 
                 case Scene.home:
-                    if (SceneManager.GetActiveScene().name != "Home")
-                        _instance.StartCoroutine(_instance.cSetScene("Home"));
+                    _instance.StartCoroutine(_instance.cSetScene("Home"));
                     break;
 
                 case Scene.shop:
@@ -98,7 +104,23 @@ namespace Impulse
 
                 case Scene.achievements:
                     if (SceneManager.GetActiveScene().name != "Achievements")
+                    {
+#if UNITY_EDITOR
                         _instance.StartCoroutine(_instance.cSetScene("Achievements"));
+#elif UNITY_ANDROID
+                        Social.localUser.Authenticate((bool success) =>
+                        {
+                            if (success)
+                            {
+                                _instance.StartCoroutine(_instance.cSetScene("Achievements"));
+                            }
+                            else
+                            {
+                                SetScene(Scene.home);
+                            }
+                        });
+#endif
+                    }
                     break;
 
                 case Scene.editor:
