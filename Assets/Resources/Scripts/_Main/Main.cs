@@ -1,4 +1,5 @@
-﻿using GooglePlayGames;
+﻿using admob;
+using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using Impulse.Progress;
 using Impulse.UI;
@@ -31,20 +32,26 @@ namespace Impulse
         public static StartupEvent onStartup = new StartupEvent();
         public static SceneChangeEvent onSceneChange = new SceneChangeEvent();
 
-        public bool started = false;
+        public static bool started = false;
+
+        public static Admob ad;
 
         private void Awake()
         {
-            PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().EnableSavedGames().Build();
-
-            PlayGamesPlatform.InitializeInstance(config);
-            // recommended for debugging:
-            PlayGamesPlatform.DebugLogEnabled = true;
             // Activate the Google Play Games platform
-            PlayGamesPlatform.Activate();
 
             // initialize progress (replace by google save)
-            ProgressManager.LoadProgressData();
+            if (!started)
+            {
+                PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().EnableSavedGames().Build();
+
+                PlayGamesPlatform.InitializeInstance(config);
+                // recommended for debugging:
+                PlayGamesPlatform.DebugLogEnabled = true;
+                PlayGamesPlatform.Activate();
+                ProgressManager.LoadProgressData();
+                currentScene = Scene.home;
+            }
 
             if (_instance != null && _instance != this)
             {
@@ -53,14 +60,15 @@ namespace Impulse
             }
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
-
-            currentScene = Scene.home;
         }
 
         private void Start()
         {
             if (!started)
             {
+                // initialize ads
+                InitAdmob();
+
                 onStartup.Invoke();
                 started = true;
             }
@@ -182,6 +190,17 @@ namespace Impulse
                 }
 #endif
             }
+        }
+
+        private void InitAdmob()
+        {
+            //  isAdmobInited = true;
+            ad = Admob.Instance();
+            ad.setTesting(true);
+
+            // banner, interstitial
+            ad.initAdmob("ca-app-pub-2906510767249222/2074269594", "ca-app-pub-2906510767249222/2353471190");
+            Debug.Log("admob inited -------------");
         }
 
         public class StartupEvent : UnityEvent { }

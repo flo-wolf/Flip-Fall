@@ -156,15 +156,6 @@ namespace Impulse.UI
                 Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
                 if (h != null && h.bestTime > 0)
                 {
-                    //Debug.Log("id: " + id);
-
-                    // this doesn't belong in here, even through it does its job right
-                    if (ProgressManager.GetProgress().lastUnlockedLevel <= id && ProgressManager.GetProgress().lastUnlockedLevel + 1 <= Constants.lastLevel)
-                    {
-                        ProgressManager.GetProgress().lastUnlockedLevel++;
-                        UILevelselectionManager.NextWasUnlocked();
-                    }
-
                     double bestTime = h.bestTime;
                     //Debug.Log("UpdateTexts() h.bestTime " + bestTime);
 

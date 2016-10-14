@@ -51,12 +51,12 @@ namespace Impulse.Progress
         }
 
         /// <param name="id">Current level, used for comparison if next level can be unlocked</param>
-        public void TryUnlockNextLevel(int id)
+        public bool TryUnlockNextLevel(int id)
         {
             if (lastUnlockedLevel <= id && lastUnlockedLevel + 1 <= Constants.lastLevel)
             {
                 lastUnlockedLevel++;
-                UILevelselectionManager.NextWasUnlocked();
+                UILevelselectionManager.unlockNextLevel = true;
 
                 if (lastUnlockedLevel == 10)
                 {
@@ -86,7 +86,9 @@ namespace Impulse.Progress
                         // handle success or failure
                     });
                 }
+                return true;
             }
+            return false;
         }
 
         //Updates existing highscores (if the score is better) or creates a new one if it doesnt exist already

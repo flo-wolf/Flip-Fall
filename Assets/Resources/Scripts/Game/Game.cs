@@ -94,12 +94,28 @@ namespace Impulse
                     Debug.Log("[Game] finishscreen");
                     Timer.Pause();
                     if (LevelManager.GetActiveID() == ProgressManager.GetProgress().lastPlayedLevelID)
+                    {
                         ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
-
+                    }
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
                     //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
+
                     Main.SetScene(Main.Scene.levelselection);
                     onGameStateChange.Invoke(gs);
+
+                    //Unlock the next level, if possible
+                    if (ProgressManager.GetProgress().TryUnlockNextLevel(LevelManager.GetActiveID()))
+                    {
+                        // show ad every 4 unlocked levels, beginn with level 6
+                        if (ProgressManager.GetProgress().lastUnlockedLevel % 4 == 0)
+                        {
+                            Main.ad.loadInterstitial();
+                            if (Main.ad.isInterstitialReady())
+                            {
+                                Main.ad.showInterstitial();
+                            }
+                        }
+                    }
                     break;
 
                 case GameState.playing:

@@ -29,13 +29,12 @@ namespace Impulse.UI
         //References
         public Animator animator;
 
-        //LevelNumber Animators
-        private List<Animator> LevelNumberAnims;
-
         public float fadeOutTime = 1F;
         public float fadeInTime = 1F;
 
         private static bool nextLevelGetsUnlocked = false;
+
+        public static bool unlockNextLevel = false;
 
         private void Awake()
         {
@@ -57,6 +56,12 @@ namespace Impulse.UI
             Main.onSceneChange.AddListener(SceneChanging);
             LevelManager.onLevelChange.AddListener(LevelChanging);
             UILevelDrag.UpdateDragObject();
+
+            if (unlockNextLevel)
+            {
+                NextWasUnlocked();
+            }
+
             nextLevelGetsUnlocked = false;
             //fadeAnimation.Play("fadeFromBlack");
             //uiLevelAnimation.Play("uiLevelselectionFadeIn");
@@ -158,12 +163,11 @@ namespace Impulse.UI
         // ADD LEVEL UNLOCK ANIMATIONS AND DELAY
         public IEnumerator UnlockNext()
         {
-            nextLevelGetsUnlocked = true;
             // add delay here
             yield return new WaitForSeconds(0.5F);
             NextLevel();
             yield return new WaitForSeconds(3F);
-            nextLevelGetsUnlocked = false;
+            unlockNextLevel = false;
             yield break;
         }
 
