@@ -50,6 +50,45 @@ namespace Impulse.Progress
             highscores = new List<Highscore>();
         }
 
+        /// <param name="id">Current level, used for comparison if next level can be unlocked</param>
+        public void TryUnlockNextLevel(int id)
+        {
+            if (lastUnlockedLevel <= id && lastUnlockedLevel + 1 <= Constants.lastLevel)
+            {
+                lastUnlockedLevel++;
+                UILevelselectionManager.NextWasUnlocked();
+
+                if (lastUnlockedLevel == 10)
+                {
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQBg", 100.0f, (bool success) =>
+                    {
+                        // handle success or failure
+                    });
+                }
+                else if (lastUnlockedLevel == 20)
+                {
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQBw", 100.0f, (bool success) =>
+                    {
+                        // handle success or failure
+                    });
+                }
+                else if (lastUnlockedLevel == 30)
+                {
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQCA", 100.0f, (bool success) =>
+                    {
+                        // handle success or failure
+                    });
+                }
+                else if (lastUnlockedLevel == Constants.lastLevel)
+                {
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQAQ", 100.0f, (bool success) =>
+                    {
+                        // handle success or failure
+                    });
+                }
+            }
+        }
+
         //Updates existing highscores (if the score is better) or creates a new one if it doesnt exist already
         public void EnterHighscore(int id, double time)
         {

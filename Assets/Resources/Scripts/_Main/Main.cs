@@ -35,7 +35,12 @@ namespace Impulse
 
         private void Awake()
         {
-            // activate google play
+            PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().EnableSavedGames().Build();
+
+            PlayGamesPlatform.InitializeInstance(config);
+            // recommended for debugging:
+            PlayGamesPlatform.DebugLogEnabled = true;
+            // Activate the Google Play Games platform
             PlayGamesPlatform.Activate();
 
             // initialize progress (replace by google save)
@@ -150,6 +155,7 @@ namespace Impulse
         private void OnApplicationQuit()
         {
             ProgressManager.SaveProgressData();
+            PlayGamesPlatform.Instance.SignOut();
         }
 
         // Listening for Android-back-key presses

@@ -14,7 +14,7 @@ namespace Impulse.UI
         public Text levelNumberText;
         private Animator animator;
 
-        private float despawnDelay = 0.5F;
+        public static float despawnDelay = 0.5F;
         private Highscore highscore;
 
         public void Start()

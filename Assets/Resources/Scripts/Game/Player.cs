@@ -163,7 +163,7 @@ namespace Impulse
             }
 
             // collided object is on one of the layers marked as killMask => death
-            if ((collider.tag == Constants.killTag || collider.tag == Constants.turretTag) && IsAlive() && teleporting == false)
+            if ((collider.tag == Constants.killTag || collider.gameObject.tag == Constants.turretTag) && IsAlive() && teleporting == false)
             {
                 Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
 
@@ -426,11 +426,10 @@ namespace Impulse
         public bool IsOnMoveArea()
         {
             int counter = 0;
-            Vector2 checkPos = transform.position;
-            Debug.Log(" bounds.x " + circleCollider.bounds.extents.x);
 
             for (int i = 1; i <= 6; i++)
             {
+                Vector2 checkPos = transform.position;
                 switch (i)
                 {
                     //right

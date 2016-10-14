@@ -35,6 +35,8 @@ namespace Impulse.UI
         public float fadeOutTime = 1F;
         public float fadeInTime = 1F;
 
+        private static bool nextLevelGetsUnlocked = false;
+
         private void Awake()
         {
             if (_instance != null && _instance != this)
@@ -55,6 +57,7 @@ namespace Impulse.UI
             Main.onSceneChange.AddListener(SceneChanging);
             LevelManager.onLevelChange.AddListener(LevelChanging);
             UILevelDrag.UpdateDragObject();
+            nextLevelGetsUnlocked = false;
             //fadeAnimation.Play("fadeFromBlack");
             //uiLevelAnimation.Play("uiLevelselectionFadeIn");
         }
@@ -155,9 +158,12 @@ namespace Impulse.UI
         // ADD LEVEL UNLOCK ANIMATIONS AND DELAY
         public IEnumerator UnlockNext()
         {
+            nextLevelGetsUnlocked = true;
             // add delay here
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5F);
             NextLevel();
+            yield return new WaitForSeconds(3F);
+            nextLevelGetsUnlocked = false;
             yield break;
         }
 
@@ -169,13 +175,17 @@ namespace Impulse.UI
 
         public void PlayLevel()
         {
+            Debug.Log(nextLevelGetsUnlocked);
             //level can be set
-            SoundManager.ButtonClicked();
-            if (LevelManager.LevelExists(activeUILevel))
+            if (!nextLevelGetsUnlocked)
             {
-                LevelManager.SetLevel(activeUILevel);
-                SoundManager.PlayCamTransitionSound();
-                Main.SetScene(Main.Scene.game);
+                SoundManager.ButtonClicked();
+                if (LevelManager.LevelExists(activeUILevel))
+                {
+                    LevelManager.SetLevel(activeUILevel);
+                    SoundManager.PlayCamTransitionSound();
+                    Main.SetScene(Main.Scene.game);
+                }
             }
             // else - animate failure
         }
