@@ -24,13 +24,23 @@
 
 public static class GPGSIds
 {
-        public const string achievement_unlock_all_themes = "CgkIqIqqjZYFEAIQBQ"; // <GPGSID>
-        public const string event_testtime = "CgkIqIqqjZYFEAIQAA"; // <GPGSID>
-        public const string achievement_level_30 = "CgkIqIqqjZYFEAIQCA"; // <GPGSID>
+        public const string achievement_how_i_did_that_on_accident = "CgkIqIqqjZYFEAIQDA"; // <GPGSID>
+        public const string achievement_why_3_if_you_can_have_2 = "CgkIqIqqjZYFEAIQDg"; // <GPGSID>
+        public const string achievement_thinking_with_portals = "CgkIqIqqjZYFEAIQEQ"; // <GPGSID>
+        public const string achievement_constructor = "CgkIqIqqjZYFEAIQEw"; // <GPGSID>
+        public const string achievement_shoplifter = "CgkIqIqqjZYFEAIQBQ"; // <GPGSID>
+        public const string achievement_flipper = "CgkIqIqqjZYFEAIQFA"; // <GPGSID>
+        public const string achievement_winning = "CgkIqIqqjZYFEAIQFQ"; // <GPGSID>
         public const string leaderboard_test_highscore = "CgkIqIqqjZYFEAIQAg"; // <GPGSID>
-        public const string achievement_level_20 = "CgkIqIqqjZYFEAIQBw"; // <GPGSID>
-        public const string achievement_unlock_all_levels = "CgkIqIqqjZYFEAIQAQ"; // <GPGSID>
-        public const string achievement_level_10 = "CgkIqIqqjZYFEAIQBg"; // <GPGSID>
+        public const string achievement_in_love_with_the_sky = "CgkIqIqqjZYFEAIQDw"; // <GPGSID>
+        public const string achievement_payday = "CgkIqIqqjZYFEAIQCw"; // <GPGSID>
+        public const string achievement_gotta_catch_em_all = "CgkIqIqqjZYFEAIQAQ"; // <GPGSID>
+        public const string achievement_gotta_go_fast = "CgkIqIqqjZYFEAIQEg"; // <GPGSID>
+        public const string achievement_death_is_my_hobby = "CgkIqIqqjZYFEAIQCg"; // <GPGSID>
+        public const string achievement_finish_level_30 = "CgkIqIqqjZYFEAIQCA"; // <GPGSID>
+        public const string achievement_vip = "CgkIqIqqjZYFEAIQEA"; // <GPGSID>
+        public const string achievement_finish_level_20 = "CgkIqIqqjZYFEAIQBw"; // <GPGSID>
+        public const string achievement_finish_level_10 = "CgkIqIqqjZYFEAIQBg"; // <GPGSID>
 
 }
 

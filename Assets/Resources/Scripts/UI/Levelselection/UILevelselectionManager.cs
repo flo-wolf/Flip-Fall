@@ -19,6 +19,10 @@ namespace Impulse.UI
 {
     public class UILevelselectionManager : MonoBehaviour
     {
+        //for passing an unlock when entering the levelselection
+        public enum EnterType { unlockNext, finished, failed }
+        public static EnterType enterType = EnterType.failed;
+
         public static UILevelselectionManager _instance;
         public static int activeUILevel;
 

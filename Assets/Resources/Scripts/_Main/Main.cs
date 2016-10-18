@@ -32,24 +32,32 @@ namespace Impulse
         public static StartupEvent onStartup = new StartupEvent();
         public static SceneChangeEvent onSceneChange = new SceneChangeEvent();
 
+        // avoid multiple awake calls due to DontDestroyOnLoad
         public static bool started = false;
 
-        public static Admob ad;
+        // ads
+        public static int adCooldownCounter = 0;
+        public static int adEveryFinish = 4;
+        public static bool adInQue = false;
 
         private void Awake()
         {
-            // Activate the Google Play Games platform
-
-            // initialize progress (replace by google save)
             if (!started)
             {
+                // Activate the Google Play Games platform
                 PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().EnableSavedGames().Build();
 
                 PlayGamesPlatform.InitializeInstance(config);
-                // recommended for debugging:
                 PlayGamesPlatform.DebugLogEnabled = true;
                 PlayGamesPlatform.Activate();
+
+                // initialize progress (replace by google save)
                 ProgressManager.LoadProgressData();
+
+                // Initialize Ads
+                Admob.Instance().initAdmob("ca-app-pub-2906510767249222/2074269594", "ca-app-pub-2906510767249222/2353471190");//admob id with format ca-app-pub-279xxxxxxxx/xxxxxxxx
+                //Admob.Instance().setTesting(true);
+
                 currentScene = Scene.home;
             }
 
@@ -67,7 +75,7 @@ namespace Impulse
             if (!started)
             {
                 // initialize ads
-                InitAdmob();
+                RequestInterstitial();
 
                 onStartup.Invoke();
                 started = true;
@@ -119,13 +127,13 @@ namespace Impulse
                     if (SceneManager.GetActiveScene().name != "Achievements")
                     {
 #if UNITY_EDITOR
-                        _instance.StartCoroutine(_instance.cSetScene("Achievements"));
+                        _instance.StartCoroutine(_instance.cSetScene("Home"));
 #elif UNITY_ANDROID
                         Social.localUser.Authenticate((bool success) =>
                         {
                             if (success)
                             {
-                                _instance.StartCoroutine(_instance.cSetScene("Achievements"));
+                                _instance.StartCoroutine(_instance.cSetSceneAchievement());
                             }
                             else
                             {
@@ -156,7 +164,40 @@ namespace Impulse
             AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName);
             ao.allowSceneActivation = false;
             yield return new WaitForSeconds(sceneSwitchDelay);
+
+            // Ad management
+            // a level was just won - check if displaying an ad is possible
+            if (sceneName == "Levelselection" && UILevelselectionManager.enterType == UILevelselectionManager.EnterType.finished)
+            {
+                adCooldownCounter++;
+                if (adCooldownCounter % adEveryFinish == 0 || adInQue)
+                {
+                    if (ShowInterstitial())
+                    {
+                        adCooldownCounter = 0;
+                        adInQue = false;
+                    }
+                    else
+                    {
+                        adInQue = true;
+                    }
+                }
+            }
+
+            //display the scene
             ao.allowSceneActivation = true;
+
+            yield break;
+        }
+
+        private IEnumerator cSetSceneAchievement()
+        {
+            yield return new WaitForSeconds(sceneSwitchDelay);
+
+            // show default achievements ui, placeholder
+            Social.ShowAchievementsUI();
+            SetScene(Scene.home);
+
             yield break;
         }
 
@@ -192,15 +233,30 @@ namespace Impulse
             }
         }
 
-        private void InitAdmob()
+        //banner: ca-app-pub-2906510767249222/2074269594
+        //interstitial: ca-app-pub-2906510767249222/2353471190
+        public static void RequestInterstitial()
         {
-            //  isAdmobInited = true;
-            ad = Admob.Instance();
-            ad.setTesting(true);
+            Admob.Instance().loadInterstitial();
+        }
 
-            // banner, interstitial
-            ad.initAdmob("ca-app-pub-2906510767249222/2074269594", "ca-app-pub-2906510767249222/2353471190");
-            Debug.Log("admob inited -------------");
+        public static bool ShowInterstitial()
+        {
+            if (Admob.Instance().isInterstitialReady())
+            {
+                Admob.Instance().showInterstitial();
+                return true;
+            }
+            else
+            {
+                RequestInterstitial();
+                if (Admob.Instance().isInterstitialReady())
+                {
+                    Admob.Instance().showInterstitial();
+                    return true;
+                }
+            }
+            return false;
         }
 
         public class StartupEvent : UnityEvent { }

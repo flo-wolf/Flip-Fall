@@ -26,6 +26,9 @@ namespace Impulse.Levels
         public static int lastID;
         public static int firstID;
 
+        // is this already loaded
+        public static bool started = false;
+
         private void Awake()
         {
             if (_instance != null && _instance != this)
@@ -37,23 +40,26 @@ namespace Impulse.Levels
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
 
-            levels = LevelLoader.LoadLevels();
-            firstID = levels.First<Level>().id;
-            lastID = levels.Last<Level>().id;
+            if (!started)
+            {
+                levels = LevelLoader.LoadLevels();
+                firstID = levels.First<Level>().id;
+                lastID = levels.Last<Level>().id;
+            }
         }
 
         //This has to be OnEnable for loading order purposes.
         private void OnEnable()
         {
-            lastPlayedID = ProgressManager.GetProgress().lastPlayedLevelID;
-            if (lastPlayedID <= ProgressManager.GetProgress().lastUnlockedLevel)
-                activeLevel = lastPlayedID;
-            else
-                activeLevel = 1;
-        }
-
-        private void Start()
-        {
+            if (!started)
+            {
+                lastPlayedID = ProgressManager.GetProgress().lastPlayedLevelID;
+                if (lastPlayedID <= ProgressManager.GetProgress().lastUnlockedLevel)
+                    activeLevel = lastPlayedID;
+                else
+                    activeLevel = 1;
+                started = true;
+            }
         }
 
         public static int GetActiveID()

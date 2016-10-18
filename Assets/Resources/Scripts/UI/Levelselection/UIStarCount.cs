@@ -38,7 +38,7 @@ namespace Impulse.UI
             {
                 starCount = starCount + h.starCount;
             }
-            ProgressManager.GetProgress().totalStars = starCount;
+            ProgressManager.GetProgress().starsOwned = starCount;
             starText.text = starCount.ToString();
         }
     }

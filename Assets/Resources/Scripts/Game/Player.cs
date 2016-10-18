@@ -1,4 +1,5 @@
-﻿using Impulse.Cam;
+﻿using GooglePlayGames;
+using Impulse.Cam;
 using Impulse.Levels;
 using Impulse.Levels.Objects;
 using Impulse.Progress;
@@ -285,6 +286,11 @@ namespace Impulse
         {
             Debug.Log("DEATHPOS: " + pos + " playerpos " + transform.position + " deathpos " + deathPos);
 
+            PlayGamesPlatform.Instance.IncrementAchievement("CgkIqIqqjZYFEAIQCg", 1, (bool success) =>
+            {
+                // handle success or failure
+            });
+
             SetPlayerState(PlayerState.dead);
             charging = false;
             facingLeft = spawn.facingLeftOnSpawn;
@@ -318,6 +324,11 @@ namespace Impulse
         private void Win()
         {
             SetPlayerState(PlayerState.win);
+
+            PlayGamesPlatform.Instance.IncrementAchievement("CgkIqIqqjZYFEAIQFQ", 1, (bool success) =>
+            {
+                // handle success or failure
+            });
 
             trailParticlesEmit.enabled = false;
             trailParticles.Stop();
@@ -367,6 +378,11 @@ namespace Impulse
             rBody.velocity = new Vector2(rBody.velocity.x * (-1), rBody.velocity.y);
             SwitchFacingDirection();
             onPlayerAction.Invoke(PlayerAction.reflect);
+
+            PlayGamesPlatform.Instance.IncrementAchievement("CgkIqIqqjZYFEAIQFA", 1, (bool success) =>
+            {
+                // handle success or failure
+            });
         }
 
         //Spieleraktion - Gravitationsabbruch, Figur wird auf der Ebene gehalten und beschleunigt

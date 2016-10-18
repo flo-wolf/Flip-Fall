@@ -30,7 +30,12 @@ namespace Impulse.Progress
 
         public int lastUnlockedLevel;
         public int lastPlayedLevelID;
-        public int totalStars;
+
+        // amount of currently owned stars
+        public int starsOwned;
+        public int starsSpent;
+        public int starsEarned;
+
         //add: unlocks, achievements, stats etc...
 
         public ProgressData()
@@ -39,7 +44,10 @@ namespace Impulse.Progress
             highscores = new List<Highscore>();
             unlocks = new Unlocks();
             lastUnlockedLevel = 1;
-            totalStars = 0;
+            starsOwned = 0;
+            starsSpent = 0;
+            starsEarned = 0;
+
             //if (LevelLoader.IsLoaded)
             //{
             //    lastPlayedLevelID = LevelManager.lastPlayedID;
@@ -50,6 +58,27 @@ namespace Impulse.Progress
             highscores = new List<Highscore>();
         }
 
+        public int GetStarsEarned()
+        {
+            // get from google and use this as validation
+            int total = 0;
+            for (int i = 0; i < highscores.Count; i++)
+            {
+                if (highscores[i].starCount > 0)
+                {
+                    total += highscores[i].starCount;
+                }
+            }
+            return total;
+        }
+
+        public int GetStarsSpent()
+        {
+            // get from google
+            int spent = 0;
+            return spent;
+        }
+
         /// <param name="id">Current level, used for comparison if next level can be unlocked</param>
         public bool TryUnlockNextLevel(int id)
         {
@@ -57,6 +86,14 @@ namespace Impulse.Progress
             {
                 lastUnlockedLevel++;
                 UILevelselectionManager.unlockNextLevel = true;
+
+                if (lastUnlockedLevel == 2)
+                {
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQDA", 100.0f, (bool success) =>
+                    {
+                        // handle success or failure
+                    });
+                }
 
                 if (lastUnlockedLevel == 10)
                 {
