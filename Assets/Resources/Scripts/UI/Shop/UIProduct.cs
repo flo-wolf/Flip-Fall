@@ -1,4 +1,5 @@
-﻿using Impulse.Progress;
+﻿using Impulse.Audio;
+using Impulse.Progress;
 using Impulse.Theme;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,15 +16,16 @@ public class UIProduct : MonoBehaviour
 {
     public static BuyEvent onBuy = new BuyEvent();
 
+    public static EquipEvent onEquip = new EquipEvent();
+
     /// <summary>
     /// Can you buy this multiple times (building-tools) or just once and forever?
     /// </summary>
-    public enum BuyType { multibuy, singlebuy };
+    public enum BuyType { consumable, nonConsumable, subscription };
 
-    /// <summary>
-    /// <para>ID, Price</para>
-    /// </summary>
-    public class BuyEvent : UnityEvent<Product> { }
+    public class BuyEvent : UnityEvent<UIProduct> { }
+
+    public class EquipEvent : UnityEvent<UIProduct> { }
 
     [Header("UIProduct Settings")]
     [Tooltip("Unique identifier, same as coresponding entry in the progress save-file")]
@@ -37,6 +39,8 @@ public class UIProduct : MonoBehaviour
 
     [Tooltip("Rebuy possible /or/ Buy once and forever")]
     public BuyType type;
+
+    [Tooltip("What item gets unlocked on purchase")]
     public Product product;
 
     [Header("Debug")]
@@ -81,7 +85,7 @@ public class UIProduct : MonoBehaviour
         {
             owned = productInfo.owned;
 
-            if (type == BuyType.singlebuy)
+            if (type == BuyType.nonConsumable)
                 equipped = productInfo.equipped;
             else
                 equipped = false;
@@ -129,10 +133,13 @@ public class UIProduct : MonoBehaviour
             owned = true;
             UpdateToggles();
             Debug.Log("Product bought and equipped: " + title);
-            //onBuy.Invoke(product);
+            onBuy.Invoke(this);
         }
         else
+        {
             Debug.Log("Product couldn't be bought: " + title);
+            SoundManager.ProductPurchaseFailed();
+        }
     }
 
     // equips this product, if it is owned and equipable. Alsoi de-quips all other products.
@@ -142,7 +149,8 @@ public class UIProduct : MonoBehaviour
         {
             if (ProgressManager.GetProgress().unlocks.EquipProduct(id))
             {
-                Debug.Log("Product got equipped: " + title);
+                Debug.Log("Product was equipped: " + title);
+                onEquip.Invoke(this);
             }
             else
                 Debug.Log("Product couldn't be equipped: " + title);

@@ -40,6 +40,8 @@ namespace Impulse.UI
 
         public static bool unlockNextLevel = false;
 
+        private bool playPressed = false;
+
         private void Awake()
         {
             if (_instance != null && _instance != this)
@@ -67,6 +69,8 @@ namespace Impulse.UI
             }
 
             nextLevelGetsUnlocked = false;
+            playPressed = false;
+
             //fadeAnimation.Play("fadeFromBlack");
             //uiLevelAnimation.Play("uiLevelselectionFadeIn");
         }
@@ -185,7 +189,7 @@ namespace Impulse.UI
         {
             Debug.Log(nextLevelGetsUnlocked);
             //level can be set
-            if (!nextLevelGetsUnlocked)
+            if (!nextLevelGetsUnlocked && !playPressed)
             {
                 SoundManager.ButtonClicked();
                 if (LevelManager.LevelExists(activeUILevel))
@@ -195,6 +199,8 @@ namespace Impulse.UI
                     Main.SetScene(Main.Scene.game);
                 }
             }
+
+            playPressed = true;
             // else - animate failure
         }
 

@@ -1,5 +1,6 @@
 ﻿using Impulse.Cam;
 using Impulse.Levels;
+using Impulse.Progress;
 using Impulse.UI;
 using System.Collections;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace Impulse.Audio
         public AudioClip chargeSound;
         public AudioClip winSound;
         public AudioClip turretShot;
+        public AudioClip attractorRumble;
 
         [Header("UI Sounds")]
         public AudioClip buttonClickSound;
@@ -34,7 +36,9 @@ namespace Impulse.Audio
         public AudioClip levelselectionAppearSound;
         public AudioClip camTransitionSound;
         public AudioClip uiLevelSwitchSound;
-        public AudioClip attractorRumble;
+        public AudioClip purchaseSound;
+        public AudioClip achievementSound;
+        public AudioClip purchaseFailSound;
 
         [Header("Music")]
         public AudioClip backgroundSound;
@@ -60,6 +64,9 @@ namespace Impulse.Audio
             //UILevelselectionManager.onUILevelSwitch.AddListener(UILevelSwitched);
             UILevelDrag.onBounceBack.AddListener(UILevelBouncedBack);
             Main.onSceneChange.AddListener(SceneChanging);
+            Main.onAchievementUnlock.AddListener(AchievementUnlocked);
+            UIProduct.onBuy.AddListener(ProductPurchased);
+            UIProduct.onEquip.AddListener(ProductEquipped);
         }
 
         private void Start()
@@ -160,6 +167,26 @@ namespace Impulse.Audio
                 default:
                     break;
             }
+        }
+
+        private void AchievementUnlocked()
+        {
+            soundPlayer.PlaySingle(achievementSound);
+        }
+
+        private void ProductPurchased(UIProduct product)
+        {
+            soundPlayer.PlaySingle(purchaseSound);
+        }
+
+        public static void ProductPurchaseFailed()
+        {
+            _instance.soundPlayer.PlaySingle(_instance.purchaseFailSound);
+        }
+
+        private void ProductEquipped(UIProduct product)
+        {
+            soundPlayer.PlaySingle(buttonClickSound);
         }
 
         private void ButtonClicked(Button b)

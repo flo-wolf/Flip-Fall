@@ -327,7 +327,8 @@ namespace Impulse
 
             PlayGamesPlatform.Instance.IncrementAchievement("CgkIqIqqjZYFEAIQFQ", 1, (bool success) =>
             {
-                // handle success or failure
+                if (success)
+                    Main.onAchievementUnlock.Invoke();
             });
 
             trailParticlesEmit.enabled = false;
@@ -381,7 +382,8 @@ namespace Impulse
 
             PlayGamesPlatform.Instance.IncrementAchievement("CgkIqIqqjZYFEAIQFA", 1, (bool success) =>
             {
-                // handle success or failure
+                if (success)
+                    Main.onAchievementUnlock.Invoke();
             });
         }
 

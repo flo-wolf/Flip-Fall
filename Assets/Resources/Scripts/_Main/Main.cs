@@ -32,6 +32,8 @@ namespace Impulse
         public static StartupEvent onStartup = new StartupEvent();
         public static SceneChangeEvent onSceneChange = new SceneChangeEvent();
 
+        public static AchievementEvent onAchievementUnlock = new AchievementEvent();
+
         // avoid multiple awake calls due to DontDestroyOnLoad
         public static bool started = false;
 
@@ -145,7 +147,7 @@ namespace Impulse
                     break;
 
                 case Scene.editor:
-                    if (ProgressManager.GetProgress().unlocks.editorUnlocked)
+                    if (ProgressManager.GetProgress().proVersion)
                     {
                         if (SceneManager.GetActiveScene().name != "Editor")
                             _instance.StartCoroutine(_instance.cSetScene("Editor"));
@@ -262,5 +264,7 @@ namespace Impulse
         public class StartupEvent : UnityEvent { }
 
         public class SceneChangeEvent : UnityEvent<Scene> { }
+
+        public class AchievementEvent : UnityEvent { }
     }
 }

@@ -24,13 +24,11 @@ namespace Impulse.Progress
         public List<ProductInfo> productInfos = new List<ProductInfo>();
 
         public List<ThemeManager.Skin> skins;
-        public bool editorUnlocked;
 
         public Unlocks()
         {
             skins = new List<ThemeManager.Skin>();
             productInfos = new List<ProductInfo>();
-            editorUnlocked = false;
         }
 
         public void UnlockSkin(ThemeManager.Skin skin)
@@ -43,12 +41,7 @@ namespace Impulse.Progress
         public void ReportUIProductsExistence(int _id)
         {
             if (GetProductInfo(_id) == null)
-            {
-                Debug.Log("is null " + _id);
                 productInfos.Add(new ProductInfo(_id, false, false));
-            }
-            else
-                Debug.Log("is not null " + _id);
         }
 
         public void ReportUpdateUIProduct(int _id, bool _owned, bool _equiped)
@@ -57,18 +50,17 @@ namespace Impulse.Progress
             if (info == null)
             {
                 productInfos.Add(new ProductInfo(_id, _owned, _equiped));
-                Debug.Log("is null " + _id);
             }
             else
             {
                 GetProductInfo(_id).owned = _owned;
                 if (_equiped)
                     EquipProduct(_id);
-                Debug.Log("is not null " + _id);
             }
             //onProductInfoChange.Invoke();
         }
 
+        // Buys the product, if the product exists and the funds allow for it
         public bool BuyProduct(int _id)
         {
             Debug.Log("BuyProduct(id) " + _id);
@@ -84,12 +76,12 @@ namespace Impulse.Progress
                     EquipProduct(_id);
                     return true;
                 }
-                Debug.Log("starsOwned " + ProgressManager.GetProgress().starsOwned);
                 return false;
             }
             return false;
         }
 
+        // Equips the product, if the product is owned and not yet equipped. De-Equips all other products.
         public bool EquipProduct(int _id)
         {
             ProductInfo product = GetProductInfo(_id);
@@ -113,6 +105,7 @@ namespace Impulse.Progress
             return false;
         }
 
+        // Gets the corresponding UIProduct of a ProductInfo by ID
         public UIProduct GetUIProductById(int _id)
         {
             if (UIShopManager.uiProducts.Any(x => x.id == _id))
@@ -122,16 +115,17 @@ namespace Impulse.Progress
             return null;
         }
 
+        // Gets the corresponding ProductInfo of an UIProduct by ID
         public ProductInfo GetProductInfo(int _id)
         {
             if (productInfos.Count > 0 && productInfos.Any(x => x.id == _id))
             {
                 return productInfos.Find(x => x.id == _id);
             }
-            //create productinfo, not owned, not bought
             return null;
         }
 
+        // Is the user already in posession of this product?
         public bool IsOwned(int _id)
         {
             ProductInfo product = GetProductInfo(_id);
@@ -142,6 +136,7 @@ namespace Impulse.Progress
             return false;
         }
 
+        // is this product already equipped?
         public bool IsEquipped(int _id)
         {
             ProductInfo product = GetProductInfo(_id);
@@ -151,11 +146,6 @@ namespace Impulse.Progress
                 return product.equipped;
             }
             return false;
-        }
-
-        public void UnlockEditor()
-        {
-            editorUnlocked = true;
         }
     }
 

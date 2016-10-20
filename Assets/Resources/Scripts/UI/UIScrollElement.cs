@@ -24,6 +24,9 @@ namespace FlipFall.UI
         [HideInInspector]
         public bool inside;
 
+        public enum Position { first, last, between }
+        public Position position = Position.between;
+
         [HideInInspector]
         public bool canBeAnimated = true;
 

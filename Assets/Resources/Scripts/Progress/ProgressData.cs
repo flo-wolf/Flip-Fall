@@ -89,14 +89,12 @@ namespace Impulse.Progress
         {
             if (lastUnlockedLevel <= id && lastUnlockedLevel + 1 <= Constants.lastLevel)
             {
-                lastUnlockedLevel++;
-                UILevelselectionManager.unlockNextLevel = true;
-
                 if (lastUnlockedLevel == 2)
                 {
                     Social.ReportProgress("CgkIqIqqjZYFEAIQDA", 100.0f, (bool success) =>
                     {
-                        // handle success or failure
+                        if (success)
+                            Main.onAchievementUnlock.Invoke();
                     });
                 }
 
@@ -104,30 +102,37 @@ namespace Impulse.Progress
                 {
                     Social.ReportProgress("CgkIqIqqjZYFEAIQBg", 100.0f, (bool success) =>
                     {
-                        // handle success or failure
+                        if (success)
+                            Main.onAchievementUnlock.Invoke();
                     });
                 }
                 else if (lastUnlockedLevel == 20)
                 {
                     Social.ReportProgress("CgkIqIqqjZYFEAIQBw", 100.0f, (bool success) =>
                     {
-                        // handle success or failure
+                        if (success)
+                            Main.onAchievementUnlock.Invoke();
                     });
                 }
                 else if (lastUnlockedLevel == 30)
                 {
                     Social.ReportProgress("CgkIqIqqjZYFEAIQCA", 100.0f, (bool success) =>
                     {
-                        // handle success or failure
+                        if (success)
+                            Main.onAchievementUnlock.Invoke();
                     });
                 }
                 else if (lastUnlockedLevel == Constants.lastLevel)
                 {
                     Social.ReportProgress("CgkIqIqqjZYFEAIQAQ", 100.0f, (bool success) =>
                     {
-                        // handle success or failure
+                        if (success)
+                            Main.onAchievementUnlock.Invoke();
                     });
                 }
+
+                lastUnlockedLevel++;
+                UILevelselectionManager.unlockNextLevel = true;
                 return true;
             }
             return false;

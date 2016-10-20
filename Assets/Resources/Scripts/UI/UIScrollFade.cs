@@ -119,18 +119,20 @@ namespace FlipFall.UI
             {
                 UIScrollElement element = scrollElements[i];
 
-                // correct the animations
+                // element is not inside
                 if (!IsInside(element.transform.position))
                 {
                     // begin fading animations if object is actually outside but still set to inside
                     if (element.inside)
                         element.FadeOut();
 
-                    if (i == 0)
+                    // first product
+                    if (element.position == UIScrollElement.Position.first)
                     {
                         dragDownPossible = true;
                     }
-                    else if (i == scrollElements.Count - 1)
+                    // last product
+                    else if (element.position == UIScrollElement.Position.last)
                     {
                         dragUpPossible = true;
                     }
