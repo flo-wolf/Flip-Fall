@@ -2,6 +2,7 @@
 using Impulse.Levels;
 using Impulse.Progress;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,13 +14,12 @@ namespace Impulse.UI
 {
     public class UIShopManager : MonoBehaviour
     {
-        //public enum UIState { levelSelection, home, settings, game, title, shop, editor, credits, buyPro }
-        //public static UIState uiState;
         public static UIShopManager _instance;
+        public static List<UIProduct> uiProducts;
 
         public Animator animator;
 
-        private void Start()
+        private void Awake()
         {
             if (_instance != null && _instance != this)
             {
@@ -29,6 +29,15 @@ namespace Impulse.UI
             _instance = this;
 
             Main.onSceneChange.AddListener(SceneChanging);
+
+            // collect all UIProducts, maybe do this in coroutine
+            uiProducts = new List<UIProduct>();
+            UIProduct[] products = GetComponentsInChildren<UIProduct>();
+
+            foreach (UIProduct p in products)
+            {
+                uiProducts.Add(p);
+            }
         }
 
         private void SceneChanging(Main.Scene scene)

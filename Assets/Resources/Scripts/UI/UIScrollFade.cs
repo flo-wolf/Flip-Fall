@@ -39,14 +39,12 @@ namespace FlipFall.UI
 
         private bool dragDownPossible = true;
         private bool dragUpPossible = true;
-
-        private float scrollSensiBackup;
+        private bool dragStopped = false;
+        private float vertNormalPosition;
 
         private void Start()
         {
             StartCoroutine(cGetScrollElements());
-
-            scrollSensiBackup = scrollRect.scrollSensitivity;
 
             if (useScollRectAsInsideArea)
             {
@@ -55,6 +53,8 @@ namespace FlipFall.UI
                 //insideBounds.center = scrollRect.content.transform.position;
                 //insideBounds.size = new Vector3(r.rect.width, r.rect.height);
             }
+
+            StartCoroutine(cCorrectInsideSetting());
         }
 
         private void OnDrawGizmos()
@@ -109,44 +109,50 @@ namespace FlipFall.UI
             // is the user dragging
             if (dragging)
             {
-                for (int i = 0; i < scrollElements.Count; i++)
+                StartCoroutine(cCorrectInsideSetting());
+            }
+        }
+
+        private IEnumerator cCorrectInsideSetting()
+        {
+            for (int i = 0; i < scrollElements.Count; i++)
+            {
+                UIScrollElement element = scrollElements[i];
+
+                // correct the animations
+                if (!IsInside(element.transform.position))
                 {
-                    UIScrollElement element = scrollElements[i];
+                    // begin fading animations if object is actually outside but still set to inside
+                    if (element.inside)
+                        element.FadeOut();
 
-                    // correct the animations
-                    if (!IsInside(element.transform.position))
+                    if (i == 0)
                     {
-                        // begin fading animations if object is actually outside but still set to inside
-                        if (element.inside)
-                            element.FadeOut();
-
-                        if (i == 0)
-                        {
-                            dragDownPossible = true;
-                        }
-                        else if (i == scrollElements.Count - 1)
-                        {
-                            dragUpPossible = true;
-                        }
+                        dragDownPossible = true;
                     }
-                    else
+                    else if (i == scrollElements.Count - 1)
                     {
-                        // begin fading animations if object is actually inside but not set to inside
-                        if (!element.inside)
-                            element.FadeIn();
+                        dragUpPossible = true;
+                    }
+                }
+                else
+                {
+                    // begin fading animations if object is actually inside but not set to inside
+                    if (!element.inside)
+                        element.FadeIn();
 
-                        // the first item is inside, which means we cant drag
-                        if (i == 0)
-                        {
-                            dragDownPossible = false;
-                        }
-                        else if (i == scrollElements.Count - 1)
-                        {
-                            dragUpPossible = false;
-                        }
+                    // the first item is inside, which means we cant drag
+                    if (i == 0)
+                    {
+                        dragDownPossible = false;
+                    }
+                    else if (i == scrollElements.Count - 1)
+                    {
+                        dragUpPossible = false;
                     }
                 }
             }
+            yield break;
         }
 
         //checks if a position is inside the scrollArea
@@ -168,13 +174,39 @@ namespace FlipFall.UI
             {
                 scrollRect.StopMovement();
                 scrollRect.enabled = false;
+                scrollRect.vertical = false;
+                vertNormalPosition = scrollRect.verticalNormalizedPosition;
+                dragStopped = true;
             }
             // dragging down while dragging down shouldn't be possible
             else if (eventData.delta.y > 0 && !dragUpPossible)
             {
                 scrollRect.StopMovement();
+                scrollRect.vertical = false;
                 scrollRect.enabled = false;
+                vertNormalPosition = scrollRect.verticalNormalizedPosition;
+                dragStopped = true;
             }
+            //else
+            //{
+            //    scrollRect.enabled = true;
+            //    scrollRect.vertical = true;
+            //}
+
+            //// drag was stopped, but the drag direction is allowed
+            //if (dragStopped && (eventData.delta.y > 0 && dragUpPossible || eventData.delta.y < 0 && dragDownPossible))
+            //{
+            //    scrollRect.StopMovement();
+            //    scrollRect.verticalNormalizedPosition = vertNormalPosition;
+            //    scrollRect.vertical = true;
+            //    scrollRect.enabled = true;
+            //    dragStopped = false;
+            //}
+
+            //else if (dragStopped)
+            //{
+            //    scrollRect.verticalNormalizedPosition = vertNormalPosition;
+            //}
         }
 
         // begin of drag
@@ -188,6 +220,7 @@ namespace FlipFall.UI
         {
             dragging = false;
             scrollRect.enabled = true;
+            scrollRect.vertical = true;
         }
     }
 }

@@ -42,6 +42,8 @@ namespace Impulse.Background
         // original height of the mesh around which the waves will allocate
         public float height = 1F;
 
+        private bool started = false;
+
         private void Awake()
         {
             if (_instance != null && _instance != this)
@@ -55,7 +57,11 @@ namespace Impulse.Background
 
         private void Start()
         {
-            waveMesh = new Mesh();
+            if (started == false)
+            {
+                waveMesh = new Mesh();
+                started = true;
+            }
 
             backgroundSpeed = ProgressManager.GetProgress().settings.backgroundSpeed;
             UISettingsManager.onHorizonSpeedChange.AddListener(HorizonSpeedChanged);

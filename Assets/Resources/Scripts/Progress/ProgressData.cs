@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// This is the actual Progress Data that is saved and loaded.
@@ -18,6 +19,11 @@ namespace Impulse.Progress
     {
         // level highscores and stars
         public List<Highscore> highscores;
+
+        //public StarsUpdateEvent onStarUpdate = new StarsUpdateEvent();
+
+        //[SerializeField]
+        //public class StarsUpdateEvent : UnityEvent<int> { }
 
         // sound settings etc.
         public Settings settings;
@@ -36,6 +42,9 @@ namespace Impulse.Progress
         public int starsSpent;
         public int starsEarned;
 
+        // pro version owned? => no ads, editor access
+        public bool proVersion;
+
         //add: unlocks, achievements, stats etc...
 
         public ProgressData()
@@ -43,19 +52,13 @@ namespace Impulse.Progress
             settings = new Settings();
             highscores = new List<Highscore>();
             unlocks = new Unlocks();
+
             lastUnlockedLevel = 1;
             starsOwned = 0;
             starsSpent = 0;
             starsEarned = 0;
-
-            //if (LevelLoader.IsLoaded)
-            //{
-            //    lastPlayedLevelID = LevelManager.lastPlayedID;
-            //    Debug.Log("[ProgressData] ProgressData(): LastPlayedID = " + lastPlayedLevelID);
-            //}
-            //else
+            proVersion = false;
             lastPlayedLevelID = 1;
-            highscores = new List<Highscore>();
         }
 
         public int GetStarsEarned()
@@ -126,6 +129,12 @@ namespace Impulse.Progress
                 return true;
             }
             return false;
+        }
+
+        public void AddStarsToWallet(int stars)
+        {
+            starsOwned += stars;
+            //onStarUpdate.Invoke(starsEarned);
         }
 
         //Updates existing highscores (if the score is better) or creates a new one if it doesnt exist already
