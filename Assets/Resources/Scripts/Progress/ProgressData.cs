@@ -89,7 +89,8 @@ namespace Impulse.Progress
         {
             if (lastUnlockedLevel <= id && lastUnlockedLevel + 1 <= Constants.lastLevel)
             {
-                if (lastUnlockedLevel == 2)
+                // first level finished
+                if (lastUnlockedLevel == 1)
                 {
                     Social.ReportProgress("CgkIqIqqjZYFEAIQDA", 100.0f, (bool success) =>
                     {
@@ -98,6 +99,17 @@ namespace Impulse.Progress
                     });
                 }
 
+                // first turret level
+                if (lastUnlockedLevel == 6)
+                {
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQBw", 100.0f, (bool success) =>
+                    {
+                        if (success)
+                            Main.onAchievementUnlock.Invoke();
+                    });
+                }
+
+                // first attractor level finished
                 if (lastUnlockedLevel == 10)
                 {
                     Social.ReportProgress("CgkIqIqqjZYFEAIQBg", 100.0f, (bool success) =>
@@ -106,17 +118,21 @@ namespace Impulse.Progress
                             Main.onAchievementUnlock.Invoke();
                     });
                 }
-                else if (lastUnlockedLevel == 20)
+
+                // first speedstrip level finished
+                else if (lastUnlockedLevel == 12)
                 {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQBw", 100.0f, (bool success) =>
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQCA", 100.0f, (bool success) =>
                     {
                         if (success)
                             Main.onAchievementUnlock.Invoke();
                     });
                 }
-                else if (lastUnlockedLevel == 30)
+
+                // first portal level finished
+                else if (lastUnlockedLevel == 7)
                 {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQCA", 100.0f, (bool success) =>
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQEQ", 100.0f, (bool success) =>
                     {
                         if (success)
                             Main.onAchievementUnlock.Invoke();

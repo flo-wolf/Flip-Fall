@@ -61,7 +61,7 @@ namespace Impulse.UI
         {
             foreach (Toggle t in toggles)
             {
-                if (t.GetComponent<HorizonToggle>().skin == ProgressManager.GetProgress().settings.skin)
+                if (t.GetComponent<HorizonToggle>().skin == ProgressManager.GetProgress().unlocks.currentSkin)
                     t.isOn = true;
                 else
                     t.isOn = false;

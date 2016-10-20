@@ -42,7 +42,8 @@ namespace FlipFall.UI
         private void SceneChanged(Main.Scene scene)
         {
             canBeAnimated = false;
-            anim.Play("scrollElementFadeout");
+            if (inside)
+                anim.Play("scrollElementFadeout");
         }
 
         // begins fade-in animation. Animator needs to have a "fadein" trigger and transitions using it.
@@ -50,8 +51,8 @@ namespace FlipFall.UI
         {
             if (canBeAnimated)
             {
-                anim.Play("scrollElementFadein");
                 inside = true;
+                anim.Play("scrollElementFadein");
             }
         }
 
@@ -60,8 +61,8 @@ namespace FlipFall.UI
         {
             if (canBeAnimated)
             {
-                anim.Play("scrollElementFadeout");
                 inside = false;
+                anim.Play("scrollElementFadeout");
             }
         }
     }

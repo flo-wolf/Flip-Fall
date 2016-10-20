@@ -23,18 +23,32 @@ namespace Impulse.Progress
         // reference to UIShopProducts items and their buy/equip states.
         public List<ProductInfo> productInfos = new List<ProductInfo>();
 
-        public List<ThemeManager.Skin> skins;
+        public List<ThemeManager.Skin> unlockedThemes;
+        public ThemeManager.Skin defaultSkin;
+
+        public ThemeManager.Skin currentSkin;
 
         public Unlocks()
         {
-            skins = new List<ThemeManager.Skin>();
+            defaultSkin = ThemeManager.Skin.toxic;
+            currentSkin = defaultSkin;
+
+            unlockedThemes = new List<ThemeManager.Skin>();
+            unlockedThemes.Add(defaultSkin);
+
             productInfos = new List<ProductInfo>();
         }
 
-        public void UnlockSkin(ThemeManager.Skin skin)
+        public void UnlockTheme(ThemeManager.Skin theme)
         {
-            if (!skins.Any(x => x == skin))
-                skins.Add(skin);
+            if (!unlockedThemes.Any(x => x == theme))
+                unlockedThemes.Add(theme);
+            ThemeManager.SetSkin(theme);
+        }
+
+        public void SwitchTheme(ThemeManager.Skin theme)
+        {
+            ThemeManager.SetSkin(theme);
         }
 
         // mistake here
@@ -74,6 +88,12 @@ namespace Impulse.Progress
 
                     productInfos.Find(x => x.id == _id).owned = true;
                     EquipProduct(_id);
+
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQCw", 100.0f, (bool success) =>
+                    {
+                        if (success)
+                            Main.onAchievementUnlock.Invoke();
+                    });
                     return true;
                 }
                 return false;

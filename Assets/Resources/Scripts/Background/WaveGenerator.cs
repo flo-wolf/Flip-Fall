@@ -113,73 +113,76 @@ namespace Impulse.Background
 
         private Mesh UpdateMesh()
         {
-            waveMesh.Clear();
-
-            // Generate 64 random points for the top (i.e. the actual wave)
-            points = new Vector3[32];
-            for (int i = 0; i < points.Length; i++)
+            if (waveMesh != null)
             {
-                // if there are no lastPoints to lerp from create random points
-                if (lastPoints == null)
+                waveMesh.Clear();
+
+                // Generate 64 random points for the top (i.e. the actual wave)
+                points = new Vector3[32];
+                for (int i = 0; i < points.Length; i++)
                 {
-                    points[i] = new Vector3(0.5f * (float)i, Random.Range(lPeak, uPeak), 0f);
-                }
-                else
-                {
-                    // assign newest amplitude on the very left generated through the audio data
-                    if (i == 0)
+                    // if there are no lastPoints to lerp from create random points
+                    if (lastPoints == null)
                     {
-                        // Get the spectrumdata of the background music and lerp its updated value
-                        if (AudioInterpreter.currentValue < 1F && AudioInterpreter.currentValue > 0)
-                            newestAudioValue = AudioInterpreter.currentValue * 10;
-                        else
-                            newestAudioValue = 0;
-
-                        amplitude = Mathf.Lerp(lastPoints[i].y, height + newestAudioValue, Time.deltaTime * backgroundSpeed);
-                        //if (lerpedAudioValue > hWave)
-                        //    hWave = lerpedAudioValue;
-                        //amplitude = Mathf.Lerp(lPeak, uPeak, Mathf.InverseLerp(0, hWave, lerpedAudioValue));
-
-                        //there is audio
-                        if (amplitude < 1 && newestAudioValue > 0.05)
-                        {
-                            points[i] = new Vector3(0.5f * (float)i, Mathf.Abs(Mathf.Lerp(lastPoints[i].y, amplitude, Time.time)), 0f);
-                        }
-
-                        //there is no audio, switch to random input
-                        else
-                        {
-                            randAmplitude = Mathf.Lerp(lastPoints[i].y, height + Mathf.Abs(Random.Range(lPeak, uPeak)), Time.deltaTime * backgroundSpeed);
-                            points[i] = new Vector3(0.5f * (float)i, Mathf.Abs(Mathf.Lerp(lastPoints[i].y, randAmplitude, Time.time)), 0f);
-                            //Random.Range(lastPoints[i].y - wavePeak, lastPoints[i].y + wavePeak)
-                        }
+                        points[i] = new Vector3(0.5f * (float)i, Random.Range(lPeak, uPeak), 0f);
                     }
-                    // shift each point one to the right - execute these in coroutine for customizable delays, through slider
                     else
                     {
-                        points[i] = new Vector3(0.5f * (float)i, lastPoints[i - 1].y, 0f);
+                        // assign newest amplitude on the very left generated through the audio data
+                        if (i == 0)
+                        {
+                            // Get the spectrumdata of the background music and lerp its updated value
+                            if (AudioInterpreter.currentValue < 1F && AudioInterpreter.currentValue > 0)
+                                newestAudioValue = AudioInterpreter.currentValue * 10;
+                            else
+                                newestAudioValue = 0;
+
+                            amplitude = Mathf.Lerp(lastPoints[i].y, height + newestAudioValue, Time.deltaTime * backgroundSpeed);
+                            //if (lerpedAudioValue > hWave)
+                            //    hWave = lerpedAudioValue;
+                            //amplitude = Mathf.Lerp(lPeak, uPeak, Mathf.InverseLerp(0, hWave, lerpedAudioValue));
+
+                            //there is audio
+                            if (amplitude < 1 && newestAudioValue > 0.05)
+                            {
+                                points[i] = new Vector3(0.5f * (float)i, Mathf.Abs(Mathf.Lerp(lastPoints[i].y, amplitude, Time.time)), 0f);
+                            }
+
+                            //there is no audio, switch to random input
+                            else
+                            {
+                                randAmplitude = Mathf.Lerp(lastPoints[i].y, height + Mathf.Abs(Random.Range(lPeak, uPeak)), Time.deltaTime * backgroundSpeed);
+                                points[i] = new Vector3(0.5f * (float)i, Mathf.Abs(Mathf.Lerp(lastPoints[i].y, randAmplitude, Time.time)), 0f);
+                                //Random.Range(lastPoints[i].y - wavePeak, lastPoints[i].y + wavePeak)
+                            }
+                        }
+                        // shift each point one to the right - execute these in coroutine for customizable delays, through slider
+                        else
+                        {
+                            points[i] = new Vector3(0.5f * (float)i, lastPoints[i - 1].y, 0f);
+                        }
                     }
+                    //AddWavePoint(points[i]);
                 }
-                //AddWavePoint(points[i]);
+                lastPoints = points;
+
+                // Number of points to draw, how smooth the curve is. has to be smaller than points.Legth+3.
+                int resolution = 29;
+                for (int i = 0; i < resolution; i++)
+                {
+                    float t = (float)i / (float)(resolution - 1);
+                    // Get the point on our curve using the 4 points generated above
+                    Vector3 p = CalculateBezierPoint(t, points[i], points[i + 1], points[i + 2], points[i + 3]);
+                    AddWavePoint(p);
+                }
+
+                // Assign the vertices and triangles to the mesh
+                waveMesh.vertices = vertices.ToArray();
+                waveMesh.triangles = triangles.ToArray();
+
+                vertices.Clear();
+                triangles.Clear();
             }
-            lastPoints = points;
-
-            // Number of points to draw, how smooth the curve is. has to be smaller than points.Legth+3.
-            int resolution = 29;
-            for (int i = 0; i < resolution; i++)
-            {
-                float t = (float)i / (float)(resolution - 1);
-                // Get the point on our curve using the 4 points generated above
-                Vector3 p = CalculateBezierPoint(t, points[i], points[i + 1], points[i + 2], points[i + 3]);
-                AddWavePoint(p);
-            }
-
-            // Assign the vertices and triangles to the mesh
-            waveMesh.vertices = vertices.ToArray();
-            waveMesh.triangles = triangles.ToArray();
-
-            vertices.Clear();
-            triangles.Clear();
 
             return waveMesh;
         }

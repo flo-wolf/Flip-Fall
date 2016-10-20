@@ -24,23 +24,23 @@
 
 public static class GPGSIds
 {
-        public const string achievement_how_i_did_that_on_accident = "CgkIqIqqjZYFEAIQDA"; // <GPGSID>
-        public const string achievement_why_3_if_you_can_have_2 = "CgkIqIqqjZYFEAIQDg"; // <GPGSID>
-        public const string achievement_thinking_with_portals = "CgkIqIqqjZYFEAIQEQ"; // <GPGSID>
         public const string achievement_constructor = "CgkIqIqqjZYFEAIQEw"; // <GPGSID>
+        public const string achievement_slow_but_steady = "CgkIqIqqjZYFEAIQCA"; // <GPGSID>
+        public const string achievement_thinking_with_portals = "CgkIqIqqjZYFEAIQEQ"; // <GPGSID>
+        public const string achievement_endgame = "CgkIqIqqjZYFEAIQAQ"; // <GPGSID>
         public const string achievement_shoplifter = "CgkIqIqqjZYFEAIQBQ"; // <GPGSID>
-        public const string achievement_flipper = "CgkIqIqqjZYFEAIQFA"; // <GPGSID>
-        public const string achievement_winning = "CgkIqIqqjZYFEAIQFQ"; // <GPGSID>
+        public const string achievement_forever_number_two = "CgkIqIqqjZYFEAIQDg"; // <GPGSID>
+        public const string achievement_this_is_complicated = "CgkIqIqqjZYFEAIQDA"; // <GPGSID>
         public const string leaderboard_test_highscore = "CgkIqIqqjZYFEAIQAg"; // <GPGSID>
-        public const string achievement_in_love_with_the_sky = "CgkIqIqqjZYFEAIQDw"; // <GPGSID>
-        public const string achievement_payday = "CgkIqIqqjZYFEAIQCw"; // <GPGSID>
-        public const string achievement_gotta_catch_em_all = "CgkIqIqqjZYFEAIQAQ"; // <GPGSID>
+        public const string achievement_flipper = "CgkIqIqqjZYFEAIQFA"; // <GPGSID>
+        public const string achievement_arrow_to_the_knee = "CgkIqIqqjZYFEAIQBw"; // <GPGSID>
+        public const string achievement_khajiit_has_wares = "CgkIqIqqjZYFEAIQCw"; // <GPGSID>
         public const string achievement_gotta_go_fast = "CgkIqIqqjZYFEAIQEg"; // <GPGSID>
         public const string achievement_death_is_my_hobby = "CgkIqIqqjZYFEAIQCg"; // <GPGSID>
-        public const string achievement_finish_level_30 = "CgkIqIqqjZYFEAIQCA"; // <GPGSID>
         public const string achievement_vip = "CgkIqIqqjZYFEAIQEA"; // <GPGSID>
-        public const string achievement_finish_level_20 = "CgkIqIqqjZYFEAIQBw"; // <GPGSID>
-        public const string achievement_finish_level_10 = "CgkIqIqqjZYFEAIQBg"; // <GPGSID>
+        public const string achievement_starhunter = "CgkIqIqqjZYFEAIQDw"; // <GPGSID>
+        public const string achievement_attracted_to_you = "CgkIqIqqjZYFEAIQBg"; // <GPGSID>
+        public const string achievement_charlie_sheen = "CgkIqIqqjZYFEAIQFQ"; // <GPGSID>
 
 }
 

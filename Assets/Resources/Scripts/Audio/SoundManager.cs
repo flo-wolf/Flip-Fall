@@ -66,6 +66,7 @@ namespace Impulse.Audio
             Main.onSceneChange.AddListener(SceneChanging);
             Main.onAchievementUnlock.AddListener(AchievementUnlocked);
             UIProduct.onBuy.AddListener(ProductPurchased);
+            UIProduct.onBuyFail.AddListener(BuyFail);
             UIProduct.onEquip.AddListener(ProductEquipped);
         }
 
@@ -167,6 +168,12 @@ namespace Impulse.Audio
                 default:
                     break;
             }
+        }
+
+        // event listener
+        private void BuyFail(UIProduct product)
+        {
+            PlayUnvalidSound();
         }
 
         private void AchievementUnlocked()

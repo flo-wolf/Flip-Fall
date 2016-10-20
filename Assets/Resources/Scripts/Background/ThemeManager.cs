@@ -51,7 +51,7 @@ namespace Impulse.Theme
         // get last skin from progress
         public Skin GetLastSkin()
         {
-            Skin lastSkin = ProgressManager.GetProgress().settings.skin;
+            Skin lastSkin = ProgressManager.GetProgress().unlocks.currentSkin;
             if (lastSkin == Skin.unset)
             {
                 lastSkin = defaultSkin;
@@ -63,10 +63,7 @@ namespace Impulse.Theme
         // checks if the skin is equipable/unlocked
         public static bool IsUnlocked(Skin newSkin)
         {
-            return true;
-
-            // NOT CALLED CURRENTLY, UNLOCKS NOT GETTING CHECKED!
-            if (ProgressManager.GetProgress().unlocks.skins.Any(x => x == newSkin))
+            if (ProgressManager.GetProgress().unlocks.unlockedThemes.Any(x => x == newSkin))
                 return true;
             return false;
         }
@@ -90,7 +87,7 @@ namespace Impulse.Theme
                         go.gameObject.transform.parent = _instance.transform;
                         go.gameObject.transform.localPosition = Vector3.zero;
                         skin = newSkin;
-                        ProgressManager.GetProgress().settings.skin = skin;
+                        ProgressManager.GetProgress().unlocks.currentSkin = skin;
 
                         GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
                         bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;

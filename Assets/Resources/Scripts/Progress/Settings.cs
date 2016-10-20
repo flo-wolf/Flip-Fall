@@ -17,7 +17,6 @@ namespace Impulse.Progress
         public float musicVolume;
         public bool imageEffects;
         public float backgroundSpeed;
-        public ThemeManager.Skin skin;
 
         public Settings()
         {
@@ -25,7 +24,6 @@ namespace Impulse.Progress
             chargeOnLeftSide = true;
             fxVolume = 1F;
             musicVolume = 0.2F;
-            skin = ThemeManager.Skin.unset;
             imageEffects = true;
         }
     }

@@ -11,11 +11,14 @@ namespace Impulse.UI
         public static UIStarCount _instance;
         public Text starText;
 
+        public Animator animator;
+
         private void Start()
         {
             _instance = this;
             UpdateStarCount();
             ProgressData.onStarUpdate.AddListener(UpdateStarCount);
+            UIProduct.onBuy.AddListener(ProductBought);
         }
 
         public static void Show()
@@ -23,6 +26,16 @@ namespace Impulse.UI
             _instance.gameObject.SetActive(true);
             _instance.UpdateStarCount();
             //animation
+        }
+
+        private void ProductBought(UIProduct product)
+        {
+            animator.SetTrigger("buy");
+        }
+
+        private void ProductBuyFail(UIProduct product)
+        {
+            animator.SetTrigger("buyfail");
         }
 
         public static void Hide()

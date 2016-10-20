@@ -18,10 +18,17 @@ public class UIProduct : MonoBehaviour
 
     public static EquipEvent onEquip = new EquipEvent();
 
+    public static BuyEvent onBuyFail = new BuyEvent();
+
     /// <summary>
     /// Can you buy this multiple times (building-tools) or just once and forever?
     /// </summary>
     public enum BuyType { consumable, nonConsumable, subscription };
+
+    /// <summary>
+    /// what kind of product is sold
+    /// </summary>
+    public enum ProductType { theme, skin, supply }
 
     public class BuyEvent : UnityEvent<UIProduct> { }
 
@@ -38,10 +45,13 @@ public class UIProduct : MonoBehaviour
     public int price;
 
     [Tooltip("Rebuy possible /or/ Buy once and forever")]
-    public BuyType type;
+    public BuyType buyType;
 
-    [Tooltip("What item gets unlocked on purchase")]
-    public Product product;
+    [Tooltip("What type is this product")]
+    public ProductType productType;
+
+    [Tooltip("In case the producttype is set to theme, unlock this")]
+    public ThemeManager.Skin themeToUnlock;
 
     [Header("Debug")]
     [Tooltip("You own this item.")]
@@ -85,7 +95,7 @@ public class UIProduct : MonoBehaviour
         {
             owned = productInfo.owned;
 
-            if (type == BuyType.nonConsumable)
+            if (buyType == BuyType.nonConsumable)
                 equipped = productInfo.equipped;
             else
                 equipped = false;
@@ -134,11 +144,16 @@ public class UIProduct : MonoBehaviour
             UpdateToggles();
             Debug.Log("Product bought and equipped: " + title);
             onBuy.Invoke(this);
+            if (productType == ProductType.theme)
+            {
+                ProgressManager.GetProgress().unlocks.UnlockTheme(themeToUnlock);
+            }
         }
         else
         {
             Debug.Log("Product couldn't be bought: " + title);
             SoundManager.ProductPurchaseFailed();
+            onBuyFail.Invoke(this);
         }
     }
 
@@ -151,6 +166,10 @@ public class UIProduct : MonoBehaviour
             {
                 Debug.Log("Product was equipped: " + title);
                 onEquip.Invoke(this);
+                if (productType == ProductType.theme && ProgressManager.GetProgress().unlocks.currentSkin != themeToUnlock)
+                {
+                    ProgressManager.GetProgress().unlocks.SwitchTheme(themeToUnlock);
+                }
             }
             else
                 Debug.Log("Product couldn't be equipped: " + title);
