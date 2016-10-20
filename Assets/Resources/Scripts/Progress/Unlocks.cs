@@ -39,28 +39,33 @@ namespace Impulse.Progress
                 skins.Add(skin);
         }
 
-        public void ReportUIProductExistence(int _id)
+        // mistake here
+        public void ReportUIProductsExistence(int _id)
         {
             if (GetProductInfo(_id) == null)
             {
+                Debug.Log("is null " + _id);
                 productInfos.Add(new ProductInfo(_id, false, false));
             }
             else
-                Debug.Log("is null");
+                Debug.Log("is not null " + _id);
         }
 
         public void ReportUpdateUIProduct(int _id, bool _owned, bool _equiped)
         {
             ProductInfo info = GetProductInfo(_id);
             if (info == null)
+            {
                 productInfos.Add(new ProductInfo(_id, _owned, _equiped));
+                Debug.Log("is null " + _id);
+            }
             else
             {
                 GetProductInfo(_id).owned = _owned;
                 if (_equiped)
                     EquipProduct(_id);
+                Debug.Log("is not null " + _id);
             }
-
             //onProductInfoChange.Invoke();
         }
 

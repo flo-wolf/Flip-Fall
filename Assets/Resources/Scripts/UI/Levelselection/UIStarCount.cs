@@ -15,6 +15,7 @@ namespace Impulse.UI
         {
             _instance = this;
             UpdateStarCount();
+            ProgressData.onStarUpdate.AddListener(UpdateStarCount);
         }
 
         public static void Show()
@@ -32,14 +33,21 @@ namespace Impulse.UI
 
         public void UpdateStarCount()
         {
-            int starCount = 0;
-            List<Highscore> highscores = ProgressManager.GetProgress().highscores;
-            foreach (Highscore h in highscores)
-            {
-                starCount = starCount + h.starCount;
-            }
-            ProgressManager.GetProgress().starsOwned = starCount;
-            starText.text = starCount.ToString();
+            starText.text = ProgressManager.GetProgress().starsOwned.ToString();
+            // update aniamtion
         }
+
+        // old way of doing it, calculate the starcount by adding all highscore stars together
+        //public void UpdateStarCount()
+        //{
+        //    int starCount = 0;
+        //    List<Highscore> highscores = ProgressManager.GetProgress().highscores;
+        //    foreach (Highscore h in highscores)
+        //    {
+        //        starCount = starCount + h.starCount;
+        //    }
+        //    ProgressManager.GetProgress().starsOwned = starCount;
+        //    starText.text = starCount.ToString();
+        //}
     }
 }

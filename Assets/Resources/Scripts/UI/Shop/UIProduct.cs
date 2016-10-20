@@ -60,7 +60,7 @@ public class UIProduct : MonoBehaviour
 
     public void Start()
     {
-        ProgressManager.GetProgress().unlocks.ReportUpdateUIProduct(id, owned, equipped);
+        ProgressManager.GetProgress().unlocks.ReportUIProductsExistence(id);
 
         owned = ProgressManager.GetProgress().unlocks.IsOwned(id);
         equipped = ProgressManager.GetProgress().unlocks.IsEquipped(id);
@@ -146,6 +146,13 @@ public class UIProduct : MonoBehaviour
             }
             else
                 Debug.Log("Product couldn't be equipped: " + title);
+
+            if (equipped)
+            {
+                unvalidToogleCall = true;
+                equipToggle.isOn = true;
+                unvalidToogleCall = false;
+            }
         }
         else
         {

@@ -15,15 +15,17 @@ using UnityEngine.Events;
 namespace Impulse.Progress
 {
     [Serializable]
+    public class StarsUpdateEvent : UnityEvent { }
+
+    [Serializable]
     public class ProgressData
     {
         // level highscores and stars
         public List<Highscore> highscores;
 
-        //public StarsUpdateEvent onStarUpdate = new StarsUpdateEvent();
+        public static StarsUpdateEvent onStarUpdate = new StarsUpdateEvent();
 
         //[SerializeField]
-        //public class StarsUpdateEvent : UnityEvent<int> { }
 
         // sound settings etc.
         public Settings settings;
@@ -134,7 +136,7 @@ namespace Impulse.Progress
         public void AddStarsToWallet(int stars)
         {
             starsOwned += stars;
-            //onStarUpdate.Invoke(starsEarned);
+            onStarUpdate.Invoke();
         }
 
         //Updates existing highscores (if the score is better) or creates a new one if it doesnt exist already
@@ -145,13 +147,21 @@ namespace Impulse.Progress
             if (!highscores.Any(x => x.levelId == id))
             {
                 hs = new Highscore(id, time);
+                AddStarsToWallet(hs.starCount);
                 highscores.Add(hs);
                 Debug.Log("[ProgresssData]: Creating new Highscore of level " + id);
             }
             //exists, thus try to edit this one
             else
             {
-                highscores.Find(x => x.levelId == id).PlaceTime(time);
+                hs = highscores.Find(x => x.levelId == id);
+                int oldStars;
+                oldStars = hs.starCount;
+                if (oldStars < 0)
+                    oldStars = 0;
+                hs.PlaceTime(time);
+                int newStars = hs.starCount;
+                AddStarsToWallet(newStars - oldStars);
                 Debug.Log("[ProgresssData]: Updating existing Highscore of level " + id);
             }
         }
