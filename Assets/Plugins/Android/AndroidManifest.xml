@@ -11,14 +11,7 @@ required for displaying ads.
   <uses-sdk android:minSdkVersion="9"
       android:targetSdkVersion="19" />
   <!-- Google Mobile Ads Permissions -->
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" android:maxSdkVersion="1" />
-  <uses-permission android:name="android.permission.READ_PHONE_STATE" android:maxSdkVersion="1" />
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="1" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="1" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="1" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" android:maxSdkVersion="1" />
+
   <!-- Uncomment to add billing for in-app purchase ads -->
   <uses-permission android:name="com.android.vending.BILLING" />
   <application  android:theme="@style/UnityThemeSelector"
