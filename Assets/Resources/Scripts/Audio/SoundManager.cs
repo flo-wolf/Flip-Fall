@@ -58,7 +58,6 @@ namespace Impulse.Audio
             Player.onPlayerAction.AddListener(PlayerAction);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
             CamMove.onCamMoveStateChange.AddListener(CamMoveStateChanged);
-            LevelManager.onLevelChange.AddListener(LevelChanged);
             UIGameButtons.onButtonClick.AddListener(ButtonClicked);
             UIGameButtons.onButtonRelease.AddListener(ButtonReleased);
             //UILevelselectionManager.onUILevelSwitch.AddListener(UILevelSwitched);
@@ -227,11 +226,6 @@ namespace Impulse.Audio
             _instance.soundPlayer.PlaySingle(_instance.unvalidSound);
         }
 
-        private void LevelChanged(int levelID)
-        {
-            //soundPlayer.PlaySingle(levelChangeSound);
-        }
-
         public static void TurretShot(Vector3 position)
         {
             float distanceToPlayer = Vector3.Distance(Player._instance.transform.position, position);
@@ -246,6 +240,7 @@ namespace Impulse.Audio
         //CHANGE SOUND IN HERE!
         public static void UILevelBouncedBack()
         {
+            Debug.Log("playeeeeeeeeeeeed");
             _instance.soundPlayer.PlaySingle(_instance.uiLevelSwitchSound);
         }
 

@@ -107,7 +107,7 @@ namespace FlipFall.UI
         private void FixedUpdate()
         {
             // is the user dragging
-            if (dragging)
+            if (scrollRect.velocity != Vector2.zero)
             {
                 StartCoroutine(cCorrectInsideSetting());
             }

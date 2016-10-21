@@ -91,8 +91,6 @@ namespace Impulse.Progress
 
                     Social.ReportProgress("CgkIqIqqjZYFEAIQCw", 100.0f, (bool success) =>
                     {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
                     });
                     return true;
                 }

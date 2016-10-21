@@ -1,4 +1,5 @@
-﻿using Impulse.Progress;
+﻿using Impulse.Audio;
+using Impulse.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -101,7 +102,10 @@ namespace Impulse.UI
                             if (!UILevelselectionManager.LastLevel())
                             {
                                 StartCoroutine(lerpBackToOrigin());
+                                SoundManager.PlayUnvalidSound();
                             }
+                            else
+                                onBounceBack.Invoke();
                         }
                         //drag to the left
                         else
@@ -109,9 +113,11 @@ namespace Impulse.UI
                             if (!UILevelselectionManager.NextLevel())
                             {
                                 StartCoroutine(lerpBackToOrigin());
+                                SoundManager.PlayUnvalidSound();
                             }
+                            else
+                                onBounceBack.Invoke();
                         }
-                        onBounceBack.Invoke();
                     }
                     newDragObjectPos = new Vector3(defaultPosition.x + dragLength, defaultPosition.y, defaultPosition.z);
                     //Debug.Log(dragLength + " " + originDragObjectPos.x);
@@ -157,7 +163,10 @@ namespace Impulse.UI
                                 if (!UILevelselectionManager.LastLevel())
                                 {
                                     StartCoroutine(lerpBackToOrigin());
+                                    SoundManager.PlayUnvalidSound();
                                 }
+                                else
+                                    onBounceBack.Invoke();
                             }
                             //drag to the left
                             else
@@ -165,9 +174,11 @@ namespace Impulse.UI
                                 if (!UILevelselectionManager.NextLevel())
                                 {
                                     StartCoroutine(lerpBackToOrigin());
+                                    SoundManager.PlayUnvalidSound();
                                 }
+                                else
+                                    onBounceBack.Invoke();
                             }
-                            onBounceBack.Invoke();
                         }
                         newDragObjectPos = new Vector3(defaultPosition.x + dragLength, defaultPosition.y, defaultPosition.z);
                         touched = true;
