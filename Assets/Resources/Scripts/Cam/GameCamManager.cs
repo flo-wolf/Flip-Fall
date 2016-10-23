@@ -96,7 +96,7 @@ namespace Impulse.Cam
                     break;
 
                 case Player.PlayerState.win:
-                    CamZoom.DeathZoom(Game.deathDelay);
+                    CamZoom.WinZoom(Game.deathDelay);
                     CamRotation.RotateToDefault(Game.deathDelay);
                     //CamRotation.DeathRotation(); //change to camshake
                     //CamMove.StopFollowing();

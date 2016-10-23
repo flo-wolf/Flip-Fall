@@ -8,6 +8,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Level class. When a level gets loaded all moveArea meshes will be combined into one object, the moveAreaGo.
+/// Is referenced in the LevelPlacer.placedLevel.
+/// </summary>
+
 namespace Impulse.Levels
 {
     [Serializable]
@@ -28,7 +33,7 @@ namespace Impulse.Levels
 
         // mergedMeshRenderer
         private MeshRenderer mr;
-        private GameObject moveAreaGo;
+        public GameObject moveAreaGo;
         public PolygonCollider2D polyCollider;
 
         [HideInInspector]
@@ -58,6 +63,15 @@ namespace Impulse.Levels
             finish = gameObject.GetComponentInChildren<Finish>();
 
             GenerateCollisionPolygons();
+        }
+
+        public void OnEnable()
+        {
+            // merge all movearea meshes into one gameobject
+            MergeMoveArea();
+
+            // reset the dissolve shader to zero
+            mr.material.SetFloat("_SliceAmount", 0F);
         }
 
         public void GenerateCollisionPolygons()
@@ -91,11 +105,6 @@ namespace Impulse.Levels
                     //levelPolys.Add(poly);
                 }
             }
-        }
-
-        public void OnEnable()
-        {
-            MergeMoveArea();
         }
 
         // Merges all movearea blocks into one, deletes old MoveAreas
@@ -166,6 +175,30 @@ namespace Impulse.Levels
 
             //moveAreaGo.GetComponent<MeshRenderer>().sharedMaterial = moveAreaMaterial;
             //moveAreaGo.GetComponent<PolygonCollider2D>(). = mergedMesh;
+        }
+
+        public void DissolveLevel()
+        {
+            StartCoroutine(cDissolveLevel(LevelManager._instance.DissolveLevelDuration));
+        }
+
+        private IEnumerator cDissolveLevel(float duration)
+        {
+            if (mr != null)
+            {
+                yield return new WaitForSeconds(LevelManager._instance.DissolveDelay);
+                Material m = mr.material;
+                float t = 0F;
+                while (t < 1.0f)
+                {
+                    t += Time.deltaTime * (Time.timeScale / duration);
+                    m.SetFloat("_SliceAmount", t);
+                    yield return 0;
+                }
+            }
+            else
+                Debug.Log("Dissolving Level failed, moveAreaGo MeshRenderer not found.");
+            yield break;
         }
 
         private void FixedUpdate()

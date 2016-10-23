@@ -306,6 +306,9 @@ namespace Impulse
             if (deathPos == Vector3.zero)
                 deathPos = transform.position;
 
+            // start level dissolve effect
+            LevelPlacer.placedLevel.DissolveLevel();
+
             Vector3 deathParticlePos = new Vector3(deathPos.x, deathPos.y, Constants.playerZ);
             deathParticles.gameObject.transform.position = deathParticlePos;
             deathParticles.gameObject.SetActive(true);
@@ -328,6 +331,9 @@ namespace Impulse
             PlayGamesPlatform.Instance.IncrementAchievement("CgkIqIqqjZYFEAIQFQ", 1, (bool success) =>
             {
             });
+
+            // start level dissolve effect
+            LevelPlacer.placedLevel.DissolveLevel();
 
             trailParticlesEmit.enabled = false;
             trailParticles.Stop();

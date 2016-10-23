@@ -26,6 +26,9 @@ namespace Impulse.Levels
         public static int lastID;
         public static int firstID;
 
+        public float DissolveDelay = 0.2f;
+        public float DissolveLevelDuration = 0.3f;
+
         // is this already loaded
         public static bool started = false;
 
