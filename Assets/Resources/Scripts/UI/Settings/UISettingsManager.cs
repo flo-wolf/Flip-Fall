@@ -38,6 +38,8 @@ namespace Impulse.UI
         // theme toggles
         private Toggle[] toggles;
 
+        private bool requestActive = false;
+
         // Use this for initialization
         private void Start()
         {
@@ -135,14 +137,42 @@ namespace Impulse.UI
 
         public void ResetProgress()
         {
-            ProgressManager.ClearProgress();
+            requestActive = true;
+            animator.SetTrigger("resetRequest");
             SoundManager.ButtonClicked();
-            resetAnimation.Play("buttonClick");
+        }
+
+        public void ResetYes()
+        {
+            if (requestActive)
+            {
+                animator.SetTrigger("resetYes");
+                ProgressManager.ClearProgress();
+                SoundManager.ButtonClicked();
+                requestActive = false;
+            }
+        }
+
+        public void ResetNo()
+        {
+            if (requestActive)
+            {
+                animator.SetTrigger("resetNo");
+                SoundManager.ButtonClicked();
+                requestActive = false;
+            }
         }
 
         public void HomeButtonClicked()
         {
+            SoundManager.ButtonClicked();
+            homeAnimation.Play("buttonClick");
             Main.SetScene(Main.Scene.home);
+        }
+
+        public void CreditsButtonClicked()
+        {
+            Main.SetScene(Main.Scene.credits);
             SoundManager.ButtonClicked();
             homeAnimation.Play("buttonClick");
         }

@@ -118,8 +118,6 @@ namespace Impulse.Cam
             float duration1 = (distance1 / (distance1 + distance2)) / 2;
             float duration2 = (distance2 / (distance1 + distance2)) / 2;
 
-            Debug.Log("dist1 " + duration1 + " dur2 " + duration2);
-
             float t = 0;
             while (t < 1F)
             {
