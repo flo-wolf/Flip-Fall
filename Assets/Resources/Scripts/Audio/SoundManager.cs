@@ -39,6 +39,7 @@ namespace Impulse.Audio
         public AudioClip purchaseSound;
         public AudioClip achievementSound;
         public AudioClip purchaseFailSound;
+        public AudioClip wooshSound;
 
         [Header("Music")]
         public AudioClip backgroundSound;
@@ -132,10 +133,13 @@ namespace Impulse.Audio
 
                 case Player.PlayerState.dead:
                     soundPlayer.PlaySingle(deathSound);
+                    PlayWooshSound();
                     break;
 
                 case Player.PlayerState.win:
                     soundPlayer.PlaySingle(winSound);
+                    soundPlayer.PlaySingle(achievementSound);
+                    //PlayWooshSound();
                     break;
 
                 default:
@@ -209,6 +213,12 @@ namespace Impulse.Audio
         private void ButtonReleased(Button b)
         {
             soundPlayer.PlaySingle(buttonReleaseSound);
+        }
+
+        public static void PlayWooshSound()
+        {
+            if (_instance.soundPlayer != null)
+                _instance.soundPlayer.PlaySingle(_instance.wooshSound);
         }
 
         public void PlayTimerSound()

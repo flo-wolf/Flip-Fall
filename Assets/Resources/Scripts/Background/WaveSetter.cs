@@ -31,12 +31,15 @@ namespace Impulse.Background
 
         private void MeshUpdated(Mesh m)
         {
-            MeshFilter filter = GetComponent<MeshFilter>();
-            mesh = filter.mesh;
-            mesh.Clear();
+            if (WaveGenerator.generateWaves)
+            {
+                MeshFilter filter = GetComponent<MeshFilter>();
+                mesh = filter.mesh;
+                mesh.Clear();
 
-            mesh.vertices = m.vertices;
-            mesh.triangles = m.triangles;
+                mesh.vertices = m.vertices;
+                mesh.triangles = m.triangles;
+            }
         }
     }
 }

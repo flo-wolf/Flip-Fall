@@ -21,12 +21,22 @@ namespace Impulse.Background
         public float uPeak = 0.2F;
         private float amplitude;
         private float randAmplitude;
-        public float backgroundSpeed;
+
+        // should waves get generated? Can be turned off to save performance
+        public static bool generateWaves = true;
+
+        // amplitude of each wave generated through sound or by random
+        public static float bgAmplitude = 1F;
+
+        // size of each horizonpart
+        public static int bgSize = 32;
+
+        public static float waveStopDuration = 1F;
 
         private float newestAudioValue = 0F;
         private float lerpedAudioValue = 0F;
 
-        // final mesh, applied to all HorizonParts
+        // final mesh, applied to all WaveSetters added to HorizonPart-GameObjects
         public static Mesh waveMesh;
 
         // The wave points along the top of the mesh
@@ -63,15 +73,37 @@ namespace Impulse.Background
                 started = true;
             }
 
-            backgroundSpeed = ProgressManager.GetProgress().settings.backgroundSpeed;
+            bgAmplitude = ProgressManager.GetProgress().settings.backgroundSpeed;
             UISettingsManager.onHorizonSpeedChange.AddListener(HorizonSpeedChanged);
 
             onMeshUpdate.Invoke(Prewarm());
         }
 
+        // EventListener, UISettingsManager.onHorizonSpeedChange
         private void HorizonSpeedChanged(float f)
         {
-            backgroundSpeed = f;
+            bgAmplitude = f;
+            if (f == 5)
+            {
+                StopAllCoroutines();
+                StartCoroutine(cStopLerp(waveStopDuration));
+            }
+        }
+
+        private IEnumerator cStopLerp(float duration)
+        {
+            float t = 0;
+            while (t < 1.0f)
+            {
+                t += Time.deltaTime * (Time.timeScale / duration);
+
+                bgAmplitude = Mathf.SmoothStep(bgAmplitude, 0, t);
+                yield return 0;
+            }
+
+            generateWaves = false;
+
+            yield break;
         }
 
         private Mesh Prewarm()
@@ -79,7 +111,7 @@ namespace Impulse.Background
             waveMesh.Clear();
 
             // Generate 64 random points for the top (i.e. the actual wave)
-            points = new Vector3[32];
+            points = new Vector3[bgSize];
             for (int i = 0; i < points.Length; i++)
             {
                 points[i] = new Vector3(0.5f * i, height, 0f);
@@ -113,12 +145,12 @@ namespace Impulse.Background
 
         private Mesh UpdateMesh()
         {
-            if (waveMesh != null)
+            if (waveMesh != null && generateWaves)
             {
                 waveMesh.Clear();
 
                 // Generate 64 random points for the top (i.e. the actual wave)
-                points = new Vector3[32];
+                points = new Vector3[bgSize];
                 for (int i = 0; i < points.Length; i++)
                 {
                     // if there are no lastPoints to lerp from create random points
@@ -137,7 +169,7 @@ namespace Impulse.Background
                             else
                                 newestAudioValue = 0;
 
-                            amplitude = Mathf.Lerp(lastPoints[i].y, height + newestAudioValue, Time.deltaTime * backgroundSpeed);
+                            amplitude = Mathf.Lerp(lastPoints[i].y, height + newestAudioValue, Time.deltaTime * bgAmplitude);
                             //if (lerpedAudioValue > hWave)
                             //    hWave = lerpedAudioValue;
                             //amplitude = Mathf.Lerp(lPeak, uPeak, Mathf.InverseLerp(0, hWave, lerpedAudioValue));
@@ -151,7 +183,7 @@ namespace Impulse.Background
                             //there is no audio, switch to random input
                             else
                             {
-                                randAmplitude = Mathf.Lerp(lastPoints[i].y, height + Mathf.Abs(Random.Range(lPeak, uPeak)), Time.deltaTime * backgroundSpeed);
+                                randAmplitude = Mathf.Lerp(lastPoints[i].y, height + Mathf.Abs(Random.Range(lPeak, uPeak)), Time.deltaTime * bgAmplitude);
                                 points[i] = new Vector3(0.5f * (float)i, Mathf.Abs(Mathf.Lerp(lastPoints[i].y, randAmplitude, Time.time)), 0f);
                                 //Random.Range(lastPoints[i].y - wavePeak, lastPoints[i].y + wavePeak)
                             }

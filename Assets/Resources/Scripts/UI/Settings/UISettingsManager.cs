@@ -34,6 +34,7 @@ namespace Impulse.UI
 
         public Slider fxSlider;
         public Slider musicSlider;
+        public Slider bgAmplitudeSlider;
 
         // theme toggles
         private Toggle[] toggles;
@@ -120,6 +121,8 @@ namespace Impulse.UI
         {
             fxSlider.value = ProgressManager.GetProgress().settings.fxVolume;
             musicSlider.value = ProgressManager.GetProgress().settings.musicVolume;
+            bgAmplitudeSlider.value = ProgressManager.GetProgress().settings.backgroundSpeed;
+
             onMusicVolumeChange.Invoke(musicSlider.value);
         }
 
@@ -191,9 +194,9 @@ namespace Impulse.UI
 
         public void SpeedSliderChanged(Slider s)
         {
+            ProgressManager.GetProgress().settings.backgroundSpeed = s.value;
             Debug.Log("Speedslider");
             onHorizonSpeedChange.Invoke(s.value);
-            ProgressManager.GetProgress().settings.backgroundSpeed = s.value;
         }
     }
 }
