@@ -28,7 +28,10 @@ namespace Impulse.UI
             }
             _instance = this;
 
+            // Listeners
             Main.onSceneChange.AddListener(SceneChanging);
+            UIProduct.onBuy.AddListener(ProductBought);
+            UIProduct.onBuyFail.AddListener(ProductBuyFail);
 
             // collect all UIProducts, maybe do this in coroutine
             uiProducts = new List<UIProduct>();
@@ -49,6 +52,18 @@ namespace Impulse.UI
         {
             SoundManager.ButtonClicked();
             Main.SetScene(Main.Scene.home);
+        }
+
+        private void ProductBought(UIProduct product)
+        {
+            Debug.Log("uistar buy success");
+            animator.SetTrigger("shake");
+        }
+
+        private void ProductBuyFail(UIProduct product)
+        {
+            Debug.Log("uistar buyfail");
+            animator.SetTrigger("shake");
         }
     }
 }
