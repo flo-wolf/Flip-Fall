@@ -23,10 +23,10 @@ namespace Impulse.Progress
         public static HighscoreStarChangeEvent onStarChange = new HighscoreStarChangeEvent();
 
         /// <summary>
-        /// 1. stars
-        /// 2. levelId
+        /// 1. Number of stars to add
+        /// 2. Highscore
         /// </summary>
-        public class HighscoreStarChangeEvent : UnityEvent<int, int> { }
+        public class HighscoreStarChangeEvent : UnityEvent<int, Highscore> { }
 
         public bool unlocked = false;
         public bool finished = false;
@@ -77,20 +77,26 @@ namespace Impulse.Progress
         public void PlaceTime(double t)
         {
             double presetTime = LevelManager.GetActiveLevel().presetTime;
+            int oldStarCount = 0;
 
             if (t < bestTime || bestTime < 0 && presetTime > 0)
             {
                 bestTime = t;
                 if (t < presetTime)
                 {
+                    oldStarCount = starCount;
                     SetStarCount(3);
                 }
                 else if (t < presetTime + (presetTime * Constants.twoStarPercantage))
                 {
+                    oldStarCount = starCount;
                     SetStarCount(2);
                 }
                 else
+                {
+                    oldStarCount = starCount;
                     SetStarCount(1);
+                }
             }
             else
             {
@@ -98,8 +104,14 @@ namespace Impulse.Progress
                 //display too small time, maybe let the timer blink up red then make it disappear and replace with timer
             }
 
-            onStarChange.Invoke(starCount, levelId);
+            //onStarChange.Invoke(oldStarCount, this);
+            SetStarUnlocks(oldStarCount);
+
             Debug.Log("[Highscore] New starCount: " + starCount + " of level: " + levelId);
+        }
+
+        private void SetStarUnlocks(int olderStarCount)
+        {
         }
     }
 }

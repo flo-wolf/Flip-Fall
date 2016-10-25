@@ -16,14 +16,14 @@ namespace Impulse.UI
         private void Start()
         {
             _instance = this;
-            UpdateStarCount();
-            ProgressData.onStarUpdate.AddListener(UpdateStarCount);
+            WalletUpdate();
+            ProgressData.onWalletUpdate.AddListener(WalletUpdate);
         }
 
         public static void Show()
         {
             _instance.gameObject.SetActive(true);
-            _instance.UpdateStarCount();
+            _instance.WalletUpdate();
             //animation
         }
 
@@ -33,10 +33,13 @@ namespace Impulse.UI
             //animation
         }
 
-        public void UpdateStarCount()
+        public void WalletUpdate()
         {
             starText.text = ProgressManager.GetProgress().starsOwned.ToString();
-            // update aniamtion
+        }
+
+        public void StarsChanged()
+        {
         }
 
         // old way of doing it, calculate the starcount by adding all highscore stars together

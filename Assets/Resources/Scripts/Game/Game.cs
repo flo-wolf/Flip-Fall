@@ -93,16 +93,27 @@ namespace Impulse
                     break;
 
                 case GameState.finishscreen:
-                    Debug.Log("[Game] finishscreen");
+
                     Timer.Pause();
+
+                    // Highscore Management
+                    Highscore oldHighscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID());
+                    if (oldHighscore != null)
+                    {
+                        Debug.Log("[Game] finishscreen - levelId: " + LevelManager.GetActiveID() + " oldHighscore stars: " + oldHighscore.starCount);
+                    }
+
+                    Highscore newHighscore = null;
                     if (LevelManager.GetActiveID() == ProgressManager.GetProgress().lastPlayedLevelID)
                     {
-                        ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
+                        newHighscore = ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
                     }
+                    UILevelPlacer.CalcStarsToUnlock(oldHighscore, newHighscore);
+
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
-                    //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
 
                     UILevelselectionManager.enterType = UILevelselectionManager.EnterType.finished;
+
                     Main.SetScene(Main.Scene.levelselection);
                     onGameStateChange.Invoke(gs);
 

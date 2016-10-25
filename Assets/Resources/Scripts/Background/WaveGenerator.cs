@@ -74,6 +74,12 @@ namespace Impulse.Background
             }
 
             bgAmplitude = ProgressManager.GetProgress().settings.backgroundSpeed;
+            if (bgAmplitude < 5)
+            {
+                StopAllCoroutines();
+                StartCoroutine(cStopLerp(waveStopDuration));
+            }
+
             UISettingsManager.onHorizonSpeedChange.AddListener(HorizonSpeedChanged);
 
             onMeshUpdate.Invoke(Prewarm());
@@ -83,7 +89,7 @@ namespace Impulse.Background
         private void HorizonSpeedChanged(float f)
         {
             bgAmplitude = f;
-            if (f == 5)
+            if (bgAmplitude < 5)
             {
                 StopAllCoroutines();
                 StartCoroutine(cStopLerp(waveStopDuration));
@@ -141,6 +147,12 @@ namespace Impulse.Background
         private void FixedUpdate()
         {
             onMeshUpdate.Invoke(UpdateMesh());
+
+            if (!generateWaves && bgAmplitude > 5)
+            {
+                StopAllCoroutines();
+                generateWaves = true;
+            }
         }
 
         private Mesh UpdateMesh()

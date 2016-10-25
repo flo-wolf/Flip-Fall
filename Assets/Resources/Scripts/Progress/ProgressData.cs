@@ -15,7 +15,7 @@ using UnityEngine.Events;
 namespace Impulse.Progress
 {
     [Serializable]
-    public class StarsUpdateEvent : UnityEvent { }
+    public class WalletUpdateEvent : UnityEvent { }
 
     [Serializable]
     public class ProgressData
@@ -23,7 +23,7 @@ namespace Impulse.Progress
         // level highscores and stars
         public List<Highscore> highscores;
 
-        public static StarsUpdateEvent onStarUpdate = new StarsUpdateEvent();
+        public static WalletUpdateEvent onWalletUpdate = new WalletUpdateEvent();
 
         //[SerializeField]
 
@@ -157,11 +157,11 @@ namespace Impulse.Progress
         public void AddStarsToWallet(int stars)
         {
             starsOwned += stars;
-            onStarUpdate.Invoke();
+            onWalletUpdate.Invoke();
         }
 
         //Updates existing highscores (if the score is better) or creates a new one if it doesnt exist already
-        public void EnterHighscore(int id, double time)
+        public Highscore EnterHighscore(int id, double time)
         {
             Highscore hs;
             //doesnt exist
@@ -185,6 +185,7 @@ namespace Impulse.Progress
                 AddStarsToWallet(newStars - oldStars);
                 Debug.Log("[ProgresssData]: Updating existing Highscore of level " + id);
             }
+            return hs;
         }
 
         public Highscore GetHighscore(int id)

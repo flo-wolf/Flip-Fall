@@ -35,6 +35,7 @@ namespace Impulse.UI
 
         public float fadeOutTime = 1F;
         public float fadeInTime = 1F;
+        public float nextLevelDelay = 2F;
 
         private static bool nextLevelGetsUnlocked = false;
 
@@ -61,6 +62,8 @@ namespace Impulse.UI
         {
             Main.onSceneChange.AddListener(SceneChanging);
             LevelManager.onLevelChange.AddListener(LevelChanging);
+            ProgressData.onWalletUpdate.AddListener(WalletUpdate);
+
             UILevelDrag.UpdateDragObject();
 
             if (unlockNextLevel)
@@ -109,8 +112,9 @@ namespace Impulse.UI
                 activeUILevel++;
                 ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
 
+                UILevelPlacer.newUnlocks = UILevel.StarsToUnlock.none;
                 UILevelPlacer.PlaceUILevel(activeUILevel, true);
-                UILevelPlacer.placedLevel.UpdateUILevel();
+
                 UILevelDrag.UpdateDragObject();
 
                 // move the numbers left, bringing the nextLevel into focus, removing those outside
@@ -140,11 +144,10 @@ namespace Impulse.UI
                 activeUILevel--;
                 ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
 
+                UILevelPlacer.newUnlocks = UILevel.StarsToUnlock.none;
                 UILevelPlacer.placedLevel.FadeOut();
-
                 //delay this
                 UILevelPlacer.PlaceUILevel(activeUILevel, true);
-                UILevelPlacer.placedLevel.UpdateUILevel();
                 UILevelDrag.UpdateDragObject();
 
                 // backwards iteration needed, because we might remove items during iterating from the collection
@@ -172,7 +175,7 @@ namespace Impulse.UI
         public IEnumerator UnlockNext()
         {
             // add delay here
-            yield return new WaitForSeconds(0.5F);
+            yield return new WaitForSeconds(nextLevelDelay);
             NextLevel();
             yield return new WaitForSeconds(3F);
             unlockNextLevel = false;
@@ -217,6 +220,11 @@ namespace Impulse.UI
                 }
             }
             return uiLevel;
+        }
+
+        public void WalletUpdate()
+        {
+            animator.SetTrigger("walletUpdate");
         }
     }
 }

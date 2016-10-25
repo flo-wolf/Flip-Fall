@@ -21,6 +21,8 @@ namespace Impulse.UI
         private static GameObject uiLevelPrefab;
         private static GameObject uiLevelNumberPrefab;
 
+        public static UILevel.StarsToUnlock newUnlocks = UILevel.StarsToUnlock.none;
+
         //Stored uiLevels
         //public static List<UILevel> uiLevels;
 
@@ -51,7 +53,6 @@ namespace Impulse.UI
             placedLevelNumbers = new List<UILevelNumber>();
             PlaceUILevel(UILevelselectionManager.activeUILevel, false);
             PlaceLevelNumbers(placedLevel.id);
-            placedLevel.UpdateUILevel();
         }
 
         // First place of all levelnumbers on entering the scene. id == number to place around
@@ -97,8 +98,6 @@ namespace Impulse.UI
                     nbr.gameObject.transform.localPosition = Vector3.zero;
                     placedLevelNumbers.Add(nbr);
                 }
-                else
-                    Debug.Log("Couldn't place UILevelNumber");
             }
         }
 
@@ -120,6 +119,7 @@ namespace Impulse.UI
                 l.createdByLevelswitch = levelSwitch;
                 //l.gameObject.transform.localPosition = new Vector3(0, 0, 0);
                 l.gameObject.transform.localPosition = new Vector3(0, uiLevelPrefab.transform.position.y, 0);
+                l.starsToUnlock = newUnlocks;
                 placedLevel = l;
             }
             else
@@ -148,6 +148,43 @@ namespace Impulse.UI
             {
                 Destroy(l.gameObject);
             }
+        }
+
+        public static void CalcStarsToUnlock(Highscore oldHs, Highscore newHs)
+        {
+            // safety checks
+
+            int oldStars = 0;
+
+            if (newHs != null)
+            {
+                switch (oldStars)
+                {
+                    case 0:
+                        if (newHs.starCount == 1)
+                            newUnlocks = UILevel.StarsToUnlock.star1;
+                        else if (newHs.starCount == 2)
+                            newUnlocks = UILevel.StarsToUnlock.star12;
+                        else if (newHs.starCount == 3)
+                            newUnlocks = UILevel.StarsToUnlock.star123;
+                        break;
+
+                    case 1:
+                        if (newHs.starCount == 2)
+                            newUnlocks = UILevel.StarsToUnlock.star2;
+                        else if (newHs.starCount == 3)
+                            newUnlocks = UILevel.StarsToUnlock.star23;
+                        break;
+
+                    case 2:
+                        if (newHs.starCount == 3)
+                            newUnlocks = UILevel.StarsToUnlock.star3;
+                        break;
+
+                    default: break;
+                }
+            }
+            Debug.Log("LevelPlacer: CalcStarsToUnlock " + newUnlocks);
         }
 
         //public static List<UILevel> CreateUILevels()

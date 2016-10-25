@@ -40,6 +40,7 @@ namespace Impulse.Audio
         public AudioClip achievementSound;
         public AudioClip purchaseFailSound;
         public AudioClip wooshSound;
+        public AudioClip starGetSound;
 
         [Header("Music")]
         public AudioClip backgroundSound;
@@ -236,6 +237,11 @@ namespace Impulse.Audio
             _instance.soundPlayer.PlaySingle(_instance.unvalidSound);
         }
 
+        public static void PlayStarGetSound()
+        {
+            _instance.soundPlayer.PlaySingle(_instance.starGetSound);
+        }
+
         public static void TurretShot(Vector3 position)
         {
             float distanceToPlayer = Vector3.Distance(Player._instance.transform.position, position);
@@ -250,7 +256,6 @@ namespace Impulse.Audio
         //CHANGE SOUND IN HERE!
         public static void UILevelBouncedBack()
         {
-            Debug.Log("playeeeeeeeeeeeed");
             _instance.soundPlayer.PlaySingle(_instance.uiLevelSwitchSound);
         }
 

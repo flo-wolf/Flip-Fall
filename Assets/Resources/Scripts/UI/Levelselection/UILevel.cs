@@ -1,4 +1,5 @@
-﻿using Impulse.Levels;
+﻿using Impulse.Audio;
+using Impulse.Levels;
 using Impulse.Progress;
 using System;
 using System.Collections;
@@ -11,10 +12,16 @@ namespace Impulse.UI
     {
         public int id;
 
+        // stars to unlock on scene entering
+        public enum StarsToUnlock { none, star1, star12, star123, star2, star23, star3 }
+
+        [HideInInspector]
+        public StarsToUnlock starsToUnlock = StarsToUnlock.none;
+
         //Stars
-        public Image Star1;
-        public Image Star2;
-        public Image Star3;
+        public GameObject Star1;
+        public GameObject Star2;
+        public GameObject Star3;
 
         //Times
         public Text timeSecText;
@@ -36,7 +43,7 @@ namespace Impulse.UI
             animator = GetComponent<Animator>();
 
             highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
-            if (highscore != null && highscore.starCount > 0)
+            if (highscore != null && highscore.starCount >= 0)
             {
                 starScore = highscore.starCount;
             }
@@ -46,8 +53,6 @@ namespace Impulse.UI
             }
 
             Main.onSceneChange.AddListener(SceneChanged);
-
-            Highscore.onStarChange.AddListener(HighscoreStarChanged);
 
             UpdateUILevel();
 
@@ -68,31 +73,128 @@ namespace Impulse.UI
             animator.SetTrigger("fadeout");
         }
 
-        private void HighscoreStarChanged(int stars, int levelId)
-        {
-            if (levelId == id)
-                SetStars(stars);
-        }
-
-        public void SetStars(int newStars)
-        {
-            if (newStars != starScore && UILevelMatchesLevel() && newStars > 0)
-            {
-                starScore = newStars;
-                UpdateStars();
-            }
-        }
-
         public void UpdateUILevel()
         {
-            Debug.Log("UPDATING STARS 1 " + starScore);
             highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
-            Debug.Log("UPDATING STARS 2 " + starScore);
             //levelNumberText.text = id.ToString();
 
             UpdateFails(highscore);
-            UpdateStars();
+
+            SetNewStars();
             UpdateTimes();
+        }
+
+        // a new highscore got created, rising the current amount of stars => amimate those coming in new
+        private void SetNewStars()
+        {
+            Debug.Log("starScore " + starScore);
+
+            if (starsToUnlock != StarsToUnlock.none)
+            {
+                StartCoroutine(cStarsRecieve());
+            }
+            else
+                ActivateStarImages();
+        }
+
+        private void ActivateStarImages()
+        {
+            switch (starScore)
+            {
+                case 1:
+                    Star1.SetActive(true);
+                    Star2.SetActive(false);
+                    Star3.SetActive(false);
+                    break;
+
+                case 2:
+                    Star1.SetActive(true);
+                    Star2.SetActive(true);
+                    Star3.SetActive(false);
+                    break;
+
+                case 3:
+                    Star1.SetActive(true);
+                    Star2.SetActive(true);
+                    Star3.SetActive(true);
+                    break;
+
+                default:
+                    Star1.SetActive(false);
+                    Star2.SetActive(false);
+                    Star3.SetActive(false);
+                    break;
+            }
+        }
+
+        // fade in the newly reached stars one by one
+        private IEnumerator cStarsRecieve()
+        {
+            Star1.SetActive(false);
+            Star2.SetActive(false);
+            Star3.SetActive(false);
+
+            float delay = 0.5F;
+            // star 1 is new
+            if (starsToUnlock == StarsToUnlock.star1)
+                StarsFade(1);
+            else if (starsToUnlock == StarsToUnlock.star12)
+            {
+                StarsFade(1);
+                yield return new WaitForSeconds(delay);
+                StarsFade(2);
+            }
+            else if (starsToUnlock == StarsToUnlock.star123)
+            {
+                StarsFade(1);
+                yield return new WaitForSeconds(delay / 2);
+                StarsFade(2);
+                yield return new WaitForSeconds(delay / 2);
+                StarsFade(3);
+            }
+            else if (starsToUnlock == StarsToUnlock.star2)
+            {
+                StarsFade(2);
+            }
+            else if (starsToUnlock == StarsToUnlock.star23)
+            {
+                StarsFade(2);
+                yield return new WaitForSeconds(delay);
+                StarsFade(3);
+            }
+            else if (starsToUnlock == StarsToUnlock.star3)
+            {
+                StarsFade(3);
+            }
+
+            yield return new WaitForSeconds(delay / 2);
+
+            ActivateStarImages();
+
+            yield break;
+        }
+
+        // called by UILevel - fades in a star (int : 1-3)
+        public void StarsFade(int starId)
+        {
+            Debug.Log("starsFade " + starId);
+            switch (starId)
+            {
+                case 1:
+                    animator.SetTrigger("star1");
+                    SoundManager.PlayStarGetSound();
+                    break;
+
+                case 2:
+                    animator.SetTrigger("star2");
+                    SoundManager.PlayStarGetSound();
+                    break;
+
+                case 3:
+                    animator.SetTrigger("star3");
+                    SoundManager.PlayStarGetSound();
+                    break;
+            }
         }
 
         public void UpdateFails(Highscore h)
@@ -103,37 +205,6 @@ namespace Impulse.UI
             }
             else
                 failsCount.text = "0000";
-        }
-
-        public void UpdateStars()
-        {
-            Debug.Log("UPDATING STARS " + starScore);
-            switch (starScore)
-            {
-                case 1:
-                    Star1.enabled = true;
-                    Star2.enabled = false;
-                    Star3.enabled = false;
-                    break;
-
-                case 2:
-                    Star1.enabled = true;
-                    Star2.enabled = true;
-                    Star3.enabled = false;
-                    break;
-
-                case 3:
-                    Star1.enabled = true;
-                    Star2.enabled = true;
-                    Star3.enabled = true;
-                    break;
-
-                default:
-                    Star1.enabled = false;
-                    Star2.enabled = false;
-                    Star3.enabled = false;
-                    break;
-            }
         }
 
         public void UpdateTimes()
