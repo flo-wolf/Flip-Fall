@@ -87,7 +87,7 @@ namespace Impulse.UI
         // a new highscore got created, rising the current amount of stars => amimate those coming in new
         private void SetNewStars()
         {
-            Debug.Log("starScore " + starScore);
+            Debug.Log("starScore " + starScore + " starsToUnlock " + starsToUnlock);
 
             if (starsToUnlock != StarsToUnlock.none)
             {
@@ -137,7 +137,9 @@ namespace Impulse.UI
             float delay = 0.5F;
             // star 1 is new
             if (starsToUnlock == StarsToUnlock.star1)
+            {
                 StarsFade(1);
+            }
             else if (starsToUnlock == StarsToUnlock.star12)
             {
                 StarsFade(1);
@@ -154,18 +156,24 @@ namespace Impulse.UI
             }
             else if (starsToUnlock == StarsToUnlock.star2)
             {
+                Star1.SetActive(true);
                 StarsFade(2);
             }
             else if (starsToUnlock == StarsToUnlock.star23)
             {
+                Star1.SetActive(true);
                 StarsFade(2);
                 yield return new WaitForSeconds(delay);
                 StarsFade(3);
             }
             else if (starsToUnlock == StarsToUnlock.star3)
             {
+                Star1.SetActive(true);
+                Star2.SetActive(true);
                 StarsFade(3);
             }
+
+            starsToUnlock = StarsToUnlock.none;
 
             yield return new WaitForSeconds(delay / 2);
 
@@ -181,16 +189,22 @@ namespace Impulse.UI
             switch (starId)
             {
                 case 1:
+                    Star1.SetActive(true);
+                    UILevelselectionManager.StarShake();
                     animator.SetTrigger("star1");
                     SoundManager.PlayStarGetSound();
                     break;
 
                 case 2:
+                    Star2.SetActive(true);
+                    UILevelselectionManager.StarShake();
                     animator.SetTrigger("star2");
                     SoundManager.PlayStarGetSound();
                     break;
 
                 case 3:
+                    Star3.SetActive(true);
+                    UILevelselectionManager.StarShake();
                     animator.SetTrigger("star3");
                     SoundManager.PlayStarGetSound();
                     break;

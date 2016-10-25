@@ -40,7 +40,7 @@ namespace Impulse.Progress
             levelId = id;
             bestTime = -1;
             fails = 0;
-            starCount = -1;
+            starCount = 0;
 
             if (time > 0)
                 PlaceTime(time);

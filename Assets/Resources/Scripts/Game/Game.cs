@@ -93,14 +93,15 @@ namespace Impulse
                     break;
 
                 case GameState.finishscreen:
+                    Debug.Log("[Game] finishscreen");
 
                     Timer.Pause();
 
                     // Highscore Management
-                    Highscore oldHighscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID());
-                    if (oldHighscore != null)
+                    int oldStars = 0;
+                    if (ProgressManager.GetProgress().highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
                     {
-                        Debug.Log("[Game] finishscreen - levelId: " + LevelManager.GetActiveID() + " oldHighscore stars: " + oldHighscore.starCount);
+                        oldStars = ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).starCount;
                     }
 
                     Highscore newHighscore = null;
@@ -108,7 +109,8 @@ namespace Impulse
                     {
                         newHighscore = ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
                     }
-                    UILevelPlacer.CalcStarsToUnlock(oldHighscore, newHighscore);
+
+                    UILevelPlacer.CalcStarsToUnlock(oldStars, newHighscore);
 
                     _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
 

@@ -40,6 +40,7 @@ namespace Impulse.UI
         private static bool nextLevelGetsUnlocked = false;
 
         public static bool unlockNextLevel = false;
+        public static bool unlockNextLevelPossible = true;
 
         private bool playPressed = false;
 
@@ -62,7 +63,6 @@ namespace Impulse.UI
         {
             Main.onSceneChange.AddListener(SceneChanging);
             LevelManager.onLevelChange.AddListener(LevelChanging);
-            ProgressData.onWalletUpdate.AddListener(WalletUpdate);
 
             UILevelDrag.UpdateDragObject();
 
@@ -108,6 +108,7 @@ namespace Impulse.UI
         {
             if (activeUILevel + 1 <= ProgressManager.GetProgress().lastUnlockedLevel)
             {
+                unlockNextLevel = false;
                 Debug.Log("ProgressManager.GetProgress().lastUnlockedLevel " + ProgressManager.GetProgress().lastUnlockedLevel);
                 activeUILevel++;
                 ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
@@ -141,6 +142,7 @@ namespace Impulse.UI
         {
             if (activeUILevel - 1 >= Constants.firstLevel)
             {
+                unlockNextLevel = false;
                 activeUILevel--;
                 ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
 
@@ -176,7 +178,12 @@ namespace Impulse.UI
         {
             // add delay here
             yield return new WaitForSeconds(nextLevelDelay);
-            NextLevel();
+            if (unlockNextLevel)
+            {
+                NextLevel();
+                SoundManager.PlayLevelSwitchSound();
+            }
+
             yield return new WaitForSeconds(3F);
             unlockNextLevel = false;
             yield break;
@@ -222,9 +229,9 @@ namespace Impulse.UI
             return uiLevel;
         }
 
-        public void WalletUpdate()
+        public static void StarShake()
         {
-            animator.SetTrigger("walletUpdate");
+            _instance.animator.SetTrigger("starShake");
         }
     }
 }

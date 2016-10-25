@@ -150,11 +150,11 @@ namespace Impulse.UI
             }
         }
 
-        public static void CalcStarsToUnlock(Highscore oldHs, Highscore newHs)
+        public static void CalcStarsToUnlock(int oldStars, Highscore newHs)
         {
-            // safety checks
+            Debug.Log("CALCSTARS ");
 
-            int oldStars = 0;
+            // safety checks
 
             if (newHs != null)
             {

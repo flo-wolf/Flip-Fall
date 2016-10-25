@@ -63,7 +63,7 @@ namespace Impulse.Audio
             UIGameButtons.onButtonClick.AddListener(ButtonClicked);
             UIGameButtons.onButtonRelease.AddListener(ButtonReleased);
             //UILevelselectionManager.onUILevelSwitch.AddListener(UILevelSwitched);
-            UILevelDrag.onBounceBack.AddListener(UILevelBouncedBack);
+            UILevelDrag.onBounceBack.AddListener(PlayLevelSwitchSound);
             Main.onSceneChange.AddListener(SceneChanging);
             Main.onAchievementUnlock.AddListener(AchievementUnlocked);
             UIProduct.onBuy.AddListener(ProductPurchased);
@@ -220,6 +220,12 @@ namespace Impulse.Audio
         {
             if (_instance.soundPlayer != null)
                 _instance.soundPlayer.PlaySingle(_instance.wooshSound);
+        }
+
+        public static void PlayLevelSwitchSound()
+        {
+            if (_instance.soundPlayer != null)
+                _instance.soundPlayer.PlaySingle(_instance.levelChangeSound);
         }
 
         public void PlayTimerSound()
