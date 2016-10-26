@@ -37,6 +37,7 @@ namespace Impulse.Progress
             unlockedThemes.Add(defaultSkin);
 
             productInfos = new List<ProductInfo>();
+            productInfos.Add(new ProductInfo(1, true, true));
         }
 
         public void UnlockTheme(ThemeManager.Skin theme)

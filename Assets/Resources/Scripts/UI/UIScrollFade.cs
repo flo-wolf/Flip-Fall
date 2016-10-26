@@ -104,7 +104,7 @@ namespace FlipFall.UI
             yield break;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             // is the user dragging
             if (scrollRect.velocity != Vector2.zero)

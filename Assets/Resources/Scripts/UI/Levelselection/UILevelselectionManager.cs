@@ -191,12 +191,14 @@ namespace Impulse.UI
 
         public void HomeBtnClicked()
         {
+            unlockNextLevel = false;
             SoundManager.ButtonClicked();
             Main.SetScene(Main.Scene.home);
         }
 
         public void PlayLevel()
         {
+            unlockNextLevel = false;
             Debug.Log(nextLevelGetsUnlocked);
             //level can be set
             if (!nextLevelGetsUnlocked && !playPressed)

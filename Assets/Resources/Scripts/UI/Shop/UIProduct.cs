@@ -8,7 +8,8 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 /// <summary>
-/// The UI version of a product. Is always in sync with a ProductInfo stored in the Progres with the same id.
+/// The UI version of a product sold in the Shop Menu.
+/// Is always in sync with a ProductInfo, which gets stored in the current progres with the same id.
 /// </summary>
 
 [SerializeField]
