@@ -21,8 +21,6 @@ namespace Impulse.Theme
         public Color horizonColor3;
         public Color horizonColor4;
         public Color horizonColor5;
-        public Color horizonColor6;
-        public Color horizonColor7;
 
         [Header("Gameplay Color Settings")]
         public Color playerColor;

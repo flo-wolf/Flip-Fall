@@ -28,7 +28,7 @@ namespace Impulse.Background
         // amplitude of each wave generated through sound or by random
         public static float bgAmplitude = 1F;
 
-        // size of each horizonpart
+        // length of each horizonpart
         public static int bgSize = 32;
 
         public static float waveStopDuration = 1F;

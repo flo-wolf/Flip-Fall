@@ -121,14 +121,6 @@ namespace Impulse.Theme
                                 case 5:
                                     mr.material.color = t.horizonColor5;
                                     break;
-
-                                case 6:
-                                    mr.material.color = t.horizonColor6;
-                                    break;
-
-                                case 7:
-                                    mr.material.color = t.horizonColor7;
-                                    break;
                             }
                         }
 
