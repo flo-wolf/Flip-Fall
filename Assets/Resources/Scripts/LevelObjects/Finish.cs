@@ -23,6 +23,8 @@ namespace Impulse.Levels
             //finishParticlesEmit = GetComponent<ParticleSystem>().emission;
             //finishParticlesEmit.enabled = false;
 
+            ps.gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", ThemeManager.theme.finishColor);
+
             MeshRenderer mr = GetComponent<MeshRenderer>();
             if (mr != null)
                 mr.material.SetColor("_Color", ThemeManager.theme.finishColor);

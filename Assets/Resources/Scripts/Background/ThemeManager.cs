@@ -38,6 +38,9 @@ namespace Impulse.Theme
 
             DontDestroyOnLoad(this);
             SetSkin(GetLastSkin());
+            ProgressManager.GetProgress().unlocks.currentSkin = theme.horizonSkin;
+
+            Debug.Log("ThemSTart" + skin);
 
             GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
             bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;
@@ -73,7 +76,7 @@ namespace Impulse.Theme
 
         public static void SetSkin(Skin newSkin)
         {
-            if (newSkin != skin && IsUnlocked(newSkin))
+            if (IsUnlocked(newSkin))
             {
                 GameObject go = null;
 
@@ -81,6 +84,9 @@ namespace Impulse.Theme
                 {
                     if (t.horizonSkin == newSkin)
                     {
+                        ProgressManager.GetProgress().unlocks.currentSkin = skin;
+                        skin = newSkin;
+
                         theme = t;
                         foreach (Transform child in _instance.transform)
                         {
@@ -123,8 +129,7 @@ namespace Impulse.Theme
                                     break;
                             }
                         }
-
-                        ProgressManager.GetProgress().unlocks.currentSkin = skin;
+                        theme = t;
 
                         GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
                         bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;

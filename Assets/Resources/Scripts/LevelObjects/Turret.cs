@@ -1,5 +1,6 @@
 ﻿using Impulse;
 using Impulse.Audio;
+using Impulse.Theme;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,15 @@ public class Turret : MonoBehaviour
     {
         shotAnimation = GetComponent<Animation>();
         shotPS = GetComponent<ParticleSystem>();
+
+        MeshRenderer mr = GetComponent<MeshRenderer>();
+        if (mr != null)
+        {
+            shotPS.gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", ThemeManager.theme.turretColor);
+            mr.material.SetColor("_Color", ThemeManager.theme.turretColor);
+        }
+        else
+            Debug.LogError("No MeshRenderer attached to the Turret, can't set the color.");
 
         Player.onPlayerStateChange.AddListener(PlayerStateChanged);
         StartCoroutine(cFire());
