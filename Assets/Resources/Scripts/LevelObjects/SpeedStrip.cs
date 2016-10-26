@@ -1,4 +1,5 @@
 ﻿using Impulse;
+using Impulse.Theme;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,10 @@ namespace Impulse.Levelobjects
         private void Start()
         {
             mat = GetComponent<SpriteRenderer>().material;
+
+            mat.color = ThemeManager.theme.moveZoneColor;
+            mat.SetColor("_Color2", ThemeManager.theme.speedstripColor);
+            mat.SetColor("_Color", ThemeManager.theme.speedstripUnactiveColor);
 
             playerRb = Player._instance.GetComponent<Rigidbody2D>();
             colliding = false;

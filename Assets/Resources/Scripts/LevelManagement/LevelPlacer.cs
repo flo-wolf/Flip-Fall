@@ -1,4 +1,6 @@
 ﻿using Impulse;
+using Impulse.Objects;
+using Impulse.Theme;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +32,7 @@ namespace Impulse.Levels
                 DestroyChildren(placingParent);
                 t = (Level)Instantiate(level, new Vector3(-0f, -2.0f, 7.8f), Quaternion.identity);
                 t.gameObject.transform.parent = placingParent;
+
                 Debug.Log("[LevelPlacer]: Place(): Level " + level.id + " placed.");
 
                 placedLevel = t;

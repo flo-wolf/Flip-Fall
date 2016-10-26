@@ -1,6 +1,7 @@
 ﻿using Impulse.Cam;
 using Impulse.Objects;
 using Impulse.Progress;
+using Impulse.Theme;
 using Impulse.UI;
 using System;
 using System.Collections;
@@ -71,6 +72,7 @@ namespace Impulse.Levels
             MergeMoveArea();
 
             // reset the dissolve shader to zero
+            mr.material.SetColor("_Color", ThemeManager.theme.moveZoneColor);
             mr.material.SetFloat("_SliceAmount", 0F);
         }
 

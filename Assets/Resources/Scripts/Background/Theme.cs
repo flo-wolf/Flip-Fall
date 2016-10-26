@@ -27,7 +27,11 @@ namespace Impulse.Theme
         public Color finishColor;
         public Color turretColor;
         public Color attractorColor;
+        public Color attractorUntrackedColor;
         public Color moveZoneColor;
+        public Color portalColor;
+        public Color speedstripColor;
+        public Color speedstripUnactiveColor;
 
         private const int SIZE = 5;
         public int[] ints = new int[SIZE];

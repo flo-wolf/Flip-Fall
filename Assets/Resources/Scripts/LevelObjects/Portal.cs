@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Impulse.Theme;
+using System;
 using System.Collections;
 
 using System.Collections;
@@ -50,6 +51,11 @@ namespace Impulse.Levels.Objects
         {
             activeMemory = active;
             Game.onGameStateChange.AddListener(GameStateChanged);
+            MeshRenderer mr = GetComponent<MeshRenderer>();
+            if (mr != null)
+                mr.material.SetColor("_Color", ThemeManager.theme.portalColor);
+            else
+                Debug.LogError("No MeshRenderer attached to the Portal, can't set the color.");
         }
 
         private void GameStateChanged(Game.GameState gs)

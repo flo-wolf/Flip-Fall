@@ -1,6 +1,7 @@
 ﻿using Impulse;
 using Impulse.Audio;
 using Impulse.Cam;
+using Impulse.Theme;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,6 +59,8 @@ namespace Impulse.LevelObjects
             attractors.Add(this);
 
             // reset shader input
+            attractorMaterial.SetColor("_Color", ThemeManager.theme.attractorUntrackedColor);
+            attractorMaterial.SetColor("_AttractedColor", ThemeManager.theme.attractorColor);
             attractorMaterial.SetFloat("_PlayerDistance", pullRadius * 10);
             attractorMaterial.SetFloat("_AttractorRadius", pullRadius);
         }

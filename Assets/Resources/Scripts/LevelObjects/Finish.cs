@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Impulse.Theme;
+using System.Collections;
 using UnityEngine;
 
 namespace Impulse.Levels
@@ -21,6 +22,12 @@ namespace Impulse.Levels
             finishLocation = (Vector2)this.gameObject.transform.position;
             //finishParticlesEmit = GetComponent<ParticleSystem>().emission;
             //finishParticlesEmit.enabled = false;
+
+            MeshRenderer mr = GetComponent<MeshRenderer>();
+            if (mr != null)
+                mr.material.SetColor("_Color", ThemeManager.theme.finishColor);
+            else
+                Debug.LogError("No MeshRenderer attached to the Spawn, can't set the color.");
 
             Game.onGameStateChange.AddListener(GameStateChanged);
         }
