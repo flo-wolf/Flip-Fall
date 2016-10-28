@@ -55,10 +55,6 @@ namespace Impulse.UI
             activeUILevel = ProgressManager.GetProgress().lastPlayedLevelID;
         }
 
-        private void OnEnable()
-        {
-        }
-
         private void Start()
         {
             Main.onSceneChange.AddListener(SceneChanging);

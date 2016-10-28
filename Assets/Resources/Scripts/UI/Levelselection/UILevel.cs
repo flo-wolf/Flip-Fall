@@ -91,10 +91,15 @@ namespace Impulse.UI
 
             if (starsToUnlock != StarsToUnlock.none)
             {
+                animator.SetTrigger("playInstantHide");
                 StartCoroutine(cStarsRecieve());
             }
             else
+            {
                 ActivateStarImages();
+                if (!createdByLevelswitch)
+                    PlayFade();
+            }
         }
 
         private void ActivateStarImages()
@@ -178,6 +183,7 @@ namespace Impulse.UI
             yield return new WaitForSeconds(delay / 2);
 
             ActivateStarImages();
+            PlayFade();
 
             yield break;
         }
@@ -209,6 +215,15 @@ namespace Impulse.UI
                     SoundManager.PlayStarGetSound();
                     break;
             }
+        }
+
+        // fade in the paly button
+        public void PlayFade()
+        {
+            animator.SetTrigger("playFade");
+            Button b = GetComponentInChildren<Button>();
+            if (b != null)
+                b.gameObject.SetActive(true);
         }
 
         public void UpdateFails(Highscore h)
