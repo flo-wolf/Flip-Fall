@@ -87,14 +87,13 @@ namespace FlipFall.UI
                     if (!IsInside(element.transform.position))
                     {
                         // begin fading animations if object is actually outside but still set to inside
-                        if (element.inside)
-                            element.FadeOut();
+                        element.gameObject.SetActive(false);
                     }
                     else
                     {
-                        // begin fading animations if object is actually inside but not set to inside
-                        if (!element.inside)
-                            element.FadeIn();
+                        element.gameObject.SetActive(true);
+                        element.FadeIn();
+                        // element.FadeIn();
                     }
 
                     // reference the element
@@ -141,7 +140,10 @@ namespace FlipFall.UI
                 {
                     // begin fading animations if object is actually inside but not set to inside
                     if (!element.inside)
+                    {
+                        element.gameObject.SetActive(true);
                         element.FadeIn();
+                    }
 
                     // the first item is inside, which means we cant drag
                     if (i == 0)

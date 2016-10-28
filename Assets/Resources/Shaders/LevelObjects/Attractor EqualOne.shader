@@ -31,6 +31,8 @@ Shader "Custom/LevelObjects/Attractor EqualOne" {
 #pragma surface surf Lambert vertex:vert alpha
 #pragma target 3.0
 
+#include "UnityCG.cginc"
+
 	struct Input {
 		float customDist;
 		fixed4 color;
@@ -65,8 +67,8 @@ Shader "Custom/LevelObjects/Attractor EqualOne" {
 
 	void surf(Input IN, inout SurfaceOutput o)
 	{
-		o.Albedo = _Color.rgb;
-		o.Emission = _Color;
+		//o.Albedo = _Color.rgb;
+		o.Emission = _Color.rgb;
 		o.Alpha = 1;
 
 		float2 uv = IN.worldPos.xy;
@@ -78,8 +80,14 @@ Shader "Custom/LevelObjects/Attractor EqualOne" {
 		{
 			//o.Alpha = (1 - (_EffectDistance / _EffectRadius)) + _AttractorColor.a;
 			//o.Emission = _AttractorColor.rgb
-			o.Albedo = _Color.rgb + ((1 - (_PlayerDistance / _AttractorRadius)) * _AttractedColor.rgb) * _ColorMulti;
-			o.Emission = _Color.rgb + ((1 - (_PlayerDistance / _AttractorRadius)) * _AttractedColor.rgb) * _ColorMulti;
+			//o.Albedo = _Color.rgb * ((1 - (_PlayerDistance / _AttractorRadius)) * _AttractedColor.rgb);
+
+			// old
+			//o.Emission = (_Color.rgb* (1 - (_PlayerDistance / _AttractorRadius))) + (1 - (_AttractedColor.rgb * (_PlayerDistance / _AttractorRadius)));
+
+			// testing
+			o.Emission = (_Color.rgb * (_PlayerDistance / _AttractorRadius)) + (_AttractedColor.rgb * (1 - (_PlayerDistance / _AttractorRadius)));
+
 			//o.Alpha = 0 + ((1 - (_PlayerDistance / _AttractorRadius)) * _AttractedColor.a) * _ColorMulti;
 		}
 		else

@@ -33,7 +33,7 @@ namespace FlipFall.UI
         // Use this for initialization
         private void Awake()
         {
-            inside = true;
+            inside = false;
             anim.Play("scrollElementFadein");
             Main.onSceneChange.AddListener(SceneChanged);
             canBeAnimated = true;

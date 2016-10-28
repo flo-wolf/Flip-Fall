@@ -15,7 +15,7 @@ namespace Impulse.Theme
     {
         public static ThemeManager _instance;
 
-        public enum Skin { unset, childhood, forrest, rainbow, sunset, silver, gold, darkness, ocean, toxic, blooddrop, royal, riptide }
+        public enum Skin { unset, childhood, forrest, rainbow, sunset, silver, gold, darkness, ocean, toxic, blooddrop, royal, riptide, coconut }
 
         //skin currently active
         public static Skin skin = Skin.unset;
@@ -74,7 +74,7 @@ namespace Impulse.Theme
         public static void SetSkin(Skin newSkin)
         {
             Debug.Log("setskin");
-            if (IsUnlocked(newSkin))
+            if (IsUnlocked(newSkin) && theme.horizonSkin != newSkin)
             {
                 GameObject go = null;
 
@@ -85,7 +85,9 @@ namespace Impulse.Theme
                         ProgressManager.GetProgress().unlocks.currentSkin = newSkin;
                         skin = newSkin;
 
-                        theme = t;
+                        //Destroy(theme.gameObject);
+                        theme = new Theme();
+
                         foreach (Transform child in _instance.transform)
                         {
                             Destroy(child.gameObject);
