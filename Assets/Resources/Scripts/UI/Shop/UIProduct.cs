@@ -167,10 +167,11 @@ public class UIProduct : MonoBehaviour
             {
                 Debug.Log("Product was equipped: " + title);
                 onEquip.Invoke(this);
-                if (productType == ProductType.theme && ProgressManager.GetProgress().unlocks.currentSkin != themeToUnlock)
-                {
-                    ProgressManager.GetProgress().unlocks.SwitchTheme(themeToUnlock);
-                }
+                //if (productType == ProductType.theme && themeToUnlock != ThemeManager.Skin.unset && ProgressManager.GetProgress().unlocks.currentSkin != themeToUnlock)
+                //{
+                Debug.Log("Equip and Switch " + themeToUnlock);
+                ProgressManager.GetProgress().unlocks.SwitchTheme(themeToUnlock);
+                //}
             }
             else
                 Debug.Log("Product couldn't be equipped: " + title);

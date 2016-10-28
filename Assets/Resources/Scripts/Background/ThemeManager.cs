@@ -19,7 +19,7 @@ namespace Impulse.Theme
 
         //skin currently active
         public static Skin skin = Skin.unset;
-        public static Theme theme;
+        public static Theme theme = new Theme();
         public Skin defaultSkin;
 
         public GameObject themePrefab;
@@ -38,21 +38,18 @@ namespace Impulse.Theme
 
             DontDestroyOnLoad(this);
             SetSkin(GetLastSkin());
-            ProgressManager.GetProgress().unlocks.currentSkin = theme.horizonSkin;
 
-            Debug.Log("ThemSTart" + skin);
-
-            GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
-            bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;
+            SetSkin(ProgressManager.GetProgress().unlocks.currentSkin);
+            //Debug.Log("ThemSTart" + theme.horizonSkin);
 
             //set background cam color
         }
 
-        private void OnLevelWasLoaded()
-        {
-            GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
-            bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;
-        }
+        //private void OnLevelWasLoaded()
+        //{
+        //    GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
+        //    bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;
+        //}
 
         // get last skin from progress
         public Skin GetLastSkin()
@@ -76,6 +73,7 @@ namespace Impulse.Theme
 
         public static void SetSkin(Skin newSkin)
         {
+            Debug.Log("setskin");
             if (IsUnlocked(newSkin))
             {
                 GameObject go = null;
@@ -84,7 +82,7 @@ namespace Impulse.Theme
                 {
                     if (t.horizonSkin == newSkin)
                     {
-                        ProgressManager.GetProgress().unlocks.currentSkin = skin;
+                        ProgressManager.GetProgress().unlocks.currentSkin = newSkin;
                         skin = newSkin;
 
                         theme = t;
@@ -131,12 +129,16 @@ namespace Impulse.Theme
                         }
                         theme = t;
 
-                        GameObject bgCam = GameObject.FindGameObjectWithTag("BackgroundCam");
-                        bgCam.GetComponent<Camera>().backgroundColor = theme.backgorundColor;
+                        CamColorSetter.BgColorUpdate();
 
+                        Debug.Log("Skin " + skin + " was set");
                         break;
                     }
                 }
+            }
+            else
+            {
+                Debug.Log("Skin is not unlocked");
             }
         }
     }

@@ -121,7 +121,6 @@ namespace Impulse.LevelObjects
             }
             else if (playerCollidesWithAny == false)
             {
-                Debug.Log("rumble falssseeeeeeeeeeeeeee");
                 SoundPlayer.rumbleAlive = false;
                 CamShake.AttractorShakeBreak();
             }

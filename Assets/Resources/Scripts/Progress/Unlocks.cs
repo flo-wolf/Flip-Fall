@@ -31,7 +31,7 @@ namespace Impulse.Progress
         public Unlocks()
         {
             defaultSkin = ThemeManager.Skin.toxic;
-            currentSkin = defaultSkin;
+            currentSkin = ThemeManager.Skin.toxic;
 
             unlockedThemes = new List<ThemeManager.Skin>();
             unlockedThemes.Add(defaultSkin);
@@ -104,7 +104,8 @@ namespace Impulse.Progress
         public bool EquipProduct(int _id)
         {
             ProductInfo product = GetProductInfo(_id);
-            if (product != null && IsOwned(_id) && !IsEquipped(_id))
+            Debug.Log("EquipProduct(id) " + product);
+            if (product != null && IsOwned(_id))
             {
                 Debug.Log("EquipProduct(id) " + _id);
 
