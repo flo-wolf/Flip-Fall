@@ -27,6 +27,8 @@ namespace Impulse.Theme
         //skin prefab references
         public Theme[] themes;
 
+        private static bool started = false;
+
         private void Start()
         {
             if (_instance != null && _instance != this)
@@ -36,13 +38,13 @@ namespace Impulse.Theme
             }
             _instance = this;
 
+            if (!started)
+            {
+                SetSkin(GetLastSkin());
+                //SetSkin(ProgressManager.GetProgress().unlocks.currentSkin);
+            }
             DontDestroyOnLoad(this);
-            SetSkin(GetLastSkin());
-
-            SetSkin(ProgressManager.GetProgress().unlocks.currentSkin);
-            //Debug.Log("ThemSTart" + theme.horizonSkin);
-
-            //set background cam color
+            started = true;
         }
 
         //private void OnLevelWasLoaded()

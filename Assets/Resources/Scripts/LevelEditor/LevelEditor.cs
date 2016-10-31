@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Impulse.Levels;
+using System.Collections;
 using UnityEngine;
 
 namespace Impulse
@@ -7,9 +8,11 @@ namespace Impulse
     {
         //look at tileeditor sctipt to get an idea how a level editor could be build up like
 
-        public enum EDITORMODE { setup, draw, select, move }
+        public enum EDITORMODE { selectObject, selectVertex, moveVertex, moveObject, addVertex }
 
-        public static EDITORMODE EditorMode = EDITORMODE.setup;
+        public static EDITORMODE EditorMode = EDITORMODE.moveVertex;
+
+        public static Level editLevel;
 
         // Use this for initialization
         private void Start()
