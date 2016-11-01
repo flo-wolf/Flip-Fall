@@ -142,7 +142,7 @@ namespace Impulse.Levels
                     {
                         polyPath[f] = new Vector2(meshRenderer.transform.TransformPoint(meshFilters[i].sharedMesh.vertices[f]).x, meshRenderer.transform.TransformPoint(meshFilters[i].sharedMesh.vertices[f]).y);
                     }
-                    Array.Sort(polyPath, new ClockwiseComparer(meshRenderer.transform.TransformPoint(meshFilters[i].sharedMesh.bounds.center)));
+                    Array.Sort(polyPath, new ClockwiseComparer2D(meshRenderer.transform.TransformPoint(meshFilters[i].sharedMesh.bounds.center)));
 
                     poly2dPaths.Add(polyPath);
 
@@ -260,72 +260,72 @@ namespace Impulse.Levels
         //        return Mathf.Atan2(v1.x, v1.y).CompareTo(Mathf.Atan2(v2.x, v2.y));
         //    }
         //}
+    }
 
-        public class ClockwiseComparer : IComparer<Vector2>
+    public class ClockwiseComparer2D : IComparer<Vector2>
+    {
+        private Vector2 m_Origin;
+
+        #region Properties
+
+        /// <summary>
+        ///     Gets or sets the origin.
+        /// </summary>
+        /// <value>The origin.</value>
+        public Vector2 origin { get { return m_Origin; } set { m_Origin = value; } }
+
+        #endregion Properties
+
+        /// <summary>
+        ///     Initializes a new instance of the ClockwiseComparer class.
+        /// </summary>
+        /// <param name="origin">Origin.</param>
+        public ClockwiseComparer2D(Vector2 origin)
         {
-            private Vector2 m_Origin;
+            m_Origin = origin;
+        }
 
-            #region Properties
+        #region IComparer Methods
 
-            /// <summary>
-            ///     Gets or sets the origin.
-            /// </summary>
-            /// <value>The origin.</value>
-            public Vector2 origin { get { return m_Origin; } set { m_Origin = value; } }
+        /// <summary>
+        ///     Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+        /// </summary>
+        /// <param name="first">First.</param>
+        /// <param name="second">Second.</param>
+        public int Compare(Vector2 v1, Vector2 v2)
+        {
+            return IsClockwise(v2, v1, m_Origin);
+        }
 
-            #endregion Properties
+        #endregion IComparer Methods
 
-            /// <summary>
-            ///     Initializes a new instance of the ClockwiseComparer class.
-            /// </summary>
-            /// <param name="origin">Origin.</param>
-            public ClockwiseComparer(Vector2 origin)
-            {
-                m_Origin = origin;
-            }
+        /// <summary>
+        ///     Returns 1 if first comes before second in clockwise order.
+        ///     Returns -1 if second comes before first.
+        ///     Returns 0 if the points are identical.
+        /// </summary>
+        /// <param name="first">First.</param>
+        /// <param name="second">Second.</param>
+        /// <param name="origin">Origin.</param>
+        public static int IsClockwise(Vector2 first, Vector2 second, Vector2 origin)
+        {
+            if (first == second)
+                return 0;
 
-            #region IComparer Methods
+            Vector2 firstOffset = first - origin;
+            Vector2 secondOffset = second - origin;
 
-            /// <summary>
-            ///     Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
-            /// </summary>
-            /// <param name="first">First.</param>
-            /// <param name="second">Second.</param>
-            public int Compare(Vector2 v1, Vector2 v2)
-            {
-                return IsClockwise(v2, v1, m_Origin);
-            }
+            float angle1 = Mathf.Atan2(firstOffset.x, firstOffset.y);
+            float angle2 = Mathf.Atan2(secondOffset.x, secondOffset.y);
 
-            #endregion IComparer Methods
+            if (angle1 < angle2)
+                return 1;
 
-            /// <summary>
-            ///     Returns 1 if first comes before second in clockwise order.
-            ///     Returns -1 if second comes before first.
-            ///     Returns 0 if the points are identical.
-            /// </summary>
-            /// <param name="first">First.</param>
-            /// <param name="second">Second.</param>
-            /// <param name="origin">Origin.</param>
-            public static int IsClockwise(Vector2 first, Vector2 second, Vector2 origin)
-            {
-                if (first == second)
-                    return 0;
+            if (angle1 > angle2)
+                return -1;
 
-                Vector2 firstOffset = first - origin;
-                Vector2 secondOffset = second - origin;
-
-                float angle1 = Mathf.Atan2(firstOffset.x, firstOffset.y);
-                float angle2 = Mathf.Atan2(secondOffset.x, secondOffset.y);
-
-                if (angle1 < angle2)
-                    return 1;
-
-                if (angle1 > angle2)
-                    return -1;
-
-                // Check to see which point is closest
-                return (firstOffset.sqrMagnitude < secondOffset.sqrMagnitude) ? 1 : -1;
-            }
+            // Check to see which point is closest
+            return (firstOffset.sqrMagnitude < secondOffset.sqrMagnitude) ? 1 : -1;
         }
     }
 }

@@ -198,5 +198,19 @@ namespace Impulse.UI
             Debug.Log("Speedslider");
             onHorizonSpeedChange.Invoke(s.value);
         }
+
+        public void EditorUnlockToogle(Toggle t)
+        {
+            if (t.isOn)
+            {
+                ProgressManager.GetProgress().proVersion = true;
+                print("unlocked pro, editor activated");
+            }
+            else
+            {
+                ProgressManager.GetProgress().proVersion = false;
+                print("locked pro, editor disabled");
+            }
+        }
     }
 }

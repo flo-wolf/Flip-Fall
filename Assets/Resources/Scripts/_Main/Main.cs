@@ -154,8 +154,8 @@ namespace Impulse
                 case Scene.editor:
                     if (ProgressManager.GetProgress().proVersion)
                     {
-                        if (SceneManager.GetActiveScene().name != "Editor")
-                            _instance.StartCoroutine(_instance.cSetScene("Editor"));
+                        if (SceneManager.GetActiveScene().name != "Leveleditor")
+                            _instance.StartCoroutine(_instance.cSetScene("Leveleditor"));
                     }
                     else
                     {
