@@ -100,14 +100,14 @@ namespace FlipFall.Editor
 
         private void OnPostRender()
         {
-            CalcStart();
-            CreateLineMaterial();
-            lineMaterial.SetPass(0);
-
-            GL.Begin(GL.LINES);
-
-            if (showGrid)
+            if (showGrid && smallStep > 10)
             {
+                CalcStart();
+                CreateLineMaterial();
+                lineMaterial.SetPass(0);
+
+                GL.Begin(GL.LINES);
+
                 if (showMain && largeStep != 0)
                 {
                     GL.Color(mainColor);
@@ -115,7 +115,7 @@ namespace FlipFall.Editor
                     // add here LargeStep lines
                 }
 
-                if (showSub && smallStep != 0)
+                if (showSub)
                 {
                     GL.Color(mainColor);
 
@@ -140,9 +140,8 @@ namespace FlipFall.Editor
                         }
                     }
                 }
+                GL.End();
             }
-
-            GL.End();
         }
     }
 }

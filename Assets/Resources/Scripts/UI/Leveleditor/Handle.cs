@@ -70,7 +70,7 @@ namespace FlipFall.Editor
                 for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
                 {
                     Vector3 newPos = VertHandler.selectedHandles[i].transform.position;
-                    newPos += new Vector3(eventData.delta.x, eventData.delta.y, 0);
+                    newPos += new Vector3(eventData.delta.x * 2, eventData.delta.y * 2, 0);
                     VertHandler.selectedHandles[i].transform.position = newPos;
                 }
             }
