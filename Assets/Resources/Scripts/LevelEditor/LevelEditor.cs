@@ -40,18 +40,5 @@ namespace FlipFall.Editor
             // create level by prefab, assign id
             return l;
         }
-
-        // swtich grid active/deactive
-        public static void Grid(bool b)
-        {
-            if (b)
-            {
-                // activate grid
-            }
-            else
-            {
-                // deactivate gríd
-            }
-        }
     }
 }

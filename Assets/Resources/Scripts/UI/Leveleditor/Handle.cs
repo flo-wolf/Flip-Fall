@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// Attached to a Handler Button
@@ -17,6 +18,8 @@ namespace FlipFall.Editor
         [HideInInspector]
         public bool dragging;
         public static bool snapToGrid = false;
+        public Color unselectedColor;
+        public Color selectedColor;
 
         private Vector3[] oPositions;
 
@@ -29,12 +32,14 @@ namespace FlipFall.Editor
                 if (!VertHandler.selectedHandles.Any(x => x == this))
                 {
                     VertHandler.selectedHandles.Add(this);
+                    GetComponent<Image>().color = selectedColor;
                     print("selected this handle at " + transform.position + " there are " + VertHandler.selectedHandles.Count + " elements in the selection");
                 }
                 // this handle is already selected, deselect it
                 else
                 {
                     VertHandler.selectedHandles.Remove(this);
+                    GetComponent<Image>().color = unselectedColor;
                     print("selected this handle at " + transform.position + " there are " + VertHandler.selectedHandles.Count + " elements in the selection");
                 }
             }
@@ -56,20 +61,17 @@ namespace FlipFall.Editor
             }
         }
 
-        // while dragging
+        // while dragging, transform the selected handles
         public void OnDrag(PointerEventData eventData)
         {
             if (LevelEditor.editorMode == LevelEditor.EditorMode.moveVertex)
             {
                 // alter positions based on the original position plus the drag delta
-                //foreach (Handle h in VertHandler.selectedHandles)
-                //{
-                //    h.transform.position = Camera.main.ScreenToWorldPoint(eventData.position);
-                //}
-
                 for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
                 {
-                    VertHandler.selectedHandles[i].transform.position += new Vector3(eventData.delta.x, eventData.delta.y, 0);
+                    Vector3 newPos = VertHandler.selectedHandles[i].transform.position;
+                    newPos += new Vector3(eventData.delta.x, eventData.delta.y, 0);
+                    VertHandler.selectedHandles[i].transform.position = newPos;
                 }
             }
         }
@@ -78,6 +80,63 @@ namespace FlipFall.Editor
         public void OnEndDrag(PointerEventData eventData)
         {
             dragging = false;
+            if (LevelEditor.editorMode == LevelEditor.EditorMode.moveVertex)
+            {
+                // alter positions based on the original position plus the drag delta
+                for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
+                {
+                    Vector3 newPos = VertHandler.selectedHandles[i].transform.position;
+
+                    // snapping enabled?
+                    if (GridOverlay._instance != null && GridOverlay._instance.snapToGrid)
+                    {
+                        newPos = Snap(newPos, GridOverlay._instance.smallStep);
+                    }
+
+                    VertHandler.selectedHandles[i].transform.position = newPos;
+                }
+            }
+        }
+
+        // snapping
+        private Vector3 Snap(Vector3 v, float snapValue)
+        {
+            Vector2 start = GridOverlay._instance.start;
+            Vector2 end = GridOverlay._instance.end;
+            float step = GridOverlay._instance.smallStep;
+
+            float closestY = 0;
+            float closestX = 0;
+
+            // Find closest vertical snappoint
+            for (float j = start.y; j <= end.y; j += step)
+            {
+                if (Mathf.Abs(v.y - j) < Mathf.Abs(v.y - closestY))
+                {
+                    closestY = j;
+                }
+            }
+
+            print("clostest " + closestY);
+
+            // Find closest horizontal snappoint
+            for (float i = start.x; i <= end.x; i += step)
+            {
+                if (Mathf.Abs(v.x - i) < Mathf.Abs(v.x - closestX))
+                {
+                    closestX = i;
+                }
+            }
+
+            print("closestX " + closestX + ", closestY " + closestY);
+
+            return new Vector3(closestX, closestY, v.z);
+            //return new Vector3
+            //(
+            //    snapValue * Mathf.Round(v.x / snapValue),
+            //    snapValue * Mathf.Round(v.y / snapValue),
+            //    v.z
+            //);
         }
     }
 }

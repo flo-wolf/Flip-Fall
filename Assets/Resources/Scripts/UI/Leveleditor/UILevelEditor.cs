@@ -59,11 +59,9 @@ namespace FlipFall.UI
         public void GridToggle(Toggle t)
         {
             if (t.isOn)
-            {
-                LevelEditor.Grid(true);
-            }
+                GridOverlay.Active(true);
             else
-                LevelEditor.Grid(false);
+                GridOverlay.Active(false);
         }
 
         #endregion Public Methods
