@@ -101,42 +101,38 @@ namespace FlipFall.Editor
         // snapping
         private Vector3 Snap(Vector3 v, float snapValue)
         {
-            Vector2 start = GridOverlay._instance.start;
-            Vector2 end = GridOverlay._instance.end;
-            float step = GridOverlay._instance.smallStep;
+            return new Vector3
+            (
+                snapValue * Mathf.Round(v.x / snapValue),
+                snapValue * Mathf.Round(v.y / snapValue),
+                v.z
+            );
 
-            float closestY = 0;
-            float closestX = 0;
+            //float step = GridOverlay._instance.smallStep;
+            //Vector2 start = GridOverlay._instance.start;
+            //Vector2 end = GridOverlay._instance.end;
+            //float closestY = 0;
+            //float closestX = 0;
 
-            // Find closest vertical snappoint
-            for (float j = start.y; j <= end.y; j += step)
-            {
-                if (Mathf.Abs(v.y - j) < Mathf.Abs(v.y - closestY))
-                {
-                    closestY = j;
-                }
-            }
+            //// Find closest vertical snappoint
+            //for (float j = start.y; j <= end.y; j += step)
+            //{
+            //    if (Mathf.Abs(v.y - j) < Mathf.Abs(v.y - closestY))
+            //    {
+            //        closestY = j;
+            //    }
+            //}
 
-            print("clostest " + closestY);
+            //// Find closest horizontal snappoint
+            //for (float i = start.x; i <= end.x; i += step)
+            //{
+            //    if (Mathf.Abs(v.x - i) < Mathf.Abs(v.x - closestX))
+            //    {
+            //        closestX = i;
+            //    }
+            //}
 
-            // Find closest horizontal snappoint
-            for (float i = start.x; i <= end.x; i += step)
-            {
-                if (Mathf.Abs(v.x - i) < Mathf.Abs(v.x - closestX))
-                {
-                    closestX = i;
-                }
-            }
-
-            print("closestX " + closestX + ", closestY " + closestY);
-
-            return new Vector3(closestX, closestY, v.z);
-            //return new Vector3
-            //(
-            //    snapValue * Mathf.Round(v.x / snapValue),
-            //    snapValue * Mathf.Round(v.y / snapValue),
-            //    v.z
-            //);
+            //return new Vector3(closestX, closestY, v.z);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace FlipFall.Editor
     {
         public Camera editorCam;
         public static GridOverlay _instance;
+
         public bool snapToGrid = true;
         public bool showGrid = true;
         public bool showMain = true;
@@ -21,10 +22,6 @@ namespace FlipFall.Editor
         public float smallStep = 50F;
 
         public Color mainColor = new Color(0f, 1f, 0f, 1f);
-
-        // screen view sizes
-        private int viewSizeX;
-        private int viewSizeY;
 
         // lower left view corner
         [HideInInspector]
@@ -43,14 +40,9 @@ namespace FlipFall.Editor
             if (_instance == null)
                 _instance = this;
 
-            viewSizeX = editorCam.pixelWidth;
-            viewSizeY = editorCam.pixelHeight;
-            start = editorCam.ViewportToWorldPoint(new Vector3(0, 0, 1));
-            end = editorCam.ViewportToWorldPoint(new Vector3(1, 1, 1));
-
             //end = new Vector2(start.x + viewSizeX, start.y + viewSizeY);
 
-            print(viewSizeX + " - " + viewSizeY + " - " + start + " - " + end);
+            //print(viewSizeX + " - " + viewSizeY + " - " + start + " - " + end);
         }
 
         // swtich grid active/deactive
@@ -88,8 +80,27 @@ namespace FlipFall.Editor
             OnPostRender();
         }
 
+        private void CalcStart()
+        {
+            start = editorCam.ViewportToWorldPoint(new Vector3(0, 0, 1));
+            end = editorCam.ViewportToWorldPoint(new Vector3(1, 1, 1));
+
+            // adjust grid for worldspace snapping
+            start.x = smallStep * Mathf.Round(start.x / smallStep);
+            start.y = smallStep * Mathf.Round(start.y / smallStep);
+            end.x = smallStep * Mathf.Round(end.x / smallStep);
+            end.y = smallStep * Mathf.Round(end.y / smallStep);
+
+            // widen grid to allow grid-dissappearing-free camera movements
+            start.x -= smallStep;
+            start.y -= smallStep;
+            end.x += smallStep;
+            end.y += smallStep;
+        }
+
         private void OnPostRender()
         {
+            CalcStart();
             CreateLineMaterial();
             lineMaterial.SetPass(0);
 
@@ -108,8 +119,10 @@ namespace FlipFall.Editor
                 {
                     GL.Color(mainColor);
 
+                    // lowest horizontal line to render
+
                     // SmallStep Lines
-                    for (float j = start.y; j <= end.y; j += smallStep)
+                    for (float j = start.y; j - smallStep <= end.y; j += smallStep)
                     {
                         // Horizontal Lines
 
@@ -119,7 +132,7 @@ namespace FlipFall.Editor
                         // Vertical Lines
                         for (float i = 0; i <= end.x - start.x; i += smallStep)
                         {
-                            if (j + smallStep <= end.y)
+                            if (j <= end.y)
                             {
                                 GL.Vertex3(start.x + i, j, 500);
                                 GL.Vertex3(start.x + i, j + smallStep, 500);
