@@ -55,6 +55,33 @@ namespace Impulse.Levels
             return level;
         }
 
+        public static Level LoadCustomLevel(int id)
+        {
+            Debug.Log("Loaded Level " + id);
+            Level level = null;
+            try
+            {
+                GameObject go = (GameObject)Resources.Load("Prefabs/Levels/Custom/" + id);
+                if (go != null)
+                {
+                    level = go.GetComponent<Level>();
+                }
+            }
+            catch (UnityException e)
+            {
+                Debug.Log(e);
+            }
+
+            if (level == null)
+            {
+                Debug.Log("LevelLoader: Levelprefab could not be found.");
+                return null;
+            }
+
+            IsLoaded = true;
+            return level;
+        }
+
         //public static int LoadLevels()
         //{
         //    //= new Level[levelsLoadingLength

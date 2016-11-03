@@ -28,13 +28,18 @@ namespace Impulse.Levels
         public double presetTime = -1;
 
         public string title;
+        public string author = "FlipFall";
 
         // Material applied onto the merged mesh - should have depthmask shader
         private Material material;
 
         // mergedMeshRenderer
         private MeshRenderer mr;
+
+        [HideInInspector]
         public GameObject moveAreaGo;
+
+        [HideInInspector]
         public PolygonCollider2D polyCollider;
 
         [HideInInspector]

@@ -20,6 +20,7 @@ namespace FlipFall.Editor
 
         private void Start()
         {
+            LevelPlacer.Place(editLevel);
         }
 
         // saves the current editLevel

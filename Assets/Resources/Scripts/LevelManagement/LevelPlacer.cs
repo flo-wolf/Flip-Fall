@@ -27,11 +27,12 @@ namespace Impulse.Levels
         public static Level Place(Level level)
         {
             Level t = null;
-            if (!IsPlaced(level.id))
+            if (level != null && !IsPlaced(level.id))
             {
                 DestroyChildren(placingParent);
                 t = (Level)Instantiate(level, new Vector3(-0f, -2.0f, 7.8f), Quaternion.identity);
                 t.gameObject.transform.parent = placingParent;
+                t.gameObject.transform.transform.position = placingParent.transform.position;
 
                 Debug.Log("[LevelPlacer]: Place(): Level " + level.id + " placed.");
 
