@@ -7,8 +7,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// This is the serialized version of a level, this is the Memento Pattern.
+/// This is the serialized version of a level, in the Memento Pattern.
 /// It contains all the information needed to reproduce a level.
+/// Reproduction is handled by the LevelLoader and LevelPlacer scripts.
 /// </summary>
 
 namespace FlipFall.Levels
@@ -21,18 +22,19 @@ namespace FlipFall.Levels
     {
         public static LevelUpdateEvent onLevelUpdate = new LevelUpdateEvent();
 
-        public int id;
-        public double presetTime;
-        public string title;
-        public string author;
+        public bool custom;             // was this level user created and can it thus editable?
+        public int id;                  // identification
+        public double presetTime;       // best time
+        public string title;            // name
+        public string author;           // author, by default "FlipFall"
 
         public Position2[] moveVerticies;
 
         // Spawn
-        public Position3 spawnPosition;
+        public Position2 spawnPosition;
 
         // Finish
-        public Position3 finishPosition;
+        public Position2 finishPosition;
 
         // Turret
         public List<TurretData> turretDatas;
@@ -43,11 +45,11 @@ namespace FlipFall.Levels
         {
             id = _id;
             presetTime = -1;
-            title = "homo";
-            author = "User";
+            title = "Furnace";
+            author = "FlipFall";
             moveVerticies = new Position2[0];
-            spawnPosition = new Position3(0, 0, 0);
-            finishPosition = new Position3(0, 0, 0);
+            spawnPosition = new Position2(0, 0);
+            finishPosition = new Position2(0, 0);
             turretDatas = new List<TurretData>();
             // default level values in here
         }

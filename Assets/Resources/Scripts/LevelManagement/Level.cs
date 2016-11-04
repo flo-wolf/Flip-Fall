@@ -23,6 +23,8 @@ namespace FlipFall.Levels
 
         public class LevelUpdateEvent : UnityEvent<Level> { }
 
+        public LevelData levelData;
+
         //id is unique, no doubles allowed!
         public int id;
         public double presetTime = -1;

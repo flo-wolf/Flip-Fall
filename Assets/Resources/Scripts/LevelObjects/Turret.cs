@@ -17,7 +17,7 @@ namespace FlipFall.LevelObjects
         public float startupDelay = 0F;
 
         // not yet implemented
-        private float shotSpeed = 1F;
+        public float shotSpeed = 1F;
 
         public bool constantFire = true;
 

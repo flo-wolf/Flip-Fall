@@ -1,10 +1,6 @@
 ﻿using FlipFall.Levels;
-
-using FlipFall.Levels;
-
 using System.Collections;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 namespace FlipFall.Editor
@@ -25,48 +21,45 @@ namespace FlipFall.Editor
         private void Start()
         {
             if (editLevel != null)
-                LevelPlacer.PlaceCustom(editLevel);
+                LevelPlacer._instance.PlaceCustom(editLevel);
         }
 
-        // saves the current editLevel
+        // saves the changes made to the currently placed generated level to the .levelData format
         public static void SaveLevel()
         {
             if (editLevel != null)
             {
-                //Object prefabObj = PrefabUtility.CreateEmptyPrefab("Assets/Resources/Prefabs/Levels/Custom/" + LevelPlacer.placedLevel.id + 1 + ".prefab");
-                //PrefabUtility.ReplacePrefab(LevelPlacer.placedLevel.gameObject, prefabObj, ReplacePrefabOptions.ReplaceNameBased);
-                print("Editor: Level saved.");
+                LevelDataMono level = LevelPlacer.generatedLevel;
+                LevelData l = new LevelData(level.levelData.id);
 
-                GameObject prefab = null;
-                string outputPath = "Assets/Resources/Prefabs/Levels/Custom/" + LevelPlacer.placedLevel.id;
+                // save level info
+                l.author = level.levelData.author;
+                l.id = level.levelData.id;
+                l.presetTime = level.levelData.presetTime;
+                l.title = level.levelData.title;
+                l.custom = level.levelData.custom;
 
-                prefab = (GameObject)AssetDatabase.LoadAssetAtPath(outputPath + ".prefab", typeof(GameObject));
-                if (prefab == null)
+                // save moveArea mesh
+                Vector3[] verts = level.moveArea.meshFilter.mesh.vertices;
+                Position2[] posVerts = new Position2[verts.Length];
+                for (int i = 0; i < verts.Length; i++)
                 {
-                    print("Editor: safe null");
-                    prefab = new GameObject();
-                    PrefabUtility.CreatePrefab(outputPath + ".prefab", LevelPlacer.placedLevel.gameObject);
+                    posVerts[i] = new Position2(verts[i].x, verts[i].y);
                 }
+                l.moveVerticies = posVerts;
 
-                //// From here on we can modify the prefab while each modification will update the prefab asset
+                // save spawn
+                Vector3 spawnPos = level.spawn.transform.localPosition;
+                l.spawnPosition = new Position2(spawnPos.x, spawnPos.y);
 
-                prefab = LevelPlacer.placedLevel.gameObject;
+                print("spawnpos saving: " + spawnPos);
 
-                // delete all children
-                //for (int i = prefab.transform.childCount - 1; i >= 0; i--)
-                //{
-                //    Destroy(prefab.transform.GetChild(i));
-                //}
+                // save finish
+                Vector3 finishPos = level.finish.transform.localPosition;
+                l.finishPosition = new Position2(finishPos.x, finishPos.y);
 
-                //// add level children
-                //foreach (Transform child in LevelPlacer.placedLevel.transform)
-                //{
-                //    child.SetParent(prefab.transform);
-                //}
-
-                //PrefabUtility.ReplacePrefab(LevelPlacer.placedLevel.gameObject, prefab, ReplacePrefabOptions.ConnectToPrefab);
-                //prefab = LevelPlacer.placedLevel.gameObject;
-                // Now any changes made to the prefab object will be reflected in the prefab asset and in any instances in the scene.
+                // save it
+                LevelLoader.SaveCustomLevel(l);
             }
         }
 

@@ -2,13 +2,10 @@
 using FlipFall.Audio;
 using FlipFall.Levels;
 
-using FlipFall.Levels;
-
 using FlipFall.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 

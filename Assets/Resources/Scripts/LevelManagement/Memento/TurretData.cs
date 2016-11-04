@@ -17,5 +17,19 @@ namespace FlipFall.Levels
     [Serializable]
     public class TurretData
     {
+        public Position2 position;
+        public float shotDelay;
+        public float startupDelay;
+        public float shotSpeed;
+        public bool constantFire;
+
+        public TurretData(Position2 pos)
+        {
+            position = pos;
+            shotDelay = 1F;
+            startupDelay = 0F;
+            shotSpeed = 1F;
+            constantFire = true;
+        }
     }
 }

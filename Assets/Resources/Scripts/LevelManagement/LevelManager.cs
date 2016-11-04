@@ -40,6 +40,7 @@ namespace FlipFall.Levels
 
         private void Awake()
         {
+            customLevels = LevelLoader.LoadCustomLevels();
             if (_instance != null && _instance != this)
             {
                 Destroy(this.gameObject);
@@ -52,7 +53,7 @@ namespace FlipFall.Levels
             if (!started)
             {
                 prefabLevels = LevelLoader.LoadPrefabLevels();
-                customLevels = LevelLoader.LoadCustomLevels();
+
                 firstID = prefabLevels.First<Level>().id;
                 lastID = prefabLevels.Last<Level>().id;
             }
