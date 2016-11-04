@@ -111,7 +111,7 @@ namespace FlipFall.Levels
                 // add finish
                 Finish finish = (Finish)Instantiate(finishPrefab, Vector3.zero, Quaternion.identity);
                 finish.transform.parent = generatedLevel.transform;
-                Vector2 finishPos = new Vector3(levelData.spawnPosition.x, levelData.spawnPosition.y, levelObjectZ);
+                Vector2 finishPos = new Vector3(levelData.finishPosition.x, levelData.finishPosition.y, levelObjectZ);
                 finish.transform.localPosition = finishPos;
                 generatedLevel.finish = finish;
 
@@ -132,7 +132,7 @@ namespace FlipFall.Levels
                     {
                         verts[i] = new Vector3(levelData.moveVerticies[i].x, levelData.moveVerticies[i].y, moveAreaZ);
                     }
-                    Mesh m = CreateMoveAreaMesh(verts);
+                    Mesh m = CreateMoveAreaMesh(verts, levelData.moveTriangles);
                     mr.sharedMesh = m;
                 }
 
@@ -160,10 +160,11 @@ namespace FlipFall.Levels
             return false;
         }
 
-        public Mesh CreateMoveAreaMesh(Vector3[] verts)
+        public Mesh CreateMoveAreaMesh(Vector3[] verts, int[] triangles)
         {
             Mesh m = new Mesh();
             m.vertices = verts;
+            m.triangles = triangles;
             m.RecalculateBounds();
             m.RecalculateNormals();
             return m;

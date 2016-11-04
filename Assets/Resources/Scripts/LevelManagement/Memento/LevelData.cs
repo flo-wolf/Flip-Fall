@@ -29,6 +29,7 @@ namespace FlipFall.Levels
         public string author;           // author, by default "FlipFall"
 
         public Position2[] moveVerticies;
+        public int[] moveTriangles;
 
         // Spawn
         public Position2 spawnPosition;

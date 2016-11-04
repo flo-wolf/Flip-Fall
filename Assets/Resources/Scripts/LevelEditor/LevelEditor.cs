@@ -47,6 +47,7 @@ namespace FlipFall.Editor
                     posVerts[i] = new Position2(verts[i].x, verts[i].y);
                 }
                 l.moveVerticies = posVerts;
+                l.moveTriangles = level.moveArea.meshFilter.mesh.triangles;
 
                 // save spawn
                 Vector3 spawnPos = level.spawn.transform.localPosition;
@@ -57,6 +58,7 @@ namespace FlipFall.Editor
                 // save finish
                 Vector3 finishPos = level.finish.transform.localPosition;
                 l.finishPosition = new Position2(finishPos.x, finishPos.y);
+                print("finish saving: " + finishPos);
 
                 // save it
                 LevelLoader.SaveCustomLevel(l);
