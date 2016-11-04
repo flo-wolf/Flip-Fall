@@ -1,4 +1,5 @@
 ﻿using FlipFall.Editor;
+using FlipFall.Levels;
 using Impulse;
 using Impulse.Audio;
 using Impulse.Levels;
@@ -11,21 +12,17 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 /// <summary>
-/// The UI version of a product sold in the Shop Menu.
-/// Is always in sync with a ProductInfo, which gets stored in the current progres with the same id.
+/// The UI version of a custom level selectable in the EditorSelection scene
 /// </summary>
 
 [SerializeField]
 public class UIEditorLevel : MonoBehaviour
 {
-    /// <summary>
-    /// Can you buy this multiple times (building-tools) or just once and forever?
-    /// </summary>
     public enum LevelType { recieved, created };
 
     public enum LevelStatus { playable, nonPlayable };
 
-    public Level level;
+    public LevelData level;
 
     [Header("UIEditorLevel Components")]
     public Text titleText;
@@ -70,14 +67,14 @@ public class UIEditorLevel : MonoBehaviour
         bool hasSpawnOnMoveArea = false;
         bool hasFinishOnMoveArea = false;
 
-        if (level.GetComponentInChildren<Spawn>(true))
-        {
-            hasSpawnOnMoveArea = true;
-        }
-        if (level.GetComponentInChildren<Finish>(true))
-        {
-            hasFinishOnMoveArea = true;
-        }
+        //if (level.GetComponentInChildren<Spawn>(true))
+        //{
+        //    hasSpawnOnMoveArea = true;
+        //}
+        //if (level.GetComponentInChildren<Finish>(true))
+        //{
+        //    hasFinishOnMoveArea = true;
+        //}
 
         return hasSpawnOnMoveArea && hasFinishOnMoveArea;
     }

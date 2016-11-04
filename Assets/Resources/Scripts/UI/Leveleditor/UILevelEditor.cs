@@ -35,7 +35,6 @@ namespace FlipFall.UI
         public void SaveButton()
         {
             LevelEditor.SaveLevel();
-            print("Editor: Level saved.");
         }
 
         public void HomeButton()

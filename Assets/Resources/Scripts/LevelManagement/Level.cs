@@ -44,7 +44,9 @@ namespace Impulse.Levels
 
         [HideInInspector]
         public Mesh mergedMesh;
-        //public List<Vector2[]> levelPolys;
+
+        [HideInInspector]
+        public MeshFilter mergedFilter;
 
         //private Ghost ghost;
         [HideInInspector]
@@ -57,8 +59,12 @@ namespace Impulse.Levels
         [HideInInspector]
         public List<Bounds> moveBounds = new List<Bounds>();
 
+        [HideInInspector]
+        public bool merged = false;
+
         private void Awake()
         {
+            merged = false;
             mergedMesh = new Mesh();
             // levelPolys = new List<Vector2[]>();
 
@@ -126,7 +132,7 @@ namespace Impulse.Levels
             // Create merged movearea gameobject
             moveAreaGo = new GameObject("Merged MoveArea");
             mr = moveAreaGo.AddComponent<MeshRenderer>();
-            MeshFilter mf = moveAreaGo.AddComponent<MeshFilter>();
+            mergedFilter = moveAreaGo.AddComponent<MeshFilter>();
             moveAreaGo.tag = Constants.moveAreaTag;
             moveAreaGo.layer = LayerMask.NameToLayer("LevelMask");
             moveAreaGo.transform.parent = this.transform;
@@ -167,7 +173,7 @@ namespace Impulse.Levels
             //    material.SetTexture("_MainTex", LevelRenderMask._instance.renderTexture);
             //}
 
-            mf.sharedMesh = mergedMesh;
+            mergedFilter.sharedMesh = mergedMesh;
 
             // create polygon collider for collision detection
             PolygonCollider2D poly2d = moveAreaGo.AddComponent<PolygonCollider2D>();
@@ -179,6 +185,8 @@ namespace Impulse.Levels
             }
 
             polyCollider = poly2d;
+
+            merged = true;
 
             //moveAreaGo.GetComponent<MeshRenderer>().sharedMaterial = moveAreaMaterial;
             //moveAreaGo.GetComponent<PolygonCollider2D>(). = mergedMesh;

@@ -49,7 +49,7 @@ namespace Impulse
 
         private void ReloadSpawnPoint()
         {
-            spawn = LevelManager.GetSpawn();
+            spawn = LevelPlacer.placedLevel.spawn;
             spawnPosition = spawn.GetPosition();
             spawnPosition.z = Constants.ghostZ;
             facingLeft = spawn.facingLeftOnSpawn;

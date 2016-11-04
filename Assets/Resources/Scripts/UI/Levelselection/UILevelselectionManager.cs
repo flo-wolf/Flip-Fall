@@ -200,7 +200,7 @@ namespace Impulse.UI
             if (!nextLevelGetsUnlocked && !playPressed)
             {
                 SoundManager.ButtonClicked();
-                if (LevelManager.LevelExists(activeUILevel))
+                if (LevelManager.LevelExists(activeUILevel, false))
                 {
                     LevelManager.SetLevel(activeUILevel);
                     SoundManager.PlayCamTransitionSound();

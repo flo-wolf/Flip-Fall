@@ -1,4 +1,5 @@
-﻿using Impulse.Levels;
+﻿using FlipFall.Levels;
+using Impulse.Levels;
 using Impulse.Progress;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,10 +17,13 @@ namespace Impulse.Levels
     public class LevelManager : MonoBehaviour
     {
         public static LevelManager _instance;
-        public static List<Level> levels = new List<Level>();
+
         public static LevelChangeEvent onLevelChange = new LevelChangeEvent();
 
         public class LevelChangeEvent : UnityEvent<int> { }
+
+        public static List<Level> prefabLevels = new List<Level>();
+        public static List<LevelData> customLevels = new List<LevelData>();
 
         private static int activeLevel = 1;
         public static int lastPlayedID;
@@ -45,10 +49,19 @@ namespace Impulse.Levels
 
             if (!started)
             {
-                levels = LevelLoader.LoadLevels();
-                firstID = levels.First<Level>().id;
-                lastID = levels.Last<Level>().id;
+                prefabLevels = LevelLoader.LoadPrefabLevels();
+                customLevels = LevelLoader.LoadCustomLevels();
+                firstID = prefabLevels.First<Level>().id;
+                lastID = prefabLevels.Last<Level>().id;
             }
+        }
+
+        public static LevelData NewCustomLevel(int id)
+        {
+            LevelData l = new LevelData(id);
+            customLevels.Add(l);
+            LevelLoader.SaveCustomLevel(l);
+            return l;
         }
 
         //This has to be OnEnable for loading order purposes.
@@ -72,7 +85,7 @@ namespace Impulse.Levels
 
         public static Level GetActiveLevel()
         {
-            return levels.Find(x => x.id == activeLevel);
+            return prefabLevels.Find(x => x.id == activeLevel);
         }
 
         public static Level GetLevel()
@@ -80,14 +93,10 @@ namespace Impulse.Levels
             return LevelPlacer.placedLevel;
         }
 
+        // load prefab level
         public static Level GetLevel(int id)
         {
-            return LevelLoader.LoadLevel(id);
-        }
-
-        public static Vector3 GetSpawnPosition()
-        {
-            return GetSpawn().GetPosition();
+            return LevelLoader.LoadPrefabLevel(id);
         }
 
         public static void SetLevel(int newID)
@@ -98,17 +107,20 @@ namespace Impulse.Levels
             onLevelChange.Invoke(newID);
         }
 
-        public static Spawn GetSpawn()
-        {
-            //Debug.Log("activeLevel: " + activeLevel);
-            return GetLevel().spawn;
-        }
-
         //Does this level exitst?
-        public static bool LevelExists(int newID)
+        public static bool LevelExists(int newID, bool custom)
         {
-            if (levels.Any<Level>(x => x.id == newID))
-                return true;
+            if (!custom)
+            {
+                if (prefabLevels.Any<Level>(x => x.id == newID))
+                    return true;
+            }
+            else
+            {
+                if (customLevels.Any<LevelData>(x => x.id == newID))
+                    return true;
+            }
+
             return false;
         }
     }

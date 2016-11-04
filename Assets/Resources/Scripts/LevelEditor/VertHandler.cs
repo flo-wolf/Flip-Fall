@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Impulse;
+using Impulse.Levels;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,36 +36,42 @@ namespace FlipFall.Editor
             OnDisable();
         }
 
-        private void OnEnable()
+        private void Start()
         {
-            handlesShown = true;
-
-            mesh = GetComponent<MeshFilter>().mesh;
-            verts = mesh.vertices;
-
-            // sort verticies clockwise
-            // Array.Sort(verts, new ClockwiseComparer(mesh.bounds.center));
-
-            // crate handles
-            if (showHandles)
+            if (LevelPlacer.placedLevel != null && LevelPlacer.placedLevel.merged)
             {
-                foreach (Vector3 vert in verts)
+                //mesh = LevelEditor.editLevel.mergedMesh;
+
+                mesh = LevelPlacer.placedLevel.mergedMesh;
+
+                handlesShown = true;
+
+                verts = mesh.vertices;
+
+                // sort verticies clockwise
+                // Array.Sort(verts, new ClockwiseComparer(mesh.bounds.center));
+
+                // crate handles
+                if (showHandles)
                 {
-                    vertPos = transform.TransformPoint(vert);
-                    GameObject handle = Instantiate(handlePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
-                    handle.name = "handle";
-                    handle.tag = "handle";
-                    handle.layer = LayerMask.NameToLayer("Handles");
-                    handle.transform.localScale = new Vector3(1, 1, 1);
+                    foreach (Vector3 vert in verts)
+                    {
+                        vertPos = LevelPlacer.placedLevel.transform.TransformPoint(vert);
+                        GameObject handle = Instantiate(handlePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
+                        handle.name = "handle";
+                        handle.tag = "handle";
+                        handle.layer = LayerMask.NameToLayer("Handles");
+                        handle.transform.localScale = new Vector3(1, 1, 1);
 
-                    if (handleParent != null)
-                        handle.transform.parent = handleParent.transform;
-                    else
-                        handle.transform.parent = transform;
+                        if (handleParent != null)
+                            handle.transform.parent = handleParent.transform;
+                        else
+                            handle.transform.parent = transform;
 
-                    handle.transform.position = vertPos;
+                        handle.transform.position = vertPos;
 
-                    print(vertPos);
+                        print(vertPos);
+                    }
                 }
             }
         }
@@ -89,23 +97,24 @@ namespace FlipFall.Editor
             handleDrag = false;
         }
 
-        // update vertices based on handler position
+        // update selection vertices based on handler position
         private void Update()
         {
-            if (showHandles)
+            if (showHandles && !handlesShown)
+                Start();
+            else if (showHandles && LevelPlacer.placedLevel != null && handlesShown)
             {
-                if (!handlesShown)
-                    OnEnable();
-
                 handles = GameObject.FindGameObjectsWithTag("handle");
                 for (int i = 0; i < verts.Length; i++)
                 {
-                    Vector3 localHandle = transform.InverseTransformPoint(handles[i].transform.position);
+                    Vector3 localHandle = LevelPlacer.placedLevel.transform.InverseTransformPoint(handles[i].transform.position);
                     verts[i] = localHandle;
                 }
                 mesh.vertices = verts;
                 mesh.RecalculateBounds();
                 mesh.RecalculateNormals();
+
+                LevelPlacer.placedLevel.mergedFilter.mesh = mesh;
             }
             else if (handlesShown)
                 OnDisable();

@@ -1,9 +1,11 @@
-﻿using Impulse;
+﻿using FlipFall.Levels;
+using Impulse;
 using Impulse.Audio;
 using Impulse.Levels;
 using Impulse.Progress;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,16 +50,7 @@ namespace FlipFall.UI
         {
             DestroyChildren(placingParent);
 
-            int customLevelCount = ProgressManager.GetProgress().customIds.Count;
-
-            Level[] customLevels = new Level[customLevelCount];
-
-            for (int i = 0; i < customLevelCount; i++)
-            {
-                customLevels[i] = LevelLoader.LoadCustomLevel(ProgressManager.GetProgress().customIds[i]);
-            }
-
-            foreach (Level l in customLevels)
+            foreach (LevelData l in LevelManager.customLevels)
             {
                 UIEditorLevel editorLevel = Instantiate(uiEditorLevelPrefab, new Vector3(0, 0, 0), Quaternion.identity);
                 editorLevel.transform.parent = placingParent;
@@ -81,21 +74,30 @@ namespace FlipFall.UI
         public void AddButtonClicked()
         {
             print("addbtn");
-            StartCoroutine(cCreateLevel());
+            SoundManager.ButtonClicked();
+            StartCoroutine(cCreateNewLevel());
+            // animation
         }
 
-        private IEnumerator cCreateLevel()
+        // creates a new levelData and displays it as an UIEditorLevel in the EditorSelection
+        private IEnumerator cCreateNewLevel()
         {
-            int newId = ProgressManager.GetProgress().customIds[ProgressManager.GetProgress().customIds.Count - 1] + 1;
-            ProgressManager.GetProgress().customIds.Add(newId);
-            SoundManager.ButtonClicked();
-            // animation
+            int newId = 505;
+            // if there are custom levels and the default id is occupied find an un-occupied id and use it
+            if (LevelManager.customLevels.Count > 0 && LevelManager.customLevels.Any(x => x.id == newId))
+            {
+                for (int i = newId + 1; i < 600; i++)
+                {
+                    if (!LevelManager.customLevels.Any(x => x.id == i))
+                    {
+                        newId = i;
+                        break;
+                    }
+                }
+            }
 
-            // create new level prefab
-            Level l = defaultLevelPrefab;
-            l.id = newId;
-            Object prefab = PrefabUtility.CreateEmptyPrefab("Assets/Resources/Prefabs/Levels/Custom/" + newId + ".prefab");
-            PrefabUtility.ReplacePrefab(l.gameObject, prefab, ReplacePrefabOptions.ConnectToPrefab);
+            // create new levelData
+            LevelData l = LevelManager.NewCustomLevel(newId);
 
             // create new uiEditorLevel
             UIEditorLevel editorLevel = Instantiate(uiEditorLevelPrefab, new Vector3(0, 0, 0), Quaternion.identity);

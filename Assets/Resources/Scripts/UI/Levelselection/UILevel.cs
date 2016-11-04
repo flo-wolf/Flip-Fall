@@ -242,7 +242,7 @@ namespace Impulse.UI
 
             if (UILevelMatchesLevel())
             {
-                double topTime = LevelManager.levels.Find(x => x.id == id).presetTime;
+                double topTime = LevelManager.prefabLevels.Find(x => x.id == id).presetTime;
 
                 // Preset top time seconds
                 string topSec = ((int)topTime).ToString();
@@ -280,7 +280,7 @@ namespace Impulse.UI
 
         public bool UILevelMatchesLevel()
         {
-            if (LevelManager.LevelExists(id))
+            if (LevelManager.LevelExists(id, false))
             {
                 return true;
             }

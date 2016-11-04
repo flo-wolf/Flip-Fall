@@ -25,9 +25,6 @@ namespace Impulse.Progress
 
         public static WalletUpdateEvent onWalletUpdate = new WalletUpdateEvent();
 
-        // custom level id references
-        public List<int> customIds;
-
         // sound settings etc.
         public Settings settings;
 
@@ -55,9 +52,6 @@ namespace Impulse.Progress
             settings = new Settings();
             highscores = new List<Highscore>();
             unlocks = new Unlocks();
-            customIds = new List<int>();
-
-            customIds.Add(500);
 
             lastUnlockedLevel = 1;
             starsOwned = 0;

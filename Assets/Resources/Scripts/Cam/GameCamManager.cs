@@ -110,7 +110,7 @@ namespace Impulse.Cam
         //Game Listener
         private void GameStateChanged(Game.GameState gameState)
         {
-            Vector3 spawnPos = LevelManager.GetSpawnPosition();
+            Vector3 spawnPos = LevelPlacer.placedLevel.spawn.transform.position;
             switch (gameState)
             {
                 case Game.GameState.playing:

@@ -103,7 +103,7 @@ namespace Impulse.UI
 
         public static bool UILevelMatchesLevel(int ID)
         {
-            if (LevelManager.LevelExists(ID))
+            if (LevelManager.LevelExists(ID, false))
                 return true;
             return false;
         }
