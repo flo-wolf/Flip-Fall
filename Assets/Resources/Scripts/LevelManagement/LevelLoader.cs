@@ -49,6 +49,8 @@ namespace Impulse.Levels
             DirectoryInfo info = new DirectoryInfo(path);
             FileInfo[] fileInfos = info.GetFiles();
 
+            Debug.Log("fileInfo length: " + fileInfos.Length);
+
             List<LevelData> dataLoading = new List<LevelData>();
             foreach (FileInfo fi in fileInfos)
             {

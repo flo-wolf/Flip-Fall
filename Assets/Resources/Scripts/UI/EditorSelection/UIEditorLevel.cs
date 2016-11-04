@@ -22,7 +22,7 @@ public class UIEditorLevel : MonoBehaviour
 
     public enum LevelStatus { playable, nonPlayable };
 
-    public LevelData level;
+    public LevelData levelData;
 
     [Header("UIEditorLevel Components")]
     public Text titleText;
@@ -37,15 +37,15 @@ public class UIEditorLevel : MonoBehaviour
 
     public void Edit()
     {
-        LevelEditor.editLevel = level;
+        LevelEditor.editLevel = levelData;
         Main.SetScene(Main.Scene.editor);
     }
 
     // set texts to fit inspector variables
     public void UpdateTexts()
     {
-        titleText.text = level.title;
-        if (level.title == "")
+        titleText.text = levelData.title;
+        if (levelData.title == "")
         {
             titleText.text = "Custom Level";
         }

@@ -1,5 +1,5 @@
-﻿using Impulse.Cam;
-using Impulse.Objects;
+﻿using FlipFall.LevelObjects;
+using Impulse.Cam;
 using Impulse.Progress;
 using Impulse.Theme;
 using Impulse.UI;

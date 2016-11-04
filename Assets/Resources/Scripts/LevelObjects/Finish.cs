@@ -1,8 +1,9 @@
-﻿using Impulse.Theme;
+﻿using Impulse;
+using Impulse.Theme;
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse.Levels
+namespace FlipFall.LevelObjects
 {
     public class Finish : MonoBehaviour
     {

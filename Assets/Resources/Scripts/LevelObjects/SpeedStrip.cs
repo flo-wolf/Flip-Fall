@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Impulse.Levelobjects
+namespace FlipFall.LevelObjects
 {
     public class SpeedStrip : MonoBehaviour
     {

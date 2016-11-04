@@ -1,14 +1,9 @@
-﻿using Impulse.Theme;
+﻿using Impulse;
+using Impulse.Theme;
 using System;
 using System.Collections;
 
-using System.Collections;
-
 using System.Collections.Generic;
-
-using System.Collections.Generic;
-
-using UnityEngine;
 
 using UnityEngine;
 
@@ -22,7 +17,7 @@ using UnityEngine.Events;
 /// A Portal can either be a one way transition into another area,
 /// It can also serve as a checkpoint upon entering.
 /// </summary>
-namespace Impulse.Levels.Objects
+namespace FlipFall.LevelObjects
 {
     public class Portal : MonoBehaviour
     {

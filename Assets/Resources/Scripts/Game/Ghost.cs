@@ -1,4 +1,5 @@
-﻿using Impulse.Cam;
+﻿using FlipFall.LevelObjects;
+using Impulse.Cam;
 using Impulse.Levels;
 using System;
 using System.Collections;

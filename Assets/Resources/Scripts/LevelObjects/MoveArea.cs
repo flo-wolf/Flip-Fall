@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse.Objects
+namespace FlipFall.LevelObjects
 {
     public class MoveArea : MonoBehaviour
     {

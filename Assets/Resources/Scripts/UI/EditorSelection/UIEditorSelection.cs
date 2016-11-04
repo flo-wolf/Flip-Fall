@@ -54,7 +54,7 @@ namespace FlipFall.UI
             {
                 UIEditorLevel editorLevel = Instantiate(uiEditorLevelPrefab, new Vector3(0, 0, 0), Quaternion.identity);
                 editorLevel.transform.parent = placingParent;
-                editorLevel.level = l;
+                editorLevel.levelData = l;
                 editorLevel.UpdateTexts();
                 uiEditorLevels.Add(editorLevel);
             }
@@ -102,7 +102,7 @@ namespace FlipFall.UI
             // create new uiEditorLevel
             UIEditorLevel editorLevel = Instantiate(uiEditorLevelPrefab, new Vector3(0, 0, 0), Quaternion.identity);
             editorLevel.transform.parent = placingParent;
-            editorLevel.level = l;
+            editorLevel.levelData = l;
             editorLevel.UpdateTexts();
             uiEditorLevels.Add(editorLevel);
 

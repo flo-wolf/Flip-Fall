@@ -1,6 +1,6 @@
-﻿using FlipFall.Levels;
+﻿using FlipFall.LevelObjects;
+using FlipFall.Levels;
 using Impulse;
-using Impulse.Objects;
 using Impulse.Theme;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +8,10 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+
+/// <summary>
+/// Parses LevelData and creates the fitting gameobjects based on it and instantiates them.
+/// </summary>
 
 namespace Impulse.Levels
 {
@@ -20,6 +24,12 @@ namespace Impulse.Levels
         public class LevelPlaceEvent : UnityEvent<Level> { }
 
         public static Level placedLevel;
+
+        [Header("LevelObject Prefabs")]
+        public Attractor attractor;
+        public GameObject moveArea;
+        public Finish finish;
+        public Spawn spawn;
 
         private void OnEnable()
         {

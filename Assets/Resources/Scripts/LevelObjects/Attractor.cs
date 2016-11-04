@@ -11,7 +11,7 @@ using UnityEngine;
 /// Force depends on the players distance to the center of the circle.
 /// Can be used to elevate the player upwards if the attraction (pullForce) is greater than the gravity pulling the player downwards.
 /// </summary>
-namespace Impulse.LevelObjects
+namespace FlipFall.LevelObjects
 {
     public class Attractor : MonoBehaviour
     {

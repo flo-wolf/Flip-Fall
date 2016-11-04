@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse.Levels
+namespace FlipFall.LevelObjects
 {
     public class Spawn : MonoBehaviour
     {
