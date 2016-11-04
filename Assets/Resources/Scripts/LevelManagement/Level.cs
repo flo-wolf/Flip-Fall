@@ -1,8 +1,8 @@
-﻿using FlipFall.LevelObjects;
-using Impulse.Cam;
-using Impulse.Progress;
-using Impulse.Theme;
-using Impulse.UI;
+﻿using FlipFall.Cam;
+using FlipFall.LevelObjects;
+using FlipFall.Progress;
+using FlipFall.Theme;
+using FlipFall.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using UnityEngine.Events;
 /// Is referenced in the LevelPlacer.placedLevel.
 /// </summary>
 
-namespace Impulse.Levels
+namespace FlipFall.Levels
 {
     [Serializable]
     public class Level : MonoBehaviour

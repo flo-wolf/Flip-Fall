@@ -1,5 +1,5 @@
-﻿using Impulse.Background;
-using Impulse.Theme;
+﻿using FlipFall.Background;
+using FlipFall.Theme;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using UnityEngine;
 /// Achievements that got unlocked
 /// </summary>
 
-namespace Impulse.Progress
+namespace FlipFall.Progress
 {
     [Serializable]
     public class Achievements

@@ -1,8 +1,8 @@
-﻿using Impulse;
-using Impulse.Cam;
-using Impulse.Levels;
-using Impulse.Progress;
-using Impulse.UI;
+﻿using FlipFall;
+using FlipFall.Cam;
+using FlipFall.Levels;
+using FlipFall.Progress;
+using FlipFall.UI;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -12,7 +12,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Controls the gameplay durimg MainState.playing
 /// </summary>
-namespace Impulse
+namespace FlipFall
 {
     public class Game : MonoBehaviour
     {

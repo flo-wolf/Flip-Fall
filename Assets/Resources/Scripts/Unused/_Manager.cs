@@ -9,11 +9,11 @@
 //Post-Processing: Add a Retro CRT Distortion Effect Using RGB Shifting
 //Audio: Add "character-dive-in", "player-death", "level-done", (...)
 
-using Impulse.Cam;
+using FlipFall.Cam;
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse.Unused
+namespace FlipFall.Unused
 {
     public enum GameState { menu, editor, playing }
 

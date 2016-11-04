@@ -1,16 +1,16 @@
-﻿using Impulse;
-using Impulse.Audio;
-using Impulse.Background;
-using Impulse.Levels;
-using Impulse.Progress;
-using Impulse.Theme;
+﻿using FlipFall;
+using FlipFall.Audio;
+using FlipFall.Background;
+using FlipFall.Levels;
+using FlipFall.Progress;
+using FlipFall.Theme;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class UISettingsManager : MonoBehaviour
     {

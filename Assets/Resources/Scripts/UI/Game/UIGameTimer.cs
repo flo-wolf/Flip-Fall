@@ -1,8 +1,8 @@
-﻿using Impulse.Audio;
+﻿using FlipFall.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class UIGameTimer : MonoBehaviour
     {

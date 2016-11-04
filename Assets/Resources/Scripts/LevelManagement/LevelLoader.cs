@@ -1,6 +1,6 @@
 ﻿using FlipFall.Levels;
-using Impulse.Progress;
-using Impulse.UI;
+using FlipFall.Progress;
+using FlipFall.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ using UnityEngine;
 /// Level Loading Component. Loads story level prefabs and/or loads and safes custom serialized levels.
 /// </summary>
 
-namespace Impulse.Levels
+namespace FlipFall.Levels
 {
     public static class LevelLoader
     {

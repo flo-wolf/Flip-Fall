@@ -3,7 +3,7 @@
 /// <summary>
 /// Constants storage, do not change
 /// </summary>
-namespace Impulse
+namespace FlipFall
 {
     public static class Constants
     {

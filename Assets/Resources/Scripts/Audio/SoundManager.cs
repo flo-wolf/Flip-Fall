@@ -1,7 +1,7 @@
-﻿using Impulse.Cam;
-using Impulse.Levels;
-using Impulse.Progress;
-using Impulse.UI;
+﻿using FlipFall.Cam;
+using FlipFall.Levels;
+using FlipFall.Progress;
+using FlipFall.UI;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Listens to game events and plays sounds accordingly through the SoundPlayer class
 /// </summary>
-namespace Impulse.Audio
+namespace FlipFall.Audio
 {
     public class SoundManager : MonoBehaviour
     {

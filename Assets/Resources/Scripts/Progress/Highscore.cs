@@ -1,6 +1,6 @@
-﻿using Impulse.Audio;
-using Impulse.Levels;
-using Impulse.UI;
+﻿using FlipFall.Audio;
+using FlipFall.Levels;
+using FlipFall.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// <summary>
 /// A Levels Highscore, containing time, reached stars and id.
 /// </summary>
-namespace Impulse.Progress
+namespace FlipFall.Progress
 {
     [Serializable]
     public class Highscore

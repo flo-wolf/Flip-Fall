@@ -42,7 +42,7 @@ Game names:
 	- velocity
 	- megaball - already eixsts, classic retro game.
 	- sliders
-	- Impulse
+	- FlipFall
 	- charge n' change (cnc)
 	- charge it
 	- amazing arcade

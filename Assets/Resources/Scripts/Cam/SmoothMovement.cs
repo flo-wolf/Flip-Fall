@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Impulse
+namespace FlipFall
 {
     public class SmoothMovement : MonoBehaviour
     {

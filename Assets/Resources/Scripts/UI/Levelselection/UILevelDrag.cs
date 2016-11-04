@@ -1,12 +1,12 @@
-﻿using Impulse.Audio;
-using Impulse.Progress;
+﻿using FlipFall.Audio;
+using FlipFall.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class UILevelDrag : MonoBehaviour
     {

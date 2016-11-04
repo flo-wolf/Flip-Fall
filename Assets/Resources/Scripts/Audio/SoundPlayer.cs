@@ -1,6 +1,6 @@
-﻿using Impulse.Cam;
-using Impulse.Progress;
-using Impulse.UI;
+﻿using FlipFall.Cam;
+using FlipFall.Progress;
+using FlipFall.UI;
 using System.Collections;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ using UnityEngine;
 /// Sound playing component of the SoundManager
 /// </summary>
 
-namespace Impulse.Audio
+namespace FlipFall.Audio
 {
     public class SoundPlayer : MonoBehaviour
     {

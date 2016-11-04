@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Impulse.Audio
+namespace FlipFall.Audio
 {
     public class AudioInterpreter : MonoBehaviour
     {

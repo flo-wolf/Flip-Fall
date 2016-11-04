@@ -1,10 +1,12 @@
-﻿using FlipFall.Editor;
+﻿using FlipFall;
+using FlipFall.Audio;
+using FlipFall.Editor;
 using FlipFall.Levels;
-using Impulse;
-using Impulse.Audio;
-using Impulse.Levels;
-using Impulse.Progress;
-using Impulse.Theme;
+
+using FlipFall.Levels;
+
+using FlipFall.Progress;
+using FlipFall.Theme;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

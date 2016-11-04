@@ -1,6 +1,6 @@
-﻿using Impulse;
-using Impulse.Audio;
-using Impulse.Levels;
+﻿using FlipFall;
+using FlipFall.Audio;
+using FlipFall.Levels;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,7 +9,7 @@ using UnityEngine.Events;
 /// Controls the movement of an array of cameras simultaniously
 /// </summary>
 
-namespace Impulse.Cam
+namespace FlipFall.Cam
 {
     public class CamMove : MonoBehaviour
     {

@@ -1,4 +1,4 @@
-﻿using Impulse;
+﻿using FlipFall;
 using System.Collections;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ using UnityEngine;
 /// Controls the zoom of an array of cameras simultaniously
 /// </summary>
 
-namespace Impulse.Cam
+namespace FlipFall.Cam
 {
     public class CamZoom : MonoBehaviour
     {

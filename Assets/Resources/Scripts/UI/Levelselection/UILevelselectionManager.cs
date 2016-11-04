@@ -1,8 +1,8 @@
-﻿using Impulse;
-using Impulse.Audio;
-using Impulse.Levels;
-using Impulse.Progress;
-using Impulse.UI;
+﻿using FlipFall;
+using FlipFall.Audio;
+using FlipFall.Levels;
+using FlipFall.Progress;
+using FlipFall.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using UnityEngine.UI;
 /// Manages all UI Elememnts of the levelselection scene
 /// Singletone
 /// </summary>
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class UILevelselectionManager : MonoBehaviour
     {

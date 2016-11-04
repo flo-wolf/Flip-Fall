@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Impulse.ImageFX
+namespace FlipFall.ImageFX
 {
     [ExecuteInEditMode]
     [AddComponentMenu("Image Effects/BlurFade")]

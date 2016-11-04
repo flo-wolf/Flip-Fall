@@ -1,8 +1,8 @@
 ﻿using admob;
+using FlipFall.Progress;
+using FlipFall.UI;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
-using Impulse.Progress;
-using Impulse.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +15,7 @@ using UnityEngine.SocialPlatforms;
 /// to save or initiate fade-in and fade-outs, since the scene switch is called after a delay post-event invoke.
 /// </summary>
 
-namespace Impulse
+namespace FlipFall
 {
     public class Main : MonoBehaviour
     {

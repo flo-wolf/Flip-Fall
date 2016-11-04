@@ -1,5 +1,5 @@
-﻿using Impulse.Background;
-using Impulse.Progress;
+﻿using FlipFall.Background;
+using FlipFall.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using UnityEngine;
 /// Manages the color theme of the game.
 /// </summary>
 
-namespace Impulse.Theme
+namespace FlipFall.Theme
 {
     public class ThemeManager : MonoBehaviour
     {

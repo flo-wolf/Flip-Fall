@@ -1,4 +1,4 @@
-﻿using Impulse;
+﻿using FlipFall;
 using System.Collections;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ using UnityEngine;
 /// Camera Rotation Handler, triggered through CameraManager
 /// </summary>
 
-namespace Impulse.Cam
+namespace FlipFall.Cam
 {
     public class CamRotation : MonoBehaviour
     {

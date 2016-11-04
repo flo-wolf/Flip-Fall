@@ -1,8 +1,8 @@
-﻿using Impulse;
+﻿using FlipFall;
 using System.Collections;
 using UnityEngine;
 
-namespace Impulse.Cam
+namespace FlipFall.Cam
 {
     public class CamShake : MonoBehaviour
     {

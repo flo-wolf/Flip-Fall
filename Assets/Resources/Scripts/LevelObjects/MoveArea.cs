@@ -1,6 +1,4 @@
-﻿using Impulse.Cam;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace FlipFall.LevelObjects
 {

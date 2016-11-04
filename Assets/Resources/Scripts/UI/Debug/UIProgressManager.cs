@@ -1,9 +1,9 @@
-﻿using Impulse;
-using Impulse.Progress;
+﻿using FlipFall;
+using FlipFall.Progress;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class UIProgressManager : MonoBehaviour
     {

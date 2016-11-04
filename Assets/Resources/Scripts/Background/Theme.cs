@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Impulse.Theme
+namespace FlipFall.Theme
 {
     public class Theme : MonoBehaviour
     {

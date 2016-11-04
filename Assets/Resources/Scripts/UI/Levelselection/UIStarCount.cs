@@ -1,10 +1,10 @@
-﻿using Impulse.Progress;
+﻿using FlipFall.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class UIStarCount : MonoBehaviour
     {

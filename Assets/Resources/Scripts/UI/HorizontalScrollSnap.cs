@@ -4,7 +4,7 @@ using System;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     [RequireComponent(typeof(ScrollRect))]
     [AddComponentMenu("UI/Extensions/Horizontal Scroll Snap")]

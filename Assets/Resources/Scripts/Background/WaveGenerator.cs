@@ -1,12 +1,12 @@
-﻿using Impulse.Audio;
-using Impulse.Progress;
-using Impulse.UI;
+﻿using FlipFall.Audio;
+using FlipFall.Progress;
+using FlipFall.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Impulse.Background
+namespace FlipFall.Background
 {
     public class WaveGenerator : MonoBehaviour
     {

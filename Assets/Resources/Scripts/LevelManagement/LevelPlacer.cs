@@ -1,7 +1,7 @@
-﻿using FlipFall.LevelObjects;
+﻿using FlipFall;
+using FlipFall.LevelObjects;
 using FlipFall.Levels;
-using Impulse;
-using Impulse.Theme;
+using FlipFall.Theme;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using UnityEngine.Events;
 /// Parses LevelData and creates the fitting gameobjects based on it and instantiates them.
 /// </summary>
 
-namespace Impulse.Levels
+namespace FlipFall.Levels
 {
     public class LevelPlacer : MonoBehaviour
     {

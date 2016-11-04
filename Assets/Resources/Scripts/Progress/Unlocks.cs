@@ -1,6 +1,6 @@
-﻿using Impulse.Background;
-using Impulse.Theme;
-using Impulse.UI;
+﻿using FlipFall.Background;
+using FlipFall.Theme;
+using FlipFall.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 // information about what items were bought/unlocked, including skins and editoritems
 
-namespace Impulse.Progress
+namespace FlipFall.Progress
 {
     [Serializable]
     public class Unlocks

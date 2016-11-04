@@ -1,4 +1,4 @@
-﻿using Impulse.Theme;
+﻿using FlipFall.Theme;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +7,7 @@ using UnityEngine;
 ///  used to allow toggeling between different horizon parts, identifer class
 /// </summary>
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class HorizonToggle : MonoBehaviour
     {

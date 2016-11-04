@@ -1,11 +1,11 @@
-﻿using Impulse.Levels;
-using Impulse.Progress;
+﻿using FlipFall.Levels;
+using FlipFall.Progress;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class UILevelStar : MonoBehaviour
     {

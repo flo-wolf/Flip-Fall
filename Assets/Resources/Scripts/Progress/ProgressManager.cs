@@ -1,7 +1,7 @@
 ﻿#define AllowDoubles //Allow double entries in data?
 
-using Impulse.Levels;
-using Impulse.UI;
+using FlipFall.Levels;
+using FlipFall.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Impulse.Progress
+namespace FlipFall.Progress
 {
     public class ProgressManager : MonoBehaviour
     {

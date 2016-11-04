@@ -1,9 +1,9 @@
-﻿using FlipFall.LevelObjects;
+﻿using FlipFall.Cam;
+using FlipFall.LevelObjects;
+using FlipFall.Levels;
+using FlipFall.Progress;
+using FlipFall.UI;
 using GooglePlayGames;
-using Impulse.Cam;
-using Impulse.Levels;
-using Impulse.Progress;
-using Impulse.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using UnityEngine.UI;
 /// <summary>
 /// The Player controller class - handles player actions and events
 /// </summary>
-namespace Impulse
+namespace FlipFall
 {
     public class Player : MonoBehaviour
     {

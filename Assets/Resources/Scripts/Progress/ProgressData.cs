@@ -1,5 +1,5 @@
-﻿using Impulse.Levels;
-using Impulse.UI;
+﻿using FlipFall.Levels;
+using FlipFall.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using UnityEngine.Events;
 /// It also holds other variables important for the players progress like achievemnts or settings.
 /// </summary>
 
-namespace Impulse.Progress
+namespace FlipFall.Progress
 {
     [Serializable]
     public class WalletUpdateEvent : UnityEvent { }

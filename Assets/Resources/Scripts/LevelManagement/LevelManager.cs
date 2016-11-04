@@ -1,6 +1,8 @@
 ﻿using FlipFall.Levels;
-using Impulse.Levels;
-using Impulse.Progress;
+
+using FlipFall.Levels;
+
+using FlipFall.Progress;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,7 @@ using UnityEngine.Events;
 /// Levels are serializable and saved to a file.
 /// </summary>
 
-namespace Impulse.Levels
+namespace FlipFall.Levels
 {
     public class LevelManager : MonoBehaviour
     {

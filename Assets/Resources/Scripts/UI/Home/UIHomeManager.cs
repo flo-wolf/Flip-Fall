@@ -1,5 +1,5 @@
-﻿using Impulse;
-using Impulse.Audio;
+﻿using FlipFall;
+using FlipFall.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +8,7 @@ using UnityEngine;
 ///  Manages all UI Elements of the Home Scene.
 /// </summary>
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class UIHomeManager : MonoBehaviour
     {

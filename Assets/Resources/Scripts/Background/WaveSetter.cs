@@ -1,6 +1,6 @@
-﻿using Impulse.Audio;
-using Impulse.Progress;
-using Impulse.UI;
+﻿using FlipFall.Audio;
+using FlipFall.Progress;
+using FlipFall.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +9,7 @@ using UnityEngine;
 /// Sets the wave Mesh generated through the WaveGenerator to the respective HorizonPart
 /// </summary>
 
-namespace Impulse.Background
+namespace FlipFall.Background
 {
     public class WaveSetter : MonoBehaviour
     {

@@ -1,13 +1,13 @@
 ﻿using FlipFall.LevelObjects;
-using Impulse.Cam;
-using Impulse.Levels;
+using FlipFall.Cam;
+using FlipFall.Levels;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Impulse
+namespace FlipFall
 {
     public class Ghost : MonoBehaviour
     {

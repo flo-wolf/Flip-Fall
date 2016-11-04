@@ -1,10 +1,10 @@
-﻿using Impulse.Audio;
+﻿using FlipFall.Audio;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Impulse.Background
+namespace FlipFall.Background
 {
     public class _HorizonPart : MonoBehaviour
     {

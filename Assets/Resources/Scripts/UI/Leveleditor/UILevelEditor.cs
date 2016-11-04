@@ -1,7 +1,7 @@
 ﻿using FlipFall.Editor;
-using Impulse;
-using Impulse.Levels;
-using Impulse.Progress;
+using FlipFall;
+using FlipFall.Levels;
+using FlipFall.Progress;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

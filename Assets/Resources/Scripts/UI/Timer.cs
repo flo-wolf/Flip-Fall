@@ -1,11 +1,11 @@
-﻿using Impulse.Audio;
+﻿using FlipFall.Audio;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public static class Timer
     {

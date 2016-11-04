@@ -1,6 +1,6 @@
-﻿using Impulse.Audio;
-using Impulse.Levels;
-using Impulse.Progress;
+﻿using FlipFall.Audio;
+using FlipFall.Levels;
+using FlipFall.Progress;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// Manages all UI Elements of the respective scene
 /// </summary>
 
-namespace Impulse.UI
+namespace FlipFall.UI
 {
     public class UICreditsManager : MonoBehaviour
     {

@@ -1,11 +1,11 @@
-﻿using Impulse.Levels;
+﻿using FlipFall.Levels;
 using System.Collections;
 using UnityEngine;
 
 /// <summary>
 /// Manages camera actions based on externally fired events
 /// </summary>
-namespace Impulse.Cam
+namespace FlipFall.Cam
 {
     public enum InterpolationType { smoothstep, linear }
 
