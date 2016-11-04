@@ -38,11 +38,11 @@ namespace FlipFall.Editor
 
         private void Start()
         {
-            if (LevelPlacer.placedLevel != null && LevelPlacer.placedLevel.merged)
+            if (LevelPlacer.generatedLevel != null)
             {
                 //mesh = LevelEditor.editLevel.mergedMesh;
 
-                mesh = LevelPlacer.placedLevel.mergedMesh;
+                mesh = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
 
                 handlesShown = true;
 
@@ -56,7 +56,7 @@ namespace FlipFall.Editor
                 {
                     foreach (Vector3 vert in verts)
                     {
-                        vertPos = LevelPlacer.placedLevel.transform.TransformPoint(vert);
+                        vertPos = LevelPlacer.generatedLevel.moveArea.transform.TransformPoint(vert);
                         GameObject handle = Instantiate(handlePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
                         handle.name = "handle";
                         handle.tag = "handle";
@@ -102,19 +102,19 @@ namespace FlipFall.Editor
         {
             if (showHandles && !handlesShown)
                 Start();
-            else if (showHandles && LevelPlacer.placedLevel != null && handlesShown)
+            else if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
             {
                 handles = GameObject.FindGameObjectsWithTag("handle");
                 for (int i = 0; i < verts.Length; i++)
                 {
-                    Vector3 localHandle = LevelPlacer.placedLevel.transform.InverseTransformPoint(handles[i].transform.position);
+                    Vector3 localHandle = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(handles[i].transform.position);
                     verts[i] = localHandle;
                 }
                 mesh.vertices = verts;
                 mesh.RecalculateBounds();
                 mesh.RecalculateNormals();
 
-                LevelPlacer.placedLevel.mergedFilter.mesh = mesh;
+                LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = mesh;
             }
             else if (handlesShown)
                 OnDisable();

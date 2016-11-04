@@ -46,7 +46,7 @@ namespace FlipFall.Levels
         {
             id = _id;
             presetTime = -1;
-            title = "Furnace";
+            title = "Custom";
             author = "FlipFall";
             moveVerticies = new Position2[0];
             spawnPosition = new Position2(0, 0);

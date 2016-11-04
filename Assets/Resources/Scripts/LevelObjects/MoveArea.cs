@@ -11,7 +11,7 @@ namespace FlipFall.LevelObjects
         private PolygonCollider2D poly2D;
         private MeshRenderer mr;
 
-        private void Start()
+        private void Awake()
         {
             meshFilter = GetComponent<MeshFilter>();
             MeshRenderer mr = GetComponent<MeshRenderer>();

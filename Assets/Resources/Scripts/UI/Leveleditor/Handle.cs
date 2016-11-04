@@ -69,9 +69,11 @@ namespace FlipFall.Editor
                 // alter positions based on the original position plus the drag delta
                 for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
                 {
-                    Vector3 newPos = VertHandler.selectedHandles[i].transform.position;
-                    newPos += new Vector3(eventData.delta.x / 5, eventData.delta.y / 5, 0);
-                    VertHandler.selectedHandles[i].transform.position = newPos;
+                    Vector3 dragPos = Camera.main.ScreenToWorldPoint(eventData.position);
+                    dragPos.z = 0;
+                    //Vector3 newPos = VertHandler.selectedHandles[i].transform.position;
+                    //newPos += new Vector3(eventData.delta.x / 5, eventData.delta.y / 5, 0);
+                    VertHandler.selectedHandles[i].transform.position = dragPos;
                 }
             }
         }
