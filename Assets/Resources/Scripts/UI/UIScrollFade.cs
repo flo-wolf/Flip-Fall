@@ -114,6 +114,7 @@ namespace FlipFall.UI
 
         private IEnumerator cCorrectInsideSetting()
         {
+            print(scrollElements.Count);
             for (int i = 0; i < scrollElements.Count; i++)
             {
                 UIScrollElement element = scrollElements[i];
@@ -126,12 +127,12 @@ namespace FlipFall.UI
                         element.FadeOut();
 
                     // first product
-                    if (element.position == UIScrollElement.Position.first)
+                    if (i == 0)
                     {
                         dragDownPossible = true;
                     }
                     // last product
-                    else if (element.position == UIScrollElement.Position.last)
+                    else if (i == scrollElements.Count - 1)
                     {
                         dragUpPossible = true;
                     }
@@ -171,7 +172,7 @@ namespace FlipFall.UI
         // while dragging
         public void OnDrag(PointerEventData eventData)
         {
-            Debug.Log("dragging " + eventData.delta.y);
+            //Debug.Log("dragging " + eventData.delta.y);
 
             // dragging up while dragging up shouldn't be possible
             if (eventData.delta.y < 0 && !dragDownPossible)

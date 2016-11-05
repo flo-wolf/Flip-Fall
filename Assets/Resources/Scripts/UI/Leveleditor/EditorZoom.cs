@@ -83,10 +83,15 @@ namespace FlipFall.Editor
                 // panning => move the camera
                 else
                 {
-                    Vector3 touchDeltaPosition = new Vector3(-touchZero.deltaPosition.x * Time.deltaTime * 2000, -touchZero.deltaPosition.y * Time.deltaTime * 2000, 0);
-                    transform.position += touchDeltaPosition;
-                    debug1.text = "moving";
-                    debug2.text = touchDeltaPosition.ToString();
+                    Vector3 dragPos = new Vector3(Camera.main.ScreenToWorldPoint(-touchZero.deltaPosition).x, Camera.main.ScreenToWorldPoint(-touchZero.deltaPosition).y, 0);
+
+                    //old one, working
+                    //Vector3 touchDeltaPosition = new Vector3(-touchZero.deltaPosition.x * Time.deltaTime * 3000, -touchZero.deltaPosition.y * Time.deltaTime * 3000, 0);
+                    //transform.position += touchDeltaPosition;
+                    transform.position = dragPos;
+
+                    //debug1.text = "moving";
+                    //debug2.text = touchDeltaPosition.ToString();
                     //transform.Translate(touchDeltaPosition.x * Time.deltaTime, touchDeltaPosition.y * Time.deltaTime, 0);
                 }
             }

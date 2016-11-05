@@ -18,6 +18,9 @@ namespace FlipFall.UI
     {
         public Animator animator;
 
+        private bool unsavedLeaveRequest = false;
+        private bool saveRequest = false;
+
         public void Start()
         {
         }
@@ -37,12 +40,17 @@ namespace FlipFall.UI
         }
 
         public void BackButton()
+
         {
-            if (LevelEditor.changesAreSaved)
+            LevelEditor.changesAreSaved = false;
+            if (!LevelEditor.changesAreSaved)
             {
-                animator.SetTrigger("unsavedLeaveRequest");
+                animator.SetTrigger("leaveUnsavedRequest");
             }
-            animator.SetTrigger("fadeout");
+            else
+            {
+                animator.SetTrigger("fadeout");
+            }
         }
 
         public void LeaveUnsaved()
@@ -53,7 +61,7 @@ namespace FlipFall.UI
 
         public void LeaveSave()
         {
-            animator.SetTrigger("leaveUnsaved");
+            animator.SetTrigger("leaveSave");
             LevelEditor.SaveLevel();
             Main.SetScene(Main.Scene.editor);
         }

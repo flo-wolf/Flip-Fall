@@ -22,6 +22,9 @@ namespace FlipFall.Editor
         public float smallStep = 50F;
 
         public Color mainColor = new Color(0f, 1f, 0f, 1f);
+        private Color gridColorBackup;
+
+        public float fadeTime = 0.5F;
 
         // lower left view corner
         [HideInInspector]
@@ -43,6 +46,43 @@ namespace FlipFall.Editor
             //end = new Vector2(start.x + viewSizeX, start.y + viewSizeY);
 
             //print(viewSizeX + " - " + viewSizeY + " - " + start + " - " + end);
+
+            gridColorBackup = mainColor;
+            StartCoroutine(cFadeIn());
+            Main.onSceneChange.AddListener(SceneChanged);
+        }
+
+        private void SceneChanged(Main.Scene s)
+        {
+            StartCoroutine(cFadeOut());
+        }
+
+        private IEnumerator cFadeIn()
+        {
+            float t = 0F;
+            Color fadedGridColor = gridColorBackup;
+            fadedGridColor.a = 0;
+            while (t < 1.0f)
+            {
+                t += Time.deltaTime * (Time.timeScale / fadeTime);
+                mainColor = Color.Lerp(fadedGridColor, gridColorBackup, t);
+                yield return 0;
+            }
+            yield break;
+        }
+
+        private IEnumerator cFadeOut()
+        {
+            float t = 0F;
+            Color fadedGridColor = gridColorBackup;
+            fadedGridColor.a = 0;
+            while (t < 1.0f)
+            {
+                t += Time.deltaTime * (Time.timeScale / fadeTime);
+                mainColor = Color.Lerp(gridColorBackup, fadedGridColor, t);
+                yield return 0;
+            }
+            yield break;
         }
 
         // swtich grid active/deactive
