@@ -31,11 +31,24 @@ public class UIEditorLevel : MonoBehaviour
     public Button editButton;
     public Button playButton;
 
+    private Animation anim;
+
     // prevent changes to toogle.isOn via script from invoking the tooglechange call and executing the Equip mothod
     private bool unvalidToogleCall = false;
 
     // corresponding product information data, stored in progress save-file
     private ProductInfo productInfo;
+
+    private void Start()
+    {
+        anim = GetComponent<Animation>();
+        Main.onSceneChange.AddListener(SceneChanged);
+    }
+
+    private void SceneChanged(Main.Scene s)
+    {
+        anim.Play("scrollElementFadeout");
+    }
 
     public void Edit()
     {

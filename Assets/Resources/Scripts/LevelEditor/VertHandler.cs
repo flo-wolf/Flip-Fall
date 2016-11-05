@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Enables/Disables the handles and transforms the mesh based on their positions
+/// Created handles and moves the moveArea verticies based on the handler's positions.
 /// </summary>
 
 namespace FlipFall.Editor
@@ -47,9 +47,6 @@ namespace FlipFall.Editor
                 handlesShown = true;
 
                 verts = mesh.vertices;
-
-                // sort verticies clockwise
-                // Array.Sort(verts, new ClockwiseComparer(mesh.bounds.center));
 
                 // crate handles
                 if (showHandles)
@@ -108,6 +105,8 @@ namespace FlipFall.Editor
                 for (int i = 0; i < verts.Length; i++)
                 {
                     Vector3 localHandle = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(handles[i].transform.position);
+                    if (verts[i] != localHandle)
+                        LevelEditor.changesAreSaved = false;
                     verts[i] = localHandle;
                 }
                 mesh.vertices = verts;

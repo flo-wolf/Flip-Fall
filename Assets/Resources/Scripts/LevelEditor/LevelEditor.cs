@@ -8,18 +8,34 @@ namespace FlipFall.Editor
     public class LevelEditor : MonoBehaviour
     {
         //look at tileeditor sctipt to get an idea how a level editor could be build up like
+        public static LevelEditor _instance;
 
-        public enum EditorMode { selectObject, selectVertex, moveVertex, moveObject, addVertex }
+        // select: select game objects/groups of objects to edit
+        // move: move a group of selected objects
+        // tool: depending on the selection each selected object can have it's own tool
+        //       the tool mode tool can have its own sub-modes
+        public enum EditorMode { select, move, tool }
 
-        public static EditorMode editorMode = EditorMode.selectVertex;
+        public static EditorMode editorMode = EditorMode.select;
 
         // current level getting edited
         public static LevelData editLevel;
 
         public static Mesh selectedMesh;
 
+        public static bool changesAreSaved;
+
         private void Start()
         {
+            changesAreSaved = true;
+
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+            _instance = this;
+
             if (editLevel != null)
                 LevelPlacer._instance.PlaceCustom(editLevel);
         }

@@ -26,7 +26,7 @@ namespace FlipFall.Editor
         public void OnPointerDown(PointerEventData eventData)
         {
             // we are selecting verticies
-            if (LevelEditor.editorMode == LevelEditor.EditorMode.selectVertex)
+            if (LevelEditor.editorMode == LevelEditor.EditorMode.tool)
             {
                 // this handle isn't selected yet, add it to the selection
                 if (!VertHandler.selectedHandles.Any(x => x == this))
@@ -51,7 +51,7 @@ namespace FlipFall.Editor
             dragging = true;
 
             // save original positions
-            if (LevelEditor.editorMode == LevelEditor.EditorMode.moveVertex)
+            if (LevelEditor.editorMode == LevelEditor.EditorMode.tool)
             {
                 oPositions = new Vector3[VertHandler.selectedHandles.Count];
                 for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
@@ -64,7 +64,7 @@ namespace FlipFall.Editor
         // while dragging, transform the selected handles
         public void OnDrag(PointerEventData eventData)
         {
-            if (LevelEditor.editorMode == LevelEditor.EditorMode.moveVertex)
+            if (LevelEditor.editorMode == LevelEditor.EditorMode.tool)
             {
                 // alter positions based on the original position plus the drag delta
                 for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
@@ -82,7 +82,7 @@ namespace FlipFall.Editor
         public void OnEndDrag(PointerEventData eventData)
         {
             dragging = false;
-            if (LevelEditor.editorMode == LevelEditor.EditorMode.moveVertex)
+            if (LevelEditor.editorMode == LevelEditor.EditorMode.tool)
             {
                 // alter positions based on the original position plus the drag delta
                 for (int i = 0; i < VertHandler.selectedHandles.Count; i++)

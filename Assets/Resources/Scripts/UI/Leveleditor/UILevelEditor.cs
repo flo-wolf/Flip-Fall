@@ -1,5 +1,5 @@
-﻿using FlipFall.Editor;
-using FlipFall;
+﻿using FlipFall;
+using FlipFall.Editor;
 using FlipFall.Levels;
 using FlipFall.Progress;
 using System;
@@ -18,8 +18,6 @@ namespace FlipFall.UI
     {
         public Animator animator;
 
-        #region Public Methods
-
         public void Start()
         {
         }
@@ -35,23 +33,45 @@ namespace FlipFall.UI
         public void SaveButton()
         {
             LevelEditor.SaveLevel();
+            animator.SetTrigger("saveRequest");
         }
 
-        public void HomeButton()
+        public void BackButton()
         {
-            Main.SetScene(Main.Scene.home);
+            if (LevelEditor.changesAreSaved)
+            {
+                animator.SetTrigger("unsavedLeaveRequest");
+            }
             animator.SetTrigger("fadeout");
+        }
+
+        public void LeaveUnsaved()
+        {
+            animator.SetTrigger("leaveUnsaved");
+            Main.SetScene(Main.Scene.editor);
+        }
+
+        public void LeaveSave()
+        {
+            animator.SetTrigger("leaveUnsaved");
+            LevelEditor.SaveLevel();
+            Main.SetScene(Main.Scene.editor);
+        }
+
+        public void LeaveAbort()
+        {
+            animator.SetTrigger("leaveAbort");
         }
 
         public void SelectButton()
         {
-            LevelEditor.editorMode = LevelEditor.EditorMode.selectVertex;
+            //LevelEditor.editorMode = LevelEditor.EditorMode.selectVertex;
             print("----- SELECTING ");
         }
 
-        public void MoveButton()
+        public void ModeSwitcher()
         {
-            LevelEditor.editorMode = LevelEditor.EditorMode.moveVertex;
+            //LevelEditor.editorMode = LevelEditor.EditorMode.moveVertex;
             print("----- Moving " + VertHandler.selectedHandles.Count + " elements.");
         }
 
@@ -62,7 +82,5 @@ namespace FlipFall.UI
             else
                 GridOverlay.Active(false);
         }
-
-        #endregion Public Methods
     }
 }

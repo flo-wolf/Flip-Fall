@@ -12,6 +12,8 @@ namespace FlipFall.Cam
     public class GameCamManager : MonoBehaviour
     {
         public static GameCamManager _instance;
+
+        // !!
         public Player player;
 
         public Camera levelMaskCamera;
@@ -43,6 +45,14 @@ namespace FlipFall.Cam
             Game.onGameStateChange.AddListener(GameStateChanged);
             Player.onPlayerAction.AddListener(PlayerAction);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
+            Main.onSceneChange.AddListener(SceneChanged);
+        }
+
+        public void SceneChanged(Main.Scene s)
+        {
+            if (s == Main.Scene.editor)
+            {
+            }
         }
 
         //Player Listener
