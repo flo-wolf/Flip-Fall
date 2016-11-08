@@ -17,34 +17,58 @@ namespace FlipFall.UI
         // the scrollRect
         public ScrollRect scrollRect;
 
+        public RectTransform canvasRect;
+        public Canvas canvas;
+
         public bool vertical = true;
 
         // ignores the insideArea property and uses the scrollable area of the ScrollRect instead
         public bool useScollRectAsInsideArea = false;
 
         // the upper bound for the area in which elements are "faded-in". Everything above will be "faded-out"
-        public float upperInsideBound;
+        public float upperInsideHeight;
+
+        // the upper height border on which elements are faded back in
+        public float upperFadeHeight;
 
         // lower bound, everything below will be "faded-out"
-        public float lowerInsideBound;
+        public float lowerInsideHeight;
+
+        // the lower height border on which elements are faded back in
+        public float lowerFadeHeight;
 
         // visualize the bounds in the Editor
-        public bool visualizeBounds = true;
+        public bool visualizeHeights = true;
 
         // list of elements attached as a child to the scrollrect
         private List<UIScrollElement> scrollElements;
 
-        // is the user dragging? If so, check the inside values
-        private bool dragging = false;
+        // drag direction
+        private bool dragUp = true;
 
         private bool dragDownPossible = true;
         private bool dragUpPossible = true;
         private bool dragStopped = false;
         private float vertNormalPosition;
 
+        private float upInside;
+        private float lowInside;
+        private float upFade;
+        private float lowFade;
+
         private void Start()
         {
-            StartCoroutine(cGetScrollElements());
+            // get worldposition inside positions to check
+
+            // middle of the canvas
+            Vector2 viewportPosition = Camera.main.WorldToViewportPoint(canvas.transform.position);
+
+            upInside = (canvasRect.sizeDelta.y * canvasRect.localScale.y) * upperInsideHeight;
+            lowInside = (canvasRect.sizeDelta.y * canvasRect.localScale.y) * lowerInsideHeight;
+            upFade = (canvasRect.sizeDelta.y * canvasRect.localScale.y) * upperFadeHeight;
+            lowFade = (canvasRect.sizeDelta.y * canvasRect.localScale.y) * lowerFadeHeight;
+
+            UpdateScrollElements();
 
             if (useScollRectAsInsideArea)
             {
@@ -53,37 +77,56 @@ namespace FlipFall.UI
                 //insideBounds.center = scrollRect.content.transform.position;
                 //insideBounds.size = new Vector3(r.rect.width, r.rect.height);
             }
+        }
 
-            StartCoroutine(cCorrectInsideSetting());
+        public void UpdateScrollElements()
+        {
+            StartCoroutine(cGetScrollElements());
         }
 
         private void OnDrawGizmos()
         {
-            if (visualizeBounds)
+            if (visualizeHeights)
             {
                 Gizmos.color = Color.blue;
 
-                // upper Line
-                Vector3 from = new Vector3(0, upperInsideBound, 0);
-                Vector3 to = new Vector3(1200, upperInsideBound, 0);
+                float width = (canvasRect.sizeDelta.x * canvasRect.localScale.x);
+
+                // upper inside Line
+                Vector3 from = new Vector3(0, upInside, 0);
+                Vector3 to = new Vector3(width, upInside, 0);
                 Gizmos.DrawLine(from, to);
 
-                // lower line
-                from = new Vector3(0, lowerInsideBound, 0);
-                to = new Vector3(1200, lowerInsideBound, 0);
+                // lower inside line
+                from = new Vector3(0, lowInside, 0);
+                to = new Vector3(width, lowInside, 0);
+                Gizmos.DrawLine(from, to);
+
+                // upper fade Line
+                from = new Vector3(0, upFade, 0);
+                to = new Vector3(width, upFade, 0);
+                Gizmos.DrawLine(from, to);
+
+                // lower fade line
+                from = new Vector3(0, lowFade, 0);
+                to = new Vector3(width, lowFade, 0);
                 Gizmos.DrawLine(from, to);
             }
         }
 
         private IEnumerator cGetScrollElements()
         {
+            yield return new WaitForEndOfFrame();
             scrollElements = new List<UIScrollElement>();
             for (int i = 0; i < scrollRect.content.childCount; i++)
             {
-                if (scrollRect.content.GetChild(i).GetComponent<UIScrollElement>() != null)
+                UIScrollElement element = scrollRect.content.GetChild(i).GetComponent<UIScrollElement>();
+                if (element != null)
                 {
                     // set the inside value to fit its first position
-                    UIScrollElement element = scrollRect.content.GetChild(i).GetComponent<UIScrollElement>();
+
+                    print("INSIDE - element " + i + ", position " + element.transform.position);
+
                     if (!IsInside(element.transform.position))
                     {
                         // begin fading animations if object is actually outside but still set to inside
@@ -100,61 +143,75 @@ namespace FlipFall.UI
                     scrollElements.Add(element);
                 }
             }
+            StartCoroutine(cCorrectInsideSetting());
             yield break;
         }
 
         private void Update()
         {
             // is the user dragging
-            if (scrollRect.velocity != Vector2.zero)
+            Vector2 vel = scrollRect.velocity;
+            if (vel != Vector2.zero)
             {
+                if (vel.y > 0)
+                    dragUp = true;
+                else
+                    dragUp = false;
                 StartCoroutine(cCorrectInsideSetting());
             }
         }
 
         private IEnumerator cCorrectInsideSetting()
         {
-            print(scrollElements.Count);
             for (int i = 0; i < scrollElements.Count; i++)
             {
                 UIScrollElement element = scrollElements[i];
 
+                //if (i == scrollElements.Count - 1 && element.transform.position.y >= lowInside)
+                //    dragUpPossible = false;
+                //else if (i == 0 && element.transform.position.y <= upInside)
+                //    dragDownPossible = false;
+
                 // element is not inside
                 if (!IsInside(element.transform.position))
                 {
-                    // begin fading animations if object is actually outside but still set to inside
-                    if (element.inside)
-                        element.FadeOut();
-
                     // first product
-                    if (i == 0)
+                    if (i == 0 && dragUp && IsInside(scrollElements[scrollElements.Count - 1].transform.position))
                     {
                         dragDownPossible = true;
+                        dragUpPossible = false;
                     }
                     // last product
-                    else if (i == scrollElements.Count - 1)
+                    else if (i == scrollElements.Count - 1 && !dragUp && IsInside(scrollElements[0].transform.position))
                     {
+                        dragUpPossible = true;
+                        dragDownPossible = false;
+                    }
+
+                    // begin fading animations if object is actually outside but still set to inside
+                    else if (element.isFadedIn)
+                        element.FadeOut();
+                    else
+                    {
+                        dragDownPossible = true;
                         dragUpPossible = true;
                     }
                 }
-                else
+                else if (CanFade(element.transform.position, element))
                 {
                     // begin fading animations if object is actually inside but not set to inside
-                    if (!element.inside)
-                    {
-                        element.gameObject.SetActive(true);
-                        element.FadeIn();
-                    }
+                    element.gameObject.SetActive(true);
+                    element.FadeIn();
 
-                    // the first item is inside, which means we cant drag
-                    if (i == 0)
-                    {
-                        dragDownPossible = false;
-                    }
-                    else if (i == scrollElements.Count - 1)
-                    {
-                        dragUpPossible = false;
-                    }
+                    //// the first item is inside, which means we cant drag
+                    //if (i == 0)
+                    //{
+                    //    dragDownPossible = false;
+                    //}
+                    //else if (i == scrollElements.Count - 1 && scrollElements.Count > 2)
+                    //{
+                    //    dragUpPossible = false;
+                    //}
                 }
             }
             yield break;
@@ -164,7 +221,19 @@ namespace FlipFall.UI
         private bool IsInside(Vector3 position)
         {
             // in between the bounds => inside
-            if (upperInsideBound > position.y && lowerInsideBound < position.y)
+            if (upInside > position.y && lowInside < position.y)
+                //if (upInside > position.y && dragUp || lowInside < position.y && !dragUp)
+                return true;
+            return false;
+        }
+
+        // checks if a position is indie the fade area
+        private bool CanFade(Vector3 position, UIScrollElement element)
+        {
+            // in between the bounds => inside
+            //if ((int)position.y == (int)upFade || (int)position.y == (int)lowFade)
+            //if (upFade > position.y && !dragUp || lowFade < position.y && dragUp)
+            if (upFade > position.y && lowFade < position.y && element.isFadedIn)
                 return true;
             return false;
         }
@@ -172,8 +241,6 @@ namespace FlipFall.UI
         // while dragging
         public void OnDrag(PointerEventData eventData)
         {
-            //Debug.Log("dragging " + eventData.delta.y);
-
             // dragging up while dragging up shouldn't be possible
             if (eventData.delta.y < 0 && !dragDownPossible)
             {
@@ -217,13 +284,11 @@ namespace FlipFall.UI
         // begin of drag
         public void OnBeginDrag(PointerEventData eventData)
         {
-            dragging = true;
         }
 
         // end of drag
         public void OnEndDrag(PointerEventData eventData)
         {
-            dragging = false;
             scrollRect.enabled = true;
             scrollRect.vertical = true;
         }

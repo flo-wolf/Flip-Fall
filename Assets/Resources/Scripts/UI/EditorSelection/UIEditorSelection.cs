@@ -27,6 +27,8 @@ namespace FlipFall.UI
         public Transform placingParent;
         public Level defaultLevelPrefab;
 
+        public UIScrollFade uiScrollFade;
+
         public static List<UIEditorLevel> uiEditorLevels;
 
         private void Start()
@@ -75,6 +77,7 @@ namespace FlipFall.UI
             print("addbtn");
             SoundManager.ButtonClicked();
             StartCoroutine(cCreateNewLevel());
+            uiScrollFade.UpdateScrollElements();
             // animation
         }
 

@@ -17,6 +17,8 @@ namespace FlipFall.Editor
     {
         public GameObject handlePrefab;
         public GameObject handleParent;
+        public Camera editorCamera;
+
         public int handleSize = 50;
         public bool showHandles = true;
 
@@ -29,6 +31,7 @@ namespace FlipFall.Editor
         private bool handlesShown = true;
 
         public static List<Handle> selectedHandles = new List<Handle>();
+        public static Handle quickDragHandle;
 
         private void Awake()
         {
@@ -129,6 +132,13 @@ namespace FlipFall.Editor
             }
             else if (handlesShown)
                 DestroyHandles();
+        }
+
+        private void VertexAdd()
+        {
+            if (Input.touchCount == 1)
+            {
+            }
         }
     }
 

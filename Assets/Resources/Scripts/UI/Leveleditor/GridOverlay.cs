@@ -46,6 +46,7 @@ namespace FlipFall.Editor
             //end = new Vector2(start.x + viewSizeX, start.y + viewSizeY);
 
             //print(viewSizeX + " - " + viewSizeY + " - " + start + " - " + end);
+            mainColor.a = 0.7F;
 
             gridColorBackup = mainColor;
             StartCoroutine(cFadeIn());

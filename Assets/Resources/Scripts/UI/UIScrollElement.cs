@@ -21,37 +21,33 @@ namespace FlipFall.UI
 
         // Controls wether or not is is needed to start a fading animation
         // if an element is actually outside an insideArea, but set to inside, a fadeout will be called while correcting inside to false.
-        [HideInInspector]
-        public bool inside;
+        // [HideInInspector]
+        public bool isFadedIn = false;
 
-        public enum Position { first, last, between }
-        public Position position = Position.between;
-
-        [HideInInspector]
+        //  [HideInInspector]
         public bool canBeAnimated = true;
 
         // Use this for initialization
         private void Awake()
         {
-            inside = false;
-            anim.Play("scrollElementFadein");
+            isFadedIn = false;
+            //anim.Play("scrollElementFadein");
             Main.onSceneChange.AddListener(SceneChanged);
             canBeAnimated = true;
         }
 
         private void SceneChanged(Main.Scene scene)
         {
+            FadeOut();
             canBeAnimated = false;
-            if (inside)
-                anim.Play("scrollElementFadeout");
         }
 
         // begins fade-in animation. Animator needs to have a "fadein" trigger and transitions using it.
         public void FadeIn()
         {
-            if (canBeAnimated)
+            if (canBeAnimated && !isFadedIn)
             {
-                inside = true;
+                isFadedIn = true;
                 anim.Play("scrollElementFadein");
             }
         }
@@ -59,9 +55,9 @@ namespace FlipFall.UI
         // begins fade-out animation. Animator needs to have a "fadeout" trigger and transitions using it.
         public void FadeOut()
         {
-            if (canBeAnimated)
+            if (canBeAnimated && isFadedIn)
             {
-                inside = false;
+                isFadedIn = false;
                 anim.Play("scrollElementFadeout");
             }
         }

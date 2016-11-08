@@ -14,11 +14,12 @@ namespace FlipFall.LevelObjects
         private void Awake()
         {
             meshFilter = GetComponent<MeshFilter>();
-            MeshRenderer mr = GetComponent<MeshRenderer>();
+            mr = GetComponent<MeshRenderer>();
             mr.material.SetColor("_Color", ThemeManager.theme.moveZoneColor);
-            mr.material.SetFloat("_SliceAmount", 0F);
+            mr.material.SetFloat("_SliceAmount", 1F);
 
             Main.onSceneChange.AddListener(SceneChanged);
+            StartCoroutine(cReverseDissolveLevel(LevelManager._instance.DissolveLevelDuration));
         }
 
         private void SceneChanged(Main.Scene s)
@@ -47,6 +48,25 @@ namespace FlipFall.LevelObjects
                 {
                     t += Time.deltaTime * (Time.timeScale / duration);
                     m.SetFloat("_SliceAmount", t);
+                    yield return 0;
+                }
+            }
+            else
+                Debug.Log("Dissolving Level failed, moveAreaGo MeshRenderer not found.");
+            yield break;
+        }
+
+        private IEnumerator cReverseDissolveLevel(float duration)
+        {
+            if (mr != null)
+            {
+                yield return new WaitForSeconds(0.1F);
+                Material m = mr.material;
+                float t = 0F;
+                while (t < 1.0f)
+                {
+                    t += Time.deltaTime * (Time.timeScale / duration);
+                    m.SetFloat("_SliceAmount", 1 - t);
                     yield return 0;
                 }
             }

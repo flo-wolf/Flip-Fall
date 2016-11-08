@@ -26,7 +26,7 @@ public class UIEditorLevel : MonoBehaviour
 
     public LevelData levelData;
 
-    [Header("UIEditorLevel Components")]
+    [Header("Components")]
     public Text titleText;
     public Button editButton;
     public Button playButton;

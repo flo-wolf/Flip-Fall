@@ -84,7 +84,7 @@ namespace FlipFall.Editor
                 else
                 {
                     //old one, working
-                    Vector3 touchDeltaPosition = new Vector3(-touchZero.deltaPosition.x * Time.deltaTime * 3000, -touchZero.deltaPosition.y * Time.deltaTime * 3000, 0);
+                    Vector3 touchDeltaPosition = new Vector3(-touchZero.deltaPosition.x * Time.deltaTime * 500, -touchZero.deltaPosition.y * Time.deltaTime * 500, 0);
                     transform.position += touchDeltaPosition;
 
                     //debug1.text = "moving";
