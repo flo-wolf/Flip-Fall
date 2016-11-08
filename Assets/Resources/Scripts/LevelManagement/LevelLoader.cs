@@ -20,7 +20,7 @@ namespace FlipFall.Levels
         public static bool IsLoaded { get; private set; }
 
         public static string SavePath = "CustomLevels/";
-        public static string SavePathAndroid = Application.persistentDataPath + "/CustomLevels/";
+        public static string SavePathAndroid = Application.persistentDataPath + "/";
         public static string saveExtention = ".levelData";
 
         public static List<Level> LoadPrefabLevels()
@@ -54,9 +54,12 @@ namespace FlipFall.Levels
             List<LevelData> dataLoading = new List<LevelData>();
             foreach (FileInfo fi in fileInfos)
             {
-                // load each leveldata in the directory
-                string filename = fi.Name.Replace(saveExtention, "");
-                dataLoading.Add(LoadCustomLevel(filename));
+                // load each leveldata in the directory, but only if its not the progress
+                if (!fi.Name.Contains("ProgressSave"))
+                {
+                    string filename = fi.Name.Replace(saveExtention, "");
+                    dataLoading.Add(LoadCustomLevel(filename));
+                }
             }
             return dataLoading;
         }

@@ -33,11 +33,13 @@ namespace FlipFall.Editor
         private void Awake()
         {
             selectedHandles = new List<Handle>();
-            OnDisable();
+            DestroyHandles();
         }
 
         private void Start()
         {
+            Main.onSceneChange.AddListener(SceneChanged);
+
             if (LevelPlacer.generatedLevel != null)
             {
                 //mesh = LevelEditor.editLevel.mergedMesh;
@@ -76,12 +78,22 @@ namespace FlipFall.Editor
         // destory handles
         private void OnDisable()
         {
+            DestroyHandles();
+        }
+
+        private void DestroyHandles()
+        {
             GameObject[] handles = GameObject.FindGameObjectsWithTag("handle");
             foreach (GameObject handle in handles)
             {
                 DestroyImmediate(handle);
                 handlesShown = false;
             }
+        }
+
+        private void SceneChanged(Main.Scene s)
+        {
+            showHandles = false;
         }
 
         public void OnClick()
@@ -116,7 +128,7 @@ namespace FlipFall.Editor
                 LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = mesh;
             }
             else if (handlesShown)
-                OnDisable();
+                DestroyHandles();
         }
     }
 

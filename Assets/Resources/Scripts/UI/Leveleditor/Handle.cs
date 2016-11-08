@@ -25,6 +25,8 @@ namespace FlipFall.Editor
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            VertHandler.selectedHandles.Add(this);
+
             // we are selecting verticies
             if (LevelEditor.editorMode == LevelEditor.EditorMode.tool)
             {
@@ -51,30 +53,24 @@ namespace FlipFall.Editor
             dragging = true;
 
             // save original positions
-            if (LevelEditor.editorMode == LevelEditor.EditorMode.tool)
+            oPositions = new Vector3[VertHandler.selectedHandles.Count];
+            for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
             {
-                oPositions = new Vector3[VertHandler.selectedHandles.Count];
-                for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
-                {
-                    oPositions[i] = VertHandler.selectedHandles[i].transform.position;
-                }
+                oPositions[i] = VertHandler.selectedHandles[i].transform.position;
             }
         }
 
         // while dragging, transform the selected handles
         public void OnDrag(PointerEventData eventData)
         {
-            if (LevelEditor.editorMode == LevelEditor.EditorMode.tool)
+            // alter positions based on the original position plus the drag delta
+            for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
             {
-                // alter positions based on the original position plus the drag delta
-                for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
-                {
-                    Vector3 dragPos = Camera.main.ScreenToWorldPoint(eventData.position);
-                    dragPos.z = 0;
-                    //Vector3 newPos = VertHandler.selectedHandles[i].transform.position;
-                    //newPos += new Vector3(eventData.delta.x / 5, eventData.delta.y / 5, 0);
-                    VertHandler.selectedHandles[i].transform.position = dragPos;
-                }
+                Vector3 dragPos = Camera.main.ScreenToWorldPoint(eventData.position);
+                dragPos.z = 0;
+                //Vector3 newPos = VertHandler.selectedHandles[i].transform.position;
+                //newPos += new Vector3(eventData.delta.x / 5, eventData.delta.y / 5, 0);
+                VertHandler.selectedHandles[i].transform.position = dragPos;
             }
         }
 
@@ -82,22 +78,21 @@ namespace FlipFall.Editor
         public void OnEndDrag(PointerEventData eventData)
         {
             dragging = false;
-            if (LevelEditor.editorMode == LevelEditor.EditorMode.tool)
+            // alter positions based on the original position plus the drag delta
+            for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
             {
-                // alter positions based on the original position plus the drag delta
-                for (int i = 0; i < VertHandler.selectedHandles.Count; i++)
+                Vector3 newPos = VertHandler.selectedHandles[i].transform.position;
+
+                // snapping enabled?
+                if (GridOverlay._instance != null && GridOverlay._instance.snapToGrid)
                 {
-                    Vector3 newPos = VertHandler.selectedHandles[i].transform.position;
-
-                    // snapping enabled?
-                    if (GridOverlay._instance != null && GridOverlay._instance.snapToGrid)
-                    {
-                        newPos = Snap(newPos, GridOverlay._instance.smallStep);
-                    }
-
-                    VertHandler.selectedHandles[i].transform.position = newPos;
+                    newPos = Snap(newPos, GridOverlay._instance.smallStep);
                 }
+
+                VertHandler.selectedHandles[i].transform.position = newPos;
             }
+
+            VertHandler.selectedHandles.Remove(this);
         }
 
         // snapping

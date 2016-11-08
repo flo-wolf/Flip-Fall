@@ -17,6 +17,13 @@ namespace FlipFall.LevelObjects
             MeshRenderer mr = GetComponent<MeshRenderer>();
             mr.material.SetColor("_Color", ThemeManager.theme.moveZoneColor);
             mr.material.SetFloat("_SliceAmount", 0F);
+
+            Main.onSceneChange.AddListener(SceneChanged);
+        }
+
+        private void SceneChanged(Main.Scene s)
+        {
+            DissolveLevel();
         }
 
         private void UpdateColliders()
@@ -25,6 +32,7 @@ namespace FlipFall.LevelObjects
 
         public void DissolveLevel()
         {
+            mr = GetComponent<MeshRenderer>();
             StartCoroutine(cDissolveLevel(LevelManager._instance.DissolveLevelDuration));
         }
 
@@ -32,7 +40,7 @@ namespace FlipFall.LevelObjects
         {
             if (mr != null)
             {
-                yield return new WaitForSeconds(LevelManager._instance.DissolveDelay);
+                yield return new WaitForSeconds(0.1F);
                 Material m = mr.material;
                 float t = 0F;
                 while (t < 1.0f)
