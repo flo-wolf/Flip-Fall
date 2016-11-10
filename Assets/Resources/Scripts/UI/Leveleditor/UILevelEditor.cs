@@ -92,10 +92,17 @@ namespace FlipFall.UI
 
         public static void DeleteShow(bool active)
         {
+            print("active? " + active);
             if (active)
+            {
+                _instance.animator.ResetTrigger("deleteHide");
                 _instance.animator.SetTrigger("deleteShow");
+            }
             else
+            {
+                _instance.animator.ResetTrigger("deleteShow");
                 _instance.animator.SetTrigger("deleteHide");
+            }
         }
 
         public void DeleteVertsButton()

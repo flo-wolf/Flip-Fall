@@ -93,7 +93,7 @@ namespace FlipFall.Editor
 
         private void DestroyHandles()
         {
-            UILevelEditor.DeleteShow(false);
+            //UILevelEditor.DeleteShow(false);
             GameObject[] handles = GameObject.FindGameObjectsWithTag("handle");
             foreach (GameObject handle in handles)
             {

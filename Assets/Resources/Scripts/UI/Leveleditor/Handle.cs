@@ -72,7 +72,7 @@ namespace FlipFall.Editor
                     VertHandler.selectedHandles.Add(this);
                     UILevelEditor.DeleteShow(true);
                     GetComponent<Image>().color = selectedColor;
-                    print("selected this handle at " + transform.position + " there are " + VertHandler.selectedHandles.Count + " elements in the selection");
+                    //print("selected this handle at " + transform.position + " there are " + VertHandler.selectedHandles.Count + " elements in the selection");
                 }
                 // this handle is already selected, deselect it
                 else
@@ -82,7 +82,7 @@ namespace FlipFall.Editor
                         UILevelEditor.DeleteShow(false);
 
                     GetComponent<Image>().color = unselectedColor;
-                    print("selected this handle at " + transform.position + " there are " + VertHandler.selectedHandles.Count + " elements in the selection");
+                    //print("selected this handle at " + transform.position + " there are " + VertHandler.selectedHandles.Count + " elements in the selection");
                 }
             }
             else if (!VertHandler.selectedHandles.Any(x => x == this))
