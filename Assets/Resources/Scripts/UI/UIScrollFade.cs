@@ -233,7 +233,7 @@ namespace FlipFall.UI
             // in between the bounds => inside
             //if ((int)position.y == (int)upFade || (int)position.y == (int)lowFade)
             //if (upFade > position.y && !dragUp || lowFade < position.y && dragUp)
-            if (upFade > position.y && lowFade < position.y && element.isFadedIn)
+            if (upFade > position.y && lowFade < position.y && !element.isFadedIn)
                 return true;
             return false;
         }

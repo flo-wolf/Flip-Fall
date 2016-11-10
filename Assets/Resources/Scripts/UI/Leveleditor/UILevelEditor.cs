@@ -16,13 +16,21 @@ namespace FlipFall.UI
 {
     public class UILevelEditor : MonoBehaviour
     {
+        public static UILevelEditor _instance;
+
         public Animator animator;
 
         private bool unsavedLeaveRequest = false;
         private bool saveRequest = false;
 
-        public void Start()
+        public void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+            _instance = this;
         }
 
         public void NewLevel()
@@ -40,7 +48,6 @@ namespace FlipFall.UI
         }
 
         public void BackButton()
-
         {
             LevelEditor.changesAreSaved = false;
             if (!LevelEditor.changesAreSaved)
@@ -81,6 +88,20 @@ namespace FlipFall.UI
         {
             //LevelEditor.editorMode = LevelEditor.EditorMode.moveVertex;
             print("----- Moving " + VertHandler.selectedHandles.Count + " elements.");
+        }
+
+        public static void DeleteShow(bool active)
+        {
+            if (active)
+                _instance.animator.SetTrigger("deleteShow");
+            else
+                _instance.animator.SetTrigger("deleteHide");
+        }
+
+        public void DeleteVertsButton()
+        {
+            VertHandler._instance.DeleteAllSelectedVerts();
+            _instance.animator.SetTrigger("deleteHide");
         }
 
         public void GridToggle(Toggle t)

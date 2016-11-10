@@ -159,14 +159,10 @@ namespace FlipFall.Editor
                 if (showSub)
                 {
                     GL.Color(mainColor);
-
-                    // lowest horizontal line to render
-
                     // SmallStep Lines
                     for (float j = start.y; j - smallStep <= end.y; j += smallStep)
                     {
                         // Horizontal Lines
-
                         GL.Vertex3(start.x, j, 500);
                         GL.Vertex3(end.x, j, 500);
 

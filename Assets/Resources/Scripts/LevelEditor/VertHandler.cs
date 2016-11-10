@@ -1,8 +1,10 @@
 ﻿using FlipFall;
 using FlipFall.Levels;
+using FlipFall.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +17,8 @@ namespace FlipFall.Editor
     [ExecuteInEditMode]
     public class VertHandler : MonoBehaviour
     {
+        public static VertHandler _instance;
+
         public GameObject handlePrefab;
         public GameObject handleParent;
         public Camera editorCamera;
@@ -35,23 +39,26 @@ namespace FlipFall.Editor
 
         private void Awake()
         {
+            if (_instance == null)
+                _instance = this;
+            else
+                Destroy(this);
+
             selectedHandles = new List<Handle>();
+
+            // destroy leftover handles
             DestroyHandles();
+
+            Main.onSceneChange.AddListener(SceneChanged);
         }
 
         private void Start()
         {
-            Main.onSceneChange.AddListener(SceneChanged);
-
             if (LevelPlacer.generatedLevel != null)
             {
-                //mesh = LevelEditor.editLevel.mergedMesh;
-
                 mesh = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
-
-                handlesShown = true;
-
                 verts = mesh.vertices;
+                handlesShown = true;
 
                 // crate handles
                 if (showHandles)
@@ -72,7 +79,7 @@ namespace FlipFall.Editor
 
                         handle.transform.position = vertPos;
 
-                        print(vertPos);
+                        //print(vertPos);
                     }
                 }
             }
@@ -86,6 +93,7 @@ namespace FlipFall.Editor
 
         private void DestroyHandles()
         {
+            UILevelEditor.DeleteShow(false);
             GameObject[] handles = GameObject.FindGameObjectsWithTag("handle");
             foreach (GameObject handle in handles)
             {
@@ -114,7 +122,7 @@ namespace FlipFall.Editor
         {
             if (showHandles && !handlesShown)
                 Start();
-            else if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
+            else if (showHandles && LevelPlacer.generatedLevel != null && handlesShown && EditorInput.itemDragged)
             {
                 handles = GameObject.FindGameObjectsWithTag("handle");
                 for (int i = 0; i < verts.Length; i++)
@@ -130,15 +138,110 @@ namespace FlipFall.Editor
 
                 LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = mesh;
             }
-            else if (handlesShown)
+            else if (handlesShown && !showHandles)
                 DestroyHandles();
         }
 
-        private void VertexAdd()
+        // add a vertex at the given position - called by EditorInput class
+        public void VertexAdd(Vector3 pos)
         {
-            if (Input.touchCount == 1)
+            if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
             {
+                // two verticies are selected, everything ready for expanding the mesh
+                if (selectedHandles.Count == 2)
+                {
+                    print("VertexAdd() at " + pos);
+                    // get the currect verticies
+                    Mesh m = new Mesh();
+                    m = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
+                    verts = m.vertices;
+                    Vector3[] newVerts = new Vector3[verts.Length + 1];
+                    for (int i = 0; i < verts.Length; i++)
+                        newVerts[i] = verts[i];
+
+                    // add the new position to the vertex arrays
+                    pos.z = 0;
+                    newVerts[verts.Length] = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(pos);
+
+                    // get the triangles
+                    int[] triangles = new int[m.triangles.Length + 3];
+                    for (int s = 0; s < m.triangles.Length; s++)
+                    {
+                        triangles[s] = m.triangles[s];
+                    }
+
+                    // add a new triangle by referencing the two selected verticies plus the new one
+                    // add selected verticies into a temporary storage
+                    int[] newIndicies = new int[3];
+                    newIndicies[0] = newVerts.Length - 1;
+                    for (int i = 0; i < newVerts.Length; i++)
+                    {
+                        // the interated vertex fits to the first selected handler
+                        if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[0].transform.position) == newVerts[i])
+                        {
+                            newIndicies[1] = i;
+                        }
+                        // the interated vertex fits to the second selected handler
+                        else if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[1].transform.position) == newVerts[i])
+                        {
+                            newIndicies[2] = i;
+                        }
+                    }
+
+                    // sort the triangle verticies in a clockwise order to ensure the triangle faces our direction and wont get rendered backwards
+                    Vector3[] triangleVerts = new Vector3[3];
+                    triangleVerts[0] = newVerts[newIndicies[0]];
+                    triangleVerts[1] = newVerts[newIndicies[1]];
+                    triangleVerts[2] = newVerts[newIndicies[2]];
+                    // calculate the center of the triangle
+                    Vector2 center = (triangleVerts[0] + triangleVerts[1] + triangleVerts[2]) / 3;
+                    Array.Sort(triangleVerts, new ClockwiseComparer(center));
+                    for (int i = 0; i < newVerts.Length; i++)
+                    {
+                        // the interated vertex fits to the first selected handler
+                        if (triangleVerts[0] == newVerts[i])
+                        {
+                            newIndicies[0] = i;
+                        }
+                        // the interated vertex fits to the second selected handler
+                        else if (triangleVerts[1] == newVerts[i])
+                        {
+                            newIndicies[1] = i;
+                        }
+                        else if (triangleVerts[2] == newVerts[i])
+                        {
+                            newIndicies[2] = i;
+                        }
+                    }
+
+                    // add the sorted indicies to the triangles array
+                    triangles[m.triangles.Length] = newIndicies[0];
+                    triangles[m.triangles.Length + 1] = newIndicies[1];
+                    triangles[m.triangles.Length + 2] = newIndicies[2];
+
+                    // update the mesh
+                    m.vertices = newVerts;
+                    m.triangles = triangles;
+                    m.RecalculateBounds();
+                    m.RecalculateNormals();
+                    mesh = m;
+                    LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = m;
+
+                    // recalculate handles
+                    selectedHandles = new List<Handle>();
+                    DestroyHandles();
+                    Start();
+                }
             }
+        }
+
+        public void DeleteAllSelectedVerts()
+        {
+        }
+
+        // add a vertex at the given position - called by EditorInput class
+        private void VertexDelete(Vector3 pos)
+        {
         }
     }
 
