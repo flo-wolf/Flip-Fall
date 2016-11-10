@@ -76,7 +76,7 @@ namespace FlipFall.Editor
                     {
                         // Change the orthographic size based on the change in distance between the touches.
                         float sizeToChange = deltaMagnitudeDiff * zoomSpeed;
-                        if ((sizeToChange > 0 && cam.orthographicSize + sizeToChange < maxSize) || (sizeToChange < 0 && cam.orthographicSize - sizeToChange > minSize))
+                        if ((sizeToChange > 0 && (cam.orthographicSize + sizeToChange) < maxSize) || (sizeToChange < 0 && (cam.orthographicSize - sizeToChange) > minSize))
                         {
                             cam.orthographicSize += sizeToChange;
                         }

@@ -69,18 +69,14 @@ namespace FlipFall.Editor
                 // this handle isn't selected yet, add it to the selection
                 if (!VertHandler.selectedHandles.Any(x => x == this))
                 {
-                    VertHandler.selectedHandles.Add(this);
-                    UILevelEditor.DeleteShow(true);
+                    VertHandler.SelectHandle(this);
                     GetComponent<Image>().color = selectedColor;
                     //print("selected this handle at " + transform.position + " there are " + VertHandler.selectedHandles.Count + " elements in the selection");
                 }
                 // this handle is already selected, deselect it
                 else
                 {
-                    VertHandler.selectedHandles.Remove(this);
-                    if (VertHandler.selectedHandles.Count == 0)
-                        UILevelEditor.DeleteShow(false);
-
+                    VertHandler.DeselectHandle(this);
                     GetComponent<Image>().color = unselectedColor;
                     //print("selected this handle at " + transform.position + " there are " + VertHandler.selectedHandles.Count + " elements in the selection");
                 }
@@ -95,7 +91,7 @@ namespace FlipFall.Editor
             }
             lastTap = Time.time;
 
-            StartCoroutine(cNextFrameDragDisable());
+            StartCoroutine(cDragDisableDelayed());
         }
 
         // begin of drag, called once
@@ -135,13 +131,28 @@ namespace FlipFall.Editor
                 newPos = beforeDragPositions[i] - dragDelta;
 
                 // check if the desired position is not crossing the triangle
-                if (IsHandlerPositionValid(LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(newPos)))
-                    VertHandler.selectedHandles[i].transform.position = beforeDragPositions[i] - dragDelta;
+                if (VertHelper.IsHandlerPositionValid(transform.position, newPos))
+                {
+                    // update the selection triangle verts
+                    Vector3 localOldPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(VertHandler.selectedHandles[i].transform.position);
+                    Vector3 localnewPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(newPos);
+                    if (VertHandler.selectionTriangleVerts.Any(x => x == localOldPos))
+                    {
+                        // get all vector entries that are equal to this position and replace them with the newest position
+                        List<int> indexes = Enumerable.Range(0, VertHandler.selectionTriangleVerts.Count).Where(k => VertHandler.selectionTriangleVerts[k] == localOldPos).ToList();
+
+                        foreach (int ind in indexes)
+                        {
+                            VertHandler.selectionTriangleVerts[ind] = localnewPos;
+                        }
+                    }
+                    VertHandler.selectedHandles[i].transform.position = newPos;
+                }
             }
             if (VertHandler.quickDragHandle != null)
             {
                 newPos = quickDragBefore - dragDelta;
-                if (IsHandlerPositionValid(LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(newPos)))
+                if (VertHelper.IsHandlerPositionValid(transform.position, newPos))
                     VertHandler.quickDragHandle.transform.position = newPos;
             }
         }
@@ -157,7 +168,7 @@ namespace FlipFall.Editor
                 // snapping enabled?
                 if (GridOverlay._instance != null && GridOverlay._instance.snapToGrid)
                 {
-                    newPos = Snap(newPos, GridOverlay._instance.smallStep);
+                    newPos = VertHelper.Snap(newPos);
                 }
 
                 VertHandler.selectedHandles[i].transform.position = newPos;
@@ -169,103 +180,20 @@ namespace FlipFall.Editor
                 // snapping enabled?
                 if (GridOverlay._instance != null && GridOverlay._instance.snapToGrid)
                 {
-                    newPos = Snap(newPos, GridOverlay._instance.smallStep);
+                    newPos = VertHelper.Snap(newPos);
                 }
                 VertHandler.quickDragHandle.transform.position = newPos;
             }
 
-            StartCoroutine(cNextFrameDragDisable());
+            StartCoroutine(cDragDisableDelayed());
             VertHandler.quickDragHandle = null;
         }
 
-        // prevent verticies from crossing the line between the two opposing verticies in a triangle, which would create swapped meshes
-        private bool IsHandlerPositionValid(Vector3 destination)
+        private IEnumerator cDragDisableDelayed()
         {
-            print(destination);
-            // get triangle verticies that get modified by this handler
-
-            Vector3[] verts = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh.vertices;
-            int[] triangles = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh.triangles;
-            Vector3 currentPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(transform.position);
-
-            // find triangles this handler is connected with
-            for (int i = 0; i < triangles.Length; i += 3)
-            {
-                Vector3 p1 = verts[triangles[i + 0]];
-                Vector3 p2 = verts[triangles[i + 1]];
-                Vector3 p3 = verts[triangles[i + 2]];
-
-                // this triangle contains our handler's vector
-                if (currentPos == p1)
-                {
-                    // the destination position is on the other side of the line
-                    if (IsLeft(p2, p3, p1) != IsLeft(p2, p3, destination))
-                    {
-                        print("i " + i + " false");
-                        return false;
-                    }
-                }
-                else if (currentPos == p2)
-                {
-                    // the destination position is on the other side of the line
-                    if (IsLeft(p1, p3, p2) != IsLeft(p1, p3, destination))
-                        return false;
-                }
-                else if (currentPos == p3)
-                {
-                    // the destination position is on the other side of the line
-                    if (IsLeft(p1, p2, p3) != IsLeft(p1, p2, destination))
-                        return false;
-                }
-            }
-            return true;
-        }
-
-        // check if point c is on the left of a line drawn between a and b
-        public bool IsLeft(Vector3 a, Vector3 b, Vector3 c)
-        {
-            return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) > 0;
-        }
-
-        private IEnumerator cNextFrameDragDisable()
-        {
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForSecondsRealtime(0.1F);
             EditorInput.itemDragged = false;
             yield break;
-        }
-
-        // snapping
-        private Vector3 Snap(Vector3 v, float snapValue)
-        {
-            Vector3 snapPos = new Vector3
-            (
-                snapValue * Mathf.Round(v.x / snapValue),
-                snapValue * Mathf.Round(v.y / snapValue),
-                v.z
-            );
-
-            Vector3 correctionDirection = (v - snapPos).normalized;
-            print(correctionDirection);
-
-            Vector3 localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(snapPos);
-
-            // try the other three surrounding positions if the snapPos is not valid
-            if (!IsHandlerPositionValid(localSnapPos))
-            {
-                // position got corrected to the right, try the next snapPosition to the left of it
-                if (correctionDirection.x > 0)
-                    snapPos.x -= snapValue;
-                else
-                    snapPos.x += snapValue;
-
-                // position got corrected to the top, try the next snapPosition to the buttom of it
-                if (correctionDirection.y > 0)
-                    snapPos.y -= snapValue;
-                else
-                    snapPos.y += snapValue;
-            }
-
-            return snapPos;
         }
     }
 }
