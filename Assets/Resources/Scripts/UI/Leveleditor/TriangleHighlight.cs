@@ -28,12 +28,6 @@ namespace FlipFall.Editor
             highlightMaterial.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.LessEqual);
         }
 
-        //private Vector3[] GetTriangles()
-        //{
-        //    Vector3[] verts = new Vector3[]
-        //    return VertHandler.selectionTriangleVerts.ToArray();
-        //}
-
         private void OnPostRender()
         {
             if (highlightTriangles)

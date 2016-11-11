@@ -105,8 +105,11 @@ namespace FlipFall.Editor
                 selectionTriangleVerts.Add(v);
             }
 
-            if (vertices.Length > 3)
+            // there are at lest three verticies in total left and we plan to delete a vertex that is component of only one triangle
+            if (vertices.Length > 3 && selectionTriangleVerts.Count <= 3)
                 UILevelEditor.DeleteShow(true);
+            else
+                UILevelEditor.DeleteShow(false);
         }
 
         public static void DeselectHandle(Handle h)
@@ -127,6 +130,8 @@ namespace FlipFall.Editor
                 selectionTriangleVerts.Clear();
                 UILevelEditor.DeleteShow(false);
             }
+            else if (vertices.Length > 3 && selectionTriangleVerts.Count <= 3)
+                UILevelEditor.DeleteShow(true);
         }
 
         // destory handles
@@ -305,9 +310,10 @@ namespace FlipFall.Editor
                 // two verticies are selected and there are enough verticies left
                 if (selectedHandles.Count > 0 && vertices.Length > selectedHandles.Count + 2)
                 {
-                    // get the selected vertices about to be deleted
+                    // get the selected vertices about to be deleted in local space
                     int length = selectedHandles.Count;
                     Vector3[] selectedVerts = new Vector3[length];
+                    List<int> selectedIndices = new List<int>();
                     for (int i = 0; i < length; i++)
                     {
                         Vector3 local = selectedHandles[i].transform.position;
@@ -315,8 +321,66 @@ namespace FlipFall.Editor
                         selectedVerts[i] = local;
                     }
 
-                    List<int> deleteTriangles = new List<int>();
-                    List<int> keepTriangles = new List<int>();
+                    // get indices of these selected vertices
+                    for (int i = 0; i < triangles.Length; i++)
+                    {
+                        Vector3 p1 = vertices[triangles[i + 0]];
+                        foreach (Vector3 v in selectedVerts)
+                        {
+                            if (v == p1)
+                            {
+                                selectedIndices.Add(triangles[i]);
+                            }
+                        }
+                    }
+
+                    // find triangles in the triangle array that contain these indicies and remove them
+                    List<int> newTriangles = new List<int>();
+                    for (int k = 0; k < triangles.Length; k += 3)
+                    {
+                        int i1 = triangles[k + 0];
+                        int i2 = triangles[k + 1];
+                        int i3 = triangles[k + 2];
+
+                        // check if the current pointed triangle contains one of the indiciees we want to delete
+                        foreach (int index in selectedIndices)
+                        {
+                            print("index " + index + " i1: " + i1 + " i2: " + i2 + " i3: " + i3 + " selectedIndicesCount: " + selectedIndices.Count);
+                            // if thats not the case, keep them, otherwise dont include them in the new triangle array
+                            if (!(index == i1 || index == i2 || index == i3))
+                            {
+                                // compensate for the deleted verticies by making the indices point to the correct vertex again
+                                if (i1 >= index)
+                                {
+                                    newTriangles.Add(i1 - 1);
+                                    print("remove 1 from entry " + k + " with value " + (i1 - 1));
+                                }
+                                else
+                                {
+                                    newTriangles.Add(i1);
+                                    print("entry " + (k + 1) + " with value " + (i1 - 0));
+                                }
+                                if (i2 >= index)
+                                {
+                                    newTriangles.Add(i2 - 1);
+                                    print("remove 1 from entry " + (k + 2) + " with value " + (i1 - 1));
+                                }
+                                else {
+                                    newTriangles.Add(i2);
+                                    print("entry " + (k + 2) + " with value " + (i1 - 0));
+                                }
+                                if (i3 >= index)
+                                {
+                                    newTriangles.Add(i3 - 1);
+                                    print("remove 1 from entry " + (k + 3) + " with value " + (i1 - 1));
+                                }
+                                else {
+                                    newTriangles.Add(i3);
+                                    print("remove 1 from entry " + (k + 3) + " with value " + (i1 - 0));
+                                }
+                            }
+                        }
+                    }
 
                     // remove all the selected vertices from the mesh's vertices array
                     Vector3[] newVerts = new Vector3[verts.Length - length];
@@ -329,53 +393,10 @@ namespace FlipFall.Editor
                         }
                     }
 
-                    // compensates for deleted vertices in the triangle array, will be added to the indicies value
-                    int triangleOffset = 0;
-
-                    // find all triangles connected to the selectedVerts...
-                    for (int i = 0; i < triangles.Length; i += 3)
-                    {
-                        Vector3 p1 = vertices[triangles[i + 0]];
-                        Vector3 p2 = vertices[triangles[i + 1]];
-                        Vector3 p3 = vertices[triangles[i + 2]];
-
-                        foreach (Vector3 v in selectedVerts)
-                        {
-                            print("v " + v + " p1 " + p1 + " p2 " + p2 + " p3 " + p3);
-                            // the currently viewed triangle doesn't contain one of the vertices about to be deleted => keep it
-                            if ((v == p1 || v == p2 || v == p3))
-                            {
-                                triangleOffset += 3;
-                                print("offset " + triangleOffset);
-                            }
-                            else
-                            {
-                                print("keepTriangles " + i);
-                                keepTriangles.Add(i - triangleOffset);
-                                keepTriangles.Add((i + 1) - triangleOffset);
-                                keepTriangles.Add((i + 2) - triangleOffset);
-                            }
-                        }
-                    }
-
-                    foreach (int i in keepTriangles)
-                    {
-                        print(i);
-                    }
-
-                    // create a new triangle array containing only triangles about to be kept
-                    int[] newTriangles = new int[keepTriangles.Count];
-                    for (int j = 0; j < newTriangles.Length; j++)
-                    {
-                        newTriangles[j] = keepTriangles[j];
-                        print("newTriangles " + j + " , " + newTriangles[j]);
-                    }
-                    print("newTriangles " + keepTriangles.Count + " verts " + newVerts.Length);
-
                     // update the mesh
                     Mesh newMesh = new Mesh();
                     newMesh.vertices = newVerts;
-                    newMesh.triangles = newTriangles;
+                    newMesh.triangles = newTriangles.ToArray();
                     newMesh.RecalculateBounds();
                     newMesh.RecalculateNormals();
                     mesh = newMesh;
@@ -389,8 +410,109 @@ namespace FlipFall.Editor
                     return true;
                 }
             }
+
             return false;
         }
+
+        //public bool DeleteAllSelectedVerts()
+        //{
+        //    if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
+        //    {
+        //        // get the mesh
+        //        Mesh m = new Mesh();
+        //        m = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
+        //        Vector3[] vertices = m.vertices;
+        //        int[] triangles = m.triangles;
+
+        //        // two verticies are selected and there are enough verticies left
+        //        if (selectedHandles.Count > 0 && vertices.Length > selectedHandles.Count + 2)
+        //        {
+        //            // get the selected vertices about to be deleted in local space
+        //            int length = selectedHandles.Count;
+        //            Vector3[] selectedVerts = new Vector3[length];
+        //            for (int i = 0; i < length; i++)
+        //            {
+        //                Vector3 local = selectedHandles[i].transform.position;
+        //                local = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(local);
+        //                selectedVerts[i] = local;
+        //            }
+
+        //            List<int> deleteTriangles = new List<int>();
+        //            List<int> keepTriangles = new List<int>();
+
+        //            // remove all the selected vertices from the mesh's vertices array
+        //            Vector3[] newVerts = new Vector3[verts.Length - length];
+        //            for (int j = 0, p = 0; j < vertices.Length; j++)
+        //            {
+        //                if (!selectedVerts.Any(x => x == vertices[j]))
+        //                {
+        //                    newVerts[p] = vertices[j];
+        //                    p++;
+        //                }
+        //            }
+
+        //            // compensates for deleted vertices in the triangle array, will be added to the indicies value
+        //            int triangleOffset = 0;
+
+        //            // find all triangles connected to the selectedVerts...
+        //            for (int i = 0; i < triangles.Length; i += 3)
+        //            {
+        //                Vector3 p1 = vertices[triangles[i + 0]];
+        //                Vector3 p2 = vertices[triangles[i + 1]];
+        //                Vector3 p3 = vertices[triangles[i + 2]];
+
+        //                foreach (Vector3 v in selectedVerts)
+        //                {
+        //                    print("v " + v + " p1 " + p1 + " p2 " + p2 + " p3 " + p3);
+        //                    // the currently viewed triangle doesn't contain one of the vertices about to be deleted => keep it
+        //                    if ((v == p1 || v == p2 || v == p3))
+        //                    {
+        //                        triangleOffset += 3;
+        //                        print("offset " + triangleOffset);
+        //                    }
+        //                    else
+        //                    {
+        //                        print("keepTriangles " + i);
+        //                        keepTriangles.Add(i - triangleOffset);
+        //                        keepTriangles.Add((i + 1) - triangleOffset);
+        //                        keepTriangles.Add((i + 2) - triangleOffset);
+        //                    }
+        //                }
+        //            }
+
+        //            foreach (int i in keepTriangles)
+        //            {
+        //                print(i);
+        //            }
+
+        //            // create a new triangle array containing only triangles about to be kept
+        //            int[] newTriangles = new int[keepTriangles.Count];
+        //            for (int j = 0; j < newTriangles.Length; j++)
+        //            {
+        //                newTriangles[j] = keepTriangles[j];
+        //                print("newTriangles " + j + " , " + newTriangles[j]);
+        //            }
+        //            print("newTriangles " + keepTriangles.Count + " verts " + newVerts.Length);
+
+        //            // update the mesh
+        //            Mesh newMesh = new Mesh();
+        //            newMesh.vertices = newVerts;
+        //            newMesh.triangles = newTriangles;
+        //            newMesh.RecalculateBounds();
+        //            newMesh.RecalculateNormals();
+        //            mesh = newMesh;
+        //            LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = newMesh;
+
+        //            // recalculate handles
+        //            selectedHandles = new List<Handle>();
+        //            DestroyHandles();
+        //            Start();
+
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
         // add a vertex at the given position - called by EditorInput class
         private void VertexDelete(Vector3 pos)
@@ -455,24 +577,7 @@ namespace FlipFall.Editor
             }
             Debug.Log("INSIDE????? Snap sais = " + inside);
 
-            // try the other three surrounding positions if the snapPos is not valid
-            //if (!IsHandlerPositionValid(currentPos, snapPos))
-            //{
-            //    // position got corrected to the right, try the next snapPosition to the left of it
-            //    if (correctionDirection.x > 0)
-            //        snapPos.x -= snapValue;
-            //    else
-            //        snapPos.x += snapValue;
-
-            //    // position got corrected to the top, try the next snapPosition to the buttom of it
-            //    if (correctionDirection.y > 0)
-            //        snapPos.y -= snapValue;
-            //    else
-            //        snapPos.y += snapValue;
-            //}
-
             // update the selection triangle verts to fit the snapped position
-
             Vector3 localnewPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(snapPos);
             // get all vector entries that are equal to this position and replace them with the newest position
             List<int> indexes = Enumerable.Range(0, VertHandler.selectionTriangleVerts.Count).Where(k => VertHandler.selectionTriangleVerts[k] == localOldPos).ToList();
@@ -485,7 +590,6 @@ namespace FlipFall.Editor
             return snapPos;
         }
 
-        // obsolete
         // prevent verticies from crossing the line between the two opposing verticies in a triangle, which would create swapped meshes
         public static bool IsHandlerPositionValid(Vector3 oldPos, Vector3 destination)
         {
