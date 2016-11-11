@@ -413,24 +413,66 @@ namespace FlipFall.Editor
 
             Vector3 correctionDirection = (currentPos - snapPos).normalized;
 
-            // try the other three surrounding positions if the snapPos is not valid
-            if (!IsHandlerPositionValid(currentPos, snapPos))
-            {
-                // position got corrected to the right, try the next snapPosition to the left of it
-                if (correctionDirection.x > 0)
-                    snapPos.x -= snapValue;
-                else
-                    snapPos.x += snapValue;
-
-                // position got corrected to the top, try the next snapPosition to the buttom of it
-                if (correctionDirection.y > 0)
-                    snapPos.y -= snapValue;
-                else
-                    snapPos.y += snapValue;
-            }
-
-            // update the selection triangle verts
+            Mesh m = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
+            Vector3 localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(snapPos);
             Vector3 localOldPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(currentPos);
+            bool inside = IsInsideMesh(m, currentPos, localSnapPos);
+
+            if (inside)
+            {
+                int testCount = 0;
+                Vector3 testSnap = snapPos;
+                while (inside && testCount < 4)
+                {
+                    testSnap = snapPos;
+                    switch (testCount)
+                    {
+                        case 0:
+                            testSnap.x -= snapValue;
+                            testSnap.y -= snapValue;
+                            break;
+
+                        case 1:
+                            testSnap.x += snapValue;
+                            testSnap.y -= snapValue;
+                            break;
+
+                        case 2:
+                            testSnap.x -= snapValue;
+                            testSnap.y += snapValue;
+                            break;
+
+                        case 3:
+                            testSnap.x += snapValue;
+                            testSnap.y += snapValue;
+                            break;
+                    }
+
+                    localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(testSnap);
+                    inside = IsInsideMesh(m, localOldPos, localSnapPos) && !IsHandlerPositionValid(currentPos, testSnap);
+                }
+                snapPos = testSnap;
+            }
+            Debug.Log("INSIDE????? Snap sais = " + inside);
+
+            // try the other three surrounding positions if the snapPos is not valid
+            //if (!IsHandlerPositionValid(currentPos, snapPos))
+            //{
+            //    // position got corrected to the right, try the next snapPosition to the left of it
+            //    if (correctionDirection.x > 0)
+            //        snapPos.x -= snapValue;
+            //    else
+            //        snapPos.x += snapValue;
+
+            //    // position got corrected to the top, try the next snapPosition to the buttom of it
+            //    if (correctionDirection.y > 0)
+            //        snapPos.y -= snapValue;
+            //    else
+            //        snapPos.y += snapValue;
+            //}
+
+            // update the selection triangle verts to fit the snapped position
+
             Vector3 localnewPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(snapPos);
             // get all vector entries that are equal to this position and replace them with the newest position
             List<int> indexes = Enumerable.Range(0, VertHandler.selectionTriangleVerts.Count).Where(k => VertHandler.selectionTriangleVerts[k] == localOldPos).ToList();
@@ -443,15 +485,17 @@ namespace FlipFall.Editor
             return snapPos;
         }
 
+        // obsolete
         // prevent verticies from crossing the line between the two opposing verticies in a triangle, which would create swapped meshes
-        public static bool IsHandlerPositionValid(Vector3 currentPos, Vector3 destination)
+        public static bool IsHandlerPositionValid(Vector3 oldPos, Vector3 destination)
         {
-            // transform the input values into local space
-
+            // get the vertices and
             Vector3[] verts = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh.vertices;
             int[] triangles = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh.triangles;
-            destination = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(destination);
-            currentPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(currentPos);
+
+            // transform the input values into local space
+            //destination = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(destination);
+            //oldPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(oldPos);
 
             // find triangles this handler is connected with
             for (int i = 0; i < triangles.Length; i += 3)
@@ -461,7 +505,7 @@ namespace FlipFall.Editor
                 Vector3 p3 = verts[triangles[i + 2]];
 
                 // this triangle contains our handler's vector
-                if (currentPos == p1)
+                if (oldPos == p1)
                 {
                     // the destination position is on the other side of the line
                     if (IsLeft(p2, p3, p1) != IsLeft(p2, p3, destination))
@@ -469,13 +513,13 @@ namespace FlipFall.Editor
                         return false;
                     }
                 }
-                else if (currentPos == p2)
+                else if (oldPos == p2)
                 {
                     // the destination position is on the other side of the line
                     if (IsLeft(p1, p3, p2) != IsLeft(p1, p3, destination))
                         return false;
                 }
-                else if (currentPos == p3)
+                else if (oldPos == p3)
                 {
                     // the destination position is on the other side of the line
                     if (IsLeft(p1, p2, p3) != IsLeft(p1, p2, destination))
@@ -483,6 +527,42 @@ namespace FlipFall.Editor
                 }
             }
             return true;
+        }
+
+        // is the next point p inside the movearea mesh?
+        static public bool IsInsideMesh(Mesh m, Vector3 oldPos, Vector3 p)
+        {
+            Vector3[] vertices = m.vertices;
+            int[] triangles = m.triangles;
+            Vector2 point = oldPos;
+
+            bool inside = false;
+
+            for (int c = 0; c < triangles.Length; c += 3)
+            {
+                Vector2[] pPoints = new Vector2[3];
+                pPoints[0] = vertices[triangles[c]];
+                pPoints[1] = vertices[triangles[c + 1]];
+                pPoints[2] = vertices[triangles[c + 2]];
+
+                if (!(pPoints[0] == point || pPoints[1] == point || pPoints[2] == point))
+                {
+                    //Debug.Log("inside: p " + p + " p0 " + pPoints[0] + " p1 " + pPoints[1] + " p2 " + pPoints[2]);
+
+                    inside = false;
+                    for (int i = 0, j = pPoints.Length - 1; i < pPoints.Length; j = i++)
+                    {
+                        if ((pPoints[i].y > p.y) != (pPoints[j].y > p.y) &&
+                             p.x < (pPoints[j].x - pPoints[i].x) * (p.y - pPoints[i].y) / (pPoints[j].y - pPoints[i].y) + pPoints[i].x)
+                        {
+                            inside = !inside;
+                        }
+                    }
+                    if (inside)
+                        return inside;
+                }
+            }
+            return inside;
         }
 
         // check if point c is on the left of a line drawn between a and b

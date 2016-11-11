@@ -130,12 +130,14 @@ namespace FlipFall.Editor
             {
                 newPos = beforeDragPositions[i] - dragDelta;
 
-                // check if the desired position is not crossing the triangle
-                if (VertHelper.IsHandlerPositionValid(transform.position, newPos))
+                Mesh m = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
+                Vector3 localOldPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(VertHandler.selectedHandles[i].transform.position);
+                Vector3 localnewPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(newPos);
+
+                // check if the desired position is not crossing the triangle and if its not inside the mesh
+                if (!VertHelper.IsInsideMesh(m, localOldPos, localnewPos) && VertHelper.IsHandlerPositionValid(localOldPos, localnewPos))
                 {
                     // update the selection triangle verts
-                    Vector3 localOldPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(VertHandler.selectedHandles[i].transform.position);
-                    Vector3 localnewPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(newPos);
                     if (VertHandler.selectionTriangleVerts.Any(x => x == localOldPos))
                     {
                         // get all vector entries that are equal to this position and replace them with the newest position
@@ -149,10 +151,16 @@ namespace FlipFall.Editor
                     VertHandler.selectedHandles[i].transform.position = newPos;
                 }
             }
+
             if (VertHandler.quickDragHandle != null)
             {
                 newPos = quickDragBefore - dragDelta;
-                if (VertHelper.IsHandlerPositionValid(transform.position, newPos))
+                Mesh m = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
+                Vector3 localOldPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(transform.position);
+                Vector3 localnewPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(newPos);
+
+                // check if the desired position is not crossing the triangle and if its not inside the mesh
+                if (!VertHelper.IsInsideMesh(m, localOldPos, localnewPos) && VertHelper.IsHandlerPositionValid(localOldPos, localnewPos))
                     VertHandler.quickDragHandle.transform.position = newPos;
             }
         }
