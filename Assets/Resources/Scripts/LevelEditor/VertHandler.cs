@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -106,7 +105,8 @@ namespace FlipFall.Editor
                 selectionTriangleVerts.Add(v);
             }
 
-            UILevelEditor.DeleteShow(true);
+            if (vertices.Length > 3)
+                UILevelEditor.DeleteShow(true);
         }
 
         public static void DeselectHandle(Handle h)
@@ -139,10 +139,10 @@ namespace FlipFall.Editor
         {
             GameObject[] handles = GameObject.FindGameObjectsWithTag("handle");
 #if UNITY_EDITOR
-            if (EditorApplication.isPlaying)
-            {
-                UILevelEditor.DeleteShow(false);
-            }
+            //if (EditorApplication.isPlaying)
+            //{
+            //    UILevelEditor.DeleteShow(false);
+            //}
 #endif
 #if UNITY_ANDROID
             UILevelEditor.DeleteShow(false);
@@ -368,6 +368,7 @@ namespace FlipFall.Editor
                     for (int j = 0; j < newTriangles.Length; j++)
                     {
                         newTriangles[j] = keepTriangles[j];
+                        print("newTriangles " + j + " , " + newTriangles[j]);
                     }
                     print("newTriangles " + keepTriangles.Count + " verts " + newVerts.Length);
 
@@ -431,10 +432,12 @@ namespace FlipFall.Editor
             // update the selection triangle verts
             Vector3 localOldPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(currentPos);
             Vector3 localnewPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(snapPos);
-            if (VertHandler.selectionTriangleVerts.Any(x => x == localOldPos))
+            // get all vector entries that are equal to this position and replace them with the newest position
+            List<int> indexes = Enumerable.Range(0, VertHandler.selectionTriangleVerts.Count).Where(k => VertHandler.selectionTriangleVerts[k] == localOldPos).ToList();
+
+            foreach (int ind in indexes)
             {
-                int index = VertHandler.selectionTriangleVerts.FindIndex(x => x == localOldPos);
-                VertHandler.selectionTriangleVerts[index] = localnewPos;
+                VertHandler.selectionTriangleVerts[ind] = localnewPos;
             }
 
             return snapPos;

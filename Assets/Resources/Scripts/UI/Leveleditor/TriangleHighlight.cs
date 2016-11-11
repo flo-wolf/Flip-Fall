@@ -40,7 +40,6 @@ namespace FlipFall.Editor
             {
                 //triangles = GetTriangles();
                 triangles = VertHandler.selectionTriangleVerts.ToArray();
-                print(triangles.Length);
 
                 // triangle array is a multiple of three
                 if (triangles.Length % 3 == 0 && triangles.Length > 0)
