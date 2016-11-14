@@ -213,86 +213,93 @@ namespace FlipFall.Editor
                     // get the currect verticies
                     Mesh m = new Mesh();
                     m = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
-                    verts = m.vertices;
-                    Vector3[] newVerts = new Vector3[verts.Length + 1];
-                    for (int i = 0; i < verts.Length; i++)
-                        newVerts[i] = verts[i];
 
-                    // snap the position
-                    pos = VertHelper.Snap(pos);
+                    Vector3 localPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(pos);
 
-                    // add the new position to the vertex arrays
-                    pos.z = 0;
-                    newVerts[verts.Length] = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(pos);
-
-                    // get the triangles
-                    int[] triangles = new int[m.triangles.Length + 3];
-                    for (int s = 0; s < m.triangles.Length; s++)
+                    if (!VertHelper.IsInsideMesh(m, Vector3.zero, localPos))
                     {
-                        triangles[s] = m.triangles[s];
+                        verts = m.vertices;
+                        Vector3[] newVerts = new Vector3[verts.Length + 1];
+                        for (int i = 0; i < verts.Length; i++)
+                            newVerts[i] = verts[i];
+
+                        // snap the position
+                        pos = VertHelper.Snap(pos);
+                        pos.z = 0;
+                        Vector3 localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(pos);
+
+                        // add the new position to the vertex arrays
+                        newVerts[verts.Length] = localSnapPos;
+
+                        // get the triangles
+                        int[] triangles = new int[m.triangles.Length + 3];
+                        for (int s = 0; s < m.triangles.Length; s++)
+                        {
+                            triangles[s] = m.triangles[s];
+                        }
+
+                        // add a new triangle by referencing the two selected verticies plus the new one
+                        // add selected verticies into a temporary storage
+                        int[] newIndicies = new int[3];
+                        newIndicies[0] = newVerts.Length - 1;
+                        for (int i = 0; i < newVerts.Length; i++)
+                        {
+                            // the interated vertex fits to the first selected handler
+                            if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[0].transform.position) == newVerts[i])
+                            {
+                                newIndicies[1] = i;
+                            }
+                            // the interated vertex fits to the second selected handler
+                            else if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[1].transform.position) == newVerts[i])
+                            {
+                                newIndicies[2] = i;
+                            }
+                        }
+
+                        // sort the triangle verticies in a clockwise order to ensure the triangle faces our direction and wont get rendered backwards
+                        Vector3[] triangleVerts = new Vector3[3];
+                        triangleVerts[0] = newVerts[newIndicies[0]];
+                        triangleVerts[1] = newVerts[newIndicies[1]];
+                        triangleVerts[2] = newVerts[newIndicies[2]];
+                        // calculate the center of the triangle
+                        Vector2 center = (triangleVerts[0] + triangleVerts[1] + triangleVerts[2]) / 3;
+                        Array.Sort(triangleVerts, new ClockwiseComparer(center));
+                        for (int i = 0; i < newVerts.Length; i++)
+                        {
+                            // the interated vertex fits to the first selected handler
+                            if (triangleVerts[0] == newVerts[i])
+                            {
+                                newIndicies[0] = i;
+                            }
+                            // the interated vertex fits to the second selected handler
+                            else if (triangleVerts[1] == newVerts[i])
+                            {
+                                newIndicies[1] = i;
+                            }
+                            else if (triangleVerts[2] == newVerts[i])
+                            {
+                                newIndicies[2] = i;
+                            }
+                        }
+
+                        // add the sorted indicies to the triangles array
+                        triangles[m.triangles.Length] = newIndicies[0];
+                        triangles[m.triangles.Length + 1] = newIndicies[1];
+                        triangles[m.triangles.Length + 2] = newIndicies[2];
+
+                        // update the mesh
+                        m.vertices = newVerts;
+                        m.triangles = triangles;
+                        m.RecalculateBounds();
+                        m.RecalculateNormals();
+                        mesh = m;
+                        LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = m;
+
+                        // recalculate handles
+                        selectedHandles = new List<Handle>();
+                        DestroyHandles();
+                        Start();
                     }
-
-                    // add a new triangle by referencing the two selected verticies plus the new one
-                    // add selected verticies into a temporary storage
-                    int[] newIndicies = new int[3];
-                    newIndicies[0] = newVerts.Length - 1;
-                    for (int i = 0; i < newVerts.Length; i++)
-                    {
-                        // the interated vertex fits to the first selected handler
-                        if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[0].transform.position) == newVerts[i])
-                        {
-                            newIndicies[1] = i;
-                        }
-                        // the interated vertex fits to the second selected handler
-                        else if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[1].transform.position) == newVerts[i])
-                        {
-                            newIndicies[2] = i;
-                        }
-                    }
-
-                    // sort the triangle verticies in a clockwise order to ensure the triangle faces our direction and wont get rendered backwards
-                    Vector3[] triangleVerts = new Vector3[3];
-                    triangleVerts[0] = newVerts[newIndicies[0]];
-                    triangleVerts[1] = newVerts[newIndicies[1]];
-                    triangleVerts[2] = newVerts[newIndicies[2]];
-                    // calculate the center of the triangle
-                    Vector2 center = (triangleVerts[0] + triangleVerts[1] + triangleVerts[2]) / 3;
-                    Array.Sort(triangleVerts, new ClockwiseComparer(center));
-                    for (int i = 0; i < newVerts.Length; i++)
-                    {
-                        // the interated vertex fits to the first selected handler
-                        if (triangleVerts[0] == newVerts[i])
-                        {
-                            newIndicies[0] = i;
-                        }
-                        // the interated vertex fits to the second selected handler
-                        else if (triangleVerts[1] == newVerts[i])
-                        {
-                            newIndicies[1] = i;
-                        }
-                        else if (triangleVerts[2] == newVerts[i])
-                        {
-                            newIndicies[2] = i;
-                        }
-                    }
-
-                    // add the sorted indicies to the triangles array
-                    triangles[m.triangles.Length] = newIndicies[0];
-                    triangles[m.triangles.Length + 1] = newIndicies[1];
-                    triangles[m.triangles.Length + 2] = newIndicies[2];
-
-                    // update the mesh
-                    m.vertices = newVerts;
-                    m.triangles = triangles;
-                    m.RecalculateBounds();
-                    m.RecalculateNormals();
-                    mesh = m;
-                    LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = m;
-
-                    // recalculate handles
-                    selectedHandles = new List<Handle>();
-                    DestroyHandles();
-                    Start();
                 }
             }
         }
@@ -539,41 +546,50 @@ namespace FlipFall.Editor
             Vector3 localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(snapPos);
             Vector3 localOldPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(currentPos);
             bool inside = IsInsideMesh(m, currentPos, localSnapPos);
+            bool crossing = !IsHandlerPositionValid(localOldPos, localSnapPos);
 
-            if (inside)
+            if (inside || crossing)
             {
                 int testCount = 0;
+                int multi = 1;
                 Vector3 testSnap = snapPos;
-                while (inside && testCount < 4)
+                while ((inside || crossing) && multi < 3)
                 {
                     testSnap = snapPos;
                     switch (testCount)
                     {
                         case 0:
-                            testSnap.x -= snapValue;
-                            testSnap.y -= snapValue;
+                            testSnap.x -= snapValue * multi;
+                            testSnap.y -= snapValue * multi;
                             break;
 
                         case 1:
-                            testSnap.x += snapValue;
-                            testSnap.y -= snapValue;
+                            testSnap.x += snapValue * multi;
+                            testSnap.y -= snapValue * multi;
                             break;
 
                         case 2:
-                            testSnap.x -= snapValue;
-                            testSnap.y += snapValue;
+                            testSnap.x -= snapValue * multi;
+                            testSnap.y += snapValue * multi;
                             break;
 
                         case 3:
-                            testSnap.x += snapValue;
-                            testSnap.y += snapValue;
+                            testSnap.x += snapValue * multi;
+                            testSnap.y += snapValue * multi;
+                            testCount = 0;
+                            multi++;
                             break;
                     }
 
                     localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(testSnap);
-                    inside = IsInsideMesh(m, localOldPos, localSnapPos) && !IsHandlerPositionValid(currentPos, testSnap);
+                    inside = IsInsideMesh(m, localOldPos, localSnapPos);
+                    crossing = !IsHandlerPositionValid(localOldPos, localSnapPos);
+                    testCount++;
                 }
-                snapPos = testSnap;
+                if (!inside)
+                {
+                    snapPos = testSnap;
+                }
             }
             Debug.Log("INSIDE????? Snap sais = " + inside);
 
