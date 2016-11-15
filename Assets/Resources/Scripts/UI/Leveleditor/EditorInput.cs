@@ -99,6 +99,14 @@ namespace FlipFall.Editor
                     Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
                     VertHandler._instance.VertexAdd(position);
                 }
+                // both mouse buttons clicked => drag view
+                else if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
+                {
+                    Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector3 deltaPos = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * 40f;
+                    deltaPos.z = 0F;
+                    transform.position += deltaPos;
+                }
                 else if (Input.GetMouseButtonDown(0))
                 {
                     Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);

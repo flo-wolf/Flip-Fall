@@ -1,4 +1,5 @@
-﻿using FlipFall.LevelObjects;
+﻿using FlipFall.Editor;
+using FlipFall.LevelObjects;
 using FlipFall.Progress;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,15 +18,18 @@ namespace FlipFall.UI
         public LevelObject.ObjectType objectType;
         public Toggle selectToogle;
         public Text amountText;
+        public Animation anim;
 
         private int amount = 0;
 
         // Use this for initialization
         private void Start()
         {
+            FadeIn();
             UpdateAmount();
             Inventory.onInventoryChange.AddListener(UpdateAmount);
             onItemSelect.AddListener(OnItemSelect);
+            Main.onSceneChange.AddListener(FadeOut);
         }
 
         private void OnItemSelect(UILevelObject obj)
@@ -52,6 +56,16 @@ namespace FlipFall.UI
             }
         }
 
+        public void Place()
+        {
+            amount = ProgressManager.GetProgress().unlocks.inventory.GetAmount(objectType);
+            if (amount > 0)
+            {
+                ProgressManager.GetProgress().unlocks.inventory.Add(objectType, amount - 1);
+            }
+            UpdateAmount();
+        }
+
         // this toogle got clicked
         public void SelectClick(Toggle t)
         {
@@ -59,13 +73,25 @@ namespace FlipFall.UI
             {
                 t.isOn = true;
                 //selectToogle.interactable = false;
+                LevelEditor.editorMode = LevelEditor.EditorMode.place;
                 onItemSelect.Invoke(this);
             }
-            //else
-            //{
-            //    t.isOn = false;
-            //    selectToogle.interactable = false;
-            //}
+            else if (!t.isOn)
+            {
+                LevelEditor.editorMode = LevelEditor.EditorMode.select;
+            }
+        }
+
+        private void FadeIn()
+        {
+            anim["fadeIn"].speed = 1.0f;
+            anim.Play("fadeIn");
+        }
+
+        private void FadeOut(Main.Scene s)
+        {
+            anim["fadeIn"].speed = -1.0f;
+            anim.Play("fadeIn");
         }
     }
 }
