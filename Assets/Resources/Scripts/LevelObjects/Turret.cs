@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace FlipFall.LevelObjects
 {
-    public class Turret : MonoBehaviour
+    public class Turret : LevelObject
     {
         private ParticleSystem shotPS;
         private Animation shotAnimation;
@@ -24,6 +24,7 @@ namespace FlipFall.LevelObjects
         // Use this for initialization
         private void Start()
         {
+            objectType = ObjectType.turret;
             shotAnimation = GetComponent<Animation>();
             shotPS = GetComponent<ParticleSystem>();
 

@@ -19,7 +19,7 @@ using UnityEngine.Events;
 /// </summary>
 namespace FlipFall.LevelObjects
 {
-    public class Portal : MonoBehaviour
+    public class Portal : LevelObject
     {
         /// <summary>
         /// Portals can either allow traveling back through or deny it.
@@ -44,6 +44,7 @@ namespace FlipFall.LevelObjects
 
         private void Start()
         {
+            objectType = ObjectType.portal;
             activeMemory = active;
             Game.onGameStateChange.AddListener(GameStateChanged);
             MeshRenderer mr = GetComponent<MeshRenderer>();

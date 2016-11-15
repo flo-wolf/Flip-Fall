@@ -1,4 +1,5 @@
 ﻿using FlipFall.Background;
+using FlipFall.Editor;
 using FlipFall.Theme;
 using FlipFall.UI;
 using System;
@@ -23,15 +24,19 @@ namespace FlipFall.Progress
         // reference to UIShopProducts items and their buy/equip states.
         public List<ProductInfo> productInfos = new List<ProductInfo>();
 
+        // contains all levelObjects
+        public Inventory inventory;
+
         public List<ThemeManager.Skin> unlockedThemes;
         public ThemeManager.Skin defaultSkin;
-
         public ThemeManager.Skin currentSkin;
 
         public Unlocks()
         {
             defaultSkin = ThemeManager.Skin.toxic;
             currentSkin = ThemeManager.Skin.toxic;
+
+            inventory = new Inventory();
 
             unlockedThemes = new List<ThemeManager.Skin>();
             unlockedThemes.Add(defaultSkin);

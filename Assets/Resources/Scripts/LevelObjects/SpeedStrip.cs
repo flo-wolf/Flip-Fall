@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace FlipFall.LevelObjects
 {
-    public class SpeedStrip : MonoBehaviour
+    public class SpeedStrip : LevelObject
     {
         public float accelSpeed = 1000F;
         public float accelMulti = 2F;
@@ -25,6 +25,7 @@ namespace FlipFall.LevelObjects
 
         private void Start()
         {
+            objectType = ObjectType.speedStrip;
             mat = GetComponent<SpriteRenderer>().material;
 
             mat.color = ThemeManager.theme.moveZoneColor;

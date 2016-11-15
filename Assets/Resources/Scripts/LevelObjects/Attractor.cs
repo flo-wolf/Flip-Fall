@@ -13,7 +13,7 @@ using UnityEngine;
 /// </summary>
 namespace FlipFall.LevelObjects
 {
-    public class Attractor : MonoBehaviour
+    public class Attractor : LevelObject
     {
         public static bool playerCollidesWithAny = false;
         public static List<Attractor> attractors = new List<Attractor>();
@@ -47,6 +47,7 @@ namespace FlipFall.LevelObjects
 
         private void Awake()
         {
+            objectType = ObjectType.attractor;
             attractors.Clear();
         }
 

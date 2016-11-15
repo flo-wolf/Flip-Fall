@@ -5,12 +5,17 @@ using UnityEngine;
 
 namespace FlipFall.LevelObjects
 {
-    public class Finish : MonoBehaviour
+    public class Finish : LevelObject
     {
         public Vector2 finishLocation;
 
         private ParticleSystem ps;
         private ParticleSystem.EmissionModule psEmit;
+
+        private void Awake()
+        {
+            objectType = ObjectType.finish;
+        }
 
         // Use this for initialization
         private void Start()

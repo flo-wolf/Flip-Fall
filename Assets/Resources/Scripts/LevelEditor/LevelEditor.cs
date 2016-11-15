@@ -11,10 +11,10 @@ namespace FlipFall.Editor
         public static LevelEditor _instance;
 
         // select: select game objects/groups of objects to edit
-        // move: move a group of selected objects
+        // move: move the current selected object. If the object is the movearea, vertices will get moved
         // tool: depending on the selection each selected object can have it's own tool
         //       the tool mode tool can have its own sub-modes
-        public enum EditorMode { select, move, tool }
+        public enum EditorMode { select, move, place }
 
         public static EditorMode editorMode = EditorMode.select;
 

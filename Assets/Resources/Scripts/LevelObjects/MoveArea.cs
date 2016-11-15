@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace FlipFall.LevelObjects
 {
-    public class MoveArea : MonoBehaviour
+    public class MoveArea : LevelObject
     {
         public MeshFilter meshFilter;
         private PolygonCollider2D poly2D;
@@ -13,6 +13,7 @@ namespace FlipFall.LevelObjects
 
         private void Awake()
         {
+            objectType = ObjectType.moveArea;
             meshFilter = GetComponent<MeshFilter>();
             mr = GetComponent<MeshRenderer>();
             mr.material.SetColor("_Color", ThemeManager.theme.moveZoneColor);

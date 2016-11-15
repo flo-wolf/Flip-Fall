@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace FlipFall.LevelObjects
 {
-    public class Spawn : MonoBehaviour
+    public class Spawn : LevelObject
     {
         public bool facingLeftOnSpawn;
 
         private void Start()
         {
+            objectType = ObjectType.spawn;
             MeshRenderer mr = GetComponent<MeshRenderer>();
             if (mr != null)
                 mr.material.SetColor("_Color2", ThemeManager.theme.speedstripColor);
