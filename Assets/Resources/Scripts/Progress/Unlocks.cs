@@ -81,14 +81,14 @@ namespace FlipFall.Progress
         }
 
         // Buys the product, if the product exists and the funds allow for it
-        public bool BuyProduct(int _id)
+        public bool BuyProduct(int _id, UIProduct.BuyType buyType)
         {
             Debug.Log("BuyProduct(id) " + _id);
             ProductInfo product = GetProductInfo(_id);
             UIProduct uiProduct = GetUIProductById(_id);
             if (product != null && uiProduct != null)
             {
-                if (!IsOwned(_id) && uiProduct.price <= ProgressManager.GetProgress().starsOwned)
+                if (((!IsOwned(_id) && buyType == UIProduct.BuyType.nonConsumable) || buyType == UIProduct.BuyType.consumable) && uiProduct.price <= ProgressManager.GetProgress().starsOwned)
                 {
                     ProgressManager.GetProgress().AddStarsToWallet(-uiProduct.price);
 

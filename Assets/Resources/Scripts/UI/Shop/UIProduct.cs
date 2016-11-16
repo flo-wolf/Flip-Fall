@@ -1,4 +1,5 @@
 ﻿using FlipFall.Audio;
+using FlipFall.LevelObjects;
 using FlipFall.Progress;
 using FlipFall.Theme;
 using System.Collections;
@@ -53,6 +54,9 @@ public class UIProduct : MonoBehaviour
 
     [Tooltip("In case the producttype is set to theme, unlock this")]
     public ThemeManager.Skin themeToUnlock;
+
+    [Tooltip("In case the producttype is set to supply, unlock this")]
+    public LevelObject.ObjectType supplyToUnlock;
 
     [Header("Debug")]
     [Tooltip("You own this item.")]
@@ -115,7 +119,7 @@ public class UIProduct : MonoBehaviour
     // set toggles to fit values gathered from the progress file
     public void UpdateToggles()
     {
-        if (owned)
+        if (owned && buyType == BuyType.nonConsumable)
         {
             buyButton.gameObject.SetActive(false);
             equipToggle.gameObject.SetActive(true);
@@ -139,7 +143,7 @@ public class UIProduct : MonoBehaviour
     // buys this product, if funds allow it
     public void Buy()
     {
-        if (ProgressManager.GetProgress().unlocks.BuyProduct(id))
+        if (ProgressManager.GetProgress().unlocks.BuyProduct(id, buyType))
         {
             owned = true;
             UpdateToggles();
@@ -148,6 +152,10 @@ public class UIProduct : MonoBehaviour
             if (productType == ProductType.theme)
             {
                 ProgressManager.GetProgress().unlocks.UnlockTheme(themeToUnlock);
+            }
+            else if (productType == ProductType.supply)
+            {
+                ProgressManager.GetProgress().unlocks.inventory.Add(supplyToUnlock, 1);
             }
         }
         else

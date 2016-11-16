@@ -90,6 +90,7 @@ namespace FlipFall.UI
 
         private void FadeOut(Main.Scene s)
         {
+            print("fadeout");
             anim["fadeIn"].speed = -1.0f;
             anim.Play("fadeIn");
         }
