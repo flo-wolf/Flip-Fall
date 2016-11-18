@@ -38,7 +38,11 @@ namespace FlipFall.UI
 
         private void SceneChanged(Main.Scene scene)
         {
-            FadeOut();
+            if (isFadedIn)
+            {
+                print("fadeOut scene cha nged");
+                FadeOut();
+            }
             canBeAnimated = false;
         }
 
@@ -57,8 +61,19 @@ namespace FlipFall.UI
         {
             if (canBeAnimated && isFadedIn)
             {
+                print("fadeOut scene cha nged 2");
                 isFadedIn = false;
                 anim.Play("scrollElementFadeout");
+            }
+        }
+
+        public void InstantFadeOut()
+        {
+            if (canBeAnimated)
+            {
+                anim["scrollElementFadeout"].normalizedTime = 1F;
+                anim.Play("scrollElementFadeout");
+                isFadedIn = false;
             }
         }
     }

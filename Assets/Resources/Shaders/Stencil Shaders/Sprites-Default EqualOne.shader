@@ -21,7 +21,7 @@ Shader "Custom/Sprites/Default EqualOne"
 
 			Cull Off
 			Lighting Off
-			ZWrite On
+			ZWrite Off
 			Blend One OneMinusSrcAlpha
 
 			Stencil

@@ -42,7 +42,7 @@ namespace FlipFall.Progress
             unlockedThemes.Add(defaultSkin);
 
             productInfos = new List<ProductInfo>();
-            productInfos.Add(new ProductInfo(1, true, true));
+            productInfos.Add(new ProductInfo(1, true, true, UIProduct.BuyType.nonConsumable));
         }
 
         public void UnlockTheme(ThemeManager.Skin theme)
@@ -58,18 +58,18 @@ namespace FlipFall.Progress
         }
 
         // mistake here
-        public void ReportUIProductsExistence(int _id)
+        public void ReportUIProductsExistence(int _id, UIProduct.BuyType _buyType)
         {
             if (GetProductInfo(_id) == null)
-                productInfos.Add(new ProductInfo(_id, false, false));
+                productInfos.Add(new ProductInfo(_id, false, false, _buyType));
         }
 
-        public void ReportUpdateUIProduct(int _id, bool _owned, bool _equiped)
+        public void ReportUpdateUIProduct(int _id, bool _owned, bool _equiped, UIProduct.BuyType _buyType)
         {
             ProductInfo info = GetProductInfo(_id);
             if (info == null)
             {
-                productInfos.Add(new ProductInfo(_id, _owned, _equiped));
+                productInfos.Add(new ProductInfo(_id, _owned, _equiped, _buyType));
             }
             else
             {
@@ -109,7 +109,7 @@ namespace FlipFall.Progress
         public bool EquipProduct(int _id)
         {
             ProductInfo product = GetProductInfo(_id);
-            Debug.Log("EquipProduct(id) " + product);
+            Debug.Log("EquipProduct(id) " + product.id);
             if (product != null && IsOwned(_id))
             {
                 Debug.Log("EquipProduct(id) " + _id);
@@ -180,9 +180,11 @@ namespace FlipFall.Progress
         public int id;
         public bool equipped;
         public bool owned;
+        public UIProduct.BuyType buyType;
 
-        public ProductInfo(int _id, bool _owned, bool _equipped)
+        public ProductInfo(int _id, bool _owned, bool _equipped, UIProduct.BuyType _buyType)
         {
+            buyType = _buyType;
             id = _id;
             owned = _owned;
             equipped = _equipped;

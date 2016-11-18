@@ -53,7 +53,10 @@ namespace FlipFall.LevelObjects
 
         public void Start()
         {
-            playerRb = Player._instance.GetComponent<Rigidbody2D>();
+            if (Player._instance != null)
+            {
+                playerRb = Player._instance.GetComponent<Rigidbody2D>();
+            }
             center = transform.position;
             SetScale();
 
@@ -90,7 +93,7 @@ namespace FlipFall.LevelObjects
                 }
             }
 
-            if (playerCollidesWithAny && collidedAttractor == this)
+            if (playerCollidesWithAny && collidedAttractor == this && playerRb != null)
             {
                 // calculate direction from player to center of this
                 Vector2 forceDirection = center - new Vector2(Player._instance.transform.position.x, Player._instance.transform.position.y);

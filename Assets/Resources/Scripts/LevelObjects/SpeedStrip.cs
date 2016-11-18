@@ -32,13 +32,16 @@ namespace FlipFall.LevelObjects
             mat.SetColor("_Color2", ThemeManager.theme.speedstripColor);
             mat.SetColor("_Color", ThemeManager.theme.speedstripUnactiveColor);
 
-            playerRb = Player._instance.GetComponent<Rigidbody2D>();
+            if (Player._instance != null)
+            {
+                playerRb = Player._instance.GetComponent<Rigidbody2D>();
+            }
             colliding = false;
         }
 
         private void OnTriggerStay2D(Collider2D collider)
         {
-            if (collider.tag == Constants.playerTag)
+            if (collider.tag == Constants.playerTag && playerRb != null)
             {
                 colliding = true;
                 accelAngle = transform.rotation.eulerAngles.z;

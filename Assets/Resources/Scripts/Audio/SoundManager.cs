@@ -250,8 +250,11 @@ namespace FlipFall.Audio
 
         public static void TurretShot(Vector3 position)
         {
-            float distanceToPlayer = Vector3.Distance(Player._instance.transform.position, position);
-            _instance.soundPlayer.PlaySingleAt(_instance.turretShot, position, distanceToPlayer);
+            if (Player._instance != null)
+            {
+                float distanceToPlayer = Vector3.Distance(Player._instance.transform.position, position);
+                _instance.soundPlayer.PlaySingleAt(_instance.turretShot, position, distanceToPlayer);
+            }
         }
 
         public static void UILevelSwitched()

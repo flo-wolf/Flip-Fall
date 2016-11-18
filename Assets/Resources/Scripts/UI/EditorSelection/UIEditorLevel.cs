@@ -42,12 +42,6 @@ public class UIEditorLevel : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animation>();
-        Main.onSceneChange.AddListener(SceneChanged);
-    }
-
-    private void SceneChanged(Main.Scene s)
-    {
-        anim.Play("scrollElementFadeout");
     }
 
     public void Edit()

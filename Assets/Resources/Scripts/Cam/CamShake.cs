@@ -43,14 +43,20 @@ namespace FlipFall.Cam
 
         public static void AttractorShake()
         {
-            _instance.StopAllCoroutines();
-            _instance.StartCoroutine(_instance.cAttractorShake());
+            if (_instance != null)
+            {
+                _instance.StopAllCoroutines();
+                _instance.StartCoroutine(_instance.cAttractorShake());
+            }
         }
 
         public static void AttractorShakeBreak()
         {
-            _instance.StopCoroutine(_instance.cAttractorShake());
-            _instance.transform.position = Vector3.zero;
+            if (_instance != null)
+            {
+                _instance.StopCoroutine(_instance.cAttractorShake());
+                _instance.transform.position = Vector3.zero;
+            }
         }
 
         public static void VelocityShake(MonoBehaviour behaviour)
