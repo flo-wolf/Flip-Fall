@@ -224,7 +224,7 @@ namespace FlipFall.Editor
                             newVerts[i] = verts[i];
 
                         // snap the position
-                        pos = VertHelper.Snap(pos, false);
+                        pos = VertHelper.Snap(pos, true);
                         pos.z = 0;
                         Vector3 localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(pos);
 

@@ -14,7 +14,7 @@ Shader "Custom/Sprites/Default EqualOne"
 			{
 				"Queue" = "Transparent"
 				"IgnoreProjector" = "True"
-				"RenderType" = "Transparent"
+				"RenderType" = "Opaque"
 				"PreviewType" = "Plane"
 				"CanUseSpriteAtlas" = "True"
 			}

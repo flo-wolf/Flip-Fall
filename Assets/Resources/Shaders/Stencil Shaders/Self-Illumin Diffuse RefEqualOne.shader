@@ -6,8 +6,11 @@ Shader "Custom/Stencil/Self-Illumin-Diffuse EqualOne" {
 		_EmissionLM("Emission (Lightmapper)", Float) = 0
 	}
 		SubShader{
-			Tags { "RenderType" = "Opaque" }
+			Tags { "RenderType" = "Opaque" "IgnoreProjector" = "True" }
 			LOD 200
+
+			ZWrite Off
+			Blend One OneMinusSrcAlpha
 
 			Stencil
 			{

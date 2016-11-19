@@ -57,16 +57,19 @@ namespace FlipFall.LevelObjects
             {
                 playerRb = Player._instance.GetComponent<Rigidbody2D>();
             }
-            center = transform.position;
-            SetScale();
 
-            attractors.Add(this);
+            center = transform.position;
+            Debug.Log("Center: " + center);
+            SetScale();
 
             // reset shader input
             attractorMaterial.SetColor("_Color", ThemeManager.theme.attractorUntrackedColor);
             attractorMaterial.SetColor("_AttractedColor", ThemeManager.theme.attractorColor);
             attractorMaterial.SetFloat("_PlayerDistance", pullRadius * 10);
             attractorMaterial.SetFloat("_AttractorRadius", pullRadius);
+            //attractorMaterial.SetVector("_AttractorCenter", center);
+
+            attractors.Add(this);
         }
 
         // draws an outline around the attractor to make it visible in the editor
@@ -93,20 +96,27 @@ namespace FlipFall.LevelObjects
                 }
             }
 
-            if (playerCollidesWithAny && collidedAttractor == this && playerRb != null)
+            if (playerCollidesWithAny && collidedAttractor == this)
             {
-                // calculate direction from player to center of this
-                Vector2 forceDirection = center - new Vector2(Player._instance.transform.position.x, Player._instance.transform.position.y);
+                Vector2 forceDirection = Vector3.up;
+                float dist = 1000F;
+                if (playerRb != null)
+                {
+                    // calculate direction from player to center of this
+                    forceDirection = center - new Vector2(Player._instance.transform.position.x, Player._instance.transform.position.y);
 
-                // apply force on player towards center of this
-                playerRb.AddForce(forceDirection.normalized * maxPullForce * Time.fixedDeltaTime * pullAmplifier);
+                    // apply force on player towards center of this
+                    playerRb.AddForce(forceDirection.normalized * maxPullForce * Time.fixedDeltaTime * pullAmplifier);
 
-                // calculate distance to the center of this
-                float dist = Mathf.Abs(Vector3.Distance(Player._instance.transform.position, transform.position));
+                    // calculate distance to the center of this
+                    dist = Mathf.Abs(Vector3.Distance(Player._instance.transform.position, transform.position));
+                }
 
                 // update shader
                 attractorMaterial.SetFloat("_AttractorRadius", pullRadius);
-                attractorMaterial.SetVector("_AttractionCenter", transform.InverseTransformPoint(transform.position));
+                Vector3 localPos = transform.InverseTransformPoint(transform.position);
+                localPos.z = transform.position.z;
+                attractorMaterial.SetVector("_AttractionCenter", localPos);
                 attractorMaterial.SetFloat("_PlayerDistance", dist);
 
                 // update camera shake

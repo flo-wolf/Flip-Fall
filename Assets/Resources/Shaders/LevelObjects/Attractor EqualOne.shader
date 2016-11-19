@@ -14,11 +14,11 @@ Shader "Custom/LevelObjects/Attractor EqualOne" {
 	}
 
 		SubShader{
-		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" "DisableBatching" = "True" }
+		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent"}
 		LOD 2000
 		Cull Off
-			ZWrite Off
-			Lighting Off
+		ZWrite On
+		Lighting Off
 
 		Stencil
 	{
