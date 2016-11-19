@@ -176,7 +176,7 @@ namespace FlipFall.Editor
                 // snapping enabled?
                 if (GridOverlay._instance != null && GridOverlay._instance.snapToGrid)
                 {
-                    newPos = VertHelper.Snap(newPos);
+                    newPos = VertHelper.Snap(newPos, true);
                 }
 
                 VertHandler.selectedHandles[i].transform.position = newPos;
@@ -188,7 +188,7 @@ namespace FlipFall.Editor
                 // snapping enabled?
                 if (GridOverlay._instance != null && GridOverlay._instance.snapToGrid)
                 {
-                    newPos = VertHelper.Snap(newPos);
+                    newPos = VertHelper.Snap(newPos, true);
                 }
                 VertHandler.quickDragHandle.transform.position = newPos;
             }

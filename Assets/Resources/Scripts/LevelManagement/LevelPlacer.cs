@@ -25,12 +25,12 @@ namespace FlipFall.Levels
 
         public class LevelPlaceEvent : UnityEvent<Level> { }
 
-        // obsolete
+        // obsolete, replaced by generatedLevel
         public static Level placedLevel;
 
         public static LevelDataMono generatedLevel;
 
-        //
+        // Z-position defaults
         public static float moveAreaZ = 0;
         public static float levelObjectZ = 0;
 
@@ -100,6 +100,12 @@ namespace FlipFall.Levels
                 generatedLevel.transform.parent = transform;
                 generatedLevel.transform.position = transform.position;
 
+                // create lists
+                generatedLevel.turrets = new List<Turret>();
+                generatedLevel.portals = new List<Portal>();
+                generatedLevel.speedStrips = new List<SpeedStrip>();
+                generatedLevel.attractors = new List<Attractor>();
+
                 // add spawn
                 Spawn spawn = (Spawn)Instantiate(spawnPrefab, Vector3.zero, Quaternion.identity);
                 spawn.transform.parent = generatedLevel.transform;
@@ -114,6 +120,66 @@ namespace FlipFall.Levels
                 Vector2 finishPos = new Vector3(levelData.finishPosition.x, levelData.finishPosition.y, levelObjectZ);
                 finish.transform.localPosition = finishPos;
                 generatedLevel.finish = finish;
+
+                // add turrets
+                foreach (TurretData td in levelData.turretData)
+                {
+                    // create turret gameobject
+                    Turret turret = (Turret)Instantiate(turretPrefab, Vector3.zero, Quaternion.identity);
+                    turret.transform.parent = generatedLevel.transform;
+                    Vector2 turretPos = new Vector3(td.position.x, td.position.y, levelObjectZ);
+                    turret.transform.localPosition = turretPos;
+
+                    // assign values
+                    turret.shotDelay = td.shotDelay;
+                    turret.startupDelay = td.startupDelay;
+                    turret.constantFire = td.constantFire;
+                    turret.shotSpeed = td.shotSpeed;
+
+                    generatedLevel.turrets.Add(turret);
+                }
+
+                // add attractors
+                foreach (AttractorData ad in levelData.attractorData)
+                {
+                    // create turret gameobject
+                    Attractor attractor = (Attractor)Instantiate(attractorPrefab, Vector3.zero, Quaternion.identity);
+                    attractor.transform.parent = generatedLevel.transform;
+                    Vector2 attractorPos = new Vector3(ad.position.x, ad.position.y, levelObjectZ);
+                    attractor.transform.localPosition = attractorPos;
+
+                    // assign values
+
+                    generatedLevel.attractors.Add(attractor);
+                }
+
+                // add speedstrips
+                foreach (SpeedStripData sd in levelData.speedStripData)
+                {
+                    // create turret gameobject
+                    SpeedStrip speedStrip = (SpeedStrip)Instantiate(speedStripPrefab, Vector3.zero, Quaternion.identity);
+                    speedStrip.transform.parent = generatedLevel.transform;
+                    Vector2 speedStripPos = new Vector3(sd.position.x, sd.position.y, levelObjectZ);
+                    speedStrip.transform.localPosition = speedStripPos;
+
+                    // assign values
+
+                    generatedLevel.speedStrips.Add(speedStrip);
+                }
+
+                // add portals
+                foreach (PortalData pd in levelData.portalData)
+                {
+                    // create turret gameobject
+                    Portal portal = (Portal)Instantiate(portalPrefab, Vector3.zero, Quaternion.identity);
+                    portal.transform.parent = generatedLevel.transform;
+                    Vector2 portalPos = new Vector3(pd.position.x, pd.position.y, levelObjectZ);
+                    portal.transform.localPosition = portalPos;
+
+                    // assign values
+
+                    generatedLevel.portals.Add(portal);
+                }
 
                 // create movearea
                 MoveArea moveArea = (MoveArea)Instantiate(moveAreaPrefab, Vector3.zero, Quaternion.identity);
@@ -134,22 +200,6 @@ namespace FlipFall.Levels
                     }
                     Mesh m = CreateMoveAreaMesh(verts, levelData.moveTriangles);
                     mr.sharedMesh = m;
-                }
-
-                // add turrets
-                foreach (TurretData turretData in levelData.turretDatas)
-                {
-                    // create the turret and add it as a child to the level
-                    Turret t = (Turret)Instantiate(turretPrefab, Vector3.zero, Quaternion.identity);
-                    t.transform.parent = generatedLevel.transform;
-                    Vector2 pos = new Vector3(turretData.position.x, turretData.position.y, levelObjectZ);
-                    t.transform.localPosition = pos;
-
-                    // assign values
-                    t.shotDelay = turretData.shotDelay;
-                    t.startupDelay = turretData.startupDelay;
-                    t.constantFire = turretData.constantFire;
-                    t.shotSpeed = turretData.shotSpeed;
                 }
                 return true;
             }

@@ -1,4 +1,5 @@
-﻿using FlipFall.Levels;
+﻿using FlipFall.LevelObjects;
+using FlipFall.Levels;
 using System.Collections;
 using System.IO;
 using UnityEngine;
@@ -35,6 +36,8 @@ namespace FlipFall.Editor
                 return;
             }
             _instance = this;
+
+            editorMode = EditorMode.select;
 
             if (editLevel != null)
                 LevelPlacer._instance.PlaceCustom(editLevel);
@@ -75,6 +78,42 @@ namespace FlipFall.Editor
                 Vector3 finishPos = level.finish.transform.localPosition;
                 l.finishPosition = new Position2(finishPos.x, finishPos.y);
                 print("finish saving: " + finishPos);
+
+                // save turrets
+                foreach (Turret t in level.turrets)
+                {
+                    Position2 turretPosition = new Position2(t.transform.localPosition.x, t.transform.localPosition.y);
+                    TurretData td = new TurretData(turretPosition);
+                    td.shotDelay = t.shotDelay;
+                    td.shotSpeed = t.shotSpeed;
+                    td.startupDelay = t.startupDelay;
+                    td.constantFire = t.constantFire;
+                    l.turretData.Add(td);
+                }
+
+                // save attractors
+                foreach (Attractor a in level.attractors)
+                {
+                    Position2 aPosition = new Position2(a.transform.localPosition.x, a.transform.localPosition.y);
+                    AttractorData ad = new AttractorData(aPosition);
+                    l.attractorData.Add(ad);
+                }
+
+                // save portals
+                foreach (Portal p in level.portals)
+                {
+                    Position2 pPosition = new Position2(p.transform.localPosition.x, p.transform.localPosition.y);
+                    PortalData pd = new PortalData(pPosition);
+                    l.portalData.Add(pd);
+                }
+
+                // save speedstrips
+                foreach (SpeedStrip s in level.speedStrips)
+                {
+                    Position2 pPosition = new Position2(s.transform.localPosition.x, s.transform.localPosition.y);
+                    SpeedStripData sd = new SpeedStripData(pPosition);
+                    l.speedStripData.Add(sd);
+                }
 
                 // save it
                 LevelLoader.SaveCustomLevel(l);

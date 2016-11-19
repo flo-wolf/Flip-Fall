@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿using FlipFall.LevelObjects;
+using FlipFall.Levels;
+using FlipFall.Progress;
+using FlipFall.UI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -97,7 +101,22 @@ namespace FlipFall.Editor
                 {
                     Touch touch = Input.GetTouch(0);
                     Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
-                    VertHandler._instance.VertexAdd(position);
+
+                    if (LevelEditor.editorMode == LevelEditor.EditorMode.select)
+                    {
+                        VertHandler._instance.VertexAdd(position);
+                    }
+                    else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
+                    {
+                        // snapping
+                        Vector3 snapPos = VertHelper.Snap(position, false);
+                        LevelObject.ObjectType objectType = UILevelObject.currentSelectedObject.objectType;
+                        if (snapPos != Vector3.zero)
+                        {
+                            ProgressManager.GetProgress().unlocks.inventory.Add(objectType, -1);
+                            LevelPlacer.generatedLevel.AddObject(objectType, snapPos);
+                        }
+                    }
                 }
                 // both mouse buttons clicked => drag view
                 else if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
@@ -110,8 +129,21 @@ namespace FlipFall.Editor
                 else if (Input.GetMouseButtonDown(0))
                 {
                     Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    print("press " + position);
-                    VertHandler._instance.VertexAdd(position);
+                    if (LevelEditor.editorMode == LevelEditor.EditorMode.select)
+                    {
+                        VertHandler._instance.VertexAdd(position);
+                    }
+                    else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
+                    {
+                        // snapping
+                        Vector3 snapPos = VertHelper.Snap(position, false);
+                        LevelObject.ObjectType objectType = UILevelObject.currentSelectedObject.objectType;
+                        if (snapPos != Vector3.zero)
+                        {
+                            ProgressManager.GetProgress().unlocks.inventory.Add(objectType, -1);
+                            LevelPlacer.generatedLevel.AddObject(objectType, snapPos);
+                        }
+                    }
                 }
             }
         }

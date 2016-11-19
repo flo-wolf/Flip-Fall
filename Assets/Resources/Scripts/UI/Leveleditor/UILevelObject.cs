@@ -15,6 +15,8 @@ namespace FlipFall.UI
 
         public class ItemSelectEvent : UnityEvent<UILevelObject> { }
 
+        public static UILevelObject currentSelectedObject;
+
         public LevelObject.ObjectType objectType;
         public Toggle selectToogle;
         public Text amountText;
@@ -52,18 +54,12 @@ namespace FlipFall.UI
             {
                 amountText.text = "0";
                 selectToogle.interactable = false;
+                if (selectToogle.isOn)
+                {
+                    selectToogle.isOn = false;
+                }
                 // change icon to gray if amount is zero
             }
-        }
-
-        public void Place()
-        {
-            amount = ProgressManager.GetProgress().unlocks.inventory.GetAmount(objectType);
-            if (amount > 0)
-            {
-                ProgressManager.GetProgress().unlocks.inventory.Add(objectType, amount - 1);
-            }
-            UpdateAmount();
         }
 
         // this toogle got clicked
@@ -74,12 +70,14 @@ namespace FlipFall.UI
                 t.isOn = true;
                 //selectToogle.interactable = false;
                 LevelEditor.editorMode = LevelEditor.EditorMode.place;
+                currentSelectedObject = this;
                 onItemSelect.Invoke(this);
             }
-            else if (!t.isOn)
+            else if (!t.isOn && currentSelectedObject.selectToogle == t)
             {
                 LevelEditor.editorMode = LevelEditor.EditorMode.select;
             }
+            Debug.Log("editormode: " + LevelEditor.editorMode);
         }
 
         private void FadeIn()

@@ -37,10 +37,17 @@ namespace FlipFall.Levels
         // Finish
         public Position2 finishPosition;
 
-        // Turret
-        public List<TurretData> turretDatas;
+        // Turrets
+        public List<TurretData> turretData;
 
-        // Attractor
+        // Attractors
+        public List<AttractorData> attractorData;
+
+        // Portals
+        public List<PortalData> portalData;
+
+        // SpeedStrips
+        public List<SpeedStripData> speedStripData;
 
         public LevelData(int _id)
         {
@@ -51,7 +58,10 @@ namespace FlipFall.Levels
             moveVerticies = new Position2[0];
             spawnPosition = new Position2(0, 0);
             finishPosition = new Position2(0, 0);
-            turretDatas = new List<TurretData>();
+            turretData = new List<TurretData>();
+            portalData = new List<PortalData>();
+            speedStripData = new List<SpeedStripData>();
+            attractorData = new List<AttractorData>();
             // default level values in here
         }
     }

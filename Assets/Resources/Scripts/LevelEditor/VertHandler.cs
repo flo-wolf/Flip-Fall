@@ -224,7 +224,7 @@ namespace FlipFall.Editor
                             newVerts[i] = verts[i];
 
                         // snap the position
-                        pos = VertHelper.Snap(pos);
+                        pos = VertHelper.Snap(pos, false);
                         pos.z = 0;
                         Vector3 localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(pos);
 
@@ -530,7 +530,7 @@ namespace FlipFall.Editor
     public static class VertHelper
     {
         // snap a position to the next allowed position on the grid
-        public static Vector3 Snap(Vector3 currentPos)
+        public static Vector3 Snap(Vector3 currentPos, bool vertexSnapping)
         {
             float snapValue = GridOverlay._instance.smallStep;
             Vector3 snapPos = new Vector3
@@ -548,61 +548,70 @@ namespace FlipFall.Editor
             bool inside = IsInsideMesh(m, currentPos, localSnapPos);
             bool crossing = !IsHandlerPositionValid(localOldPos, localSnapPos);
 
-            if (inside || crossing)
+            if (vertexSnapping == true)
             {
-                int testCount = 0;
-                int multi = 1;
-                Vector3 testSnap = snapPos;
-                while ((inside || crossing) && multi < 3)
+                if (inside || crossing)
                 {
-                    testSnap = snapPos;
-                    switch (testCount)
+                    int testCount = 0;
+                    int multi = 1;
+                    Vector3 testSnap = snapPos;
+                    while ((inside || crossing) && multi < 3)
                     {
-                        case 0:
-                            testSnap.x -= snapValue * multi;
-                            testSnap.y -= snapValue * multi;
-                            break;
+                        testSnap = snapPos;
+                        switch (testCount)
+                        {
+                            case 0:
+                                testSnap.x -= snapValue * multi;
+                                testSnap.y -= snapValue * multi;
+                                break;
 
-                        case 1:
-                            testSnap.x += snapValue * multi;
-                            testSnap.y -= snapValue * multi;
-                            break;
+                            case 1:
+                                testSnap.x += snapValue * multi;
+                                testSnap.y -= snapValue * multi;
+                                break;
 
-                        case 2:
-                            testSnap.x -= snapValue * multi;
-                            testSnap.y += snapValue * multi;
-                            break;
+                            case 2:
+                                testSnap.x -= snapValue * multi;
+                                testSnap.y += snapValue * multi;
+                                break;
 
-                        case 3:
-                            testSnap.x += snapValue * multi;
-                            testSnap.y += snapValue * multi;
-                            testCount = 0;
-                            multi++;
-                            break;
+                            case 3:
+                                testSnap.x += snapValue * multi;
+                                testSnap.y += snapValue * multi;
+                                testCount = 0;
+                                multi++;
+                                break;
+                        }
+
+                        localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(testSnap);
+                        inside = IsInsideMesh(m, localOldPos, localSnapPos);
+                        crossing = !IsHandlerPositionValid(localOldPos, localSnapPos);
+                        testCount++;
                     }
-
-                    localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(testSnap);
-                    inside = IsInsideMesh(m, localOldPos, localSnapPos);
-                    crossing = !IsHandlerPositionValid(localOldPos, localSnapPos);
-                    testCount++;
+                    if (!inside)
+                    {
+                        snapPos = testSnap;
+                    }
                 }
-                if (!inside)
+
+                Debug.Log("INSIDE????? Snap sais = " + inside);
+
+                // update the selection triangle verts to fit the snapped position
+                Vector3 localnewPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(snapPos);
+                // get all vector entries that are equal to this position and replace them with the newest position
+                List<int> indexes = Enumerable.Range(0, VertHandler.selectionTriangleVerts.Count).Where(k => VertHandler.selectionTriangleVerts[k] == localOldPos).ToList();
+
+                foreach (int ind in indexes)
                 {
-                    snapPos = testSnap;
+                    VertHandler.selectionTriangleVerts[ind] = localnewPos;
                 }
             }
-            Debug.Log("INSIDE????? Snap sais = " + inside);
-
-            // update the selection triangle verts to fit the snapped position
-            Vector3 localnewPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(snapPos);
-            // get all vector entries that are equal to this position and replace them with the newest position
-            List<int> indexes = Enumerable.Range(0, VertHandler.selectionTriangleVerts.Count).Where(k => VertHandler.selectionTriangleVerts[k] == localOldPos).ToList();
-
-            foreach (int ind in indexes)
+            // levelObject snapping - the suggested snap position is outside the moveArea, which is not valid -> snap inside
+            else if (!inside)
             {
-                VertHandler.selectionTriangleVerts[ind] = localnewPos;
+                // replace with correct snapping algortithm
+                return Vector3.zero;
             }
-
             return snapPos;
         }
 
