@@ -38,6 +38,9 @@ namespace FlipFall.Editor
         private Vector2 deltaPositon;
         private Vector2 lastPositon;
 
+        public float doubleClickDelay = 0.3F;
+        private float doubleClickTime = 0F;
+
         private void Update()
         {
 #if UNITY_EDITOR
@@ -102,7 +105,7 @@ namespace FlipFall.Editor
                     Touch touch = Input.GetTouch(0);
                     Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
 
-                    if (LevelEditor.editorMode == LevelEditor.EditorMode.select)
+                    if (LevelEditor.editorMode == LevelEditor.EditorMode.edit)
                     {
                         VertHandler._instance.VertexAdd(position);
                     }
@@ -131,6 +134,70 @@ namespace FlipFall.Editor
                     Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     if (LevelEditor.editorMode == LevelEditor.EditorMode.select)
                     {
+                        // double click
+                        if (Time.time - doubleClickTime < doubleClickDelay)
+                        {
+                            Debug.Log("double click");
+                            Vector3 rayOrigin = position;
+                            rayOrigin.z = -50F;
+                            // get the object clicked onto by raycasting
+                            RaycastHit hitInfo = new RaycastHit();
+                            bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, 50000F);
+                            //RaycastHit hitInfo = new RaycastHit();
+                            //bool hit = Physics.Raycast(rayOrigin, Vector3.forward * 200, out hitInfo);
+
+                            Debug.Log("Camera.main.ScreenPointToRay(Input.mousePosition) " + Camera.main.ScreenPointToRay(Input.mousePosition).origin);
+                            Debug.DrawRay(rayOrigin, Vector3.forward * 200, Color.green, 20F, false);
+
+                            if (hit)
+                            {
+                                Debug.Log("Hit " + hitInfo.transform.gameObject.name);
+                                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
+                                {
+                                    LevelObject levelObject = hitInfo.transform.parent.gameObject.GetComponent<LevelObject>();
+                                    Debug.Log("LevelObject hit " + levelObject);
+                                    if (levelObject != null)
+                                    {
+                                        LevelEditor.selectedObject = levelObject;
+                                        LevelEditor.editorMode = LevelEditor.EditorMode.edit;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //normal click
+                        }
+                    }
+                    else if (LevelEditor.editorMode == LevelEditor.EditorMode.edit)
+                    {
+                        if (Time.time - doubleClickTime < doubleClickDelay)
+                        {
+                            /// double click
+                            RaycastHit hitInfo = new RaycastHit();
+                            bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
+                            if (hit)
+                            {
+                                Debug.Log("Hit " + hitInfo.transform.gameObject.name);
+                                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
+                                {
+                                    LevelObject levelObject = hitInfo.transform.parent.gameObject.GetComponent<LevelObject>();
+                                    Debug.Log("LevelObject hit " + levelObject);
+                                    if (levelObject != null)
+                                    {
+                                        if (levelObject == LevelEditor.selectedObject)
+                                        {
+                                            LevelEditor.selectedObject = null;
+                                            LevelEditor.editorMode = LevelEditor.EditorMode.select;
+                                        }
+                                        else if (levelObject != LevelEditor.selectedObject)
+                                        {
+                                            LevelEditor.selectedObject = levelObject;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         VertHandler._instance.VertexAdd(position);
                     }
                     else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
@@ -144,6 +211,7 @@ namespace FlipFall.Editor
                             LevelPlacer.generatedLevel.AddObject(objectType, snapPos);
                         }
                     }
+                    doubleClickTime = Time.time;
                 }
             }
         }

@@ -31,6 +31,8 @@ namespace FlipFall.Levels
         public List<SpeedStrip> speedStrips;
         public List<Portal> portals;
 
+        public Hashtable changedObjects = new Hashtable();
+
         private void Awake()
         {
         }
@@ -57,6 +59,7 @@ namespace FlipFall.Levels
                         Vector2 turretPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         turret.transform.position = turretPos;
                         turrets.Add(turret);
+                        RegisterChange(type, 1);
                         break;
 
                     case LevelObject.ObjectType.attractor:
@@ -65,6 +68,7 @@ namespace FlipFall.Levels
                         Vector2 aPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         a.transform.position = aPos;
                         attractors.Add(a);
+                        RegisterChange(type, 1);
                         break;
 
                     case LevelObject.ObjectType.portal:
@@ -73,6 +77,7 @@ namespace FlipFall.Levels
                         Vector2 pPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         p.transform.position = pPos;
                         portals.Add(p);
+                        RegisterChange(type, 1);
                         break;
 
                     case LevelObject.ObjectType.speedStrip:
@@ -81,6 +86,7 @@ namespace FlipFall.Levels
                         Vector2 sPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         s.transform.position = sPos;
                         speedStrips.Add(s);
+                        RegisterChange(type, 1);
                         break;
 
                     default:
@@ -91,6 +97,21 @@ namespace FlipFall.Levels
             else
             {
                 Debug.LogError("LevelPlacer needed to add an object to the level.");
+            }
+        }
+
+        public void RegisterChange(LevelObject.ObjectType type, int value)
+        {
+            // add the value to the existing value
+            if (changedObjects.Contains(type))
+            {
+                int oldValue = (int)changedObjects[type];
+                changedObjects[type] = oldValue + value;
+            }
+            // the entry doesnt exist yet, create a new one with a guaranteed positive value
+            else if (value > 0)
+            {
+                changedObjects.Add(type, value);
             }
         }
 

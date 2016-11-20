@@ -1,5 +1,6 @@
 ﻿using FlipFall;
 using FlipFall.Editor;
+using FlipFall.LevelObjects;
 using FlipFall.Levels;
 using FlipFall.Progress;
 using System;
@@ -63,6 +64,12 @@ namespace FlipFall.UI
         public void LeaveUnsaved()
         {
             animator.SetTrigger("leaveUnsaved");
+            // reward the used items back, because we do not save the changes
+            foreach (LevelObject.ObjectType objectType in LevelPlacer.generatedLevel.changedObjects.Keys)
+            {
+                ProgressManager.GetProgress().unlocks.inventory.Add(objectType, (int)LevelPlacer.generatedLevel.changedObjects[objectType]);
+            }
+
             Main.SetScene(Main.Scene.editor);
         }
 
