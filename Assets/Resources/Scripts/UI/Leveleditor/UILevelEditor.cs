@@ -94,7 +94,6 @@ namespace FlipFall.UI
         {
             if (_instance != null)
             {
-                print("active? " + active);
                 if (active)
                 {
                     _instance.animator.ResetTrigger("deleteHide");

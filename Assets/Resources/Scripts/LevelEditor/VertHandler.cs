@@ -24,7 +24,7 @@ namespace FlipFall.Editor
         public Camera editorCamera;
 
         public int handleSize = 50;
-        public bool showHandles = true;
+        public static bool showHandles = true;
 
         private Mesh mesh;
         private Vector3[] verts;

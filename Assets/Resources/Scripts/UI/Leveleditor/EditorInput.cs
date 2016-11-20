@@ -44,9 +44,6 @@ namespace FlipFall.Editor
         // the time of the last registered click
         private float doubleClickTime = 0F;
 
-        // cycle through objects when multiple are within the same raycast by double tapping again
-        private int cycleSelection = 0;
-
         private void Update()
         {
 #if UNITY_EDITOR
@@ -138,6 +135,8 @@ namespace FlipFall.Editor
                 else if (Input.GetMouseButtonDown(0))
                 {
                     Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    bool objectSelected = false;
+
                     if (LevelEditor.editorMode == LevelEditor.EditorMode.select)
                     {
                         // double click
@@ -153,31 +152,34 @@ namespace FlipFall.Editor
                             RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
                             Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
 
-                            int i = 0;
-
                             foreach (RaycastHit2D hit in hits)
                             {
                                 if (hit.collider != null)
                                 {
                                     if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
                                     {
-                                        i++;
                                         LevelObject levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
-                                        Debug.Log("LevelObject hit " + levelObject);
-                                        if (levelObject != null && i == cycleSelection + 1)
+                                        if (levelObject != null)
                                         {
-                                            cycleSelection = i;
-                                            if (i + 1 >= hits.Length - 1)
-                                            {
-                                                cycleSelection = 0;
-                                            }
-                                            Debug.Log("cycleselection: " + cycleSelection);
                                             Debug.Log("SELECTED OBJ " + levelObject.name);
-                                            LevelEditor.selectedObject = levelObject;
-                                            LevelEditor.editorMode = LevelEditor.EditorMode.edit;
+                                            LevelEditor.SetSelectedObject(levelObject);
+                                            objectSelected = true;
                                             break;
                                         }
                                     }
+                                }
+                            }
+
+                            // the raycast didn't select any levelobjects
+                            if (!objectSelected)
+                            {
+                                Vector3 localPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(position);
+                                bool clickInsideMesh = VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, localPos);
+                                // we double clicked inside the mesh => select the mesh
+                                if (clickInsideMesh)
+                                {
+                                    LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.moveArea);
+                                    objectSelected = true;
                                 }
                             }
                         }
@@ -190,7 +192,7 @@ namespace FlipFall.Editor
                     {
                         if (Time.time - doubleClickTime < doubleClickDelay)
                         {
-                            /// double click
+                            // double click
                             RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
                             Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
 
@@ -204,21 +206,41 @@ namespace FlipFall.Editor
                                         Debug.Log("LevelObject hit " + levelObject);
                                         if (levelObject != null)
                                         {
+                                            // same object got selected again, deselect it
                                             if (levelObject == LevelEditor.selectedObject)
                                             {
-                                                LevelEditor.selectedObject = null;
-                                                LevelEditor.editorMode = LevelEditor.EditorMode.select;
+                                                LevelEditor.SetSelectedObject(null);
+                                                objectSelected = true;
                                             }
+                                            // a new object gets selected, replace the old selection with the new one.
                                             else if (levelObject != LevelEditor.selectedObject)
                                             {
-                                                LevelEditor.selectedObject = levelObject;
+                                                LevelEditor.SetSelectedObject(levelObject);
+                                                objectSelected = true;
                                             }
                                         }
                                     }
                                 }
                             }
+                            // the raycast didn't select any levelobjects
+                            if (!objectSelected)
+                            {
+                                Vector3 localPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(position);
+                                bool clickInsideMesh = VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, localPos);
+                                // we double clicked inside the mesh => select the mesh
+                                if (clickInsideMesh)
+                                {
+                                    if (LevelEditor.selectedObject.objectType != LevelPlacer.generatedLevel.moveArea.objectType)
+                                        LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.moveArea);
+                                    else
+                                        LevelEditor.SetSelectedObject(null);
+                                    objectSelected = true;
+                                }
+                            }
                         }
-                        VertHandler._instance.VertexAdd(position);
+                        // there was no object selected, try to add a vertex
+                        if (!objectSelected)
+                            VertHandler._instance.VertexAdd(position);
                     }
                     else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
                     {

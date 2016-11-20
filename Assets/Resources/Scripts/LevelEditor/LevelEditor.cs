@@ -43,6 +43,8 @@ namespace FlipFall.Editor
 
             if (editLevel != null)
                 LevelPlacer._instance.PlaceCustom(editLevel);
+
+            selectedObject = LevelPlacer.generatedLevel.moveArea;
         }
 
         // saves the changes made to the currently placed generated level to the .levelData format
@@ -119,6 +121,48 @@ namespace FlipFall.Editor
 
                 // save it
                 LevelLoader.SaveCustomLevel(l);
+            }
+        }
+
+        public static void SetSelectedObject(LevelObject newSelected)
+        {
+            // deselect the current selection
+            if (newSelected == null)
+            {
+                // if the movearea was selected deactivate the handles
+                if (selectedObject.objectType == LevelObject.ObjectType.moveArea)
+                {
+                    VertHandler.showHandles = false;
+                }
+
+                if (selectedObject != null)
+                    selectedObject.SetOutlineVisible(false);
+                selectedObject = null;
+
+                editorMode = EditorMode.select;
+            }
+            // replace the current selection with a new one
+            else
+            {
+                if (selectedObject != null)
+                {
+                    selectedObject.SetOutlineVisible(false);
+                    // if the movearea got selected activate the handles
+                    if (selectedObject.objectType == LevelObject.ObjectType.moveArea)
+                    {
+                        VertHandler.showHandles = false;
+                    }
+                }
+
+                // if the movearea got selected activate the handles
+                if (newSelected.objectType == LevelObject.ObjectType.moveArea)
+                {
+                    VertHandler.showHandles = true;
+                }
+
+                editorMode = EditorMode.edit;
+                selectedObject = newSelected;
+                selectedObject.SetOutlineVisible(true);
             }
         }
 
