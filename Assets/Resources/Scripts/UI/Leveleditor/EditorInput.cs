@@ -38,8 +38,14 @@ namespace FlipFall.Editor
         private Vector2 deltaPositon;
         private Vector2 lastPositon;
 
+        // the time needed between to clicks to account for a double click/tap
         public float doubleClickDelay = 0.3F;
+
+        // the time of the last registered click
         private float doubleClickTime = 0F;
+
+        // cycle through objects when multiple are within the same raycast by double tapping again
+        private int cycleSelection = 0;
 
         private void Update()
         {
@@ -141,25 +147,36 @@ namespace FlipFall.Editor
                             Vector3 rayOrigin = position;
                             rayOrigin.z = -50F;
                             // get the object clicked onto by raycasting
-                            RaycastHit hitInfo = new RaycastHit();
-                            bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, 50000F);
                             //RaycastHit hitInfo = new RaycastHit();
-                            //bool hit = Physics.Raycast(rayOrigin, Vector3.forward * 200, out hitInfo);
+                            //bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, 50000F);
 
-                            Debug.Log("Camera.main.ScreenPointToRay(Input.mousePosition) " + Camera.main.ScreenPointToRay(Input.mousePosition).origin);
-                            Debug.DrawRay(rayOrigin, Vector3.forward * 200, Color.green, 20F, false);
+                            RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
+                            Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
 
-                            if (hit)
+                            int i = 0;
+
+                            foreach (RaycastHit2D hit in hits)
                             {
-                                Debug.Log("Hit " + hitInfo.transform.gameObject.name);
-                                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
+                                if (hit.collider != null)
                                 {
-                                    LevelObject levelObject = hitInfo.transform.parent.gameObject.GetComponent<LevelObject>();
-                                    Debug.Log("LevelObject hit " + levelObject);
-                                    if (levelObject != null)
+                                    if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
                                     {
-                                        LevelEditor.selectedObject = levelObject;
-                                        LevelEditor.editorMode = LevelEditor.EditorMode.edit;
+                                        i++;
+                                        LevelObject levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
+                                        Debug.Log("LevelObject hit " + levelObject);
+                                        if (levelObject != null && i == cycleSelection + 1)
+                                        {
+                                            cycleSelection = i;
+                                            if (i + 1 >= hits.Length - 1)
+                                            {
+                                                cycleSelection = 0;
+                                            }
+                                            Debug.Log("cycleselection: " + cycleSelection);
+                                            Debug.Log("SELECTED OBJ " + levelObject.name);
+                                            LevelEditor.selectedObject = levelObject;
+                                            LevelEditor.editorMode = LevelEditor.EditorMode.edit;
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -174,25 +191,28 @@ namespace FlipFall.Editor
                         if (Time.time - doubleClickTime < doubleClickDelay)
                         {
                             /// double click
-                            RaycastHit hitInfo = new RaycastHit();
-                            bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
-                            if (hit)
+                            RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
+                            Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
+
+                            foreach (RaycastHit2D hit in hits)
                             {
-                                Debug.Log("Hit " + hitInfo.transform.gameObject.name);
-                                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
+                                if (hit.collider != null)
                                 {
-                                    LevelObject levelObject = hitInfo.transform.parent.gameObject.GetComponent<LevelObject>();
-                                    Debug.Log("LevelObject hit " + levelObject);
-                                    if (levelObject != null)
+                                    if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
                                     {
-                                        if (levelObject == LevelEditor.selectedObject)
+                                        LevelObject levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
+                                        Debug.Log("LevelObject hit " + levelObject);
+                                        if (levelObject != null)
                                         {
-                                            LevelEditor.selectedObject = null;
-                                            LevelEditor.editorMode = LevelEditor.EditorMode.select;
-                                        }
-                                        else if (levelObject != LevelEditor.selectedObject)
-                                        {
-                                            LevelEditor.selectedObject = levelObject;
+                                            if (levelObject == LevelEditor.selectedObject)
+                                            {
+                                                LevelEditor.selectedObject = null;
+                                                LevelEditor.editorMode = LevelEditor.EditorMode.select;
+                                            }
+                                            else if (levelObject != LevelEditor.selectedObject)
+                                            {
+                                                LevelEditor.selectedObject = levelObject;
+                                            }
                                         }
                                     }
                                 }
