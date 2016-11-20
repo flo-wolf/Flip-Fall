@@ -1,5 +1,6 @@
 ﻿using FlipFall.LevelObjects;
 using FlipFall.Levels;
+using FlipFall.UI;
 using System.Collections;
 using System.IO;
 using UnityEngine;
@@ -124,6 +125,7 @@ namespace FlipFall.Editor
             }
         }
 
+        // change the current selected object and controll outline/handler/delete button display
         public static void SetSelectedObject(LevelObject newSelected)
         {
             // deselect the current selection
@@ -139,6 +141,8 @@ namespace FlipFall.Editor
                     selectedObject.SetOutlineVisible(false);
                 selectedObject = null;
 
+                UILevelEditor.DeleteShow(false);
+
                 editorMode = EditorMode.select;
             }
             // replace the current selection with a new one
@@ -150,7 +154,7 @@ namespace FlipFall.Editor
                     // if the movearea got selected activate the handles
                     if (selectedObject.objectType == LevelObject.ObjectType.moveArea)
                     {
-                        VertHandler.showHandles = false;
+                        VertHandler._instance.DestroyHandles();
                     }
                 }
 
@@ -158,12 +162,23 @@ namespace FlipFall.Editor
                 if (newSelected.objectType == LevelObject.ObjectType.moveArea)
                 {
                     VertHandler.showHandles = true;
+                    UILevelEditor.DeleteShow(false);
+                }
+                // the new object is not a movearea, activate the delete button (movearea delete button gets displayed when vertices get selected)
+                else
+                {
+                    UILevelEditor.DeleteShow(true);
                 }
 
                 editorMode = EditorMode.edit;
                 selectedObject = newSelected;
                 selectedObject.SetOutlineVisible(true);
             }
+        }
+
+        public static void SetState(EditorMode mode)
+        {
+            editorMode = mode;
         }
 
         // loads a level by its id

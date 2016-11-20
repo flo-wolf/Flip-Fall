@@ -24,7 +24,7 @@ namespace FlipFall.Editor
         public Camera editorCamera;
 
         public int handleSize = 50;
-        public static bool showHandles = true;
+        public static bool showHandles;
 
         private Mesh mesh;
         private Vector3[] verts;
@@ -54,6 +54,7 @@ namespace FlipFall.Editor
 
             // destroy leftover handles
             DestroyHandles();
+            showHandles = true;
 
             Main.onSceneChange.AddListener(SceneChanged);
         }
@@ -140,8 +141,9 @@ namespace FlipFall.Editor
             DestroyHandles();
         }
 
-        private void DestroyHandles()
+        public void DestroyHandles()
         {
+            showHandles = false;
             GameObject[] handles = GameObject.FindGameObjectsWithTag("handle");
 #if UNITY_EDITOR
             //if (EditorApplication.isPlaying)

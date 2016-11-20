@@ -93,6 +93,45 @@ namespace FlipFall.Levels
                         //Debug.Log("Wasnt able to add the levelobject to the LevelDataMono of type " + lo.objectType);
                         break;
                 }
+
+                ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+            }
+            else
+            {
+                Debug.LogError("LevelPlacer needed to add an object to the level.");
+            }
+        }
+
+        // add an object to the level. this step of reference is needed for later deconstruction of the level and serialization
+        public void DeleteObject(LevelObject levelObj)
+        {
+            if (LevelPlacer._instance != null)
+            {
+                switch (levelObj.objectType)
+                {
+                    case LevelObject.ObjectType.turret:
+                        turrets.Remove((Turret)levelObj);
+                        break;
+
+                    case LevelObject.ObjectType.attractor:
+                        attractors.Remove((Attractor)levelObj);
+                        break;
+
+                    case LevelObject.ObjectType.portal:
+                        portals.Remove((Portal)levelObj);
+                        break;
+
+                    case LevelObject.ObjectType.speedStrip:
+                        speedStrips.Remove((SpeedStrip)levelObj);
+                        break;
+
+                    default:
+                        //Debug.Log("Wasnt able to add the levelobject to the LevelDataMono of type " + lo.objectType);
+                        break;
+                }
+                RegisterChange(levelObj.objectType, -1);
+                ProgressManager.GetProgress().unlocks.inventory.Add(levelObj.objectType, 1);
+                DestroyImmediate(levelObj.gameObject);
             }
             else
             {
@@ -108,15 +147,11 @@ namespace FlipFall.Levels
                 int oldValue = (int)changedObjects[type];
                 changedObjects[type] = oldValue + value;
             }
-            // the entry doesnt exist yet, create a new one with a guaranteed positive value
-            else if (value > 0)
+            // the entry doesnt exist yet
+            else
             {
                 changedObjects.Add(type, value);
             }
-        }
-
-        public void RemoveObject(LevelObject lo)
-        {
         }
     }
 }

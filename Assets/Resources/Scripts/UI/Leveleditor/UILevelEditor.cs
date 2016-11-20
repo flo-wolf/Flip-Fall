@@ -70,6 +70,7 @@ namespace FlipFall.UI
                 ProgressManager.GetProgress().unlocks.inventory.Add(objectType, (int)LevelPlacer.generatedLevel.changedObjects[objectType]);
             }
 
+            DeleteShow(false);
             Main.SetScene(Main.Scene.editor);
         }
 
@@ -77,6 +78,7 @@ namespace FlipFall.UI
         {
             animator.SetTrigger("leaveSave");
             LevelEditor.SaveLevel();
+            DeleteShow(false);
             Main.SetScene(Main.Scene.editor);
         }
 
@@ -92,25 +94,36 @@ namespace FlipFall.UI
 
         public static void DeleteShow(bool active)
         {
+            Debug.Log("DELETE SHOW " + active);
             if (_instance != null)
             {
                 if (active)
                 {
                     _instance.animator.ResetTrigger("deleteHide");
+                    _instance.animator.ResetTrigger("deleteShow");
                     _instance.animator.SetTrigger("deleteShow");
                 }
                 else
                 {
                     _instance.animator.ResetTrigger("deleteShow");
+                    _instance.animator.ResetTrigger("deleteHide");
                     _instance.animator.SetTrigger("deleteHide");
                 }
             }
         }
 
-        public void DeleteVertsButton()
+        public void DeleteButton()
         {
-            VertHandler._instance.DeleteAllSelectedVerts();
-            _instance.animator.SetTrigger("deleteHide");
+            // the movearea is selected, thus delete vertices
+            if (LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea)
+                VertHandler._instance.DeleteAllSelectedVerts();
+
+            // another levelobject is selected, delete it and reward the item back into the inventory
+            else if (LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+            {
+                _instance.animator.SetTrigger("deleteHide");
+                LevelPlacer.generatedLevel.DeleteObject(LevelEditor.selectedObject);
+            }
         }
 
         public void GridToggle(Toggle t)

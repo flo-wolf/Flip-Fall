@@ -119,7 +119,6 @@ namespace FlipFall.Editor
                         LevelObject.ObjectType objectType = UILevelObject.currentSelectedObject.objectType;
                         if (snapPos != Vector3.zero)
                         {
-                            ProgressManager.GetProgress().unlocks.inventory.Add(objectType, -1);
                             LevelPlacer.generatedLevel.AddObject(objectType, snapPos);
                         }
                     }
@@ -230,7 +229,7 @@ namespace FlipFall.Editor
                                 // we double clicked inside the mesh => select the mesh
                                 if (clickInsideMesh)
                                 {
-                                    if (LevelEditor.selectedObject.objectType != LevelPlacer.generatedLevel.moveArea.objectType)
+                                    if (LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
                                         LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.moveArea);
                                     else
                                         LevelEditor.SetSelectedObject(null);
@@ -249,7 +248,6 @@ namespace FlipFall.Editor
                         LevelObject.ObjectType objectType = UILevelObject.currentSelectedObject.objectType;
                         if (snapPos != Vector3.zero)
                         {
-                            ProgressManager.GetProgress().unlocks.inventory.Add(objectType, -1);
                             LevelPlacer.generatedLevel.AddObject(objectType, snapPos);
                         }
                     }
