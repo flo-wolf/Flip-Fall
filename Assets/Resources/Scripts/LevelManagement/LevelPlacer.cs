@@ -188,7 +188,7 @@ namespace FlipFall.Levels
                 int length = levelData.moveVerticies.Length;
                 generatedLevel.moveArea = moveArea;
 
-                // if there are verticies listed, generate a mesh and place it, otherwise leave the default quad mesh
+                // if the leveldata has verticies listed, generate a mesh and place it
                 if (length > 0)
                 {
                     MeshFilter mr = moveArea.GetComponent<MeshFilter>();
@@ -199,6 +199,33 @@ namespace FlipFall.Levels
                         verts[i] = new Vector3(levelData.moveVerticies[i].x, levelData.moveVerticies[i].y, moveAreaZ);
                     }
                     Mesh m = CreateMoveAreaMesh(verts, levelData.moveTriangles);
+                    mr.sharedMesh = m;
+                }
+                // ... otherwise create a default level mesh and place it
+                else
+                {
+                    MeshFilter mr = moveArea.GetComponent<MeshFilter>();
+
+                    Vector3[] verts = new Vector3[4];
+                    int[] tri = new int[verts.Length * 3];
+
+                    // upper left
+                    verts[0] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3974.99f, 1080f, moveAreaZ));
+                    // upper right
+                    verts[1] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4065.01f, 1080f, moveAreaZ));
+                    // lower left
+                    verts[2] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3974.99f, 990f, moveAreaZ));
+                    // lower right
+                    verts[3] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4065.01f, 990f, moveAreaZ));
+
+                    tri[0] = 0;
+                    tri[1] = 1;
+                    tri[2] = 2;
+                    tri[3] = 1;
+                    tri[4] = 3;
+                    tri[5] = 2;
+
+                    Mesh m = CreateMoveAreaMesh(verts, tri);
                     mr.sharedMesh = m;
                 }
                 return true;
