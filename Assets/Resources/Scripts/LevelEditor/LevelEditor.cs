@@ -154,7 +154,7 @@ namespace FlipFall.Editor
                     // if the movearea got selected activate the handles
                     if (selectedObject.objectType == LevelObject.ObjectType.moveArea)
                     {
-                        VertHandler._instance.DestroyHandles();
+                        VertHandler._instance.OnDisable();
                     }
                 }
 

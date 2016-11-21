@@ -29,11 +29,6 @@ namespace FlipFall.Editor
 
         public static bool itemDragged = false;
 
-        private void Start()
-        {
-            cam = GetComponent<Camera>();
-        }
-
         private Vector2 currentPosition;
         private Vector2 deltaPositon;
         private Vector2 lastPositon;
@@ -42,8 +37,15 @@ namespace FlipFall.Editor
         public float doubleClickDelay = 0.3F;
 
         // the time of the last registered click
-        private float doubleClickTime = 0F;
+        private float doubleClickTime;
 
+        private void Start()
+        {
+            cam = GetComponent<Camera>();
+            doubleClickTime = 0F;
+        }
+
+        // Input Control
         private void Update()
         {
 #if UNITY_EDITOR
@@ -97,32 +99,19 @@ namespace FlipFall.Editor
                         //old one, working
                         Vector3 touchDeltaPosition = new Vector3(-touchZero.deltaPosition.x * Time.deltaTime * 500, -touchZero.deltaPosition.y * Time.deltaTime * 500, 0);
                         transform.position += touchDeltaPosition;
-
-                        //debug1.text = "moving";
-                        //debug2.text = touchDeltaPosition.ToString();
                         //transform.Translate(touchDeltaPosition.x * Time.deltaTime, touchDeltaPosition.y * Time.deltaTime, 0);
                     }
                 }
                 else if (Input.touchCount == 1)
                 {
                     Touch touch = Input.GetTouch(0);
-                    Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
-
-                    if (LevelEditor.editorMode == LevelEditor.EditorMode.edit)
+                    if (touch.phase == TouchPhase.Began)
                     {
-                        VertHandler._instance.VertexAdd(position);
-                    }
-                    else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
-                    {
-                        // snapping
-                        Vector3 snapPos = VertHelper.Snap(position, false);
-                        LevelObject.ObjectType objectType = UILevelObject.currentSelectedObject.objectType;
-                        if (snapPos != Vector3.zero)
-                        {
-                            LevelPlacer.generatedLevel.AddObject(objectType, snapPos);
-                        }
+                        Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
+                        ClickHandler(position);
                     }
                 }
+#if UNITY_EDITOR
                 // both mouse buttons clicked => drag view
                 else if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
                 {
@@ -134,126 +123,125 @@ namespace FlipFall.Editor
                 else if (Input.GetMouseButtonDown(0))
                 {
                     Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    bool objectSelected = false;
+                    ClickHandler(position);
+                }
+#endif
+            }
+        }
 
-                    if (LevelEditor.editorMode == LevelEditor.EditorMode.select)
+        private void ClickHandler(Vector3 position)
+        {
+            bool objectSelected = false;
+
+            if (LevelEditor.editorMode == LevelEditor.EditorMode.select)
+            {
+                // double click
+                if (Time.time - doubleClickTime < doubleClickDelay && doubleClickTime > 0)
+                {
+                    RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
+                    Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
+
+                    foreach (RaycastHit2D hit in hits)
                     {
-                        // double click
-                        if (Time.time - doubleClickTime < doubleClickDelay)
+                        if (hit.collider != null)
                         {
-                            Debug.Log("double click");
-                            Vector3 rayOrigin = position;
-                            rayOrigin.z = -50F;
-                            // get the object clicked onto by raycasting
-                            //RaycastHit hitInfo = new RaycastHit();
-                            //bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, 50000F);
-
-                            RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
-                            Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
-
-                            foreach (RaycastHit2D hit in hits)
+                            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
                             {
-                                if (hit.collider != null)
+                                LevelObject levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
+                                if (levelObject != null)
                                 {
-                                    if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
-                                    {
-                                        LevelObject levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
-                                        if (levelObject != null)
-                                        {
-                                            Debug.Log("SELECTED OBJ " + levelObject.name);
-                                            LevelEditor.SetSelectedObject(levelObject);
-                                            objectSelected = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-
-                            // the raycast didn't select any levelobjects
-                            if (!objectSelected)
-                            {
-                                Vector3 localPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(position);
-                                bool clickInsideMesh = VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, localPos);
-                                // we double clicked inside the mesh => select the mesh
-                                if (clickInsideMesh)
-                                {
-                                    LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.moveArea);
+                                    Debug.Log("SELECTED OBJ " + levelObject.name);
+                                    LevelEditor.SetSelectedObject(levelObject);
                                     objectSelected = true;
+                                    break;
                                 }
                             }
                         }
-                        else
-                        {
-                            //normal click
-                        }
                     }
-                    else if (LevelEditor.editorMode == LevelEditor.EditorMode.edit)
-                    {
-                        if (Time.time - doubleClickTime < doubleClickDelay)
-                        {
-                            // double click
-                            RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
-                            Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
 
-                            foreach (RaycastHit2D hit in hits)
-                            {
-                                if (hit.collider != null)
-                                {
-                                    if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
-                                    {
-                                        LevelObject levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
-                                        Debug.Log("LevelObject hit " + levelObject);
-                                        if (levelObject != null)
-                                        {
-                                            // same object got selected again, deselect it
-                                            if (levelObject == LevelEditor.selectedObject)
-                                            {
-                                                LevelEditor.SetSelectedObject(null);
-                                                objectSelected = true;
-                                            }
-                                            // a new object gets selected, replace the old selection with the new one.
-                                            else if (levelObject != LevelEditor.selectedObject)
-                                            {
-                                                LevelEditor.SetSelectedObject(levelObject);
-                                                objectSelected = true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            // the raycast didn't select any levelobjects
-                            if (!objectSelected)
-                            {
-                                Vector3 localPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(position);
-                                bool clickInsideMesh = VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, localPos);
-                                // we double clicked inside the mesh => select the mesh
-                                if (clickInsideMesh)
-                                {
-                                    if (LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
-                                        LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.moveArea);
-                                    else
-                                        LevelEditor.SetSelectedObject(null);
-                                    objectSelected = true;
-                                }
-                            }
-                        }
-                        // there was no object selected, try to add a vertex
-                        if (!objectSelected)
-                            VertHandler._instance.VertexAdd(position);
-                    }
-                    else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
+                    // the raycast didn't select any levelobjects
+                    if (!objectSelected)
                     {
-                        // snapping
-                        Vector3 snapPos = VertHelper.Snap(position, false);
-                        LevelObject.ObjectType objectType = UILevelObject.currentSelectedObject.objectType;
-                        if (snapPos != Vector3.zero)
+                        Vector3 localPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(position);
+                        bool clickInsideMesh = VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, localPos);
+                        // we double clicked inside the mesh => select the mesh
+                        if (clickInsideMesh)
                         {
-                            LevelPlacer.generatedLevel.AddObject(objectType, snapPos);
+                            LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.moveArea);
+                            objectSelected = true;
                         }
                     }
-                    doubleClickTime = Time.time;
+                }
+                else
+                {
+                    //normal click
                 }
             }
+            else if (LevelEditor.editorMode == LevelEditor.EditorMode.edit)
+            {
+                if (Time.time - doubleClickTime < doubleClickDelay && doubleClickTime > 0)
+                {
+                    // double click
+                    RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
+                    Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
+
+                    foreach (RaycastHit2D hit in hits)
+                    {
+                        if (hit.collider != null)
+                        {
+                            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
+                            {
+                                LevelObject levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
+                                Debug.Log("LevelObject hit " + levelObject);
+                                if (levelObject != null)
+                                {
+                                    // same object got selected again, deselect it
+                                    if (levelObject == LevelEditor.selectedObject)
+                                    {
+                                        LevelEditor.SetSelectedObject(null);
+                                        objectSelected = true;
+                                    }
+                                    // a new object gets selected, replace the old selection with the new one.
+                                    else if (levelObject != LevelEditor.selectedObject)
+                                    {
+                                        LevelEditor.SetSelectedObject(levelObject);
+                                        objectSelected = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // the raycast didn't select any levelobjects
+                    if (!objectSelected)
+                    {
+                        Vector3 localPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(position);
+                        bool clickInsideMesh = VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, localPos);
+                        // we double clicked inside the mesh => select the mesh
+                        if (clickInsideMesh)
+                        {
+                            if (LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+                                LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.moveArea);
+                            else
+                                LevelEditor.SetSelectedObject(null);
+                            objectSelected = true;
+                        }
+                    }
+                }
+                // there was no object selected, try to add a vertex
+                //if (!objectSelected || LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea)
+                VertHandler._instance.VertexAdd(position);
+            }
+            else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
+            {
+                // snapping
+                Vector3 snapPos = VertHelper.Snap(position, false);
+                LevelObject.ObjectType objectType = UILevelObject.currentSelectedObject.objectType;
+                if (snapPos != Vector3.zero)
+                {
+                    LevelPlacer.generatedLevel.AddObject(objectType, snapPos);
+                }
+            }
+            doubleClickTime = Time.time;
         }
 
 #endif

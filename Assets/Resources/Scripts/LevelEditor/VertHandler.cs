@@ -136,14 +136,15 @@ namespace FlipFall.Editor
         }
 
         // destory handles
-        private void OnDisable()
+        public void OnDisable()
         {
+            showHandles = false;
+            handlesShown = false;
             DestroyHandles();
         }
 
         public void DestroyHandles()
         {
-            showHandles = false;
             GameObject[] handles = GameObject.FindGameObjectsWithTag("handle");
 #if UNITY_EDITOR
             //if (EditorApplication.isPlaying)
@@ -207,6 +208,7 @@ namespace FlipFall.Editor
         // add a vertex at the given position - called by EditorInput class
         public void VertexAdd(Vector3 pos)
         {
+            Debug.Log("vertexadd");
             if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
             {
                 // two verticies are selected, everything ready for expanding the mesh

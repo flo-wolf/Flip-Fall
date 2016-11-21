@@ -33,8 +33,8 @@ namespace FlipFall.Progress
 
         public Unlocks()
         {
-            defaultSkin = ThemeManager.Skin.toxic;
-            currentSkin = ThemeManager.Skin.toxic;
+            defaultSkin = ThemeManager.Skin.sunset;
+            currentSkin = ThemeManager.Skin.sunset;
 
             inventory = new Inventory();
 
