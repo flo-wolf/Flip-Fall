@@ -356,7 +356,7 @@ namespace FlipFall.Editor
                         // check if the current pointed triangle contains one of the indiciees we want to delete
                         foreach (int index in selectedIndices)
                         {
-                            print("index " + index + " i1: " + i1 + " i2: " + i2 + " i3: " + i3 + " selectedIndicesCount: " + selectedIndices.Count);
+                            //print("index " + index + " i1: " + i1 + " i2: " + i2 + " i3: " + i3 + " selectedIndicesCount: " + selectedIndices.Count);
                             // if thats not the case, keep them, otherwise dont include them in the new triangle array
                             if (!(index == i1 || index == i2 || index == i3))
                             {
@@ -364,30 +364,30 @@ namespace FlipFall.Editor
                                 if (i1 >= index)
                                 {
                                     newTriangles.Add(i1 - 1);
-                                    print("remove 1 from entry " + k + " with value " + (i1 - 1));
+                                    //print("remove 1 from entry " + k + " with value " + (i1 - 1));
                                 }
                                 else
                                 {
                                     newTriangles.Add(i1);
-                                    print("entry " + (k + 1) + " with value " + (i1 - 0));
+                                    //print("entry " + (k + 1) + " with value " + (i1 - 0));
                                 }
                                 if (i2 >= index)
                                 {
                                     newTriangles.Add(i2 - 1);
-                                    print("remove 1 from entry " + (k + 2) + " with value " + (i1 - 1));
+                                    //print("remove 1 from entry " + (k + 2) + " with value " + (i1 - 1));
                                 }
                                 else {
                                     newTriangles.Add(i2);
-                                    print("entry " + (k + 2) + " with value " + (i1 - 0));
+                                    //print("entry " + (k + 2) + " with value " + (i1 - 0));
                                 }
                                 if (i3 >= index)
                                 {
                                     newTriangles.Add(i3 - 1);
-                                    print("remove 1 from entry " + (k + 3) + " with value " + (i1 - 1));
+                                    //print("remove 1 from entry " + (k + 3) + " with value " + (i1 - 1));
                                 }
                                 else {
                                     newTriangles.Add(i3);
-                                    print("remove 1 from entry " + (k + 3) + " with value " + (i1 - 0));
+                                    //print("remove 1 from entry " + (k + 3) + " with value " + (i1 - 0));
                                 }
                             }
                         }
