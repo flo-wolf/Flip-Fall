@@ -129,7 +129,7 @@ namespace FlipFall.Editor
                             Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
                             //position.y = Screen.height - position.y;
                             position.z = LevelEditor.selectedObject.transform.position.z;
-                            if (VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, position))
+                            if (VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(position)))
                                 LevelEditor.selectedObject.transform.position = position;
                         }
                     }
