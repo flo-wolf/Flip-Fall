@@ -29,7 +29,13 @@ namespace FlipFall.Cam
 
         private void Start()
         {
-            Vector3 spawnPos = LevelManager.GetActiveLevel().spawn.GetPosition();
+            Vector3 spawnPos = Vector3.zero;
+            if (Game.gameType == Game.GameType.story)
+                spawnPos = LevelManager.GetActiveLevel().spawn.GetPosition();
+            else if (Game.gameType == Game.GameType.testing)
+            {
+                spawnPos = LevelPlacer.generatedLevel.spawn.transform.position;
+            }
             spawnPos.z = Constants.cameraZ;
             foreach (Camera cam in cams)
             {

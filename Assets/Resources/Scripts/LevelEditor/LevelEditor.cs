@@ -174,6 +174,13 @@ namespace FlipFall.Editor
             }
         }
 
+        public static bool TryTestLevel()
+        {
+            Game.gameType = Game.GameType.testing;
+            Main.SetScene(Main.Scene.game);
+            return true;
+        }
+
         public static void SetState(EditorMode mode)
         {
             editorMode = mode;

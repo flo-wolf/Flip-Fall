@@ -1,5 +1,6 @@
 ﻿using FlipFall;
 using FlipFall.Cam;
+using FlipFall.Editor;
 using FlipFall.Levels;
 using FlipFall.Progress;
 using FlipFall.UI;
@@ -16,13 +17,10 @@ namespace FlipFall
 {
     public class Game : MonoBehaviour
     {
+        public enum GameType { story, testing, shared }
         public enum GameState { playing, pause, finishscreen, deathscreen }
 
-        //create class main, make it completly static, surviving scene changes
-        // main class logs the current screenstate and allows easy switching, accessable by the controller script of each scene
-        //public enum MainState { startup, title, firstvisit, home, playing, pause, levelselection, editor, settings }
-        //
-
+        public static GameType gameType = GameType.story;
         public static GameState gameState;
         public static GameStateChangeEvent onGameStateChange = new GameStateChangeEvent();
 
@@ -49,7 +47,14 @@ namespace FlipFall
 
         private void Start()
         {
-            LevelPlacer.Place(LevelManager.GetActiveLevel());
+            if (gameType == GameType.story)
+            {
+                LevelPlacer.Place(LevelManager.GetActiveLevel());
+            }
+            else if (gameType == GameType.testing && LevelPlacer._instance != null)
+            {
+                LevelPlacer._instance.PlaceCustom(LevelEditor.editLevel);
+            }
             SetGameState(GameState.playing);
             Main.onSceneChange.AddListener(SceneChanged);
         }
@@ -75,21 +80,24 @@ namespace FlipFall
 
                     Timer.Pause();
 
-                    if (ProgressManager.GetProgress().highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                    if (gameType == GameType.story)
                     {
-                        ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                        if (ProgressManager.GetProgress().highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                        {
+                            ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                        }
+                        else
+                        {
+                            ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), -1);
+                            ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                        }
+                        onGameStateChange.Invoke(gs);
+                        Main.SetScene(Main.Scene.levelselection);
                     }
-                    else
+                    else if (gameType == GameType.testing)
                     {
-                        ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), -1);
-                        ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                        Main.SetScene(Main.Scene.editor);
                     }
-
-                    //_instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
-                    //_instance.StartCoroutine(DelayedGameStateSet(Game.GameState.levelselection, deathTolevelselectionDelay + deathDelay));
-
-                    onGameStateChange.Invoke(gs);
-                    Main.SetScene(Main.Scene.levelselection);
                     break;
 
                 case GameState.finishscreen:
@@ -97,32 +105,40 @@ namespace FlipFall
 
                     Timer.Pause();
 
-                    // Highscore Management
-                    int oldStars = 0;
-                    if (ProgressManager.GetProgress().highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                    if (gameType == GameType.story)
                     {
-                        oldStars = ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).starCount;
+                        // Highscore Management
+                        int oldStars = 0;
+                        if (ProgressManager.GetProgress().highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                        {
+                            oldStars = ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).starCount;
+                        }
+
+                        Highscore newHighscore = null;
+                        if (LevelManager.GetActiveID() == ProgressManager.GetProgress().lastPlayedLevelID)
+                        {
+                            newHighscore = ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
+                        }
+
+                        UILevelPlacer.CalcStarsToUnlock(oldStars, newHighscore);
+
+                        _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
+
+                        UILevelselectionManager.enterType = UILevelselectionManager.EnterType.finished;
+
+                        Main.SetScene(Main.Scene.levelselection);
+                        onGameStateChange.Invoke(gs);
+
+                        //Unlock the next level, if possible
+                        if (ProgressManager.GetProgress().TryUnlockNextLevel(LevelManager.GetActiveID()))
+                        {
+                        }
+                    }
+                    else if (gameType == GameType.testing)
+                    {
+                        Main.SetScene(Main.Scene.editor);
                     }
 
-                    Highscore newHighscore = null;
-                    if (LevelManager.GetActiveID() == ProgressManager.GetProgress().lastPlayedLevelID)
-                    {
-                        newHighscore = ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
-                    }
-
-                    UILevelPlacer.CalcStarsToUnlock(oldStars, newHighscore);
-
-                    _instance.StartCoroutine(DelayedGameStateInvoke(gs, deathDelay));
-
-                    UILevelselectionManager.enterType = UILevelselectionManager.EnterType.finished;
-
-                    Main.SetScene(Main.Scene.levelselection);
-                    onGameStateChange.Invoke(gs);
-
-                    //Unlock the next level, if possible
-                    if (ProgressManager.GetProgress().TryUnlockNextLevel(LevelManager.GetActiveID()))
-                    {
-                    }
                     break;
 
                 case GameState.playing:

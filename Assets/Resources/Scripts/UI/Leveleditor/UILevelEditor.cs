@@ -87,9 +87,20 @@ namespace FlipFall.UI
             animator.SetTrigger("leaveAbort");
         }
 
-        public void ModeSwitcher()
+        public void PreferencesButton()
         {
-            //LevelEditor.editorMode = LevelEditor.EditorMode.moveVertex;
+        }
+
+        public void TestButton()
+        {
+            if (LevelEditor.TryTestLevel())
+            {
+                // animations
+            }
+        }
+
+        public void HelpButton()
+        {
         }
 
         public static void DeleteShow(bool active)

@@ -120,7 +120,13 @@ namespace FlipFall.Cam
         //Game Listener
         private void GameStateChanged(Game.GameState gameState)
         {
-            Vector3 spawnPos = LevelPlacer.placedLevel.spawn.transform.position;
+            Vector3 spawnPos = Vector3.zero;
+            if (Game.gameType == Game.GameType.story)
+                spawnPos = LevelPlacer.placedLevel.spawn.transform.position;
+            else if (Game.gameType == Game.GameType.testing)
+            {
+                spawnPos = LevelPlacer.generatedLevel.spawn.transform.position;
+            }
             switch (gameState)
             {
                 case Game.GameState.playing:

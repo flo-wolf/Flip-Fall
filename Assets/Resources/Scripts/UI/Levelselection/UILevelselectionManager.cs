@@ -20,7 +20,7 @@ namespace FlipFall.UI
     public class UILevelselectionManager : MonoBehaviour
     {
         //for passing an unlock when entering the levelselection
-        public enum EnterType { unlockNext, finished, failed }
+        public enum EnterType { unlockNext, finished, failed, none }
         public static EnterType enterType = EnterType.failed;
 
         public static UILevelselectionManager _instance;
@@ -53,10 +53,16 @@ namespace FlipFall.UI
             }
             _instance = this;
             activeUILevel = ProgressManager.GetProgress().lastPlayedLevelID;
+
+            if (enterType != EnterType.none)
+            {
+                enterType = EnterType.none;
+            }
         }
 
         private void Start()
         {
+            Game.gameType = Game.GameType.story;
             Main.onSceneChange.AddListener(SceneChanging);
             LevelManager.onLevelChange.AddListener(LevelChanging);
 
