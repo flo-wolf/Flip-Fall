@@ -1,4 +1,5 @@
 ﻿using FlipFall;
+using FlipFall.Editor;
 using FlipFall.LevelObjects;
 using FlipFall.Levels;
 using FlipFall.Theme;
@@ -188,7 +189,7 @@ namespace FlipFall.Levels
                 int length = levelData.moveVerticies.Length;
                 generatedLevel.moveArea = moveArea;
 
-                // if the leveldata has verticies listed, generate a mesh and place it
+                // if the leveldata has verticies listed, generate a mesh from it and place it
                 if (length > 0)
                 {
                     MeshFilter mr = moveArea.GetComponent<MeshFilter>();
@@ -218,6 +219,7 @@ namespace FlipFall.Levels
                     // lower right
                     verts[3] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4065.01f, 990f, moveAreaZ));
 
+                    // create clockwise triangles based on the vertices we just created
                     tri[0] = 0;
                     tri[1] = 1;
                     tri[2] = 2;
@@ -227,6 +229,12 @@ namespace FlipFall.Levels
 
                     Mesh m = CreateMoveAreaMesh(verts, tri);
                     mr.sharedMesh = m;
+                }
+
+                // set the movearea as the selected object
+                if (Main.currentScene == Main.Scene.editor)
+                {
+                    LevelEditor.SetSelectedObject(generatedLevel.moveArea);
                 }
                 return true;
             }

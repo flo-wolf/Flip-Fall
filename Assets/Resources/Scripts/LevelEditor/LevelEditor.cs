@@ -44,8 +44,6 @@ namespace FlipFall.Editor
 
             if (editLevel != null)
                 LevelPlacer._instance.PlaceCustom(editLevel);
-
-            selectedObject = LevelPlacer.generatedLevel.moveArea;
         }
 
         // saves the changes made to the currently placed generated level to the .levelData format

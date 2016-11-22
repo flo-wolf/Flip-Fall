@@ -27,6 +27,7 @@ namespace FlipFall.Editor
 
         private Camera cam;
 
+        // vertex getting dragged
         public static bool itemDragged = false;
 
         private Vector2 currentPosition;
@@ -38,6 +39,9 @@ namespace FlipFall.Editor
 
         // the time of the last registered click
         private float doubleClickTime;
+
+        // levelobject getting dragged
+        private bool objectDragged = true;
 
         private void Start()
         {
@@ -102,6 +106,7 @@ namespace FlipFall.Editor
                         //transform.Translate(touchDeltaPosition.x * Time.deltaTime, touchDeltaPosition.y * Time.deltaTime, 0);
                     }
                 }
+                // one finger touches the screen
                 else if (Input.touchCount == 1)
                 {
                     Touch touch = Input.GetTouch(0);
@@ -109,10 +114,39 @@ namespace FlipFall.Editor
                     {
                         Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
                         ClickHandler(position);
+
+                        LevelObject l = GetLevelObjectAt(position);
+                        if (l != null && l == LevelEditor.selectedObject)
+                        {
+                            objectDragged = true;
+                        }
+                    }
+                    else if (touch.phase == TouchPhase.Moved)
+                    {
+                        // an object is selected, and it is not the movearea
+                        if (objectDragged && LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+                        {
+                            Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
+                            //position.y = Screen.height - position.y;
+                            position.z = LevelEditor.selectedObject.transform.position.z;
+                            LevelEditor.selectedObject.transform.position = position;
+                        }
+                    }
+                    else if (touch.phase == TouchPhase.Ended)
+                    {
+                        // an object is selected, and it is not the movearea
+                        if (objectDragged && LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+                        {
+                            // move the selected object
+                            Vector3 position = LevelEditor.selectedObject.transform.position;
+                            LevelEditor.selectedObject.transform.position = VertHelper.Snap(position, false);
+                            //itemDragged = false;
+                        }
+                        objectDragged = false;
                     }
                 }
 #if UNITY_EDITOR
-                // both mouse buttons clicked => drag view
+                // both mouse buttons are held down => drag the editor view
                 else if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
                 {
                     Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -120,15 +154,63 @@ namespace FlipFall.Editor
                     deltaPos.z = 0F;
                     transform.position += deltaPos;
                 }
+                // one mouse button got clicked
                 else if (Input.GetMouseButtonDown(0))
                 {
                     Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     ClickHandler(position);
                 }
+                // one mouse button is held down (aka "dragged")
+                else if (Input.GetMouseButton(0))
+                {
+                    // an object is selected, and it is not the movearea
+                    if (LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+                    {
+                        //itemDragged = true;
+                        // move the selected object
+                        Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        Vector3 deltaPos = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * 40f;
+                        deltaPos.z = 0F;
+                        LevelEditor.selectedObject.transform.position += deltaPos;
+                    }
+                }
+                else if (Input.GetMouseButtonUp(0))
+                {
+                    // an object is selected, and it is not the movearea
+                    if (LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+                    {
+                        // move the selected object
+                        Vector3 position = LevelEditor.selectedObject.transform.position;
+                        LevelEditor.selectedObject.transform.position = VertHelper.Snap(position, false);
+                        //itemDragged = false;
+                    }
+                }
 #endif
             }
         }
 
+        // fire a raycast at the given worldposition and get the levelobject at that postion
+        private LevelObject GetLevelObjectAt(Vector3 position)
+        {
+            LevelObject levelObject = null;
+
+            RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
+            Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
+
+            foreach (RaycastHit2D hit in hits)
+            {
+                if (hit.collider != null)
+                {
+                    if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
+                    {
+                        levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
+                    }
+                }
+            }
+            return levelObject;
+        }
+
+        // checks for double clicks and selectes/deselects objects accordingly
         private void ClickHandler(Vector3 position)
         {
             bool objectSelected = false;
@@ -138,25 +220,12 @@ namespace FlipFall.Editor
                 // double click
                 if (Time.time - doubleClickTime < doubleClickDelay && doubleClickTime > 0)
                 {
-                    RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
-                    Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
-
-                    foreach (RaycastHit2D hit in hits)
+                    LevelObject levelObject = GetLevelObjectAt(position);
+                    if (levelObject != null)
                     {
-                        if (hit.collider != null)
-                        {
-                            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
-                            {
-                                LevelObject levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
-                                if (levelObject != null)
-                                {
-                                    Debug.Log("SELECTED OBJ " + levelObject.name);
-                                    LevelEditor.SetSelectedObject(levelObject);
-                                    objectSelected = true;
-                                    break;
-                                }
-                            }
-                        }
+                        Debug.Log("SELECTED OBJ " + levelObject.name);
+                        LevelEditor.SetSelectedObject(levelObject);
+                        objectSelected = true;
                     }
 
                     // the raycast didn't select any levelobjects
@@ -172,43 +241,25 @@ namespace FlipFall.Editor
                         }
                     }
                 }
-                else
-                {
-                    //normal click
-                }
             }
             else if (LevelEditor.editorMode == LevelEditor.EditorMode.edit)
             {
                 if (Time.time - doubleClickTime < doubleClickDelay && doubleClickTime > 0)
                 {
-                    // double click
-                    RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
-                    Debug.DrawRay(position, Vector3.forward * 200, Color.green, 20F, false);
-
-                    foreach (RaycastHit2D hit in hits)
+                    LevelObject levelObject = GetLevelObjectAt(position);
+                    if (levelObject != null)
                     {
-                        if (hit.collider != null)
+                        // same object got selected again, deselect it
+                        if (levelObject == LevelEditor.selectedObject)
                         {
-                            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EditorSelectionColliders"))
-                            {
-                                LevelObject levelObject = hit.transform.parent.gameObject.GetComponent<LevelObject>();
-                                Debug.Log("LevelObject hit " + levelObject);
-                                if (levelObject != null)
-                                {
-                                    // same object got selected again, deselect it
-                                    if (levelObject == LevelEditor.selectedObject)
-                                    {
-                                        LevelEditor.SetSelectedObject(null);
-                                        objectSelected = true;
-                                    }
-                                    // a new object gets selected, replace the old selection with the new one.
-                                    else if (levelObject != LevelEditor.selectedObject)
-                                    {
-                                        LevelEditor.SetSelectedObject(levelObject);
-                                        objectSelected = true;
-                                    }
-                                }
-                            }
+                            LevelEditor.SetSelectedObject(null);
+                            objectSelected = true;
+                        }
+                        // a new object gets selected, replace the old selection with the new one.
+                        else if (levelObject != LevelEditor.selectedObject)
+                        {
+                            LevelEditor.SetSelectedObject(levelObject);
+                            objectSelected = true;
                         }
                     }
                     // the raycast didn't select any levelobjects
@@ -227,9 +278,12 @@ namespace FlipFall.Editor
                         }
                     }
                 }
-                // there was no object selected, try to add a vertex
-                //if (!objectSelected || LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea)
-                VertHandler._instance.VertexAdd(position);
+
+                Debug.Log(LevelEditor.selectedObject);
+
+                // there was no double click detected, if a movearea is selected, try to add vertices
+                if (LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea)
+                    VertHandler._instance.VertexAdd(position);
             }
             else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
             {
