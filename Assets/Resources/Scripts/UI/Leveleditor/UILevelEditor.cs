@@ -32,6 +32,16 @@ namespace FlipFall.UI
                 return;
             }
             _instance = this;
+
+            Main.onSceneChange.AddListener(SceneChanged);
+        }
+
+        private void SceneChanged(Main.Scene s)
+        {
+            if (s == Main.Scene.game)
+            {
+                animator.SetTrigger("fadeout");
+            }
         }
 
         public void NewLevel()

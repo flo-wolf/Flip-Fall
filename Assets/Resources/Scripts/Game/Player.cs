@@ -324,6 +324,8 @@ namespace FlipFall
             // start level dissolve effect
             if (Game.gameType == Game.GameType.story)
                 LevelPlacer.placedLevel.DissolveLevel();
+            else if (Game.gameType == Game.GameType.testing)
+                LevelPlacer.generatedLevel.moveArea.DissolveLevel();
 
             Vector3 deathParticlePos = new Vector3(deathPos.x, deathPos.y, Constants.playerZ);
             deathParticles.gameObject.transform.position = deathParticlePos;
@@ -349,7 +351,10 @@ namespace FlipFall
             });
 
             // start level dissolve effect
-            LevelPlacer.placedLevel.DissolveLevel();
+            if (Game.gameType == Game.GameType.story)
+                LevelPlacer.placedLevel.DissolveLevel();
+            else if (Game.gameType == Game.GameType.testing)
+                LevelPlacer.generatedLevel.moveArea.DissolveLevel();
 
             trailParticlesEmit.enabled = false;
             trailParticles.Stop();
