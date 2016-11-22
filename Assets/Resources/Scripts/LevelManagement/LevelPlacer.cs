@@ -211,13 +211,13 @@ namespace FlipFall.Levels
                     int[] tri = new int[verts.Length * 3];
 
                     // upper left
-                    verts[0] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3974.99f, 1080f, moveAreaZ));
+                    verts[0] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3990f, 1110f, moveAreaZ));
                     // upper right
-                    verts[1] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4065.01f, 1080f, moveAreaZ));
+                    verts[1] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4050f, 1110f, moveAreaZ));
                     // lower left
-                    verts[2] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3974.99f, 990f, moveAreaZ));
+                    verts[2] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3990f, 945f, moveAreaZ));
                     // lower right
-                    verts[3] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4065.01f, 990f, moveAreaZ));
+                    verts[3] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4050f, 945f, moveAreaZ));
 
                     // create clockwise triangles based on the vertices we just created
                     tri[0] = 0;

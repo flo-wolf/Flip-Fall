@@ -49,6 +49,13 @@ namespace FlipFall.Editor
         // saves the changes made to the currently placed generated level to the .levelData format
         public static void SaveLevel()
         {
+            // save it
+            LevelLoader.SaveCustomLevel(CreateLevelData());
+        }
+
+        // takes the current placed levelObjects and serializes it into the levelData format
+        public static LevelData CreateLevelData()
+        {
             if (editLevel != null)
             {
                 LevelDataMono level = LevelPlacer.generatedLevel;
@@ -118,9 +125,9 @@ namespace FlipFall.Editor
                     l.speedStripData.Add(sd);
                 }
 
-                // save it
-                LevelLoader.SaveCustomLevel(l);
+                return l;
             }
+            return null;
         }
 
         // change the current selected object and controll outline/handler/delete button display
@@ -176,6 +183,7 @@ namespace FlipFall.Editor
 
         public static bool TryTestLevel()
         {
+            editLevel = CreateLevelData();
             Game.gameType = Game.GameType.testing;
             Main.SetScene(Main.Scene.game);
             return true;

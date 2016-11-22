@@ -57,7 +57,7 @@ namespace FlipFall.Progress
             starsOwned = 0;
             starsSpent = 0;
             starsEarned = 0;
-            proVersion = false;
+            proVersion = true;
             lastPlayedLevelID = 1;
         }
 

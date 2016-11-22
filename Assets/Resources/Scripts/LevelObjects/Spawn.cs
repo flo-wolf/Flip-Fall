@@ -7,9 +7,15 @@ namespace FlipFall.LevelObjects
     public class Spawn : LevelObject
     {
         public bool facingLeftOnSpawn;
+        private Animation anim;
 
         private void Start()
         {
+            anim = GetComponent<Animation>();
+            if (anim != null && Main.currentScene == Main.Scene.game)
+            {
+                anim.Play("spawnFadeOut");
+            }
             objectType = ObjectType.spawn;
             MeshRenderer mr = GetComponent<MeshRenderer>();
             if (mr != null)

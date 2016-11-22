@@ -154,7 +154,7 @@ namespace FlipFall
                 case Scene.editor:
                     if (ProgressManager.GetProgress().proVersion)
                     {
-                        if (SceneManager.GetActiveScene().name != "EditorSelection")
+                        if (SceneManager.GetActiveScene().name != "EditorSelection" && SceneManager.GetActiveScene().name != "Game")
                             _instance.StartCoroutine(_instance.cSetScene("EditorSelection"));
                         else
                             _instance.StartCoroutine(_instance.cSetScene("Leveleditor"));

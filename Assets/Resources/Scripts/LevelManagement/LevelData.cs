@@ -56,8 +56,8 @@ namespace FlipFall.Levels
             title = "Custom";
             author = "FlipFall";
             moveVerticies = new Position2[0];
-            spawnPosition = new Position2(0, 0);
-            finishPosition = new Position2(0, 0);
+            spawnPosition = new Position2(0, 58);
+            finishPosition = new Position2(0, -63);
             turretData = new List<TurretData>();
             portalData = new List<PortalData>();
             speedStripData = new List<SpeedStripData>();

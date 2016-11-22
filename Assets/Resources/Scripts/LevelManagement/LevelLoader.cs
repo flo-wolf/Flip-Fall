@@ -93,34 +93,38 @@ namespace FlipFall.Levels
 
         public static bool SaveCustomLevel(LevelData levelData)
         {
-            string savePath;
+            if (levelData != null)
+            {
+                string savePath;
 #if UNITY_ANDROID && !UNITY_EDITOR
             savePath = SavePathAndroid;
 #else
-            savePath = SavePath;
+                savePath = SavePath;
 #endif
-            savePath = savePath + levelData.id + ".levelData";
+                savePath = savePath + levelData.id + ".levelData";
 
-            //LevelManager.onLevelChange.AddListener(LevelStateChanged);
+                //LevelManager.onLevelChange.AddListener(LevelStateChanged);
 
-            FileStream file;
-            if (!File.Exists(savePath))
-            {
-                file = File.Create(savePath);
-                Debug.Log("[LevelLoader] Created LevelData " + levelData.id);
+                FileStream file;
+                if (!File.Exists(savePath))
+                {
+                    file = File.Create(savePath);
+                    Debug.Log("[LevelLoader] Created LevelData " + levelData.id);
+                }
+                else
+                {
+                    file = new FileStream(savePath, FileMode.Open);
+                    Debug.Log("[LevelLoader] Overwritten LevelData " + levelData.id);
+                }
+
+                var bf = new BinaryFormatter();
+
+                bf.Serialize(file, levelData);
+                file.Close();
+
+                return true;
             }
-            else
-            {
-                file = new FileStream(savePath, FileMode.Open);
-                Debug.Log("[LevelLoader] Overwritten LevelData " + levelData.id);
-            }
-
-            var bf = new BinaryFormatter();
-
-            bf.Serialize(file, levelData);
-            file.Close();
-
-            return true;
+            return false;
         }
 
         public static LevelData LoadCustomLevel(string filename)
