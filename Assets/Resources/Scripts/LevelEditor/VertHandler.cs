@@ -544,7 +544,7 @@ namespace FlipFall.Editor
                 currentPos.z
             );
 
-            Vector3 correctionDirection = (currentPos - snapPos).normalized;
+            Vector3 correctionDirection = -(currentPos - snapPos).normalized;
 
             Mesh m = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
             Vector3 localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(snapPos);
@@ -614,9 +614,116 @@ namespace FlipFall.Editor
             else if (!inside)
             {
                 // replace with correct snapping algortithm
-                return Vector3.zero;
+                Debug.Log("!inside");
+                return FindNextSnapPoint(snapPos, correctionDirection);
             }
             return snapPos;
+        }
+
+        private enum SnapPointTestType { upLeft, upRight, lowRight, lowLeft }
+
+        // find the next surrounding possible snapposition inside a mesh, given a failed try
+        private static Vector3 FindNextSnapPoint(Vector3 failedSnapPosition, Vector3 correctionDirection)
+        {
+            Vector3 testSnap = failedSnapPosition;
+            SnapPointTestType testType = SnapPointTestType.upLeft;
+            Vector3 localTestSnap;
+            float snapValue = GridOverlay._instance.smallStep;
+            bool inside = false;
+            int testCount = 0;
+
+            Debug.Log("correctionDirection: " + correctionDirection);
+
+            // get what kind of snap got passed
+            if (correctionDirection.x >= 0 && correctionDirection.y >= 0)
+                testType = SnapPointTestType.upRight;
+            else if (correctionDirection.x < 0 && correctionDirection.y >= 0)
+                testType = SnapPointTestType.upLeft;
+            else if (correctionDirection.x >= 0 && correctionDirection.y < 0)
+                testType = SnapPointTestType.lowRight;
+            else if (correctionDirection.x < 0 && correctionDirection.y < 0)
+                testType = SnapPointTestType.lowLeft;
+
+            Debug.Log("testType: " + testType);
+
+            // rotate clockwise through the three possible nearby intersections and try each of them, till one is inside the mesh
+            while (!inside && testCount < 3)
+            {
+                Debug.Log("testCount: " + testCount);
+                //testSnap = failedSnapPosition;
+                switch (testCount)
+                {
+                    case 0:
+                        switch (testType)
+                        {
+                            // we started at the upper left, thus now try the upper right
+                            case SnapPointTestType.upLeft:
+                                testSnap.x += snapValue;
+                                break;
+                            // we started at the upper right, thus now try the lower right
+                            case SnapPointTestType.upRight:
+                                testSnap.y -= snapValue;
+                                break;
+
+                            case SnapPointTestType.lowRight:
+                                testSnap.x -= snapValue;
+                                break;
+
+                            case SnapPointTestType.lowLeft:
+                                testSnap.y += snapValue;
+                                break;
+                        }
+                        break;
+
+                    case 1:
+                        switch (testType)
+                        {
+                            // we started at the upper left, thus now try the lower right (2nd clockwise postion to check)
+                            case SnapPointTestType.upLeft:
+                                testSnap.y -= snapValue;
+                                break;
+                            // we started at the upper right, thus now try the lower left (2nd clockwise postion to check)
+                            case SnapPointTestType.upRight:
+                                testSnap.x -= snapValue;
+                                break;
+
+                            case SnapPointTestType.lowRight:
+                                testSnap.y += snapValue;
+                                break;
+
+                            case SnapPointTestType.lowLeft:
+                                testSnap.x += snapValue;
+                                break;
+                        }
+                        break;
+
+                    case 2:
+                        switch (testType)
+                        {
+                            case SnapPointTestType.upLeft:
+                                testSnap.y -= snapValue;
+                                break;
+
+                            case SnapPointTestType.upRight:
+                                testSnap.x += snapValue;
+                                break;
+
+                            case SnapPointTestType.lowRight:
+                                testSnap.x += snapValue;
+                                break;
+
+                            case SnapPointTestType.lowLeft:
+                                testSnap.y -= snapValue;
+                                break;
+                        }
+                        break;
+                }
+
+                localTestSnap = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(testSnap);
+                inside = IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, localTestSnap);
+                testCount++;
+            }
+            return testSnap;
         }
 
         // prevent verticies from crossing the line between the two opposing verticies in a triangle, which would create swapped meshes

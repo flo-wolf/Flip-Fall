@@ -129,7 +129,8 @@ namespace FlipFall.Editor
                             Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
                             //position.y = Screen.height - position.y;
                             position.z = LevelEditor.selectedObject.transform.position.z;
-                            LevelEditor.selectedObject.transform.position = position;
+                            if (VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, position))
+                                LevelEditor.selectedObject.transform.position = position;
                         }
                     }
                     else if (touch.phase == TouchPhase.Ended)
@@ -171,7 +172,10 @@ namespace FlipFall.Editor
                         Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         Vector3 deltaPos = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * 40f;
                         deltaPos.z = 0F;
-                        LevelEditor.selectedObject.transform.position += deltaPos;
+
+                        Vector3 newPos = LevelEditor.selectedObject.transform.position + deltaPos;
+                        if (VertHelper.IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(newPos)))
+                            LevelEditor.selectedObject.transform.position = newPos;
                     }
                 }
                 else if (Input.GetMouseButtonUp(0))

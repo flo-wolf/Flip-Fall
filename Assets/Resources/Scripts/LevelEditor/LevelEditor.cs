@@ -133,7 +133,7 @@ namespace FlipFall.Editor
         // change the current selected object and controll outline/handler/delete button display
         public static void SetSelectedObject(LevelObject newSelected)
         {
-            // deselect the current selection
+            // the new selection will be null, thus deselect whatever is selected
             if (newSelected == null)
             {
                 // if the movearea was selected deactivate the handles
@@ -153,6 +153,7 @@ namespace FlipFall.Editor
             // replace the current selection with a new one
             else
             {
+                // there was an object sleected already
                 if (selectedObject != null)
                 {
                     selectedObject.SetOutlineVisible(false);
@@ -170,7 +171,7 @@ namespace FlipFall.Editor
                     UILevelEditor.DeleteShow(false);
                 }
                 // the new object is not a movearea, activate the delete button (movearea delete button gets displayed when vertices get selected)
-                else
+                else if (newSelected.objectType != LevelObject.ObjectType.spawn && newSelected.objectType != LevelObject.ObjectType.finish)
                 {
                     UILevelEditor.DeleteShow(true);
                 }
