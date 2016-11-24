@@ -1,4 +1,5 @@
-﻿using FlipFall.LevelObjects;
+﻿using FlipFall.Editor;
+using FlipFall.LevelObjects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,14 +22,14 @@ namespace FlipFall.Progress
         public class InventoryChangeEvent : UnityEvent { }
 
         // a table containing the list of available levelObjects aswell as their owned amount
-        private Hashtable levelObjects = new Hashtable();
+        public Hashtable levelObjects = new Hashtable();
 
         public Inventory()
         {
             levelObjects.Add(LevelObject.ObjectType.spawn, 2);
             levelObjects.Add(LevelObject.ObjectType.finish, 2);
             levelObjects.Add(LevelObject.ObjectType.speedStrip, 1);
-            levelObjects.Add(LevelObject.ObjectType.turret, 1);
+            levelObjects.Add(LevelObject.ObjectType.turret, 5);
         }
 
         // adds a value to the given entry in the inventory, if it doesnt exist, it gets created. Can be used to substract.
@@ -56,6 +57,7 @@ namespace FlipFall.Progress
             {
                 levelObjects.Remove(type);
             }
+
             onInventoryChange.Invoke();
         }
 
@@ -68,6 +70,20 @@ namespace FlipFall.Progress
             }
             else
                 return -1;
+        }
+
+        public static Inventory CreateCopy(Inventory inv)
+        {
+            Inventory inventory = new Inventory();
+            Hashtable levelObjects = new Hashtable();
+            Hashtable referencedLevelObjects = inv.levelObjects;
+
+            foreach (LevelObject.ObjectType key in referencedLevelObjects.Keys)
+            {
+                levelObjects.Add(key, (int)referencedLevelObjects[key]);
+            }
+            inventory.levelObjects = levelObjects;
+            return inventory;
         }
     }
 }

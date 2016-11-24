@@ -218,6 +218,7 @@ namespace FlipFall.Editor
         // add a vertex at the given position - called by EditorInput class
         public void VertexAdd(Vector3 pos)
         {
+            Debug.Log("VertexAdd at " + pos);
             if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
             {
                 // two verticies are selected, everything ready for expanding the mesh
@@ -641,7 +642,7 @@ namespace FlipFall.Editor
             bool inside = false;
             int testCount = 0;
 
-            Debug.Log("correctionDirection: " + correctionDirection);
+            //Debug.Log("correctionDirection: " + correctionDirection);
 
             // get what kind of snap got passed
             if (correctionDirection.x >= 0 && correctionDirection.y >= 0)
@@ -653,12 +654,12 @@ namespace FlipFall.Editor
             else if (correctionDirection.x < 0 && correctionDirection.y < 0)
                 testType = SnapPointTestType.lowLeft;
 
-            Debug.Log("testType: " + testType);
+            //Debug.Log("testType: " + testType);
 
             // rotate clockwise through the three possible nearby intersections and try each of them, till one is inside the mesh
             while (!inside && testCount < 3)
             {
-                Debug.Log("testCount: " + testCount);
+                //Debug.Log("testCount: " + testCount);
                 //testSnap = failedSnapPosition;
                 switch (testCount)
                 {
@@ -827,7 +828,7 @@ namespace FlipFall.Editor
         public static Vector3[] GetTriangleVerticiesByVertex(Vector3[] vertices, int[] triangles, Vector3 vertex)
         {
             vertex = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(vertex);
-            Debug.Log("getByVertex verts " + vertices.Length + " tris " + triangles.Length + " vertex " + vertex);
+            //Debug.Log("getByVertex verts " + vertices.Length + " tris " + triangles.Length + " vertex " + vertex);
             List<Vector3> triangleVerts = new List<Vector3>();
 
             // find triangles this handler is connected with

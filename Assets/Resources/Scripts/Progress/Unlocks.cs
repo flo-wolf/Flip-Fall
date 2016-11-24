@@ -49,7 +49,8 @@ namespace FlipFall.Progress
         {
             if (newInventory != null)
             {
-                inventory = newInventory;
+                Debug.Log("SetInventory oldTurrets: " + inventory.GetAmount(LevelObjects.LevelObject.ObjectType.turret) + " newTurrets: " + newInventory.GetAmount(LevelObjects.LevelObject.ObjectType.turret));
+                inventory = Inventory.CreateCopy(newInventory);
                 Inventory.onInventoryChange.Invoke();
             }
         }

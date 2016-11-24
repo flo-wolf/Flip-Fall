@@ -33,6 +33,8 @@ namespace FlipFall.Editor
         private float tapTime = 0.4F;       // allowed timeframe to register a double tap
         private float lastTap;              // time since the last tap
 
+        public static bool vertGettingSelected = false;
+
         public void Awake()
         {
             image = GetComponent<Image>();
@@ -62,7 +64,7 @@ namespace FlipFall.Editor
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            EditorInput.vertexDragged = true;
+            vertGettingSelected = true;
             // this is a valid double tap => select the clicked vertex
             if ((Time.time - lastTap) < tapTime)
             {
@@ -91,6 +93,7 @@ namespace FlipFall.Editor
             }
             lastTap = Time.time;
 
+            StartCoroutine(cDelayedVertexSelectDisable());
             // StartCoroutine(cDragDisableDelayed());
         }
 
@@ -195,6 +198,13 @@ namespace FlipFall.Editor
 
             StartCoroutine(cDragDisableDelayed());
             VertHandler.quickDragHandle = null;
+        }
+
+        private IEnumerator cDelayedVertexSelectDisable()
+        {
+            yield return new WaitForSecondsRealtime(0.1F);
+            vertGettingSelected = false;
+            yield break;
         }
 
         private IEnumerator cDragDisableDelayed()

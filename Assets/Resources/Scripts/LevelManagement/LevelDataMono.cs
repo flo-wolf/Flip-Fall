@@ -32,8 +32,6 @@ namespace FlipFall.Levels
         public List<SpeedStrip> speedStrips;
         public List<Portal> portals;
 
-        public Hashtable changedObjects = new Hashtable();
-
         private void Awake()
         {
         }
@@ -91,7 +89,7 @@ namespace FlipFall.Levels
                         break;
                 }
                 ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
-                RegisterChange(type, 1);
+                UndoManager.AddUndoPoint();
             }
             else
             {
@@ -128,30 +126,13 @@ namespace FlipFall.Levels
                 }
 
                 ProgressManager.GetProgress().unlocks.inventory.Add(levelObj.objectType, 1);
-                RegisterChange(levelObj.objectType, -1);
                 DestroyImmediate(levelObj.gameObject);
+                UndoManager.AddUndoPoint();
             }
             else
             {
                 Debug.LogError("LevelPlacer needed to add an object to the level.");
             }
-        }
-
-        public void RegisterChange(LevelObject.ObjectType type, int value)
-        {
-            // add the value to the existing value
-            if (changedObjects.Contains(type))
-            {
-                int oldValue = (int)changedObjects[type];
-                changedObjects[type] = oldValue + value;
-            }
-            // the entry doesnt exist yet
-            else
-            {
-                changedObjects.Add(type, value);
-            }
-
-            UndoManager.AddUndoPoint();
         }
     }
 }

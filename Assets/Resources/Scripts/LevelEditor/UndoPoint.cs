@@ -20,8 +20,9 @@ namespace FlipFall.Editor
         public UndoPoint(int _id, LevelData _levelData, Inventory _inventory)
         {
             id = _id;
-            levelData = _levelData;
+            inventory = new Inventory();
             inventory = _inventory;
+            levelData = _levelData;
         }
     }
 }

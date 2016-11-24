@@ -297,7 +297,7 @@ namespace FlipFall.Editor
                 Debug.Log(LevelEditor.selectedObject);
 
                 // there was no double click detected, if a movearea is selected, try to add vertices
-                if (LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea)
+                if (LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea && !Handle.vertGettingSelected)
                     VertHandler._instance.VertexAdd(position);
             }
             else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)

@@ -1,4 +1,5 @@
-﻿using FlipFall.Levels;
+﻿using FlipFall.LevelObjects;
+using FlipFall.Levels;
 using FlipFall.Progress;
 using System.Collections;
 using System.Collections.Generic;
@@ -66,6 +67,12 @@ namespace FlipFall.Editor
         // jump to the last undo step if it exists
         public static bool Undo()
         {
+            if (!UndoExists(undoId))
+            {
+                undoId -= 2;
+                AddUndoPoint();
+            }
+
             bool undoExists = UndoExists(undoId - 1);
             Debug.Log("Undo - Undo to Step " + (undoId - 1) + " exists: " + undoExists);
             if (undoExists)
@@ -110,6 +117,8 @@ namespace FlipFall.Editor
             Debug.Log("RestoreUndoPoint " + id);
             if (undoPoint != null)
             {
+                Debug.Log("RestoreUndoPoint inventory turrets: " + undoPoint.inventory.GetAmount(LevelObjects.LevelObject.ObjectType.turret));
+
                 ProgressManager.GetProgress().unlocks.SetInventory(undoPoint.inventory);
                 VertHandler._instance.DestroyHandles();
                 LevelPlacer._instance.PlaceCustom(undoPoint.levelData);
@@ -124,7 +133,8 @@ namespace FlipFall.Editor
         {
             // add the value to the existing value
             undoId += 1;
-            savePoint = new UndoPoint(undoId, levelData, ProgressManager.GetProgress().unlocks.inventory);
+            Inventory inventory = Inventory.CreateCopy(ProgressManager.GetProgress().unlocks.inventory);
+            savePoint = new UndoPoint(undoId, levelData, inventory);
             AddUndoPoint();
             onSavePointChange.Invoke();
             LevelLoader.SaveCustomLevel(levelData);
@@ -135,11 +145,12 @@ namespace FlipFall.Editor
         public static void AddUndoPoint()
         {
             LevelData levelData = LevelEditor.CreateLevelData();
-            Inventory inventory = ProgressManager.GetProgress().unlocks.inventory;
+            Inventory inventory = Inventory.CreateCopy(ProgressManager.GetProgress().unlocks.inventory);
+
             undoId += 1;
             UndoPoint oldUndoPoint = undoPoints.Find(x => x.id == undoId);
 
-            Debug.Log("AddUndoPoint " + undoId);
+            Debug.Log("AddUndoPoint " + undoId + "inventory turrets: " + inventory.GetAmount(LevelObjects.LevelObject.ObjectType.turret));
 
             // there is already an undo point with the id we want to add
             if (oldUndoPoint != null)
@@ -166,6 +177,8 @@ namespace FlipFall.Editor
                 }
                 undoPoints.Remove(undoPoints.Find(x => x.id == lowest));
             }
+
+            Debug.Log("Added AddUndoPoint " + undoId + "inventory turrets: " + undoPoints.Find(x => x.id == undoId).inventory.GetAmount(LevelObjects.LevelObject.ObjectType.turret));
         }
     }
 }
