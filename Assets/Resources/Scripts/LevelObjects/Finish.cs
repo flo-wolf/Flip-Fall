@@ -37,7 +37,24 @@ namespace FlipFall.LevelObjects
             else
                 Debug.LogError("No MeshRenderer attached to the Spawn, can't set the color.");
 
-            Game.onGameStateChange.AddListener(GameStateChanged);
+            Player.onPlayerStateChange.AddListener(PlayerStateChanged);
+            //Game.onGameStateChange.AddListener(GameStateChanged);
+        }
+
+        private void PlayerStateChanged(Player.PlayerState p)
+        {
+            switch (p)
+            {
+                case Player.PlayerState.win:
+                    //GetComponent<ParticleSystem>().Clear();
+                    GetComponent<Animation>().Play("finishFadeOut");
+
+                    Debug.Log("PLAYFINISHPARTICLES");
+                    ps.gameObject.SetActive(true);
+                    ps.Play();
+                    //GetComponent<ParticleSystem>().Play();
+                    break;
+            }
         }
 
         private void GameStateChanged(Game.GameState gs)
