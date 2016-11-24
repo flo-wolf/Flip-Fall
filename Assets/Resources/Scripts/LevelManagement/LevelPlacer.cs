@@ -89,6 +89,14 @@ namespace FlipFall.Levels
         {
             if (levelData != null)
             {
+                if (generatedLevel != null)
+                {
+                    bool vertsDifferen = levelData.moveVerticies != generatedLevel.levelData.moveVerticies;
+                    Debug.Log("Destroy Old generated Level, verticies are different: " + vertsDifferen);
+                    DestroyImmediate(generatedLevel.gameObject);
+                    generatedLevel = null;
+                }
+
                 // create the base level gameobject, parent of all levelObjects
                 GameObject generatedLevelGO;
                 generatedLevelGO = new GameObject("Generated Level " + levelData.id);

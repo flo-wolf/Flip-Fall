@@ -31,7 +31,6 @@ namespace FlipFall.Editor
         private Vector3 vertPos;
         private GameObject[] handles;
 
-        private bool handleDrag = false;
         private bool handlesShown = true;
 
         // handles currently selected
@@ -170,15 +169,8 @@ namespace FlipFall.Editor
             showHandles = false;
         }
 
-        public void OnClick()
-        {
-            handleDrag = true;
-        }
-
-        public void OnRelease()
-        {
-            handleDrag = false;
-        }
+        private bool changesMade = false;
+        private bool firstChangeCheck = true;
 
         // update selection vertices based on handler position
         private void Update()
@@ -187,12 +179,23 @@ namespace FlipFall.Editor
                 Start();
             else if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
             {
+                //Debug.Log("EditorInput.itemDragged " + EditorInput.vertexDragged);
+                if (!EditorInput.vertexDragged)
+                {
+                    changesMade = false;
+                    firstChangeCheck = true;
+                }
+
                 handles = GameObject.FindGameObjectsWithTag("handle");
                 for (int i = 0; i < verts.Length; i++)
                 {
                     Vector3 localHandle = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(handles[i].transform.position);
                     if (verts[i] != localHandle)
-                        LevelEditor.changesAreSaved = false;
+                    {
+                        EditorInput.vertexDragged = true;
+                        if (changesMade == false)
+                            changesMade = true;
+                    }
                     verts[i] = localHandle;
                 }
                 mesh.vertices = verts;
@@ -200,6 +203,13 @@ namespace FlipFall.Editor
                 mesh.RecalculateNormals();
 
                 LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = mesh;
+
+                if (changesMade && firstChangeCheck)
+                {
+                    //UndoManager.AddUndoPoint();
+                    LevelEditor.changesAreSaved = false;
+                    firstChangeCheck = false;
+                }
             }
             else if (handlesShown && !showHandles)
                 DestroyHandles();
@@ -208,7 +218,6 @@ namespace FlipFall.Editor
         // add a vertex at the given position - called by EditorInput class
         public void VertexAdd(Vector3 pos)
         {
-            Debug.Log("vertexadd");
             if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
             {
                 // two verticies are selected, everything ready for expanding the mesh
@@ -723,6 +732,8 @@ namespace FlipFall.Editor
                 inside = IsInsideMesh(LevelPlacer.generatedLevel.moveArea.meshFilter.mesh, Vector3.zero, localTestSnap);
                 testCount++;
             }
+            if (!inside)
+                return Vector3.zero;
             return testSnap;
         }
 

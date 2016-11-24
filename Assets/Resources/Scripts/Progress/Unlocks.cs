@@ -45,6 +45,15 @@ namespace FlipFall.Progress
             productInfos.Add(new ProductInfo(1, true, true, UIProduct.BuyType.nonConsumable));
         }
 
+        public void SetInventory(Inventory newInventory)
+        {
+            if (newInventory != null)
+            {
+                inventory = newInventory;
+                Inventory.onInventoryChange.Invoke();
+            }
+        }
+
         public void UnlockTheme(ThemeManager.Skin theme)
         {
             if (!unlockedThemes.Any(x => x == theme))

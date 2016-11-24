@@ -1,4 +1,5 @@
 ﻿using FlipFall.Cam;
+using FlipFall.Editor;
 using FlipFall.LevelObjects;
 using FlipFall.Progress;
 using FlipFall.Theme;
@@ -59,7 +60,6 @@ namespace FlipFall.Levels
                         Vector2 turretPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         turret.transform.position = turretPos;
                         turrets.Add(turret);
-                        RegisterChange(type, 1);
                         break;
 
                     case LevelObject.ObjectType.attractor:
@@ -68,7 +68,6 @@ namespace FlipFall.Levels
                         Vector2 aPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         a.transform.position = aPos;
                         attractors.Add(a);
-                        RegisterChange(type, 1);
                         break;
 
                     case LevelObject.ObjectType.portal:
@@ -77,7 +76,6 @@ namespace FlipFall.Levels
                         Vector2 pPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         p.transform.position = pPos;
                         portals.Add(p);
-                        RegisterChange(type, 1);
                         break;
 
                     case LevelObject.ObjectType.speedStrip:
@@ -86,15 +84,14 @@ namespace FlipFall.Levels
                         Vector2 sPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         s.transform.position = sPos;
                         speedStrips.Add(s);
-                        RegisterChange(type, 1);
                         break;
 
                     default:
                         //Debug.Log("Wasnt able to add the levelobject to the LevelDataMono of type " + lo.objectType);
                         break;
                 }
-
                 ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                RegisterChange(type, 1);
             }
             else
             {
@@ -129,8 +126,9 @@ namespace FlipFall.Levels
                         //Debug.Log("Wasnt able to add the levelobject to the LevelDataMono of type " + lo.objectType);
                         break;
                 }
-                RegisterChange(levelObj.objectType, -1);
+
                 ProgressManager.GetProgress().unlocks.inventory.Add(levelObj.objectType, 1);
+                RegisterChange(levelObj.objectType, -1);
                 DestroyImmediate(levelObj.gameObject);
             }
             else
@@ -152,6 +150,8 @@ namespace FlipFall.Levels
             {
                 changedObjects.Add(type, value);
             }
+
+            UndoManager.AddUndoPoint();
         }
     }
 }

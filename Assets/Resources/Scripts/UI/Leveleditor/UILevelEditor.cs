@@ -48,8 +48,20 @@ namespace FlipFall.UI
         {
         }
 
-        public void RemoveLevel()
+        public void UndoButton()
         {
+            if (UndoManager.Undo())
+            {
+                //animation
+            }
+        }
+
+        public void RedoButton()
+        {
+            if (UndoManager.Redo())
+            {
+                //animation
+            }
         }
 
         public void SaveButton()
@@ -79,6 +91,7 @@ namespace FlipFall.UI
             {
                 ProgressManager.GetProgress().unlocks.inventory.Add(objectType, (int)LevelPlacer.generatedLevel.changedObjects[objectType]);
             }
+            UndoManager.RestoreSavePoint();
 
             DeleteShow(false);
             Main.SetScene(Main.Scene.editor);

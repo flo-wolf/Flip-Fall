@@ -28,7 +28,7 @@ namespace FlipFall.Editor
         private Camera cam;
 
         // vertex getting dragged
-        public static bool itemDragged = false;
+        public static bool vertexDragged = false;
 
         private Vector2 currentPosition;
         private Vector2 deltaPositon;
@@ -66,7 +66,7 @@ namespace FlipFall.Editor
 #endif
 #if UNITY_ANDROID
             // No items or verticies get curretly dragged
-            if (!itemDragged)
+            if (!vertexDragged)
             {
                 // If there are two touches on the device...
                 if (Input.touchCount == 2)
@@ -140,7 +140,12 @@ namespace FlipFall.Editor
                         {
                             // move the selected object
                             Vector3 position = LevelEditor.selectedObject.transform.position;
-                            LevelEditor.selectedObject.transform.position = VertHelper.Snap(position, false);
+                            position = VertHelper.Snap(position, false);
+                            if (LevelEditor.selectedObject.transform.position != position)
+                            {
+                                LevelEditor.selectedObject.transform.position = position;
+                                UndoManager.AddUndoPoint();
+                            }
                             //itemDragged = false;
                         }
                         objectDragged = false;
@@ -185,7 +190,13 @@ namespace FlipFall.Editor
                     {
                         // move the selected object
                         Vector3 position = LevelEditor.selectedObject.transform.position;
-                        LevelEditor.selectedObject.transform.position = VertHelper.Snap(position, false);
+                        position = VertHelper.Snap(position, false);
+                        if (LevelEditor.selectedObject.transform.position != position)
+                        {
+                            LevelEditor.selectedObject.transform.position = position;
+                            UndoManager.AddUndoPoint();
+                        }
+
                         //itemDragged = false;
                     }
                 }

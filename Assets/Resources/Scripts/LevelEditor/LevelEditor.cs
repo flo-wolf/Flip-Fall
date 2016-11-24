@@ -43,14 +43,18 @@ namespace FlipFall.Editor
             editorMode = EditorMode.select;
 
             if (editLevel != null)
+            {
                 LevelPlacer._instance.PlaceCustom(editLevel);
+                UndoManager.AddSavePoint(editLevel);
+            }
         }
 
         // saves the changes made to the currently placed generated level to the .levelData format
         public static void SaveLevel()
         {
             // save it
-            LevelLoader.SaveCustomLevel(CreateLevelData());
+            editLevel = CreateLevelData();
+            UndoManager.AddSavePoint(editLevel);
         }
 
         // takes the current placed levelObjects and serializes it into the levelData format
@@ -58,6 +62,7 @@ namespace FlipFall.Editor
         {
             if (editLevel != null)
             {
+                print("CreateLevelData");
                 LevelDataMono level = LevelPlacer.generatedLevel;
                 LevelData l = new LevelData(level.levelData.id);
 
@@ -75,6 +80,10 @@ namespace FlipFall.Editor
                 {
                     posVerts[i] = new Position2(verts[i].x, verts[i].y);
                 }
+                if (!posVerts.Equals(editLevel.moveVerticies))
+                {
+                    Debug.Log("Different Vertices");
+                }
                 l.moveVerticies = posVerts;
                 l.moveTriangles = level.moveArea.meshFilter.mesh.triangles;
 
@@ -82,12 +91,9 @@ namespace FlipFall.Editor
                 Vector3 spawnPos = level.spawn.transform.localPosition;
                 l.spawnPosition = new Position2(spawnPos.x, spawnPos.y);
 
-                print("spawnpos saving: " + spawnPos);
-
                 // save finish
                 Vector3 finishPos = level.finish.transform.localPosition;
                 l.finishPosition = new Position2(finishPos.x, finishPos.y);
-                print("finish saving: " + finishPos);
 
                 // save turrets
                 foreach (Turret t in level.turrets)

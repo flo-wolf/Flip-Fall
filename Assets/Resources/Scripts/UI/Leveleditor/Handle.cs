@@ -62,7 +62,7 @@ namespace FlipFall.Editor
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            EditorInput.itemDragged = true;
+            EditorInput.vertexDragged = true;
             // this is a valid double tap => select the clicked vertex
             if ((Time.time - lastTap) < tapTime)
             {
@@ -91,13 +91,13 @@ namespace FlipFall.Editor
             }
             lastTap = Time.time;
 
-            StartCoroutine(cDragDisableDelayed());
+            // StartCoroutine(cDragDisableDelayed());
         }
 
         // begin of drag, called once
         public void OnBeginDrag(PointerEventData eventData)
         {
-            EditorInput.itemDragged = true;
+            EditorInput.vertexDragged = true;
             dragStart = Camera.main.ScreenToWorldPoint(eventData.position);
             dragStart.z = 0;
 
@@ -200,7 +200,8 @@ namespace FlipFall.Editor
         private IEnumerator cDragDisableDelayed()
         {
             yield return new WaitForSecondsRealtime(0.1F);
-            EditorInput.itemDragged = false;
+            UndoManager.AddUndoPoint();
+            EditorInput.vertexDragged = false;
             yield break;
         }
     }
