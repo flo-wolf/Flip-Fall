@@ -66,7 +66,7 @@ namespace FlipFall.Editor
 #endif
 #if UNITY_ANDROID
             // No items or verticies get curretly dragged
-            if (!vertexDragged)
+            if (!vertexDragged && !UILevelPreferences.menuOpen)
             {
                 // If there are two touches on the device...
                 if (Input.touchCount == 2)
@@ -307,7 +307,9 @@ namespace FlipFall.Editor
                 LevelObject.ObjectType objectType = UILevelObject.currentSelectedObject.objectType;
                 if (snapPos != Vector3.zero)
                 {
-                    LevelPlacer.generatedLevel.AddObject(objectType, snapPos);
+                    // return to selection mode and deselect the inventory item
+                    LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.AddObject(objectType, snapPos));
+                    UILevelObject.onItemSelect.Invoke(null);
                 }
             }
             doubleClickTime = Time.time;

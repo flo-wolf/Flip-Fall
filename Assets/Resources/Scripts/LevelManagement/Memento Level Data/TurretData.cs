@@ -18,6 +18,7 @@ namespace FlipFall.Levels
     public class TurretData
     {
         public Position2 position;
+        public Position3 rotation;
         public float shotDelay;
         public float startupDelay;
         public float shotSpeed;

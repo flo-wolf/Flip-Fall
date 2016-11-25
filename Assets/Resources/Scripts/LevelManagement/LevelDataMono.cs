@@ -46,7 +46,7 @@ namespace FlipFall.Levels
         }
 
         // add an object to the level. this step of reference is needed for later deconstruction of the level and serialization
-        public void AddObject(LevelObject.ObjectType type, Vector3 position)
+        public LevelObject AddObject(LevelObject.ObjectType type, Vector3 position)
         {
             if (LevelPlacer._instance != null)
             {
@@ -58,7 +58,9 @@ namespace FlipFall.Levels
                         Vector2 turretPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         turret.transform.position = turretPos;
                         turrets.Add(turret);
-                        break;
+                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        UndoManager.AddUndoPoint();
+                        return turret;
 
                     case LevelObject.ObjectType.attractor:
                         Attractor a = (Attractor)Instantiate(LevelPlacer._instance.attractorPrefab, Vector3.zero, Quaternion.identity);
@@ -66,7 +68,9 @@ namespace FlipFall.Levels
                         Vector2 aPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         a.transform.position = aPos;
                         attractors.Add(a);
-                        break;
+                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        UndoManager.AddUndoPoint();
+                        return a;
 
                     case LevelObject.ObjectType.portal:
                         Portal p = (Portal)Instantiate(LevelPlacer._instance.portalPrefab, Vector3.zero, Quaternion.identity);
@@ -74,7 +78,9 @@ namespace FlipFall.Levels
                         Vector2 pPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         p.transform.position = pPos;
                         portals.Add(p);
-                        break;
+                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        UndoManager.AddUndoPoint();
+                        return p;
 
                     case LevelObject.ObjectType.speedStrip:
                         SpeedStrip s = (SpeedStrip)Instantiate(LevelPlacer._instance.speedStripPrefab, Vector3.zero, Quaternion.identity);
@@ -82,19 +88,20 @@ namespace FlipFall.Levels
                         Vector2 sPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         s.transform.position = sPos;
                         speedStrips.Add(s);
-                        break;
+                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        UndoManager.AddUndoPoint();
+                        return s;
 
                     default:
                         //Debug.Log("Wasnt able to add the levelobject to the LevelDataMono of type " + lo.objectType);
                         break;
                 }
-                ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
-                UndoManager.AddUndoPoint();
             }
             else
             {
                 Debug.LogError("LevelPlacer needed to add an object to the level.");
             }
+            return null;
         }
 
         // add an object to the level. this step of reference is needed for later deconstruction of the level and serialization

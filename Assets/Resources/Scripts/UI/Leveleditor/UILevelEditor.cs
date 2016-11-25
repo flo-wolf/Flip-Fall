@@ -50,36 +50,49 @@ namespace FlipFall.UI
 
         public void UndoButton()
         {
-            if (UndoManager.Undo())
+            if (!UILevelPreferences.menuOpen)
             {
-                //animation
+                if (UndoManager.Undo())
+                {
+                    //animation
+                }
             }
         }
 
         public void RedoButton()
         {
-            if (UndoManager.Redo())
+            if (!UILevelPreferences.menuOpen)
             {
-                //animation
+                if (UndoManager.Redo())
+                {
+                    //animation
+                }
             }
         }
 
         public void SaveButton()
         {
-            LevelEditor.SaveLevel();
-            animator.SetTrigger("saveRequest");
+            if (!UILevelPreferences.menuOpen)
+            {
+                LevelEditor.SaveLevel();
+                animator.SetTrigger("saveRequest");
+            }
         }
 
         public void BackButton()
         {
-            LevelEditor.changesAreSaved = false;
-            if (!LevelEditor.changesAreSaved)
+            if (!UILevelPreferences.menuOpen)
             {
-                animator.SetTrigger("leaveUnsavedRequest");
-            }
-            else
-            {
-                animator.SetTrigger("fadeout");
+                UILevelPreferences.menuOpen = true;
+                LevelEditor.changesAreSaved = false;
+                if (!LevelEditor.changesAreSaved)
+                {
+                    animator.SetTrigger("leaveUnsavedRequest");
+                }
+                else
+                {
+                    animator.SetTrigger("fadeout");
+                }
             }
         }
 
@@ -107,15 +120,14 @@ namespace FlipFall.UI
             animator.SetTrigger("leaveAbort");
         }
 
-        public void PreferencesButton()
-        {
-        }
-
         public void TestButton()
         {
-            if (LevelEditor.TryTestLevel())
+            if (!UILevelPreferences.menuOpen)
             {
-                // animations
+                if (LevelEditor.TryTestLevel())
+                {
+                    // animations
+                }
             }
         }
 
@@ -123,8 +135,10 @@ namespace FlipFall.UI
         {
         }
 
+        // show or hide the delete button
         public static void DeleteShow(bool active)
         {
+            PreferencesShow(active);
             Debug.Log("DELETE SHOW " + active);
             if (_instance != null)
             {
@@ -143,26 +157,72 @@ namespace FlipFall.UI
             }
         }
 
-        public void DeleteButton()
+        // show or hide the preferences button
+        public static void PreferencesShow(bool active)
         {
-            // the movearea is selected, thus delete vertices
-            if (LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea)
-                VertHandler._instance.DeleteAllSelectedVerts();
-
-            // another levelobject is selected, delete it and reward the item back into the inventory
-            else if (LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+            Debug.Log("Preferences SHOW " + active);
+            if (_instance != null)
             {
-                _instance.animator.SetTrigger("deleteHide");
-                LevelPlacer.generatedLevel.DeleteObject(LevelEditor.selectedObject);
+                if (active)
+                {
+                    _instance.animator.ResetTrigger("prefHide");
+                    _instance.animator.ResetTrigger("prefShow");
+                    _instance.animator.SetTrigger("prefShow");
+                }
+                else
+                {
+                    _instance.animator.ResetTrigger("prefShow");
+                    _instance.animator.ResetTrigger("prefHide");
+                    _instance.animator.SetTrigger("prefHide");
+                }
             }
         }
 
+        // the delete button got clicked
+        public void DeleteButton()
+        {
+            if (!UILevelPreferences.menuOpen)
+            {
+                // the movearea is selected, thus delete vertices
+                if (LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea)
+                    VertHandler._instance.DeleteAllSelectedVerts();
+
+                // another levelobject is selected, delete it and reward the item back into the inventory
+                else if (LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+                {
+                    _instance.animator.SetTrigger("deleteHide");
+                    _instance.animator.SetTrigger("prefHide");
+                    LevelPlacer.generatedLevel.DeleteObject(LevelEditor.selectedObject);
+                }
+            }
+        }
+
+        // the preferences button got clicked
+        public void PreferencesButton()
+        {
+            if (!UILevelPreferences.menuOpen)
+            {
+                // some levelobject is selected, which is not a movearea - open the preferences window to edit it
+                if (LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+                {
+                    // _instance.animator.SetTrigger("prefHide");
+                    // _instance.animator.SetTrigger("deleteHide");
+                    Debug.Log(UILevelPreferences.ShowMenu());
+                    // open preferences window and pass selected object
+                }
+            }
+        }
+
+        // toggles the grid on and of, doesn't effect the snapping
         public void GridToggle(Toggle t)
         {
-            if (t.isOn)
-                GridOverlay.Active(true);
-            else
-                GridOverlay.Active(false);
+            if (!UILevelPreferences.menuOpen)
+            {
+                if (t.isOn)
+                    GridOverlay.Active(true);
+                else
+                    GridOverlay.Active(false);
+            }
         }
     }
 }

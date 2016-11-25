@@ -100,6 +100,7 @@ namespace FlipFall.Editor
                 {
                     Position2 turretPosition = new Position2(t.transform.localPosition.x, t.transform.localPosition.y);
                     TurretData td = new TurretData(turretPosition);
+                    td.rotation = new Position3(t.transform.rotation.eulerAngles.x, t.transform.rotation.eulerAngles.y, t.transform.rotation.eulerAngles.z);
                     td.shotDelay = t.shotDelay;
                     td.shotSpeed = t.shotSpeed;
                     td.startupDelay = t.startupDelay;

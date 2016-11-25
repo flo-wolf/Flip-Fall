@@ -139,6 +139,8 @@ namespace FlipFall.Levels
                     Vector2 turretPos = new Vector3(td.position.x, td.position.y, levelObjectZ);
                     turret.transform.localPosition = turretPos;
 
+                    turret.transform.rotation = Quaternion.Euler(td.rotation.x, td.rotation.y, td.rotation.z);
+
                     // assign values
                     turret.shotDelay = td.shotDelay;
                     turret.startupDelay = td.startupDelay;

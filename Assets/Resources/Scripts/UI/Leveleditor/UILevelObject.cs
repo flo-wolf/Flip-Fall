@@ -65,19 +65,22 @@ namespace FlipFall.UI
         // this toogle got clicked
         public void SelectClick(Toggle t)
         {
-            if (amount > 0 && t.isOn)
+            if (!UILevelPreferences.menuOpen)
             {
-                t.isOn = true;
-                //selectToogle.interactable = false;
-                LevelEditor.editorMode = LevelEditor.EditorMode.place;
-                currentSelectedObject = this;
-                onItemSelect.Invoke(this);
+                if (amount > 0 && t.isOn)
+                {
+                    t.isOn = true;
+                    //selectToogle.interactable = false;
+                    LevelEditor.editorMode = LevelEditor.EditorMode.place;
+                    currentSelectedObject = this;
+                    onItemSelect.Invoke(this);
+                }
+                else if (!t.isOn && currentSelectedObject.selectToogle == t)
+                {
+                    LevelEditor.editorMode = LevelEditor.EditorMode.select;
+                }
+                Debug.Log("editormode: " + LevelEditor.editorMode);
             }
-            else if (!t.isOn && currentSelectedObject.selectToogle == t)
-            {
-                LevelEditor.editorMode = LevelEditor.EditorMode.select;
-            }
-            Debug.Log("editormode: " + LevelEditor.editorMode);
         }
 
         private void FadeIn()
