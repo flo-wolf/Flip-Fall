@@ -59,6 +59,8 @@ public class UILevelPreferences : MonoBehaviour
                 case LevelObject.ObjectType.turret:
                     UITurretMenu.Activate(LevelEditor.CreateLevelData());
                     UIPreferenceMenu.onPreferenceChange.Invoke(_instance.turretMenu);
+                    animator.ResetTrigger("showTurret");
+                    animator.ResetTrigger("hideTurret");
                     animator.SetTrigger("showTurret");
                     Debug.Log("treeehehee " + _instance.turretMenu);
                     return _instance.turretMenu;
