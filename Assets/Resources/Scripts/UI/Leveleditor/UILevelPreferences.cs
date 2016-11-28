@@ -25,7 +25,6 @@ public class UILevelPreferences : MonoBehaviour
     public UIPreferenceMenu spikeMenu;
     public UIPreferenceMenu attractorMenu;
     public UIPreferenceMenu speedStripMenu;
-    public UIPreferenceMenu openedMenu;
 
     private void Start()
     {
@@ -72,6 +71,11 @@ public class UILevelPreferences : MonoBehaviour
                     return _instance.attractorMenu;
 
                 case LevelObject.ObjectType.speedStrip:
+                    UISpeedStripMenu.Activate(LevelEditor.CreateLevelData());
+                    UIPreferenceMenu.onPreferenceChange.Invoke(_instance.speedStripMenu);
+                    animator.ResetTrigger("showSpeedStrip");
+                    animator.ResetTrigger("hideSpeedStrip");
+                    animator.SetTrigger("showSpeedStrip");
                     return _instance.speedStripMenu;
 
                 case LevelObject.ObjectType.finish:
@@ -117,6 +121,7 @@ public class UILevelPreferences : MonoBehaviour
                     return attractorMenu;
 
                 case LevelObject.ObjectType.speedStrip:
+                    speedStripMenu.gameObject.SetActive(false);
                     return speedStripMenu;
 
                 case LevelObject.ObjectType.finish:

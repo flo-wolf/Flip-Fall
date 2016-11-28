@@ -207,8 +207,9 @@ namespace FlipFall.UI
                 {
                     // _instance.animator.SetTrigger("prefHide");
                     // _instance.animator.SetTrigger("deleteHide");
-                    Debug.Log(UILevelPreferences.ShowMenu());
-                    // open preferences window and pass selected object
+
+                    UIPreferenceMenu menu = UILevelPreferences.ShowMenu();
+                    Debug.Log(menu);
                 }
             }
         }

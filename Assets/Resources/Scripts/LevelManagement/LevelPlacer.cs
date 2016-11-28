@@ -172,8 +172,7 @@ namespace FlipFall.Levels
                     speedStrip.transform.parent = generatedLevel.transform;
                     Vector2 speedStripPos = new Vector3(sd.position.x, sd.position.y, levelObjectZ);
                     speedStrip.transform.localPosition = speedStripPos;
-
-                    // assign values
+                    speedStrip.transform.rotation = Quaternion.Euler(sd.rotation.x, sd.rotation.y, sd.rotation.z);
 
                     generatedLevel.speedStrips.Add(speedStrip);
                 }

@@ -60,7 +60,7 @@ namespace FlipFall.Editor
         // takes the current placed levelObjects and serializes it into the levelData format
         public static LevelData CreateLevelData()
         {
-            if (editLevel != null)
+            if (LevelPlacer.generatedLevel != null && editLevel != null)
             {
                 print("CreateLevelData");
                 LevelDataMono level = LevelPlacer.generatedLevel;
@@ -129,6 +129,7 @@ namespace FlipFall.Editor
                 {
                     Position2 pPosition = new Position2(s.transform.localPosition.x, s.transform.localPosition.y);
                     SpeedStripData sd = new SpeedStripData(pPosition);
+                    sd.rotation = new Position3(s.transform.rotation.eulerAngles.x, s.transform.rotation.eulerAngles.y, s.transform.rotation.eulerAngles.z);
                     l.speedStripData.Add(sd);
                 }
 

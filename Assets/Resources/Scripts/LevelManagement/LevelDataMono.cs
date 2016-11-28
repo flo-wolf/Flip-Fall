@@ -87,6 +87,7 @@ namespace FlipFall.Levels
                         s.transform.parent = LevelPlacer.generatedLevel.transform;
                         Vector2 sPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         s.transform.position = sPos;
+                        s.transform.rotation = Quaternion.Euler(0, 0, 180);
                         speedStrips.Add(s);
                         ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
                         UndoManager.AddUndoPoint();
