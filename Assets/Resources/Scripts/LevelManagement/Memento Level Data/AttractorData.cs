@@ -18,18 +18,14 @@ namespace FlipFall.Levels
     public class AttractorData
     {
         public Position2 position;
-        public float shotDelay;
-        public float startupDelay;
-        public float shotSpeed;
-        public bool constantFire;
+        public int radius;
+        public int pullStrength;
 
         public AttractorData(Position2 pos)
         {
             position = pos;
-            shotDelay = 1F;
-            startupDelay = 0F;
-            shotSpeed = 1F;
-            constantFire = true;
+            radius = 50;
+            pullStrength = 2000;
         }
     }
 }

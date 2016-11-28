@@ -14,6 +14,9 @@ public class UITurretMenu : UIPreferenceMenu
     public LevelObject.ObjectType objectType = LevelObject.ObjectType.turret;
     private static LevelData editData;
     public Slider rotationSlider;
+    public Slider fireRateSlider;
+
+    private static Turret turret;
 
     // Use this for initialization
     private void Start()
@@ -21,6 +24,12 @@ public class UITurretMenu : UIPreferenceMenu
         _instance = this;
         onPreferenceChange.AddListener(PreferenceChanged);
         rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
+
+        turret = LevelEditor.selectedObject.GetComponent<Turret>();
+        if (turret != null)
+        {
+            fireRateSlider.value = turret.shotDelay;
+        }
     }
 
     public static void Activate(LevelData levelData)
@@ -46,43 +55,6 @@ public class UITurretMenu : UIPreferenceMenu
                 lowerThanThis = i + 11.25F;
         }
 
-        //// value needs snapping
-        //if (v >= 0 && v <= 360 && v % (22.5F) != 0)
-        //{
-        //    if (v < 11.25)
-        //        v = 0;
-        //    else if (v < 37.5)
-        //        v = 22.5F;
-        //    else if (v < 56.25)
-        //        v = 45;
-        //    else if (v < 75)
-        //        v = 67.5F;
-        //    else if (v < 112.5)
-        //        v = 90F;
-        //    else if (v < 131.25)
-        //        v = 112.5F;
-        //    else if (v < 150)
-        //        v = 135F;
-        //    else if (v < 168.75)
-        //        v = 157.5F;
-        //    else if (v < 187.5)
-        //        v = 180;
-        //    else if (v < 37.5)
-        //        v = 202.5F;
-        //    else if (v < 37.5)
-        //        v = 225F;
-        //    else if (v < 37.5)
-        //        v = 247.5F;
-        //    else if (v < 37.5)
-        //        v = 270F;
-        //    else if (v < 37.5)
-        //        v = 315F;
-        //    else if (v < 37.5)
-        //        v = 337.5F;
-        //    else if (v < 37.5)
-        //        v = 360F;
-        //}
-
         // set the selectet object's rotation to the angle given by the slider
         Vector3 lookPos = transform.position;
         lookPos.y = 0;
@@ -92,6 +64,14 @@ public class UITurretMenu : UIPreferenceMenu
         LevelEditor.selectedObject.transform.rotation = rotation;
 
         //transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
+    }
+
+    public void FireRateSliderChanged(Slider s)
+    {
+        float v = s.value;
+
+        if (turret != null)
+            turret.shotDelay = v;
     }
 
     private void PreferenceChanged(UIPreferenceMenu menu)

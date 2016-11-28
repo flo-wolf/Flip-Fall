@@ -19,18 +19,12 @@ namespace FlipFall.Levels
     {
         public Position2 position;
         public Position3 rotation;
-        public float shotDelay;
-        public float startupDelay;
-        public float shotSpeed;
-        public bool constantFire;
+        public int pushStrength;
 
         public SpeedStripData(Position2 pos)
         {
             position = pos;
-            shotDelay = 1F;
-            startupDelay = 0F;
-            shotSpeed = 1F;
-            constantFire = true;
+            pushStrength = 7500;
         }
     }
 }

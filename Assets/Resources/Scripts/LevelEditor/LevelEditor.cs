@@ -113,6 +113,8 @@ namespace FlipFall.Editor
                 {
                     Position2 aPosition = new Position2(a.transform.localPosition.x, a.transform.localPosition.y);
                     AttractorData ad = new AttractorData(aPosition);
+                    ad.pullStrength = (int)a.maxPullForce;
+                    ad.radius = (int)a.pullRadius;
                     l.attractorData.Add(ad);
                 }
 
@@ -130,6 +132,7 @@ namespace FlipFall.Editor
                     Position2 pPosition = new Position2(s.transform.localPosition.x, s.transform.localPosition.y);
                     SpeedStripData sd = new SpeedStripData(pPosition);
                     sd.rotation = new Position3(s.transform.rotation.eulerAngles.x, s.transform.rotation.eulerAngles.y, s.transform.rotation.eulerAngles.z);
+                    sd.pushStrength = (int)s.accelSpeed;
                     l.speedStripData.Add(sd);
                 }
 

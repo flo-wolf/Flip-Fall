@@ -160,7 +160,11 @@ namespace FlipFall.Levels
                     attractor.transform.localPosition = attractorPos;
 
                     // assign values
+                    attractor.pullRadius = ad.radius;
+                    attractor.maxPullForce = ad.pullStrength;
+                    attractor.SetScale();
 
+                    // add to the reference list for later saving access
                     generatedLevel.attractors.Add(attractor);
                 }
 
@@ -173,7 +177,7 @@ namespace FlipFall.Levels
                     Vector2 speedStripPos = new Vector3(sd.position.x, sd.position.y, levelObjectZ);
                     speedStrip.transform.localPosition = speedStripPos;
                     speedStrip.transform.rotation = Quaternion.Euler(sd.rotation.x, sd.rotation.y, sd.rotation.z);
-
+                    speedStrip.accelSpeed = sd.pushStrength;
                     generatedLevel.speedStrips.Add(speedStrip);
                 }
 

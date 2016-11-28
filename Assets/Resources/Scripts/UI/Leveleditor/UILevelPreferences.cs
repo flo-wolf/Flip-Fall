@@ -37,6 +37,7 @@ public class UILevelPreferences : MonoBehaviour
         }
     }
 
+    // hides all currently opened preference menus
     public static void DisableAll()
     {
         if (_instance != null)
@@ -45,6 +46,7 @@ public class UILevelPreferences : MonoBehaviour
         }
     }
 
+    // activates the properties menu that corresponds to the current selected object
     public static UIPreferenceMenu ShowMenu()
     {
         menuOpen = true;
@@ -68,6 +70,10 @@ public class UILevelPreferences : MonoBehaviour
                     return _instance.portalMenu;
 
                 case LevelObject.ObjectType.attractor:
+                    UIAttractorMenu.Activate(LevelEditor.CreateLevelData());
+                    UIPreferenceMenu.onPreferenceChange.Invoke(_instance.attractorMenu);
+                    animator.ResetTrigger("showAttractor");
+                    animator.SetTrigger("showAttractor");
                     return _instance.attractorMenu;
 
                 case LevelObject.ObjectType.speedStrip:
