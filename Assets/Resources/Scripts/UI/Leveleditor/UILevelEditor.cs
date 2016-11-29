@@ -50,7 +50,7 @@ namespace FlipFall.UI
 
         public void UndoButton()
         {
-            if (!UILevelPreferences.menuOpen)
+            if (!UIObjectlPreferences.menuOpen)
             {
                 if (UndoManager.Undo())
                 {
@@ -61,7 +61,7 @@ namespace FlipFall.UI
 
         public void RedoButton()
         {
-            if (!UILevelPreferences.menuOpen)
+            if (!UIObjectlPreferences.menuOpen)
             {
                 if (UndoManager.Redo())
                 {
@@ -72,7 +72,7 @@ namespace FlipFall.UI
 
         public void SaveButton()
         {
-            if (!UILevelPreferences.menuOpen)
+            if (!UIObjectlPreferences.menuOpen)
             {
                 LevelEditor.SaveLevel();
                 animator.SetTrigger("saveRequest");
@@ -81,9 +81,9 @@ namespace FlipFall.UI
 
         public void BackButton()
         {
-            if (!UILevelPreferences.menuOpen)
+            if (!UIObjectlPreferences.menuOpen)
             {
-                UILevelPreferences.menuOpen = true;
+                UIObjectlPreferences.menuOpen = true;
                 LevelEditor.changesAreSaved = false;
                 if (!LevelEditor.changesAreSaved)
                 {
@@ -122,7 +122,7 @@ namespace FlipFall.UI
 
         public void TestButton()
         {
-            if (!UILevelPreferences.menuOpen)
+            if (!UIObjectlPreferences.menuOpen)
             {
                 if (LevelEditor.TryTestLevel())
                 {
@@ -181,7 +181,7 @@ namespace FlipFall.UI
         // the delete button got clicked
         public void DeleteButton()
         {
-            if (!UILevelPreferences.menuOpen)
+            if (!UIObjectlPreferences.menuOpen)
             {
                 // the movearea is selected, thus delete vertices
                 if (LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea)
@@ -200,7 +200,7 @@ namespace FlipFall.UI
         // the preferences button got clicked
         public void PreferencesButton()
         {
-            if (!UILevelPreferences.menuOpen)
+            if (!UIObjectlPreferences.menuOpen)
             {
                 // some levelobject is selected, which is not a movearea - open the preferences window to edit it
                 if (LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
@@ -208,7 +208,7 @@ namespace FlipFall.UI
                     // _instance.animator.SetTrigger("prefHide");
                     // _instance.animator.SetTrigger("deleteHide");
 
-                    UIPreferenceMenu menu = UILevelPreferences.ShowMenu();
+                    UIPreferenceMenu menu = UIObjectlPreferences.ShowMenu();
                     Debug.Log(menu);
                 }
             }
@@ -217,7 +217,7 @@ namespace FlipFall.UI
         // toggles the grid on and of, doesn't effect the snapping
         public void GridToggle(Toggle t)
         {
-            if (!UILevelPreferences.menuOpen)
+            if (!UIObjectlPreferences.menuOpen)
             {
                 if (t.isOn)
                     GridOverlay.Active(true);

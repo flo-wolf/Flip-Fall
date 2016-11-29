@@ -15,6 +15,8 @@ namespace FlipFall.UI
 {
     public class UIScrollFade : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
+        public static UIScrollFade _instance;
+
         // the scrollRect
         public ScrollRect scrollRect;
 
@@ -42,7 +44,7 @@ namespace FlipFall.UI
         public bool visualizeHeights = true;
 
         // list of elements attached as a child to the scrollrect
-        private List<UIScrollElement> scrollElements;
+        public static List<UIScrollElement> scrollElements;
 
         // drag direction
         private bool dragUp = true;
@@ -59,6 +61,9 @@ namespace FlipFall.UI
 
         private void Start()
         {
+            if (_instance == null)
+                _instance = this;
+
             // get worldposition inside positions to check
 
             // middle of the canvas

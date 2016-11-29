@@ -66,7 +66,7 @@ namespace FlipFall.Editor
 #endif
 #if UNITY_ANDROID
             // No items or verticies get curretly dragged
-            if (!vertexDragged && !UILevelPreferences.menuOpen)
+            if (!vertexDragged && !UIObjectlPreferences.menuOpen)
             {
                 // If there are two touches on the device...
                 if (Input.touchCount == 2)

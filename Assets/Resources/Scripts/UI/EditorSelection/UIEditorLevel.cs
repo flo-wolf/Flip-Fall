@@ -7,6 +7,7 @@ using FlipFall.Levels;
 
 using FlipFall.Progress;
 using FlipFall.Theme;
+using FlipFall.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,10 +45,30 @@ public class UIEditorLevel : MonoBehaviour
         anim = GetComponent<Animation>();
     }
 
+    // edit button got pressed
     public void Edit()
     {
         LevelEditor.editLevel = levelData;
         Main.SetScene(Main.Scene.editor);
+    }
+
+    // settings button got pressed
+    public void Settings()
+    {
+        foreach (UIScrollElement element in UIScrollFade.scrollElements)
+        {
+            element.FadeOut();
+        }
+        StartCoroutine(cDelayedSettingsShow());
+    }
+
+    private IEnumerator cDelayedSettingsShow()
+    {
+        UIScrollElement element = GetComponent<UIScrollElement>();
+
+        yield return new WaitForSeconds(0.2F);
+        UILevelSettings.Show(levelData, element);
+        yield break;
     }
 
     // set texts to fit inspector variables

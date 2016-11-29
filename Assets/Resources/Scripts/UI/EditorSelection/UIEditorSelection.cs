@@ -49,6 +49,7 @@ namespace FlipFall.UI
         // loads the list of custom levels
         public void LoadUIEditorLevels()
         {
+            uiEditorLevels = new List<UIEditorLevel>();
             DestroyChildren(placingParent);
 
             foreach (LevelData l in LevelManager.customLevels)
@@ -116,7 +117,7 @@ namespace FlipFall.UI
             int childCount = root.childCount;
             for (int i = 0; i < childCount; i++)
             {
-                GameObject.Destroy(root.GetChild(0).gameObject);
+                GameObject.DestroyImmediate(root.GetChild(0).gameObject);
             }
         }
     }

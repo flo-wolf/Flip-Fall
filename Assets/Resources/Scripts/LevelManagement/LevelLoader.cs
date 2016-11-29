@@ -91,6 +91,7 @@ namespace FlipFall.Levels
             return level;
         }
 
+        // saves the given levelData into the file directory, overwrites old versions of the leveldata if existent.
         public static bool SaveCustomLevel(LevelData levelData)
         {
             if (levelData != null)
@@ -123,6 +124,30 @@ namespace FlipFall.Levels
                 file.Close();
 
                 return true;
+            }
+            return false;
+        }
+
+        // finds the levelData by id and deletes it
+        public static bool DeleteCustomLevel(LevelData levelData)
+        {
+            Debug.Log("DDEEEEELEEEEEETEEEE");
+            if (levelData != null)
+            {
+                string savePath;
+#if UNITY_ANDROID && !UNITY_EDITOR
+            savePath = SavePathAndroid;
+#else
+                savePath = SavePath;
+#endif
+                savePath = savePath + levelData.id + ".levelData";
+
+                if (File.Exists(savePath))
+                {
+                    Debug.Log("Dadffffffffffffffffff");
+                    File.Delete(savePath);
+                    return true;
+                }
             }
             return false;
         }

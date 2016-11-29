@@ -65,7 +65,7 @@ namespace FlipFall.UI
         // this toogle got clicked
         public void SelectClick(Toggle t)
         {
-            if (!UILevelPreferences.menuOpen)
+            if (!UIObjectlPreferences.menuOpen)
             {
                 if (amount > 0 && t.isOn)
                 {

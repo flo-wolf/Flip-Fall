@@ -61,7 +61,6 @@ namespace FlipFall.UI
         {
             if (canBeAnimated && isFadedIn)
             {
-                print("fadeOut scene cha nged 2");
                 isFadedIn = false;
                 anim.Play("scrollElementFadeout");
             }

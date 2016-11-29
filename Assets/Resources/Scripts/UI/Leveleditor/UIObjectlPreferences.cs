@@ -11,9 +11,9 @@ using UnityEngine.UI;
 /// Colotrils what preference menus get to be shown and handles the preference saving/discarding
 /// </summary>
 
-public class UILevelPreferences : MonoBehaviour
+public class UIObjectlPreferences : MonoBehaviour
 {
-    public static UILevelPreferences _instance;
+    public static UIObjectlPreferences _instance;
     public static LevelData preferenceData;
     public static bool menuOpen;
     private static Animator animator;
