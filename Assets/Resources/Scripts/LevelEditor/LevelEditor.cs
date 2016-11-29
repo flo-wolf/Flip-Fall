@@ -175,6 +175,10 @@ namespace FlipFall.Editor
                     }
                 }
 
+                editorMode = EditorMode.edit;
+                selectedObject = newSelected;
+                selectedObject.SetOutlineVisible(true);
+
                 // if the movearea got selected activate the handles
                 if (newSelected.objectType == LevelObject.ObjectType.moveArea)
                 {
@@ -186,10 +190,6 @@ namespace FlipFall.Editor
                 {
                     UILevelEditor.DeleteShow(true);
                 }
-
-                editorMode = EditorMode.edit;
-                selectedObject = newSelected;
-                selectedObject.SetOutlineVisible(true);
             }
         }
 

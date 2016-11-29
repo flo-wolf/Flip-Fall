@@ -16,8 +16,8 @@ public class UILevelSettings : MonoBehaviour
     private static UIScrollElement editElement;
     public Animator animator;
 
-    public Text titleInputText;
-    public Text authorInputText;
+    public InputField titleInput;
+    public InputField authorInput;
 
     private void Start()
     {
@@ -29,22 +29,12 @@ public class UILevelSettings : MonoBehaviour
     {
         editElement = scrollElement;
         editData = levelData;
-        _instance.titleInputText.text = levelData.title;
-        _instance.authorInputText.text = levelData.author;
+        Debug.Log("title: " + levelData.title);
+        _instance.titleInput.text = levelData.title;
+        _instance.authorInput.text = levelData.author;
         _instance.animator.ResetTrigger("fadeIn");
         _instance.animator.ResetTrigger("fadeOut");
         _instance.animator.SetTrigger("fadeIn");
-    }
-
-    public void OnTitleEdit(string s)
-    {
-        Debug.Log("titleedit " + titleInputText.text);
-        editData.title = titleInputText.text;
-    }
-
-    public void OnAuthorEdit(string s)
-    {
-        editData.author = authorInputText.text;
     }
 
     // leave the settings and restore the saved leveldata
@@ -63,8 +53,8 @@ public class UILevelSettings : MonoBehaviour
         animator.ResetTrigger("fadeIn");
         animator.ResetTrigger("fadeOut");
         animator.SetTrigger("fadeOut");
-        editData.title = titleInputText.text;
-        editData.author = authorInputText.text;
+        editData.title = titleInput.text;
+        editData.author = authorInput.text;
         LevelLoader.SaveCustomLevel(editData);
         LevelManager.customLevels = LevelLoader.LoadCustomLevels();
         DestroyImmediate(editElement.gameObject);

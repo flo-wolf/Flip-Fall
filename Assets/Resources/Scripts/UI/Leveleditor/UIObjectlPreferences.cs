@@ -49,7 +49,6 @@ public class UIObjectlPreferences : MonoBehaviour
     // activates the properties menu that corresponds to the current selected object
     public static UIPreferenceMenu ShowMenu()
     {
-        menuOpen = true;
         LevelObject.ObjectType type = LevelEditor.selectedObject.objectType;
         Debug.Log("type " + type + " - " + _instance);
         if (_instance != null)
@@ -64,6 +63,7 @@ public class UIObjectlPreferences : MonoBehaviour
                     animator.ResetTrigger("hideTurret");
                     animator.SetTrigger("showTurret");
                     Debug.Log("treeehehee " + _instance.turretMenu);
+                    menuOpen = true;
                     return _instance.turretMenu;
 
                 case LevelObject.ObjectType.portal:
@@ -74,6 +74,7 @@ public class UIObjectlPreferences : MonoBehaviour
                     UIPreferenceMenu.onPreferenceChange.Invoke(_instance.attractorMenu);
                     animator.ResetTrigger("showAttractor");
                     animator.SetTrigger("showAttractor");
+                    menuOpen = true;
                     return _instance.attractorMenu;
 
                 case LevelObject.ObjectType.speedStrip:
@@ -82,6 +83,7 @@ public class UIObjectlPreferences : MonoBehaviour
                     animator.ResetTrigger("showSpeedStrip");
                     animator.ResetTrigger("hideSpeedStrip");
                     animator.SetTrigger("showSpeedStrip");
+                    menuOpen = true;
                     return _instance.speedStripMenu;
 
                 case LevelObject.ObjectType.finish:

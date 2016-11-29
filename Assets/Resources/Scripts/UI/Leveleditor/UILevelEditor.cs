@@ -138,11 +138,11 @@ namespace FlipFall.UI
         // show or hide the delete button
         public static void DeleteShow(bool active)
         {
-            PreferencesShow(active);
-            Debug.Log("DELETE SHOW " + active);
             if (_instance != null)
             {
-                if (active)
+                Debug.Log("DELETE SHOW " + active);
+                PreferencesShow(active);
+                if (active && LevelEditor.selectedObject != null)
                 {
                     _instance.animator.ResetTrigger("deleteHide");
                     _instance.animator.ResetTrigger("deleteShow");
@@ -163,7 +163,7 @@ namespace FlipFall.UI
             Debug.Log("Preferences SHOW " + active);
             if (_instance != null)
             {
-                if (active)
+                if (active && LevelEditor.selectedObject != null)
                 {
                     _instance.animator.ResetTrigger("prefHide");
                     _instance.animator.ResetTrigger("prefShow");
