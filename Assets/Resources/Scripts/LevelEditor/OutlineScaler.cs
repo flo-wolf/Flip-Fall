@@ -14,6 +14,7 @@ namespace FlipFall.Editor
         // fixed outline size in unity units
         public static float fixedSize = 4F;
 
+        // the parent object this object should scale to
         private Transform parentTransform;
 
         // the last size of the parentTransform, prevents the scaling when not needed

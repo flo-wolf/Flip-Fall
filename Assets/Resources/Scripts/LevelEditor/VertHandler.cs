@@ -95,6 +95,8 @@ namespace FlipFall.Editor
         {
             selectedHandles.Add(h);
 
+            LevelEditor.editorMode = LevelEditor.EditorMode.edit;
+
             Vector3[] vertices = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh.vertices;
             int[] triangles = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh.triangles;
             Vector3[] newSelectionVerts = VertHelper.GetTriangleVerticiesByVertex(vertices, triangles, h.transform.position);

@@ -44,9 +44,12 @@ namespace FlipFall.LevelObjects
             if (collider.tag == Constants.playerTag && playerRb != null)
             {
                 colliding = true;
-                accelAngle = transform.rotation.eulerAngles.z;
-                Vector2 accelDirection = new Vector2(Mathf.Sin(Mathf.Deg2Rad * accelAngle), Mathf.Cos(Mathf.Deg2Rad * accelAngle));
-                playerRb.AddForce(accelDirection.normalized * Time.fixedDeltaTime * accelSpeed * accelMulti);
+                Quaternion speedStripAngle = transform.rotation;
+                Vector2 forceDirection = speedStripAngle * Vector2.up;
+                //accelAngle = transform.rotation.eulerAngles.z;
+                //Vector2 accelDirection = new Vector2(Mathf.Sin(Mathf.Deg2Rad * accelAngle), Mathf.Cos(Mathf.Deg2Rad * accelAngle));
+                //playerRb.AddForce(accelDirection.normalized * Time.fixedDeltaTime * accelSpeed * accelMulti);
+                playerRb.AddForce(forceDirection * Time.fixedDeltaTime * accelSpeed * accelMulti);
 
                 //Debug.Log("----2 " + accelAngle + " direction " + accelDirection);
             }

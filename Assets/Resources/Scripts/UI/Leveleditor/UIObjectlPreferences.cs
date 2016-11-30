@@ -42,6 +42,7 @@ public class UIObjectlPreferences : MonoBehaviour
     {
         if (_instance != null)
         {
+            animator.ResetTrigger("hideAll");
             animator.SetTrigger("hideAll");
         }
     }

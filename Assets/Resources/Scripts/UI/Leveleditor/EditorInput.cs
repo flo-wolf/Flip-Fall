@@ -49,7 +49,7 @@ namespace FlipFall.Editor
             doubleClickTime = 0F;
         }
 
-        // Input Control
+        // Input Control, listens for key input, mouse/touch input and switches EditorModes / selects objects / adds vertices
         private void Update()
         {
 #if UNITY_EDITOR
@@ -65,10 +65,10 @@ namespace FlipFall.Editor
             }
 #endif
 #if UNITY_ANDROID
-            // No items or verticies get curretly dragged
+            // No items or verticies get curretly dragged and no menu is open, thus listen for input
             if (!vertexDragged && !UIObjectlPreferences.menuOpen)
             {
-                // If there are two touches on the device...
+                // If there are two touches on the device manage the editor view (zooming/moving)
                 if (Input.touchCount == 2)
                 {
                     // Store both touches.
@@ -92,7 +92,7 @@ namespace FlipFall.Editor
                     {
                         // Change the orthographic size based on the change in distance between the touches.
                         float sizeToChange = deltaMagnitudeDiff * zoomSpeed;
-                        if ((sizeToChange > 0 && (cam.orthographicSize + sizeToChange) < maxSize) || (sizeToChange < 0 && (cam.orthographicSize - sizeToChange) > minSize))
+                        if ((sizeToChange > 0 && (cam.orthographicSize + sizeToChange) < maxSize) || (sizeToChange < 0 && (cam.orthographicSize + sizeToChange) > minSize))
                         {
                             cam.orthographicSize += sizeToChange;
                         }
@@ -100,16 +100,17 @@ namespace FlipFall.Editor
                     // panning => move the camera
                     else
                     {
-                        //old one, working
                         Vector3 touchDeltaPosition = new Vector3(-touchZero.deltaPosition.x * Time.deltaTime * 500, -touchZero.deltaPosition.y * Time.deltaTime * 500, 0);
                         transform.position += touchDeltaPosition;
                         //transform.Translate(touchDeltaPosition.x * Time.deltaTime, touchDeltaPosition.y * Time.deltaTime, 0);
                     }
                 }
-                // one finger touches the screen
+                // only one finger touches the screen, control object selecting/vertex adding
                 else if (Input.touchCount == 1)
                 {
                     Touch touch = Input.GetTouch(0);
+
+                    // touch click = > handle selection/ vertex adding
                     if (touch.phase == TouchPhase.Began)
                     {
                         Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
@@ -121,6 +122,8 @@ namespace FlipFall.Editor
                             objectDragged = true;
                         }
                     }
+
+                    // touch drag => handle object movement
                     else if (touch.phase == TouchPhase.Moved)
                     {
                         // an object is selected, and it is not the movearea
@@ -133,6 +136,8 @@ namespace FlipFall.Editor
                                 LevelEditor.selectedObject.transform.position = position;
                         }
                     }
+
+                    // touch drag end => snap the dragged object and save the changes that were made
                     else if (touch.phase == TouchPhase.Ended)
                     {
                         // an object is selected, and it is not the movearea
@@ -160,13 +165,13 @@ namespace FlipFall.Editor
                     deltaPos.z = 0F;
                     transform.position += deltaPos;
                 }
-                // one mouse button got clicked
+                // one mouse button got clicked => handle selection/vertex adding
                 else if (Input.GetMouseButtonDown(0))
                 {
                     Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     ClickHandler(position);
                 }
-                // one mouse button is held down (aka "dragged")
+                // one mouse button is held down (aka "dragged") => try to move selected objects
                 else if (Input.GetMouseButton(0))
                 {
                     // an object is selected, and it is not the movearea
@@ -183,6 +188,7 @@ namespace FlipFall.Editor
                             LevelEditor.selectedObject.transform.position = newPos;
                     }
                 }
+                // a mouse drag has ended, snap the dragged object and save the changes that were made
                 else if (Input.GetMouseButtonUp(0))
                 {
                     // an object is selected, and it is not the movearea
