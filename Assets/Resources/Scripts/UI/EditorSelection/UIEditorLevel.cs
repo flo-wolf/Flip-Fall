@@ -3,8 +3,6 @@ using FlipFall.Audio;
 using FlipFall.Editor;
 using FlipFall.Levels;
 
-using FlipFall.Levels;
-
 using FlipFall.Progress;
 using FlipFall.Theme;
 using FlipFall.UI;

@@ -22,6 +22,9 @@ namespace FlipFall.Editor
         public float minSize = 500F;
         public float maxSize = 3000F;
 
+        // ignores any input from the bottom of the screen up in percent, important for vertex adding and object placement
+        public float ignoreBottomScreenPercent = 0.2F;
+
         // only relevant on the PC, zoom factor for each keypress
         public float keyboardZoomStep = 250F;
 
@@ -304,15 +307,26 @@ namespace FlipFall.Editor
 
                 // there was no double click detected, if a movearea is selected, try to add vertices
                 if (LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType == LevelObject.ObjectType.moveArea && !Handle.vertGettingSelected)
-                    VertHandler._instance.VertexAdd(position);
+                {
+                    Vector3 screenPosition = Camera.main.WorldToScreenPoint(position);
+                    bool isInIgnoreArea = screenPosition.y < Camera.main.pixelHeight * ignoreBottomScreenPercent;
+                    if (!isInIgnoreArea)
+                        VertHandler._instance.VertexAdd(position);
+                }
             }
             else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
             {
                 // snapping
                 Vector3 snapPos = VertHelper.Snap(position, false);
                 LevelObject.ObjectType objectType = UILevelObject.currentSelectedObject.objectType;
-                if (snapPos != Vector3.zero)
+
+                Vector3 screenPosition = Camera.main.WorldToScreenPoint(snapPos);
+                bool isInIgnoreArea = screenPosition.y < Camera.main.pixelHeight * ignoreBottomScreenPercent;
+
+                // the snapping found a valid snap position around the given position
+                if (snapPos != Vector3.zero && !isInIgnoreArea)
                 {
+                    Debug.Log("Buttom screen percent " + ignoreBottomScreenPercent + " screenPos.y " + screenPosition.y);
                     // return to selection mode and deselect the inventory item
                     LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.AddObject(objectType, snapPos));
                     UILevelObject.onItemSelect.Invoke(null);
