@@ -145,7 +145,7 @@ namespace FlipFall.Editor
         public static void SetSelectedObject(LevelObject newSelected)
         {
             // the new selection will be null, thus deselect whatever is selected
-            if (newSelected == null)
+            if (newSelected == null && !Handle.vertGettingSelected)
             {
                 // if the movearea was selected deactivate the handles
                 if (selectedObject.objectType == LevelObject.ObjectType.moveArea)
@@ -162,7 +162,7 @@ namespace FlipFall.Editor
                 editorMode = EditorMode.select;
             }
             // replace the current selection with a new one
-            else
+            else if (!Handle.vertGettingSelected)
             {
                 // there was an object sleected already
                 if (selectedObject != null)
