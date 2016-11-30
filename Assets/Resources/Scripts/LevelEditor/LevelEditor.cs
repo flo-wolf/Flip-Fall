@@ -1,4 +1,5 @@
-﻿using FlipFall.LevelObjects;
+﻿using FlipFall.Audio;
+using FlipFall.LevelObjects;
 using FlipFall.Levels;
 using FlipFall.UI;
 using System.Collections;
@@ -159,6 +160,7 @@ namespace FlipFall.Editor
 
                 UILevelEditor.DeleteShow(false);
 
+                SoundManager.PlayLightWobble(0.6F);
                 editorMode = EditorMode.select;
             }
             // replace the current selection with a new one
@@ -189,6 +191,7 @@ namespace FlipFall.Editor
                 else if (newSelected.objectType != LevelObject.ObjectType.spawn && newSelected.objectType != LevelObject.ObjectType.finish)
                 {
                     UILevelEditor.DeleteShow(true);
+                    SoundManager.PlayLightWobble();
                 }
             }
         }

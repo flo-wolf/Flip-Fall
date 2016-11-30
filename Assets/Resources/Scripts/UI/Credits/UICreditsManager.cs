@@ -29,11 +29,15 @@ namespace FlipFall.UI
             }
             _instance = this;
 
+            animator.SetTrigger("fadein");
+
             Main.onSceneChange.AddListener(SceneChanging);
         }
 
         private void SceneChanging(Main.Scene scene)
         {
+            animator.ResetTrigger("fadein");
+            animator.ResetTrigger("fadeout");
             animator.SetTrigger("fadeout");
         }
 
@@ -41,6 +45,12 @@ namespace FlipFall.UI
         {
             SoundManager.ButtonClicked();
             Main.SetScene(Main.Scene.home);
+        }
+
+        public void RateButtonClicked()
+        {
+            SoundManager.ButtonClicked();
+            Application.OpenURL("market://details?id=com.florianwolf.flipfall");
         }
     }
 }

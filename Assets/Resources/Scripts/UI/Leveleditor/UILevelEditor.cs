@@ -1,4 +1,5 @@
 ﻿using FlipFall;
+using FlipFall.Audio;
 using FlipFall.Editor;
 using FlipFall.LevelObjects;
 using FlipFall.Levels;
@@ -54,7 +55,12 @@ namespace FlipFall.UI
             {
                 if (UndoManager.Undo())
                 {
+                    SoundManager.ButtonClicked();
                     //animation
+                }
+                else
+                {
+                    SoundManager.PlayUnvalidSound();
                 }
             }
         }
@@ -65,13 +71,19 @@ namespace FlipFall.UI
             {
                 if (UndoManager.Redo())
                 {
+                    SoundManager.ButtonClicked();
                     //animation
+                }
+                else
+                {
+                    SoundManager.PlayUnvalidSound();
                 }
             }
         }
 
         public void SaveButton()
         {
+            SoundManager.ButtonClicked();
             if (!UIObjectlPreferences.menuOpen)
             {
                 LevelEditor.SaveLevel();
@@ -81,6 +93,7 @@ namespace FlipFall.UI
 
         public void BackButton()
         {
+            SoundManager.ButtonClicked();
             if (!UIObjectlPreferences.menuOpen)
             {
                 UIObjectlPreferences.menuOpen = true;
@@ -98,6 +111,7 @@ namespace FlipFall.UI
 
         public void LeaveUnsaved()
         {
+            SoundManager.ButtonClicked();
             animator.SetTrigger("leaveUnsaved");
 
             // retore the last savepoint
@@ -109,6 +123,7 @@ namespace FlipFall.UI
 
         public void LeaveSave()
         {
+            SoundManager.ButtonClicked();
             animator.SetTrigger("leaveSave");
             LevelEditor.SaveLevel();
             DeleteShow(false);
@@ -126,6 +141,7 @@ namespace FlipFall.UI
             {
                 if (LevelEditor.TryTestLevel())
                 {
+                    SoundManager.ButtonClicked();
                     // animations
                 }
             }
@@ -194,6 +210,7 @@ namespace FlipFall.UI
                     _instance.animator.SetTrigger("prefHide");
                     LevelPlacer.generatedLevel.DeleteObject(LevelEditor.selectedObject);
                 }
+                SoundManager.ButtonClicked();
             }
         }
 
@@ -209,14 +226,20 @@ namespace FlipFall.UI
                     // _instance.animator.SetTrigger("deleteHide");
 
                     UIPreferenceMenu menu = UIObjectlPreferences.ShowMenu();
+                    SoundManager.ButtonClicked();
                     Debug.Log(menu);
                 }
+            }
+            else
+            {
+                SoundManager.PlayUnvalidSound();
             }
         }
 
         // toggles the grid on and of, doesn't effect the snapping
         public void GridToggle(Toggle t)
         {
+            SoundManager.ButtonClicked();
             if (!UIObjectlPreferences.menuOpen)
             {
                 if (t.isOn)

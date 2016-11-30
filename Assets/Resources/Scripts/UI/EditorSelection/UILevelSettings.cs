@@ -1,4 +1,5 @@
-﻿using FlipFall.Levels;
+﻿using FlipFall.Audio;
+using FlipFall.Levels;
 using FlipFall.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,6 +44,7 @@ public class UILevelSettings : MonoBehaviour
         animator.ResetTrigger("fadeIn");
         animator.ResetTrigger("fadeOut");
         animator.SetTrigger("fadeOut");
+        SoundManager.ButtonClicked();
 
         StartCoroutine(cDelayedEditorLevelsShow());
     }
@@ -53,6 +55,8 @@ public class UILevelSettings : MonoBehaviour
         animator.ResetTrigger("fadeIn");
         animator.ResetTrigger("fadeOut");
         animator.SetTrigger("fadeOut");
+        SoundManager.ButtonClicked();
+
         editData.title = titleInput.text;
         editData.author = authorInput.text;
         LevelLoader.SaveCustomLevel(editData);
@@ -75,6 +79,7 @@ public class UILevelSettings : MonoBehaviour
     {
         animator.ResetTrigger("deleteRequest");
         animator.SetTrigger("deleteRequest");
+        SoundManager.ButtonClicked();
     }
 
     // yes got pressed, delete the level
@@ -83,6 +88,8 @@ public class UILevelSettings : MonoBehaviour
         animator.ResetTrigger("deleteYes");
         animator.SetTrigger("deleteYes");
         animator.SetTrigger("fadeOut");
+        SoundManager.ButtonClicked();
+
         DestroyImmediate(editElement.gameObject);
         LevelLoader.DeleteCustomLevel(editData);
         LevelManager.customLevels = LevelLoader.LoadCustomLevels();
@@ -97,5 +104,6 @@ public class UILevelSettings : MonoBehaviour
     {
         animator.ResetTrigger("deleteNo");
         animator.SetTrigger("deleteNo");
+        SoundManager.ButtonClicked();
     }
 }

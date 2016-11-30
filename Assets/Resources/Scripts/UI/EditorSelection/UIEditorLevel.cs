@@ -47,6 +47,7 @@ public class UIEditorLevel : MonoBehaviour
     public void Edit()
     {
         LevelEditor.editLevel = levelData;
+        SoundManager.ButtonClicked();
         Main.SetScene(Main.Scene.editor);
     }
 
@@ -57,6 +58,7 @@ public class UIEditorLevel : MonoBehaviour
         {
             element.FadeOut();
         }
+        SoundManager.ButtonClicked();
         StartCoroutine(cDelayedSettingsShow());
     }
 

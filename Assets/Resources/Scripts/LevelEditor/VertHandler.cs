@@ -1,4 +1,5 @@
 ﻿using FlipFall;
+using FlipFall.Audio;
 using FlipFall.Levels;
 using FlipFall.UI;
 using System;
@@ -106,6 +107,7 @@ namespace FlipFall.Editor
             {
                 selectionTriangleVerts.Add(v);
             }
+            SoundManager.PlayLightWobble();
 
             // there are at lest three verticies in total left and we plan to delete a vertex that is component of only one triangle
             if (vertices.Length > 3 && selectionTriangleVerts.Count <= 3)
@@ -117,6 +119,7 @@ namespace FlipFall.Editor
         public static void DeselectHandle(Handle h)
         {
             selectedHandles.Remove(h);
+            SoundManager.PlayLightWobble(0.6F);
 
             Vector3[] vertices = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh.vertices;
             int[] triangles = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh.triangles;
@@ -218,7 +221,7 @@ namespace FlipFall.Editor
         }
 
         // add a vertex at the given position - called by EditorInput class
-        public void VertexAdd(Vector3 pos)
+        public bool VertexAdd(Vector3 pos)
         {
             Debug.Log("VertexAdd at " + pos);
             if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
@@ -315,9 +318,11 @@ namespace FlipFall.Editor
                         selectedHandles = new List<Handle>();
                         DestroyHandles();
                         Start();
+                        return true;
                     }
                 }
             }
+            return false;
         }
 
         public bool DeleteAllSelectedVerts()

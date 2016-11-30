@@ -80,6 +80,16 @@ namespace FlipFall.Audio
             sfxSource.PlayOneShot(clip, fxVolume);
         }
 
+        // Used to play single sound clips.
+        public void PlaySingle(AudioClip clip, float pitch)
+        {
+            //Set the clip of our efxSource audio source to the clip passed in as a parameter.
+            sfxSource.pitch = pitch;
+
+            //Play the clip.
+            sfxSource.PlayOneShot(clip, fxVolume);
+        }
+
         public void PlayAttractorRumble(AudioClip clip, Vector3 pos)
         {
             StartCoroutine(_instance.cPlayAttractorRumble(clip, pos));

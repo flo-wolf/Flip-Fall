@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8254a8c164d387c489e80361bd4ba792
-timeCreated: 1480423984
+timeCreated: 1480541197
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -43,6 +43,9 @@ TextureImporter:
     21300072: impulse_icons_Sprites2_36
     21300074: impulse_icons_Sprites2_37
     21300076: impulse_icons_Sprites2_38
+    21300078: impulse_icons_Sprites2_39
+    21300080: impulse_icons_Sprites2_40
+    21300082: impulse_icons_Sprites2_41
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -186,9 +189,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 987
-        y: 1383
+        y: 1393
         width: 476
-        height: 262
+        height: 252
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -562,10 +565,10 @@ TextureImporter:
       name: impulse_icons_Sprites2_34
       rect:
         serializedVersion: 2
-        x: 1410
+        x: 1371
         y: 420
-        width: 289
-        height: 142
+        width: 339
+        height: 125
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -618,6 +621,45 @@ TextureImporter:
         y: 1024
         width: 352
         height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites2_39
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 1898
+        width: 262
+        height: 138
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites2_40
+      rect:
+        serializedVersion: 2
+        x: 977
+        y: 1293
+        width: 453
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites2_41
+      rect:
+        serializedVersion: 2
+        x: 977
+        y: 1188
+        width: 454
+        height: 104
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

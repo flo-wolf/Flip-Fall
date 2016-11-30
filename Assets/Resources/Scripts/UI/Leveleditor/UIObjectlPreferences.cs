@@ -1,4 +1,5 @@
-﻿using FlipFall.Editor;
+﻿using FlipFall.Audio;
+using FlipFall.Editor;
 using FlipFall.LevelObjects;
 using FlipFall.Levels;
 using FlipFall.UI;
@@ -102,12 +103,14 @@ public class UIObjectlPreferences : MonoBehaviour
     {
         animator.SetTrigger("hideAll");
         menuOpen = false;
+        SoundManager.ButtonClicked();
         UndoManager.Undo();
     }
 
     public void LeaveSaved()
     {
         menuOpen = false;
+        SoundManager.ButtonClicked();
         animator.SetTrigger("hideAll");
     }
 

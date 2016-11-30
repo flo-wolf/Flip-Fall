@@ -1,4 +1,5 @@
-﻿using FlipFall.Editor;
+﻿using FlipFall.Audio;
+using FlipFall.Editor;
 using FlipFall.LevelObjects;
 using FlipFall.Progress;
 using System.Collections;
@@ -62,7 +63,7 @@ namespace FlipFall.UI
             }
         }
 
-        // this toogle got clicked
+        // this toogle got changed
         public void SelectClick(Toggle t)
         {
             if (!UIObjectlPreferences.menuOpen)
@@ -72,11 +73,14 @@ namespace FlipFall.UI
                     t.isOn = true;
                     //selectToogle.interactable = false;
                     LevelEditor.editorMode = LevelEditor.EditorMode.place;
+                    SoundManager.PlayLightWobble();
                     currentSelectedObject = this;
                     onItemSelect.Invoke(this);
                 }
                 else if (!t.isOn && currentSelectedObject.selectToogle == t)
                 {
+                    if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
+                        SoundManager.PlayLightWobble(0.6F);
                     LevelEditor.editorMode = LevelEditor.EditorMode.select;
                 }
                 Debug.Log("editormode: " + LevelEditor.editorMode);

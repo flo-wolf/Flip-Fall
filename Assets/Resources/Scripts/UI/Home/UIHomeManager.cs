@@ -87,6 +87,13 @@ namespace FlipFall.UI
             SoundManager.ButtonClicked();
         }
 
+        public void CreditsButton()
+        {
+            Main.SetScene(Main.Scene.credits);
+            animator.SetTrigger("fadeout");
+            SoundManager.ButtonClicked();
+        }
+
         public void ShopButton()
         {
             Main.SetScene(Main.Scene.shop);

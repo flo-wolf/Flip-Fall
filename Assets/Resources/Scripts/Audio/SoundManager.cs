@@ -248,6 +248,18 @@ namespace FlipFall.Audio
             _instance.soundPlayer.PlaySingle(_instance.starGetSound);
         }
 
+        public static void PlayLightWobble()
+        {
+            _instance.soundPlayer.PlaySingle(_instance.turretShot);
+            Debug.Log("playlight");
+        }
+
+        public static void PlayLightWobble(float pitch)
+        {
+            _instance.soundPlayer.PlaySingle(_instance.turretShot, pitch);
+            Debug.Log("playlight pitched");
+        }
+
         public static void TurretShot(Vector3 position)
         {
             if (Player._instance != null)

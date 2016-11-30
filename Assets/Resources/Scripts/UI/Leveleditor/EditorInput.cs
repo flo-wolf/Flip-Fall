@@ -1,4 +1,5 @@
-﻿using FlipFall.LevelObjects;
+﻿using FlipFall.Audio;
+using FlipFall.LevelObjects;
 using FlipFall.Levels;
 using FlipFall.Progress;
 using FlipFall.UI;
@@ -311,7 +312,10 @@ namespace FlipFall.Editor
                     Vector3 screenPosition = Camera.main.WorldToScreenPoint(position);
                     bool isInIgnoreArea = screenPosition.y < Camera.main.pixelHeight * ignoreBottomScreenPercent;
                     if (!isInIgnoreArea)
-                        VertHandler._instance.VertexAdd(position);
+                        if (VertHandler._instance.VertexAdd(position))
+                        {
+                            SoundManager.ButtonClicked();
+                        }
                 }
             }
             else if (LevelEditor.editorMode == LevelEditor.EditorMode.place)
