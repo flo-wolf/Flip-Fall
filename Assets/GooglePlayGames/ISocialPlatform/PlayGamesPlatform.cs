@@ -17,8 +17,6 @@
 
 namespace GooglePlayGames
 {
-    using System;
-    using System.Collections.Generic;
     using GooglePlayGames.BasicApi;
     using GooglePlayGames.BasicApi.Events;
     using GooglePlayGames.BasicApi.Multiplayer;
@@ -26,6 +24,8 @@ namespace GooglePlayGames
     using GooglePlayGames.BasicApi.Quests;
     using GooglePlayGames.BasicApi.SavedGame;
     using GooglePlayGames.OurUtils;
+    using System;
+    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.SocialPlatforms;
 
@@ -335,6 +335,31 @@ namespace GooglePlayGames
         public void Authenticate(Action<bool> callback)
         {
             Authenticate(callback, false);
+        }
+
+        public void Authenticate(Action<bool, string> callback)
+        {
+            Authenticate(callback, false, "auth error");
+        }
+
+        public void Authenticate(Action<bool, string> callback, bool silent, string message)
+        {
+            // make a platform-specific Play Games client
+            if (mClient == null)
+            {
+                GooglePlayGames.OurUtils.Logger.d(
+                    "Creating platform-specific Play Games client.");
+                mClient = PlayGamesClientFactory.GetPlatformPlayGamesClient(mConfiguration);
+            }
+
+            // authenticate!
+            Action<bool> c = (bool a) => callback(a, message);
+            mClient.Authenticate(c, silent);
+        }
+
+        public void Authenticate(ILocalUser unused, Action<bool, string> callback)
+        {
+            Authenticate(callback, false, "auth error");
         }
 
         /// <summary>
@@ -717,7 +742,7 @@ namespace GooglePlayGames
                         " is less than or equal to 1. You might be trying to use values in the range of [0,1], while values are expected to be within the range [0,100]. If you are using the latter, you can safely ignore this message.");
                 }
 
-                int targetSteps = (int) Math.Round((progress / 100f) * totalSteps);
+                int targetSteps = (int)Math.Round((progress / 100f) * totalSteps);
                 int numSteps = targetSteps - curSteps;
                 GooglePlayGames.OurUtils.Logger.d("Target steps: " +
                     targetSteps + ", cur steps:" + curSteps);
@@ -1065,7 +1090,7 @@ namespace GooglePlayGames
                 return;
             }
 
-            GooglePlayGames.OurUtils.Logger.d("ShowAchievementsUI callback is "  + callback);
+            GooglePlayGames.OurUtils.Logger.d("ShowAchievementsUI callback is " + callback);
             mClient.ShowAchievementsUI(callback);
         }
 
@@ -1161,15 +1186,15 @@ namespace GooglePlayGames
             mDefaultLbUi = lbid;
         }
 
-       /// <summary>
-       /// Loads the friends that also play this game.  See loadConnectedPlayers.
-       /// </summary>
+        /// <summary>
+        /// Loads the friends that also play this game.  See loadConnectedPlayers.
+        /// </summary>
         /// <remarks>This is a callback variant of LoadFriends.  When completed,
         /// the friends list set in the user object, so they can accessed via the
         /// friends property as needed.
         /// </remarks>
         /// <param name="user">The current local user</param>
-       /// <param name="callback">Callback invoked when complete.</param>
+        /// <param name="callback">Callback invoked when complete.</param>
         public void LoadFriends(ILocalUser user, Action<bool> callback)
         {
             if (!IsAuthenticated())
@@ -1213,12 +1238,15 @@ namespace GooglePlayGames
                 case TimeScope.AllTime:
                     timeSpan = LeaderboardTimeSpan.AllTime;
                     break;
+
                 case TimeScope.Week:
                     timeSpan = LeaderboardTimeSpan.Weekly;
                     break;
+
                 case TimeScope.Today:
                     timeSpan = LeaderboardTimeSpan.Daily;
                     break;
+
                 default:
                     timeSpan = LeaderboardTimeSpan.AllTime;
                     break;
@@ -1337,4 +1365,5 @@ namespace GooglePlayGames
         }
     }
 }
+
 #endif

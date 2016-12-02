@@ -17,8 +17,8 @@
 
 namespace GooglePlayGames
 {
-    using System;
     using GooglePlayGames.BasicApi;
+    using System;
     using UnityEngine.SocialPlatforms;
 
     /// <summary>
@@ -45,6 +45,11 @@ namespace GooglePlayGames
         /// <see cref="PlayGamesPlatform.Authenticate" />.
         /// </summary>
         public void Authenticate(Action<bool> callback)
+        {
+            mPlatform.Authenticate(callback);
+        }
+
+        public void Authenticate(Action<bool, string> callback)
         {
             mPlatform.Authenticate(callback);
         }
@@ -86,7 +91,7 @@ namespace GooglePlayGames
         [Obsolete("Use PlayGamesPlatform.GetServerAuthCode()")]
         public void GetIdToken(Action<string> idTokenCallback)
         {
-            if(authenticated)
+            if (authenticated)
                 mPlatform.GetIdToken(idTokenCallback);
             else
                 idTokenCallback(null);
@@ -207,7 +212,6 @@ namespace GooglePlayGames
             }
         }
 
-
         public new string AvatarURL
         {
             get
@@ -273,4 +277,5 @@ namespace GooglePlayGames
         }
     }
 }
+
 #endif
