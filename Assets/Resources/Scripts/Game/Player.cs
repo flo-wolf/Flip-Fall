@@ -24,8 +24,8 @@ namespace FlipFall
 
         public enum PlayerState { alive, dead, win, teleporting };
         public enum PlayerAction { reflect, charge, decharge, teleport };
-        private PlayerState playerState;
-        private PlayerAction playerAction;
+        public static PlayerState playerState;
+        private static PlayerAction playerAction;
 
         public static PlayerStateChangeEvent onPlayerStateChange = new PlayerStateChangeEvent();
         public static PlayerActionEvent onPlayerAction = new PlayerActionEvent();

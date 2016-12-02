@@ -24,7 +24,7 @@ namespace FlipFall
         /// <summary>
         /// Indicates which scene is curretly active -  switch with SetScene()
         /// </summary>
-        public enum Scene { welcome, home, levelselection, tutorial, game, settings, editor, shop, achievements, credits }
+        public enum Scene { welcome, home, levelselection, tutorial, game, settings, editor, shop, achievements, credits, gopro }
         public static Scene currentScene;
 
         public float sceneSwitchDelay = 0.5F;
@@ -40,6 +40,7 @@ namespace FlipFall
         // ads
         public static int adCooldownCounter = 0;
         public static int adEveryFinish = 4;
+        public static int adEveryTest = 8;
         public static bool adInQue = false;
 
         private void Awake()
@@ -115,6 +116,11 @@ namespace FlipFall
                         _instance.StartCoroutine(_instance.cSetScene("Tutorial"));
                     break;
 
+                case Scene.gopro:
+                    if (SceneManager.GetActiveScene().name != "GoPro")
+                        _instance.StartCoroutine(_instance.cSetScene("GoPro"));
+                    break;
+
                 case Scene.game:
                     if (SceneManager.GetActiveScene().name != "Game")
                         _instance.StartCoroutine(_instance.cSetScene("Game"));
@@ -152,18 +158,13 @@ namespace FlipFall
                     break;
 
                 case Scene.editor:
-                    if (ProgressManager.GetProgress().proVersion)
-                    {
-                        if (SceneManager.GetActiveScene().name != "EditorSelection" && SceneManager.GetActiveScene().name != "Game")
-                            _instance.StartCoroutine(_instance.cSetScene("EditorSelection"));
-                        else
-                            _instance.StartCoroutine(_instance.cSetScene("Leveleditor"));
-                    }
+                    //if (ProgressManager.GetProgress().proVersion)
+                    //{
+                    if (SceneManager.GetActiveScene().name != "EditorSelection" && SceneManager.GetActiveScene().name != "Game")
+                        _instance.StartCoroutine(_instance.cSetScene("EditorSelection"));
                     else
-                    {
-                        if (SceneManager.GetActiveScene().name != "EditorUnlock")
-                            _instance.StartCoroutine(_instance.cSetScene("EditorUnlock"));
-                    }
+                        _instance.StartCoroutine(_instance.cSetScene("Leveleditor"));
+                    // }
                     break;
             }
         }
@@ -180,6 +181,23 @@ namespace FlipFall
             {
                 adCooldownCounter++;
                 if (adCooldownCounter % adEveryFinish == 0 || adInQue)
+                {
+                    if (ShowInterstitial())
+                    {
+                        adCooldownCounter = 0;
+                        adInQue = false;
+                    }
+                    else
+                    {
+                        adInQue = true;
+                    }
+                }
+            }
+            else if (sceneName == "Leveleditor" && Game.gameType == Game.GameType.testing)
+            {
+                Debug.Log("SetSCENE EDTTOROREOEOEO ---------------------");
+                adCooldownCounter++;
+                if (adCooldownCounter % adEveryTest == 0 || adInQue)
                 {
                     if (ShowInterstitial())
                     {
@@ -251,6 +269,7 @@ namespace FlipFall
 
         public static bool ShowInterstitial()
         {
+            Debug.Log("SHOWINTERSTITIAL");
             if (Admob.Instance().isInterstitialReady())
             {
                 Admob.Instance().showInterstitial();
