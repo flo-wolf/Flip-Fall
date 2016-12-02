@@ -62,6 +62,12 @@ namespace FlipFall
                 //Admob.Instance().setTesting(true);
 
                 currentScene = Scene.home;
+
+#if UNITY_ANDROID
+                Social.localUser.Authenticate((bool success) =>
+                {
+                });
+#endif
             }
 
             if (_instance != null && _instance != this)

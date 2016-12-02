@@ -101,6 +101,13 @@ namespace FlipFall.UI
             SoundManager.ButtonClicked();
         }
 
+        public void GoProButton()
+        {
+            Main.SetScene(Main.Scene.gopro);
+            animator.SetTrigger("fadeout");
+            SoundManager.ButtonClicked();
+        }
+
         private void FadeIn()
         {
             fadeAnimation.Play("fadeFromBlack");

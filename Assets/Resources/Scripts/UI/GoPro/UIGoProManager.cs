@@ -30,12 +30,10 @@ namespace FlipFall.UI
             _instance = this;
 
             Main.onSceneChange.AddListener(SceneChanging);
-        }
 
-        private static bool IsProUnlocked()
-        {
-            //checks
-            return true;
+            // check if the item is bought or not and then fade the correct ui in
+            animator.SetTrigger("fadeBuy");
+            // else: animator.SetTrigger("fadeThanks");
         }
 
         private void SceneChanging(Main.Scene scene)
@@ -51,13 +49,25 @@ namespace FlipFall.UI
 
         public void ProButtonClicked()
         {
+            // pro not bought yet
             if (!IsProUnlocked())
             {
-                // buy
-                // if buy successfull add pro notice to progress
+                // try to buy
+                if (InAppBilling.BuyPro())
+                {
+                    animator.ResetTrigger("buy");
+                    animator.SetTrigger("buy");
+                    Debug.Log("SUCCESSFULKL BUY");
+                    // change scene to a "thank you" notice
+                }
             }
             SoundManager.ButtonClicked();
-            Main.SetScene(Main.Scene.home);
+        }
+
+        private static bool IsProUnlocked()
+        {
+            //checks
+            return false;
         }
     }
 }
