@@ -117,6 +117,50 @@ namespace FlipFall.UI
                 return false;
         }
 
+        // the left contols-half got clicked
+        public void LeftHalfClicked()
+        {
+            if (player.IsAlive() && !IsPaused())
+            {
+                player.ReflectToLeft();
+            }
+        }
+
+        // the left contols-half got released
+        public void LeftHalfReleased()
+        {
+            if (player.IsAlive())
+            {
+                if (player.charging)
+                {
+                    player.Decharge();
+                }
+            }
+        }
+
+        // the right contols-half got clicked
+        public void RightHalfClicked()
+        {
+            if (player.IsAlive() && !IsPaused())
+            {
+                player.ReflectToRight();
+            }
+        }
+
+        // the right contols-half got released
+        public void RightHalfReleased()
+        {
+            if (player.IsAlive() && !IsPaused())
+            {
+                if (player.charging)
+                {
+                    player.Decharge();
+                }
+            }
+        }
+
+        /* Old Controls
+        // the left contols-half got clicked
         public void LeftHalfClicked()
         {
             if (player.IsAlive() && !IsPaused())
@@ -132,6 +176,7 @@ namespace FlipFall.UI
             }
         }
 
+        // the left contols-half got released
         public void LeftHalfReleased()
         {
             if (player.IsAlive())
@@ -143,6 +188,7 @@ namespace FlipFall.UI
             }
         }
 
+        // the right contols-half got clicked
         public void RightHalfClicked()
         {
             if (player.IsAlive() && !IsPaused())
@@ -158,6 +204,7 @@ namespace FlipFall.UI
             }
         }
 
+        // the right contols-half got released
         public void RightHalfReleased()
         {
             if (player.IsAlive() && !IsPaused())
@@ -168,6 +215,7 @@ namespace FlipFall.UI
                 }
             }
         }
+            */
 
         //Inputs, alles in den Input Manager!
         private void Update()
@@ -181,11 +229,15 @@ namespace FlipFall.UI
                 }
                 else if (Input.GetKeyDown(KeyCode.M))
                 {
-                    player.Reflect();
+                    player.ReflectToRight();
                 }
-                else if (Input.GetKeyDown(KeyCode.Y) && !player.charging)
+                else if (Input.GetKeyUp(KeyCode.M) && player.charging)
                 {
-                    player.Charge();
+                    player.Decharge();
+                }
+                else if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    player.ReflectToLeft();
                 }
                 else if (Input.GetKeyUp(KeyCode.Y) && player.charging)
                 {

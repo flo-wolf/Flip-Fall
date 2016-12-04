@@ -55,6 +55,7 @@ namespace FlipFall
         public float chargeForcePerTick = 5F;
         public float respawnDuration = 1f;
         public float teleportDuration = 0.2F;
+        public float directionSwitchForce = 25F;
 
         [Range(0.0f, 0.1f)]
         public float triggerExitCheckDelay = 0.001F;
@@ -81,6 +82,8 @@ namespace FlipFall
         private static PolygonCollider2D levelCollider;
 
         private static Mesh levelMesh;
+
+        public float chargeDelayAfterClik = 0.3F;
 
         private void Awake()
         {
@@ -293,7 +296,10 @@ namespace FlipFall
             SetPlayerState(PlayerState.alive);
 
             rBody.gravityScale = gravity;
-            rBody.velocity = new Vector3(0f, -0.00001f, 0f);
+            if (spawn.facingLeftOnSpawn)
+                rBody.velocity = new Vector3(-0.00001f, 0f, 0f);
+            else
+                rBody.velocity = new Vector3(0.00001f, 0f, 0f);
             rBody.WakeUp();
         }
 
@@ -398,10 +404,16 @@ namespace FlipFall
             facingLeft = !facingLeft;
         }
 
-        //Spieleraktion - X-Achsen-Spiegelung der Figurenflugbahn
+        // Switch the players x-velocity
         public void Reflect()
         {
-            rBody.velocity = new Vector2(rBody.velocity.x * (-1), rBody.velocity.y);
+            // currently moving to the right => switch to the left
+            if (rBody.velocity.x > 0)
+                rBody.velocity = new Vector2(-directionSwitchForce, rBody.velocity.y);
+            // currently moving to the left => switch to the right
+            else
+                rBody.velocity = new Vector2(directionSwitchForce, rBody.velocity.y);
+
             SwitchFacingDirection();
             onPlayerAction.Invoke(PlayerAction.reflect);
 
@@ -410,13 +422,49 @@ namespace FlipFall
             });
         }
 
-        //Spieleraktion - Gravitationsabbruch, Figur wird auf der Ebene gehalten und beschleunigt
-        public void Charge()
+        // reflect the player to the right when he flies to the left
+        public void ReflectToLeft()
+        {
+            if (rBody.velocity.x > 0)
+            {
+                Reflect();
+            }
+            else
+            {
+                onPlayerAction.Invoke(PlayerAction.reflect);
+            }
+            StartCoroutine(cChargeDelay());
+        }
+
+        // reflect the player to the left when he flies to the right
+        public void ReflectToRight()
+        {
+            if (rBody.velocity.x < 0)
+            {
+                Reflect();
+            }
+            else
+            {
+                onPlayerAction.Invoke(PlayerAction.reflect);
+            }
+            StartCoroutine(cChargeDelay());
+        }
+
+        // delay between charge call and actual charge beginn
+        private IEnumerator cChargeDelay()
         {
             rBody.gravityScale = 0f;
             rBody.velocity = new Vector2(rBody.velocity.x, 0f);
-            charging = true;
             onPlayerAction.Invoke(PlayerAction.charge);
+            yield return new WaitForSeconds(chargeDelayAfterClik);
+            Charge();
+            yield break;
+        }
+
+        //Spieleraktion - Gravitationsabbruch, Figur wird auf der Ebene gehalten und beschleunigt
+        public void Charge()
+        {
+            charging = true;
         }
 
         //Spieleraktion - Erneutes Hinzufügen der Gravitation
@@ -439,7 +487,7 @@ namespace FlipFall
 
                 if (charging && Mathf.Abs(rBody.velocity.x) < maxChargeVelocity)
                 {
-                    if (facingLeft)
+                    if (velocity.x < 0)
                     {
                         velocity.x = velocity.x - chargeForcePerTick;
                     }
