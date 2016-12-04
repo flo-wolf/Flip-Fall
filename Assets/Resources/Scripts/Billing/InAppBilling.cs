@@ -17,7 +17,7 @@ public class InAppBilling : MonoBehaviour, IStoreListener
     private static IExtensionProvider m_StoreExtensionProvider; // Reference to store-specific Purchasing
 
     // com.company.project.item_name value
-    private static string kItem = "flipfall.pro"; // General handle for the consumable product.
+    private static string kItem = "FlipFall Pro Upgrade"; // General handle for the consumable product.
 
     private static string kGooglePlayItems = "com.florianwolf.flipfall.flipfall.pro"; // Google Play Store identifier for the consumable product.
 
@@ -29,6 +29,8 @@ public class InAppBilling : MonoBehaviour, IStoreListener
             return;
         }
         _instance = this;
+
+        DontDestroyOnLoad(this);
 
         //ZPlayerPrefs.Initialize("----------------", SystemInfo.deviceUniqueIdentifier);
         // If we haven't set up the Unity Purchasing reference

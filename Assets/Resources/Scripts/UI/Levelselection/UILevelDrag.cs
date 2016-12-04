@@ -103,6 +103,7 @@ namespace FlipFall.UI
                             {
                                 StartCoroutine(lerpBackToOrigin());
                                 SoundManager.PlayUnvalidSound();
+                                UILevelselectionManager.StarShake();
                             }
                             else
                                 onBounceBack.Invoke();
@@ -114,6 +115,7 @@ namespace FlipFall.UI
                             {
                                 StartCoroutine(lerpBackToOrigin());
                                 SoundManager.PlayUnvalidSound();
+                                UILevelselectionManager.StarShake();
                             }
                             else
                                 onBounceBack.Invoke();
@@ -164,6 +166,7 @@ namespace FlipFall.UI
                                 {
                                     StartCoroutine(lerpBackToOrigin());
                                     SoundManager.PlayUnvalidSound();
+                                    UILevelselectionManager.StarShake();
                                 }
                                 else
                                     onBounceBack.Invoke();
@@ -175,6 +178,7 @@ namespace FlipFall.UI
                                 {
                                     StartCoroutine(lerpBackToOrigin());
                                     SoundManager.PlayUnvalidSound();
+                                    UILevelselectionManager.StarShake();
                                 }
                                 else
                                     onBounceBack.Invoke();
