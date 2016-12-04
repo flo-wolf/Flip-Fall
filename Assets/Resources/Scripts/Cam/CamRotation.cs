@@ -83,9 +83,29 @@ namespace FlipFall.Cam
             if (behaviour != null && behaviour.GetComponent<Rigidbody2D>() != null)
             {
                 _instance.StopAllCoroutines();
-                Quaternion memoryRotation = _instance.minRotation;
-                _instance.minRotation = _instance.maxRotation;
-                _instance.maxRotation = memoryRotation;
+
+                Quaternion memoryRotation;
+
+                // movement to the right
+                if (Player._instance.rBody.velocity.x > 0)
+                {
+                    if (_instance.maxRotation != Quaternion.AngleAxis(_instance.maxRotationAngle, Vector3.forward))
+                    {
+                        memoryRotation = _instance.minRotation;
+                        _instance.minRotation = _instance.maxRotation;
+                        _instance.maxRotation = memoryRotation;
+                    }
+                }
+                // movement to the left
+                else
+                {
+                    if (_instance.maxRotation != Quaternion.AngleAxis(-_instance.maxRotationAngle, Vector3.forward))
+                    {
+                        memoryRotation = _instance.maxRotation;
+                        _instance.maxRotation = _instance.minRotation;
+                        _instance.minRotation = memoryRotation;
+                    }
+                }
                 _instance.StartCoroutine(_instance.cRotateToVelocity(behaviour.GetComponent<Rigidbody2D>(), duration));
             }
         }

@@ -100,7 +100,7 @@ namespace FlipFall.Audio
                     break;
 
                 case Player.PlayerAction.charge:
-                    soundPlayer.PlaySingle(chargeSound);
+                    //soundPlayer.PlaySingle(chargeSound);
                     break;
 
                 case Player.PlayerAction.decharge:
