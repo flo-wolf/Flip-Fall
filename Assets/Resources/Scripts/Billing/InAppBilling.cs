@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Purchasing;
 
 /// <summary>
@@ -13,6 +14,10 @@ using UnityEngine.Purchasing;
 public class InAppBilling : MonoBehaviour, IStoreListener
 {
     public static InAppBilling _instance;
+
+    public static ProBuyEvent onProBuy = new ProBuyEvent();
+
+    public class ProBuyEvent : UnityEvent { }
 
     public static bool initialized = false;
 
@@ -228,6 +233,7 @@ public class InAppBilling : MonoBehaviour, IStoreListener
             Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
             //If the item has been successfully purchased, store the item for later use!
             ProgressManager.GetProgress().proVersion = true;
+            onProBuy.Invoke();
             //PlayerPrefs.SetInt("Items_All", 1);
             //_Main.Invoke("Got_Items", 0); //Call a function in another script to play some effects.
         }

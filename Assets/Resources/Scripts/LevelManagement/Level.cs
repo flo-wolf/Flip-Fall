@@ -199,19 +199,32 @@ namespace FlipFall.Levels
             StartCoroutine(cDissolveLevel(LevelManager._instance.DissolveLevelDuration));
         }
 
+        // updates the shader's slice amount each frame to fade out the level. Also fades the alpha color value.
         private IEnumerator cDissolveLevel(float duration)
         {
             if (mr != null)
             {
-                yield return new WaitForSeconds(LevelManager._instance.DissolveDelay);
+                yield return new WaitForSeconds(0.03F);
                 Material m = mr.material;
+
+                // begin color - full alpha
+                Color c = ThemeManager.theme.moveZoneColor;
+
+                // end color - no alpha
+                Color ca = new Color(c.r, c.g, c.b, 0F);
+
                 float t = 0F;
                 while (t < 1.0f)
                 {
+                    //float alpha = Mathf.Lerp(0.0, 1.0, lerp);
                     t += Time.deltaTime * (Time.timeScale / duration);
+                    if (t > 0.3F)
+                        m.SetColor("_Color", Color.Lerp(c, ca, (t - 0.3F) * 2));
                     m.SetFloat("_SliceAmount", t);
+                    Debug.Log("Color: " + m.color);
                     yield return 0;
                 }
+                m.SetColor("_Color", ca);
             }
             else
                 Debug.Log("Dissolving Level failed, moveAreaGo MeshRenderer not found.");

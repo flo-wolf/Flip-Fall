@@ -77,7 +77,7 @@ namespace FlipFall.Editor
                         handle.name = "handle";
                         handle.tag = "handle";
                         handle.layer = LayerMask.NameToLayer("Handles");
-                        handle.transform.localScale = new Vector3(1, 1, 1);
+                        handle.transform.localScale = handlePrefab.transform.localScale;
 
                         if (handleParent != null)
                             handle.transform.parent = handleParent.transform;

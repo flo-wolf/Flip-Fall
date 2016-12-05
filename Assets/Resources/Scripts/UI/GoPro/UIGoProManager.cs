@@ -30,6 +30,7 @@ namespace FlipFall.UI
             _instance = this;
 
             Main.onSceneChange.AddListener(SceneChanging);
+            InAppBilling.onProBuy.AddListener(ProBought);
 
             if (!InAppBilling.ProIsOwned())
             {
@@ -65,13 +66,17 @@ namespace FlipFall.UI
                 // try to buy
                 if (InAppBilling.BuyPro())
                 {
-                    animator.ResetTrigger("buy");
-                    animator.SetTrigger("buy");
-                    Debug.Log("SUCCESSFULKL BUY");
                     // change scene to a "thank you" notice
                 }
             }
             SoundManager.ButtonClicked();
+        }
+
+        private void ProBought()
+        {
+            Debug.Log("SUCCESSFULKL BUY");
+            animator.ResetTrigger("buy");
+            animator.SetTrigger("buy");
         }
 
         private static bool IsProUnlocked()
