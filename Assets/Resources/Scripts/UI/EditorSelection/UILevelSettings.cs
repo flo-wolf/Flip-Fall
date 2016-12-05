@@ -82,6 +82,14 @@ public class UILevelSettings : MonoBehaviour
         SoundManager.ButtonClicked();
     }
 
+    // the duplicate button got pressed, open the yes/no menu
+    public void DuplicateButton()
+    {
+        UIEditorSelection._instance.DuplicateLevel(editElement.GetComponent<UIEditorLevel>());
+        animator.SetTrigger("fadeOut");
+        SoundManager.ButtonClicked();
+    }
+
     // yes got pressed, delete the level
     public void DeleteYes()
     {

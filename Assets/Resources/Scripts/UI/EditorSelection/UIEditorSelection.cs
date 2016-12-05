@@ -1,7 +1,6 @@
 ﻿using FlipFall;
 using FlipFall.Audio;
 using FlipFall.Levels;
-
 using FlipFall.Progress;
 using System.Collections;
 using System.Collections.Generic;
@@ -73,42 +72,33 @@ namespace FlipFall.UI
             Main.SetScene(Main.Scene.home);
         }
 
+        public void DuplicateLevel(UIEditorLevel editLevel)
+        {
+            SoundManager.ButtonClicked();
+            LevelData l = LevelManager.NewCustomLevel(LevelManager.GetNextId(), editLevel.levelData);
+            StartCoroutine(cCreateNewLevel(l));
+            uiScrollFade.UpdateScrollElements();
+        }
+
         public void AddButtonClicked()
         {
             print("addbtn");
             SoundManager.ButtonClicked();
-            StartCoroutine(cCreateNewLevel());
+            LevelData l = LevelManager.NewCustomLevel(LevelManager.GetNextId());
+            StartCoroutine(cCreateNewLevel(l));
             uiScrollFade.UpdateScrollElements();
             // animation
         }
 
         // creates a new levelData and displays it as an UIEditorLevel in the EditorSelection
-        private IEnumerator cCreateNewLevel()
+        private IEnumerator cCreateNewLevel(LevelData l)
         {
-            int newId = 505;
-            // if there are custom levels and the default id is occupied find an un-occupied id and use it
-            if (LevelManager.customLevels.Count > 0 && LevelManager.customLevels.Any(x => x.id == newId))
-            {
-                for (int i = newId + 1; i < 600; i++)
-                {
-                    if (!LevelManager.customLevels.Any(x => x.id == i))
-                    {
-                        newId = i;
-                        break;
-                    }
-                }
-            }
-
-            // create new levelData
-            LevelData l = LevelManager.NewCustomLevel(newId);
-
             // create new uiEditorLevel
             UIEditorLevel editorLevel = Instantiate(uiEditorLevelPrefab, new Vector3(0, 0, 0), Quaternion.identity);
             editorLevel.transform.parent = placingParent;
             editorLevel.levelData = l;
             editorLevel.UpdateTexts();
             uiEditorLevels.Add(editorLevel);
-
             yield break;
         }
 

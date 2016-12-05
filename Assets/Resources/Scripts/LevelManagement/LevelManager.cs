@@ -59,9 +59,37 @@ namespace FlipFall.Levels
             }
         }
 
+        // get the next id
+        public static int GetNextId()
+        {
+            int newId = 505;
+            // if there are custom levels and the default id is occupied find an un-occupied id and use it
+            if (customLevels.Count > 0 && customLevels.Any(x => x.id == newId))
+            {
+                for (int i = newId + 1; i < 600; i++)
+                {
+                    if (!customLevels.Any(x => x.id == i))
+                    {
+                        newId = i;
+                        break;
+                    }
+                }
+            }
+            return newId;
+        }
+
         public static LevelData NewCustomLevel(int id)
         {
             LevelData l = new LevelData(id);
+
+            customLevels.Add(l);
+            LevelLoader.SaveCustomLevel(l);
+            return l;
+        }
+
+        public static LevelData NewCustomLevel(int id, LevelData l)
+        {
+            l.id = id;
             customLevels.Add(l);
             LevelLoader.SaveCustomLevel(l);
             return l;

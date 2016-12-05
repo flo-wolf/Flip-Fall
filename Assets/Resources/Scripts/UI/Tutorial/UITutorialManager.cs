@@ -41,9 +41,9 @@ namespace FlipFall.UI
             //FadeIn();
             Main.onSceneChange.AddListener(SceneChanging);
 
-            reflectSprite = reflectImage.sprite;
-            chargeSprite = chargeImage.sprite;
-            SetSprites();
+            //reflectSprite = reflectImage.sprite;
+            //chargeSprite = chargeImage.sprite;
+            //SetSprites();
         }
 
         private void SceneChanging(Main.Scene scene)

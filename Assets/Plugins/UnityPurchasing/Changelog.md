@@ -1,10 +1,16 @@
+## [1.9.2] - 2016-11-29
+### Fixed
+- GooglePlay - addresses warning about usage of WebViewClient.onReceivedSslError if CloudMoolah.aar is included
+- CloudMoolah - simplify Login API and rename LoginError enum to LoginResultState
+- Android - remove READ_PHONE_STATE permission from AndroidManifest.xml simplifying logic around CloudMoolah Register and Login by removing automatic SystemInfo.deviceUniqueIdentifier calls. Developers may now choose to include this permission using this API to collect a user identifer, or provide an alternate long-lived user identifier, in a CloudMoolah supporting game for the Register and Login API password parameter.
+
 ## [1.9.1] - 2016-11-17
 ### Added
 - [Beta] Codeless IAP — UI fields show title, price, and description downloaded from the platform store
+- IAP Catalog now includes a store ID field for the CloudMoolah store
 
 ### Fixed
 - IAPButton component now updates product ID list as the IAP Catalog is being edited
-- IAP Catalog now includes a store ID field for the Cloud Moolah store
 - Fixed a problem with opening a project containing the Unity IAP plugin while IAP was disabled in the Services window
 - IAPButton inspector field for Product ID now works correctly with Undo
 - Set GooglePlay as default Android store AAR fileset. Excludes other store's assets (Java, resource XML, localization), saving ~196kb in default APK. Creates Assets/Plugins/UnityPurchasing/Resources/BillingMode.json in Project. Configure manually with Window > Unity IAP > Android menu, or UnityPurchasingEditor.TargetAndroidStore(AndroidStore).

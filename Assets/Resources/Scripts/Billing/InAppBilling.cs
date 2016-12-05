@@ -1,5 +1,6 @@
 ﻿using FlipFall.Progress;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -13,16 +14,19 @@ public class InAppBilling : MonoBehaviour, IStoreListener
 {
     public static InAppBilling _instance;
 
+    public static bool initialized = false;
+
     private static IStoreController m_StoreController; // Reference to the Purchasing system.
     private static IExtensionProvider m_StoreExtensionProvider; // Reference to store-specific Purchasing
 
     // com.company.project.item_name value
-    private static string kItem = "FlipFall Pro Upgrade"; // General handle for the consumable product.
+    private static string kItem = "pro_upgrade"; // General handle for the consumable product.
 
-    private static string kGooglePlayItems = "com.florianwolf.flipfall.flipfall.pro"; // Google Play Store identifier for the consumable product.
+    private static string kGooglePlayItem = "flipfall.pro"; // Google Play Store identifier for the consumable product.
 
     private void Start()
     {
+        Debug.Log("IN APP BILLING - Start");
         if (_instance != null && _instance != this)
         {
             Destroy(this.gameObject);
@@ -32,21 +36,43 @@ public class InAppBilling : MonoBehaviour, IStoreListener
 
         DontDestroyOnLoad(this);
 
-        //ZPlayerPrefs.Initialize("----------------", SystemInfo.deviceUniqueIdentifier);
-        // If we haven't set up the Unity Purchasing reference
-        if (m_StoreController == null)
+        if (m_StoreController == null && initialized == false)
         {
+            Debug.Log("IN APP BILLING - both null, initialize");
             // Begin to configure our connection to Purchasing
             InitializePurchasing();
         }
+
+        if (IsInitialized())
+        {
+            Product product = m_StoreController.products.WithID(kItem);
+            if (product != null && product.hasReceipt)
+            {
+                // Owned Non Consumables and Subscriptions should always have receipts.
+                // So here the Non Consumable product has already been bought.
+                ProgressManager.GetProgress().proVersion = true;
+            }
+            else
+            {
+                ProgressManager.GetProgress().proVersion = false;
+            }
+        }
+
+        Debug.Log("ProgressManager: Owns Pro Version: " + ProgressManager.GetProgress().proVersion);
+        //ZPlayerPrefs.Initialize("----------------", SystemInfo.deviceUniqueIdentifier);
+        // If we haven't set up the Unity Purchasing reference
     }
 
     public void InitializePurchasing()
     {
+        Debug.Log("InAppBilling: InitializePurchasing()");
+        initialized = true;
+
         // If we have already connected to Purchasing ...
         if (IsInitialized())
         {
             // ... we are done here.
+            Debug.Log("InAppBilling: Trying to initialize, but it's already initialized.");
             return;
         }
 
@@ -54,21 +80,47 @@ public class InAppBilling : MonoBehaviour, IStoreListener
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
         // Add a product to sell / restore by way of its identifier, associating the general identifier with its store-specific identifiers.
-        builder.AddProduct(kItem, ProductType.NonConsumable, new IDs() { { kGooglePlayItems, GooglePlay.Name } });// Continue adding the non-consumable product.
+        builder.AddProduct(kItem, ProductType.NonConsumable, new IDs() { { kGooglePlayItem, GooglePlay.Name } });// Continue adding the non-consumable product.
 
         UnityPurchasing.Initialize(this, builder);
     }
 
     private static bool IsInitialized()
     {
+        Debug.Log("InAppBilling: IsInitialized() m_StoreController: " + m_StoreController + " m_StoreExtensionProvider: " + m_StoreExtensionProvider);
         // Only say we are initialized if both the Purchasing references are set.
         return m_StoreController != null && m_StoreExtensionProvider != null;
     }
 
+    public static bool ProIsOwned()
+    {
+        bool owned = false;
+        if (IsInitialized())
+        {
+            Product product = m_StoreController.products.WithID(kItem);
+            if (product != null && product.hasReceipt)
+            {
+                // Owned Non Consumables and Subscriptions should always have receipts.
+                // So here the Non Consumable product has already been bought.
+                owned = true;
+                ProgressManager.GetProgress().proVersion = true;
+            }
+            else
+            {
+                owned = false;
+                ProgressManager.GetProgress().proVersion = false;
+            }
+        }
+        return owned;
+    }
+
     public static bool BuyPro()
     {
+        Debug.Log("InAppBilling: BuyPro()");
+        bool bought = BuyProductID(kItem);
+        Debug.Log("InAppBilling: BuyPro() " + bought);
         // Buy the non-consumable product using its general identifier. Expect a response either through ProcessPurchase or OnPurchaseFailed asynchronously.
-        return BuyProductID(kItem);
+        return bought;
     }
 
     private static bool BuyProductID(string productId)

@@ -31,8 +31,18 @@ namespace FlipFall.UI
 
             Main.onSceneChange.AddListener(SceneChanging);
 
+            if (!InAppBilling.ProIsOwned())
+            {
+                Debug.Log("is not owned");
+                animator.SetTrigger("fadeBuy");
+            }
+            else
+            {
+                Debug.Log("is owned");
+                animator.SetTrigger("fadeOwned");
+            }
             // check if the item is bought or not and then fade the correct ui in
-            animator.SetTrigger("fadeBuy");
+
             // else: animator.SetTrigger("fadeThanks");
         }
 
