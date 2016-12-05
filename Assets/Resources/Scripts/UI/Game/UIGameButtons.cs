@@ -65,6 +65,7 @@ namespace FlipFall.UI
 
         public void PauseBtnClicked(Toggle t)
         {
+            Debug.Log("PauseCLicked");
             if (Player._instance.IsAlive())
             {
                 if (t.isOn)

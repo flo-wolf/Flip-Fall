@@ -14,11 +14,12 @@ Shader "Custom/Stencil/Dissolve"
 
 		SubShader
 		{
-			Tags { "RenderType" = "Opaque" "Queue" = "Geometry-1" }
+			Tags { "RenderType" = "Transparent" "Queue" = "Geometry-1" "IgnoreProjector" = "True" }
 			ZWrite Off
 			ZTest Less
 			Lighting Off
 			LOD 200
+			Blend One OneMinusSrcAlpha
 
 			Stencil
 		{
@@ -30,7 +31,7 @@ Shader "Custom/Stencil/Dissolve"
 			CGPROGRAM
 
 			//if you're not planning on using shadows, remove "addshadow" for better performance
-			#pragma surface surf BlinnPhong
+			#pragma surface surf Lambert alpha:blend
 
 			fixed4 _Color;
 			sampler2D _MainTex;
@@ -71,11 +72,13 @@ Shader "Custom/Stencil/Dissolve"
 					c = tex2D(_SliceGuide, UV* _Scale); // use FLR texture
 				}
 
+				o.Emission = _Color.rgb;
+				o.Alpha = _Color.a;
+
 				clip(c - _SliceAmount);
 
 				// use albedo if lighting/reflection is neccessary
-				o.Emission = _Color.rgb;
-				o.Alpha = _Color.a;
+
 				//o.Alpha = tex2D(_MainTex, IN.uv_MainTex).a;
 				//o.Alpha = tex2D(_MainTex, IN.uv_MainTex).a * (1 - _SliceAmount);
 			}
