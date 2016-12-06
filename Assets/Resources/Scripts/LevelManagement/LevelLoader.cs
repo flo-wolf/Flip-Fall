@@ -116,6 +116,7 @@ namespace FlipFall.Levels
 
                     using (StreamWriter sw = new StreamWriter(file))
                     {
+                        levelData.GenerateChecksum();
                         string jsonLevelData = JsonUtility.ToJson(levelData);
                         // dont overwrite, just add - there is nothing to overwrite anyways
                         sw.Write(jsonLevelData);
@@ -130,6 +131,7 @@ namespace FlipFall.Levels
 
                     using (StreamWriter sw = new StreamWriter(savePath, false))
                     {
+                        levelData.GenerateChecksum();
                         string jsonLevelData = JsonUtility.ToJson(levelData);
                         sw.Write(jsonLevelData);
                     }
@@ -181,6 +183,12 @@ namespace FlipFall.Levels
                 try
                 {
                     loadedLevelData = JsonUtility.FromJson<LevelData>(File.ReadAllText(savePath, Encoding.UTF8));
+                    string loadedChecksum = loadedLevelData.checksum;
+                    if (loadedChecksum == loadedLevelData.GenerateChecksum())
+                        Debug.Log("LevelData checksums are the same, have fun!");
+                    else
+                        Debug.LogError("LevelData checksums mismatching. Someone tried to mess with the levelData!");
+
                     Debug.Log("[LevelLoader]: Successfully loaded LevelData " + loadedLevelData.id);
                 }
                 catch (SerializationException e)

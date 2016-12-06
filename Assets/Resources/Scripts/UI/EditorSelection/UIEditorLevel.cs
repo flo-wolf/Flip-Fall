@@ -46,9 +46,16 @@ public class UIEditorLevel : MonoBehaviour
     // edit button got pressed
     public void Edit()
     {
-        LevelEditor.editLevel = levelData;
-        SoundManager.ButtonClicked();
-        Main.SetScene(Main.Scene.editor);
+        if (levelData.checksum == levelData.GenerateChecksum())
+        {
+            LevelEditor.editLevel = levelData;
+            SoundManager.ButtonClicked();
+            Main.SetScene(Main.Scene.editor);
+        }
+        else
+        {
+            SoundManager.PlayUnvalidSound();
+        }
     }
 
     // settings button got pressed

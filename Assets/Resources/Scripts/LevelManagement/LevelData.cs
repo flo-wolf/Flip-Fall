@@ -22,8 +22,10 @@ namespace FlipFall.Levels
     {
         public static LevelUpdateEvent onLevelUpdate = new LevelUpdateEvent();
 
-        public bool custom;             // was this level user created and can it thus editable?
+        public string checksum;
+
         public int id;                  // identification
+        public bool custom;             // was this level user created and is it thus editable?
         public double presetTime;       // best time
         public string title;            // name
         public string author;           // author, by default "FlipFall"
@@ -62,7 +64,35 @@ namespace FlipFall.Levels
             portalData = new List<PortalData>();
             speedStripData = new List<SpeedStripData>();
             attractorData = new List<AttractorData>();
-            // default level values in here
+
+            checksum = GenerateChecksum();
+        }
+
+        // generate a checksum out of all levelobjects contained in the leveldata, to verify no objects have been added or removed
+        public string GenerateChecksum()
+        {
+            string check = "turretData" + turretData.Count + "portalData" + portalData.Count + "speedStripData" + speedStripData.Count + "attractorData" + attractorData.Count;
+            return Md5Sum(check);
+        }
+
+        public string Md5Sum(string strToEncrypt)
+        {
+            System.Text.UTF8Encoding ue = new System.Text.UTF8Encoding();
+            byte[] bytes = ue.GetBytes(strToEncrypt);
+
+            // encrypt bytes
+            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] hashBytes = md5.ComputeHash(bytes);
+
+            // Convert the encrypted bytes back to a string (base 16)
+            string hashString = "";
+
+            for (int i = 0; i < hashBytes.Length; i++)
+            {
+                hashString += System.Convert.ToString(hashBytes[i], 16).PadLeft(2, '0');
+            }
+
+            return hashString.PadLeft(32, '0');
         }
     }
 }

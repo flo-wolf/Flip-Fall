@@ -60,7 +60,6 @@ namespace FlipFall.LevelObjects
                     if (t > 0.3F)
                         m.SetColor("_Color", Color.Lerp(c, ca, (t - 0.3F) * 2));
                     m.SetFloat("_SliceAmount", t);
-                    Debug.Log("Color: " + m.color);
                     yield return 0;
                 }
                 m.SetColor("_Color", ca);
@@ -90,7 +89,6 @@ namespace FlipFall.LevelObjects
                     if (t < 0.5F)
                         m.SetColor("_Color", Color.Lerp(ca, c, (t * 2)));
                     m.SetFloat("_SliceAmount", 1 - t);
-                    Debug.Log("Color: " + m.color);
                     yield return 0;
                 }
 
