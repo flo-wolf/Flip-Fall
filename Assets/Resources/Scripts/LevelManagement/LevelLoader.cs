@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using UnityEngine;
 
 /// <summary>
@@ -106,22 +107,33 @@ namespace FlipFall.Levels
 
                 //LevelManager.onLevelChange.AddListener(LevelStateChanged);
 
-                FileStream file;
+                // the file doesn't exist yet, create it and populate it
                 if (!File.Exists(savePath))
                 {
+                    FileStream file;
                     file = File.Create(savePath);
                     Debug.Log("[LevelLoader] Created LevelData " + levelData.id);
+
+                    using (StreamWriter sw = new StreamWriter(file))
+                    {
+                        string jsonLevelData = JsonUtility.ToJson(levelData);
+                        // dont overwrite, just add - there is nothing to overwrite anyways
+                        sw.Write(jsonLevelData);
+                    }
+                    file.Close();
                 }
+                // the file does exist, overwrite its contents
                 else
                 {
-                    file = new FileStream(savePath, FileMode.Open);
+                    //file = new FileStream(savePath, FileMode.Open);
                     Debug.Log("[LevelLoader] Overwritten LevelData " + levelData.id);
+
+                    using (StreamWriter sw = new StreamWriter(savePath, false))
+                    {
+                        string jsonLevelData = JsonUtility.ToJson(levelData);
+                        sw.Write(jsonLevelData);
+                    }
                 }
-
-                var bf = new BinaryFormatter();
-
-                bf.Serialize(file, levelData);
-                file.Close();
 
                 return true;
             }
@@ -166,21 +178,15 @@ namespace FlipFall.Levels
 
             if (File.Exists(savePath))
             {
-                var fs = new FileStream(savePath, FileMode.Open);
                 try
                 {
-                    var bf = new BinaryFormatter();
-                    loadedLevelData = bf.Deserialize(fs) as LevelData;
+                    loadedLevelData = JsonUtility.FromJson<LevelData>(File.ReadAllText(savePath, Encoding.UTF8));
                     Debug.Log("[LevelLoader]: Successfully loaded LevelData " + loadedLevelData.id);
                 }
                 catch (SerializationException e)
                 {
                     Debug.LogError("[LevelLoader]: Failed to deserialize level. Reason: " + e.Message);
                     throw;
-                }
-                finally
-                {
-                    fs.Close();
                 }
                 IsLoaded = true;
             }
