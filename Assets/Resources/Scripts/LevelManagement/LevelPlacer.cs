@@ -3,6 +3,7 @@ using FlipFall.Editor;
 using FlipFall.LevelObjects;
 using FlipFall.Levels;
 using FlipFall.Theme;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -118,7 +119,7 @@ namespace FlipFall.Levels
                 // add spawn
                 Spawn spawn = (Spawn)Instantiate(spawnPrefab, Vector3.zero, Quaternion.identity);
                 spawn.transform.parent = generatedLevel.transform;
-                Vector2 spawnPos = new Vector3(levelData.spawnPosition.x, levelData.spawnPosition.y, levelObjectZ);
+                Vector2 spawnPos = new Vector3(levelData.objectData.spawnPosition.x, levelData.objectData.spawnPosition.y, levelObjectZ);
                 print("spawnpos loading: " + spawnPos);
                 spawn.transform.localPosition = spawnPos;
                 generatedLevel.spawn = spawn;
@@ -126,12 +127,12 @@ namespace FlipFall.Levels
                 // add finish
                 Finish finish = (Finish)Instantiate(finishPrefab, Vector3.zero, Quaternion.identity);
                 finish.transform.parent = generatedLevel.transform;
-                Vector2 finishPos = new Vector3(levelData.finishPosition.x, levelData.finishPosition.y, levelObjectZ);
+                Vector2 finishPos = new Vector3(levelData.objectData.finishPosition.x, levelData.objectData.finishPosition.y, levelObjectZ);
                 finish.transform.localPosition = finishPos;
                 generatedLevel.finish = finish;
 
                 // add turrets
-                foreach (TurretData td in levelData.turretData)
+                foreach (TurretData td in levelData.objectData.turretData)
                 {
                     // create turret gameobject
                     Turret turret = (Turret)Instantiate(turretPrefab, Vector3.zero, Quaternion.identity);
@@ -151,7 +152,7 @@ namespace FlipFall.Levels
                 }
 
                 // add attractors
-                foreach (AttractorData ad in levelData.attractorData)
+                foreach (AttractorData ad in levelData.objectData.attractorData)
                 {
                     // create turret gameobject
                     Attractor attractor = (Attractor)Instantiate(attractorPrefab, Vector3.zero, Quaternion.identity);
@@ -169,7 +170,7 @@ namespace FlipFall.Levels
                 }
 
                 // add speedstrips
-                foreach (SpeedStripData sd in levelData.speedStripData)
+                foreach (SpeedStripData sd in levelData.objectData.speedStripData)
                 {
                     // create turret gameobject
                     SpeedStrip speedStrip = (SpeedStrip)Instantiate(speedStripPrefab, Vector3.zero, Quaternion.identity);
@@ -182,7 +183,7 @@ namespace FlipFall.Levels
                 }
 
                 // add portals
-                foreach (PortalData pd in levelData.portalData)
+                foreach (PortalData pd in levelData.objectData.portalData)
                 {
                     // create turret gameobject
                     Portal portal = (Portal)Instantiate(portalPrefab, Vector3.zero, Quaternion.identity);
@@ -221,16 +222,16 @@ namespace FlipFall.Levels
                     MeshFilter mr = moveArea.GetComponent<MeshFilter>();
 
                     Vector3[] verts = new Vector3[4];
-                    int[] tri = new int[verts.Length * 3];
+                    int[] tri = new int[6];
 
                     // upper left
-                    verts[0] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3990f, 1110f, moveAreaZ));
+                    verts[0] = Round(generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3990f, 1110f, moveAreaZ)));
                     // upper right
-                    verts[1] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4050f, 1110f, moveAreaZ));
+                    verts[1] = Round(generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4050f, 1110f, moveAreaZ)));
                     // lower left
-                    verts[2] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3990f, 945f, moveAreaZ));
+                    verts[2] = Round(generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(3990f, 945f, moveAreaZ)));
                     // lower right
-                    verts[3] = generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4050f, 945f, moveAreaZ));
+                    verts[3] = Round(generatedLevel.moveArea.transform.InverseTransformPoint(new Vector3(4050f, 945f, moveAreaZ)));
 
                     // create clockwise triangles based on the vertices we just created
                     tri[0] = 0;
@@ -242,6 +243,7 @@ namespace FlipFall.Levels
 
                     Mesh m = CreateMoveAreaMesh(verts, tri);
                     mr.sharedMesh = m;
+                    //LevelLoader.SaveCustomLevel(LevelEditor.CreateLevelData());
                 }
 
                 // set the movearea as the selected object
@@ -256,6 +258,15 @@ namespace FlipFall.Levels
                 print("[LevelLoader] level already placed or the LevelData trying to be generated is null");
             }
             return false;
+        }
+
+        // used to round movearea vertices to 0.01
+        private Vector3 Round(Vector3 v)
+        {
+            float x = float.Parse(v.x.ToString("F3"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            float y = float.Parse(v.y.ToString("F3"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            float z = float.Parse(v.z.ToString("F3"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            return new Vector3(x, y, z);
         }
 
         public Mesh CreateMoveAreaMesh(Vector3[] verts, int[] triangles)

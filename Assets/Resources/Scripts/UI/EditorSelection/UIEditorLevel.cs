@@ -46,7 +46,7 @@ public class UIEditorLevel : MonoBehaviour
     // edit button got pressed
     public void Edit()
     {
-        if (levelData.checksum == levelData.GenerateChecksum())
+        if (levelData.objectChecksum == levelData.GenerateObjectChecksum())
         {
             LevelEditor.editLevel = levelData;
             SoundManager.ButtonClicked();

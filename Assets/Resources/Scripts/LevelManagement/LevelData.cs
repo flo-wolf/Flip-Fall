@@ -22,8 +22,6 @@ namespace FlipFall.Levels
     {
         public static LevelUpdateEvent onLevelUpdate = new LevelUpdateEvent();
 
-        public string checksum;
-
         public int id;                  // identification
         public bool custom;             // was this level user created and is it thus editable?
         public double presetTime;       // best time
@@ -33,23 +31,12 @@ namespace FlipFall.Levels
         public Position2[] moveVerticies;
         public int[] moveTriangles;
 
-        // Spawn
-        public Position2 spawnPosition;
+        // a collection of all levelobjects in the scene including all of their attributes
+        public LevelObjectData objectData;
 
-        // Finish
-        public Position2 finishPosition;
+        public string objectChecksum;
 
-        // Turrets
-        public List<TurretData> turretData;
-
-        // Attractors
-        public List<AttractorData> attractorData;
-
-        // Portals
-        public List<PortalData> portalData;
-
-        // SpeedStrips
-        public List<SpeedStripData> speedStripData;
+        public string levelChecksum;
 
         public LevelData(int _id)
         {
@@ -58,21 +45,22 @@ namespace FlipFall.Levels
             title = "Custom Level";
             author = "FlipFall";
             moveVerticies = new Position2[0];
-            spawnPosition = new Position2(0, 58);
-            finishPosition = new Position2(0, -63);
-            turretData = new List<TurretData>();
-            portalData = new List<PortalData>();
-            speedStripData = new List<SpeedStripData>();
-            attractorData = new List<AttractorData>();
-
-            checksum = GenerateChecksum();
+            objectData = new LevelObjectData();
+            objectChecksum = GenerateObjectChecksum();
         }
 
-        // generate a checksum out of all levelobjects contained in the leveldata, to verify no objects have been added or removed
-        public string GenerateChecksum()
+        // checksum getting generated out of the amount of objects in the scene
+        public string GenerateObjectChecksum()
         {
-            string check = "turretData" + turretData.Count + "portalData" + portalData.Count + "speedStripData" + speedStripData.Count + "attractorData" + attractorData.Count;
+            string check = "turretData" + objectData.turretData.Count + "portalData" + objectData.portalData.Count + "speedStripData" + objectData.speedStripData.Count + "attractorData" + objectData.attractorData.Count;
             return Md5Sum(check);
+        }
+
+        // full object checksum, checks if any changes were made to the level
+        public string GenerateLevelChecksum()
+        {
+            string jsonLevelData = JsonUtility.ToJson(objectData);
+            return Md5Sum(jsonLevelData);
         }
 
         public string Md5Sum(string strToEncrypt)

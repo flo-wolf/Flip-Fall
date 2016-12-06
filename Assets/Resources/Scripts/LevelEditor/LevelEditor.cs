@@ -90,11 +90,11 @@ namespace FlipFall.Editor
 
                 // save spawn
                 Vector3 spawnPos = level.spawn.transform.localPosition;
-                l.spawnPosition = new Position2(spawnPos.x, spawnPos.y);
+                l.objectData.spawnPosition = new Position2(spawnPos.x, spawnPos.y);
 
                 // save finish
                 Vector3 finishPos = level.finish.transform.localPosition;
-                l.finishPosition = new Position2(finishPos.x, finishPos.y);
+                l.objectData.finishPosition = new Position2(finishPos.x, finishPos.y);
 
                 // save turrets
                 foreach (Turret t in level.turrets)
@@ -106,7 +106,7 @@ namespace FlipFall.Editor
                     td.shotSpeed = t.shotSpeed;
                     td.startupDelay = t.startupDelay;
                     td.constantFire = t.constantFire;
-                    l.turretData.Add(td);
+                    l.objectData.turretData.Add(td);
                 }
 
                 // save attractors
@@ -116,7 +116,7 @@ namespace FlipFall.Editor
                     AttractorData ad = new AttractorData(aPosition);
                     ad.pullStrength = (int)a.maxPullForce;
                     ad.radius = (int)a.pullRadius;
-                    l.attractorData.Add(ad);
+                    l.objectData.attractorData.Add(ad);
                 }
 
                 // save portals
@@ -124,7 +124,7 @@ namespace FlipFall.Editor
                 {
                     Position2 pPosition = new Position2(p.transform.localPosition.x, p.transform.localPosition.y);
                     PortalData pd = new PortalData(pPosition);
-                    l.portalData.Add(pd);
+                    l.objectData.portalData.Add(pd);
                 }
 
                 // save speedstrips
@@ -134,7 +134,7 @@ namespace FlipFall.Editor
                     SpeedStripData sd = new SpeedStripData(pPosition);
                     sd.rotation = new Position3(s.transform.rotation.eulerAngles.x, s.transform.rotation.eulerAngles.y, s.transform.rotation.eulerAngles.z);
                     sd.pushStrength = (int)s.accelSpeed;
-                    l.speedStripData.Add(sd);
+                    l.objectData.speedStripData.Add(sd);
                 }
 
                 return l;
