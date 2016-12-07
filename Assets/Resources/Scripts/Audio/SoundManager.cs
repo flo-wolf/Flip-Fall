@@ -60,8 +60,8 @@ namespace FlipFall.Audio
             Player.onPlayerAction.AddListener(PlayerAction);
             Player.onPlayerStateChange.AddListener(PlayerStateChanged);
             CamMove.onCamMoveStateChange.AddListener(CamMoveStateChanged);
-            UIGameButtons.onButtonClick.AddListener(ButtonClicked);
-            UIGameButtons.onButtonRelease.AddListener(ButtonReleased);
+            UIGameManager.onButtonClick.AddListener(ButtonClicked);
+            UIGameManager.onButtonRelease.AddListener(ButtonReleased);
             //UILevelselectionManager.onUILevelSwitch.AddListener(UILevelSwitched);
             UILevelDrag.onBounceBack.AddListener(PlayLevelSwitchSound);
             Main.onSceneChange.AddListener(SceneChanging);

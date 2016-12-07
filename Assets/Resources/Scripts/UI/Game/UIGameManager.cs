@@ -1,24 +1,32 @@
-﻿using FlipFall.Levels;
+﻿using FlipFall;
 using FlipFall.Progress;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
-
-/// <summary>
-/// Manages all UI Elements through externally fired events and turns them on and off
-/// </summary>
 
 namespace FlipFall.UI
 {
     public class UIGameManager : MonoBehaviour
     {
-        //public enum UIState { levelSelection, home, settings, game, title, shop, editor, credits, buyPro }
-        //public static UIState uiState;
         public static UIGameManager _instance;
-        public Animation fadeAnimation;
+        public static UIButtonClick onButtonClick = new UIButtonClick();
+        public static UIButtonRelease onButtonRelease = new UIButtonRelease();
+        public Player player;
+
+        public Toggle pauseToggle;
+        //public Button resumeBtn;
+
+        //public Animator pauseAnimator;
+        public Animation timerAnimaton;
+
         public Animator animator;
 
-        private void Start()
+        public float buttonSwitchDelay = 0.25F;
+
+        private bool chargeOnLeftSide = true;
+
+        private void Awake()
         {
             if (_instance != null && _instance != this)
             {
@@ -26,88 +34,232 @@ namespace FlipFall.UI
                 return;
             }
             _instance = this;
+        }
 
-            //FadeIn();
-
-            Game.onGameStateChange.AddListener(GameStateChanged);
-            Player.onPlayerAction.AddListener(PlayerAction);
-            Player.onPlayerStateChange.AddListener(PlayerStateChanged);
-            Main.onSceneChange.AddListener(SceneChanging);
+        private void Start()
+        {
+            player = Player._instance;
+            chargeOnLeftSide = ProgressManager.GetProgress().settings.chargeOnLeftSide;
+            timerAnimaton.Play("uiLevelselectionFadeIn");
+            //pauseAnimator.SetBool("fadeout", false);
+            Main.onSceneChange.AddListener(SceneChanged);
 
             UIGameTimer.Show();
         }
 
-        private void SceneChanging(Main.Scene scene)
+        public void SceneChanged(Main.Scene sc)
         {
             animator.SetTrigger("fadeout");
-            //FadeOut();
+            timerAnimaton.Play("uiLevelselectionFadeOut");
+            //pauseAnimator.SetBool("fadeout", true);
         }
 
-        private void GameStateChanged(Game.GameState gameState)
+        public static void Show(Button b)
         {
-            switch (gameState)
+            //FadeInAnimations
+            //b.gameObject.SetActive(true);
+        }
+
+        public static void Hide(Button b)
+        {
+            //FadeOutAnimations
+            //b.gameObject.SetActive(false);
+        }
+
+        public void HomeBtnClicked(Button b)
+        {
+            Main.SetScene(Main.Scene.home);
+            onButtonClick.Invoke(b);
+        }
+
+        public void PauseBtnClicked(Toggle t)
+        {
+            Debug.Log("PauseCLicked");
+            if (Player._instance.IsAlive())
             {
-                case Game.GameState.playing:
-                    //
-                    break;
-
-                case Game.GameState.deathscreen:
-                    //show deathscreen
-                    break;
-
-                case Game.GameState.finishscreen:
-                    //show finishscreen
-                    break;
-
-                default:
-                    Debug.Log("Incorrect PlayerState");
-                    break;
+                if (t.isOn)
+                {
+                    Time.timeScale = 0;
+                    animator.SetTrigger("pause");
+                    //pauseAnimator.SetBool("fadeout", true);
+                    //StartCoroutine(cPauseResumeSwitch(pauseBtn, resumeBtn));
+                    Game.SetGameState(Game.GameState.pause);
+                }
+                else
+                {
+                    animator.SetTrigger("resume");
+                    Time.timeScale = 1;
+                    //pauseAnimator.SetBool("fadeout", true);
+                    //StartCoroutine(cPauseResumeSwitch(pauseBtn, resumeBtn));
+                    Game.SetGameState(Game.GameState.playing);
+                }
             }
         }
 
-        //Player Listener
-        private void PlayerAction(Player.PlayerAction playerAction)
+        //public void ResumeBtnClicked()
+        //{
+        //    if (Player._instance.IsAlive())
+        //    {
+        //        Time.timeScale = 1;
+        //        //pauseAnimator.SetBool("fadeout", false);
+        //        //StartCoroutine(cPauseResumeSwitch(resumeBtn, pauseBtn));
+        //        Game.SetGameState(Game.GameState.playing);
+        //    }
+        //}
+
+        private IEnumerator cPauseResumeSwitch(Button deactivateBtn, Button activateBtn)
         {
-            switch (playerAction)
+            //since we have paused the timescale "new WaitForSeconds" wont work, this is a nice workaround
+            yield return StartCoroutine(CoroutineUtilities.WaitForRealTime(buttonSwitchDelay));
+            deactivateBtn.gameObject.SetActive(false);
+            activateBtn.gameObject.SetActive(true);
+            yield break;
+        }
+
+        public void LevelButtonClicked(Button b, UILevel level)
+        {
+            onButtonClick.Invoke(b);
+        }
+
+        private bool IsPaused()
+        {
+            if (Game.gameState == Game.GameState.pause)
+                return true;
+            else
+                return false;
+        }
+
+        // the left contols-half got clicked
+        public void LeftHalfClicked()
+        {
+            if (player.IsAlive() && !IsPaused())
             {
-                case Player.PlayerAction.reflect:
-                    break;
-
-                case Player.PlayerAction.charge:
-                    break;
-
-                case Player.PlayerAction.decharge:
-                    break;
-
-                default:
-                    break;
+                player.ReflectToLeft();
             }
         }
 
-        //Player Listener
-        private void PlayerStateChanged(Player.PlayerState playerState)
+        // the left contols-half got released
+        public void LeftHalfReleased()
         {
-            switch (playerState)
+            if (player.IsAlive())
             {
-                case Player.PlayerState.alive:
-                    break;
-
-                case Player.PlayerState.dead:
-                    break;
-
-                default:
-                    break;
+                if (player.charging)
+                {
+                    player.Decharge();
+                }
             }
         }
 
-        private void FadeIn()
+        // the right contols-half got clicked
+        public void RightHalfClicked()
         {
-            fadeAnimation.Play("fadeFromBlack");
+            if (player.IsAlive() && !IsPaused())
+            {
+                player.ReflectToRight();
+            }
         }
 
-        private void FadeOut()
+        // the right contols-half got released
+        public void RightHalfReleased()
         {
-            fadeAnimation.Play("fadeToBlack");
+            if (player.IsAlive() && !IsPaused())
+            {
+                if (player.charging)
+                {
+                    player.Decharge();
+                }
+            }
         }
+
+        /* Old Controls
+        // the left contols-half got clicked
+        public void LeftHalfClicked()
+        {
+            if (player.IsAlive() && !IsPaused())
+            {
+                if (chargeOnLeftSide && !player.charging)
+                {
+                    player.Charge();
+                }
+                else if (!chargeOnLeftSide)
+                {
+                    player.Reflect();
+                }
+            }
+        }
+
+        // the left contols-half got released
+        public void LeftHalfReleased()
+        {
+            if (player.IsAlive())
+            {
+                if (chargeOnLeftSide && player.charging)
+                {
+                    player.Decharge();
+                }
+            }
+        }
+
+        // the right contols-half got clicked
+        public void RightHalfClicked()
+        {
+            if (player.IsAlive() && !IsPaused())
+            {
+                if (chargeOnLeftSide)
+                {
+                    player.Reflect();
+                }
+                else if (!chargeOnLeftSide)
+                {
+                    player.Charge();
+                }
+            }
+        }
+
+        // the right contols-half got released
+        public void RightHalfReleased()
+        {
+            if (player.IsAlive() && !IsPaused())
+            {
+                if (!chargeOnLeftSide && player.charging)
+                {
+                    player.Decharge();
+                }
+            }
+        }
+            */
+
+        //Inputs, alles in den Input Manager!
+        private void Update()
+        {
+            if (player.IsAlive() && !IsPaused())
+            {
+                //Keyboard
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    player.Die(player.transform.position);
+                }
+                else if (Input.GetKeyDown(KeyCode.M))
+                {
+                    player.ReflectToRight();
+                }
+                else if (Input.GetKeyUp(KeyCode.M) && player.charging)
+                {
+                    player.Decharge();
+                }
+                else if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    player.ReflectToLeft();
+                }
+                else if (Input.GetKeyUp(KeyCode.Y) && player.charging)
+                {
+                    player.Decharge();
+                }
+            }
+        }
+
+        public class UIButtonClick : UnityEvent<Button> { }
+
+        public class UIButtonRelease : UnityEvent<Button> { }
     }
 }

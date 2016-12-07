@@ -167,7 +167,7 @@ namespace FlipFall
             facingLeft = spawn.facingLeftOnSpawn;
         }
 
-        // Player has hit an object, either the finish or an enemy
+        // player has hit a trigger collider
         private void OnTriggerEnter2D(Collider2D collider)
         {
             if (collider.tag == Constants.moveAreaTag && IsAlive())
@@ -182,7 +182,7 @@ namespace FlipFall
             }
 
             // collided object is on one of the layers marked as killMask => death
-            if ((collider.tag == Constants.killTag || collider.gameObject.tag == Constants.turretTag) && IsAlive() && teleporting == false)
+            if ((collider.tag == Constants.killTag || collider.tag == Constants.turretTag) && IsAlive() && teleporting == false)
             {
                 Debug.Log("TriggerEnter - Die - Collider: " + collider.gameObject);
 

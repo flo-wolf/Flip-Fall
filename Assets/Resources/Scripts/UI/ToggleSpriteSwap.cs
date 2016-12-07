@@ -2,6 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// Switches sprites when the pause/resume toggle gets clicked.
+/// Default toogle sprite switches dont work in unscaled time, which is something we have on game pausing. This is thus the workaround.
+
 public class ToggleSpriteSwap : MonoBehaviour
 {
     public Toggle targetToggle;
