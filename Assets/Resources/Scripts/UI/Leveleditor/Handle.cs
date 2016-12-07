@@ -64,6 +64,7 @@ namespace FlipFall.Editor
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            Debug.Log("HandlePointerDown");
             vertGettingSelected = true;
             // this is a valid double tap => select the clicked vertex
             if ((Time.time - lastTap) < tapTime)

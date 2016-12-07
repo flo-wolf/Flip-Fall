@@ -28,8 +28,8 @@ namespace FlipFall.Levels
 
         public LevelObjectData()
         {
-            spawnPosition = new Position2(20, 95);
-            finishPosition = new Position2(20, -25);
+            spawnPosition = new Position2(20, 100);
+            finishPosition = new Position2(20, -20);
             turretData = new List<TurretData>();
             portalData = new List<PortalData>();
             speedStripData = new List<SpeedStripData>();

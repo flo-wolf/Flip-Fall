@@ -19,7 +19,7 @@ namespace FlipFall.Editor
         public bool showSub = true;
 
         public float largeStep = 100F;
-        public float smallStep = 50F;
+        public float smallStep = 15F;
 
         public Color mainColor = new Color(0f, 1f, 0f, 1f);
         private Color gridColorBackup;
@@ -141,7 +141,7 @@ namespace FlipFall.Editor
 
         private void OnPostRender()
         {
-            if (showGrid && smallStep > 10)
+            if (showGrid && smallStep >= 10)
             {
                 CalcStart();
                 CreateLineMaterial();

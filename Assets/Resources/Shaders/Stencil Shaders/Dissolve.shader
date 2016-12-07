@@ -18,7 +18,7 @@ Shader "Custom/Stencil/Dissolve"
 			ZWrite Off
 			ZTest Less
 			Lighting Off
-			LOD 200
+			//LOD 200
 			Blend One OneMinusSrcAlpha
 
 			Stencil
@@ -73,7 +73,8 @@ Shader "Custom/Stencil/Dissolve"
 				}
 
 				o.Emission = _Color.rgb;
-				o.Alpha = _Color.a;
+
+					o.Alpha = _Color.a;
 
 				clip(c - _SliceAmount);
 

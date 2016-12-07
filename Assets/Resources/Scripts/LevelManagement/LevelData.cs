@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// This is the serialized version of a level, in the Memento Pattern.
+/// This is the serialized version of a level, in the memento pattern.
 /// It contains all the information needed to reproduce a level.
 /// Reproduction is handled by the LevelLoader and LevelPlacer scripts.
 /// </summary>
@@ -56,13 +56,14 @@ namespace FlipFall.Levels
             return Md5Sum(check);
         }
 
-        // full object checksum, checks if any changes were made to the level
+        // full object checksum, checks if any changes were made to the level - includes id, time, movearea and objects.
         public string GenerateLevelChecksum()
         {
-            string jsonLevelData = JsonUtility.ToJson(objectData);
+            string jsonLevelData = JsonUtility.ToJson(objectData) + JsonUtility.ToJson(moveVerticies) + JsonUtility.ToJson(moveTriangles) + id + presetTime + custom;
             return Md5Sum(jsonLevelData);
         }
 
+        // creates an MD5 Hash out of an input string
         public string Md5Sum(string strToEncrypt)
         {
             System.Text.UTF8Encoding ue = new System.Text.UTF8Encoding();

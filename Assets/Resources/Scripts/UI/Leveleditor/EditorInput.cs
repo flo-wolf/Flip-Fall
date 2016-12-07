@@ -118,13 +118,14 @@ namespace FlipFall.Editor
                     if (touch.phase == TouchPhase.Began)
                     {
                         Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
-                        ClickHandler(position);
 
                         LevelObject l = GetLevelObjectAt(position);
-                        if (l != null && l == LevelEditor.selectedObject)
+                        if (l != null && l == LevelEditor.selectedObject && LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
                         {
                             objectDragged = true;
                         }
+
+                        ClickHandler(position);
                     }
 
                     // touch drag => handle object movement
