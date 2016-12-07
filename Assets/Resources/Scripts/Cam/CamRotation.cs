@@ -235,25 +235,28 @@ namespace FlipFall.Cam
             Quaternion defaultRotation = Quaternion.AngleAxis(defaultRotationAngle, Vector3.forward);
             Quaternion minRotation = Quaternion.AngleAxis(-maxRotationAngle, Vector3.forward);
             Quaternion maxRotation = Quaternion.AngleAxis(maxRotationAngle, Vector3.forward);
-            Quaternion newRotation;
+            Quaternion newRotation = Quaternion.Euler(0, 0, 0);
 
             while (true)
             {
                 velocity = rb.velocity;
                 //velocity.x = System.Math.Abs(velocity.x);
 
-                if (velocity.x > (maxVelocity - Constants.velocityThreshhold))
+                if (velocity.x > maxVelocity)
                 {
-                    //velocity.x = maxVelocity;
+                    velocity.x = maxVelocity;
                 }
 
                 if (velocity.x != 0)
                 {
-                    newRotation = Quaternion.Lerp(defaultRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, Mathf.Abs(velocity.x))));
-                }
-                else
-                {
-                    newRotation = Quaternion.Lerp(defaultRotation, minRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, Mathf.Abs(velocity.x))));
+                    if (velocity.x > 0)
+                    {
+                        newRotation = Quaternion.Lerp(defaultRotation, maxRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, Mathf.Abs(velocity.x))));
+                    }
+                    else
+                    {
+                        newRotation = Quaternion.Lerp(defaultRotation, minRotation, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, maxVelocity, Mathf.Abs(velocity.x))));
+                    }
                 }
 
                 //change Lerp to Smoothstep, since min and max are fixed values

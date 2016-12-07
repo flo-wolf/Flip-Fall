@@ -26,7 +26,7 @@ namespace FlipFall.LevelObjects
         private void Start()
         {
             objectType = ObjectType.speedStrip;
-            mat = GetComponent<SpriteRenderer>().material;
+            mat = GetComponent<MeshRenderer>().material;
 
             mat.color = ThemeManager.theme.moveZoneColor;
             mat.SetColor("_Color2", ThemeManager.theme.speedstripColor);
