@@ -80,6 +80,7 @@ namespace FlipFall.UI
                 if (t.isOn)
                 {
                     Time.timeScale = 0;
+                    animator.ResetTrigger("pause");
                     animator.SetTrigger("pause");
                     //pauseAnimator.SetBool("fadeout", true);
                     //StartCoroutine(cPauseResumeSwitch(pauseBtn, resumeBtn));
