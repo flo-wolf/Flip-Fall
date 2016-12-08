@@ -9,9 +9,9 @@ namespace FlipFall.LevelObjects
     public class SpeedStrip : LevelObject
     {
         public float accelSpeed = 1000F;
-        public float accelMulti = 2F;
-        private float colorSwitchDuration = 50F; //add sound
-        private float colorFadeBack = 4F;
+        public float accelMulti = 4F;
+        private float colorSwitchDuration = 100F; //add sound
+        private float colorFadeBack = 6F;
 
         // when the player doesn't touch the strip anymore, we blend back to the first color.
         private bool autoFadeBack = true;

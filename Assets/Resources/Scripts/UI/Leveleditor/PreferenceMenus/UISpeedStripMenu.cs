@@ -26,6 +26,7 @@ public class UISpeedStripMenu : UIPreferenceMenu
         rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
 
         speedStrip = LevelEditor.selectedObject.GetComponent<SpeedStrip>();
+
         if (speedStrip != null)
         {
             pushSlider.value = speedStrip.accelSpeed;
@@ -34,9 +35,25 @@ public class UISpeedStripMenu : UIPreferenceMenu
         started = true;
     }
 
+    private void OnDisable()
+    {
+        started = false;
+    }
+
     public static void Activate(LevelData levelData)
     {
+        if (_instance != null)
+        {
+            _instance.rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
+            speedStrip = LevelEditor.selectedObject.GetComponent<SpeedStrip>();
+
+            if (speedStrip != null)
+            {
+                _instance.pushSlider.value = speedStrip.accelSpeed;
+            }
+        }
         editData = levelData;
+        started = true;
     }
 
     public void RotationSliderChanged(Slider s)

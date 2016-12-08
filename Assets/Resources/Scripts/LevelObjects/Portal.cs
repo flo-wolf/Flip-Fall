@@ -31,9 +31,21 @@ namespace FlipFall.LevelObjects
         //if PortalType == limitedTravel
         public int travelMax;
 
-        public Portal twinPortal;
+        public int portalID;
+        public int linkedPortalID;
+
+        public Portal linkedPortal;
         public bool active;
         //public bool possibleExit;
+
+        // the portal the player currently travels from, aka start portal
+        private static Portal startPortal;
+
+        // the portal the player currently travels to, aka exit portal
+        private static Portal exitPortal;
+
+        // the players velocity on entering the portal
+        private static Vector3 teleportVelocityMemory;
 
         private bool activeMemory;
 
@@ -65,6 +77,48 @@ namespace FlipFall.LevelObjects
                 default:
                     break;
             }
+        }
+
+        // The player has entered this portal
+        public void Enter()
+        {
+            Player.teleporting = true;
+            if (active && this != exitPortal)
+            {
+                if (linkedPortal.active)
+                {
+                    // save the velocity on entering the portal
+                    Rigidbody2D playerBody = Player._instance.rBody;
+                    teleportVelocityMemory = playerBody.velocity;
+
+                    // set exitportal
+                    exitPortal = linkedPortal;
+                    startPortal = this;
+
+                    // set the player's position to the exit position
+                    Player._instance.transform.position = exitPortal.transform.position;
+                }
+            }
+            Player.teleporting = false;
+        }
+
+        // the player exits this portal
+        public void Exit()
+        {
+            if (this != startPortal)
+            {
+                if (portalType == Portal.PortalType.oneway)
+                    linkedPortal.active = false;
+                else
+                {
+                    linkedPortal.active = true;
+                    active = true;
+                }
+
+                exitPortal = null;
+                startPortal = null;
+            }
+            Player.teleporting = false;
         }
     }
 }

@@ -73,8 +73,7 @@ Shader "Custom/Stencil/Dissolve"
 				}
 
 				o.Emission = _Color.rgb;
-
-					o.Alpha = _Color.a;
+				o.Alpha = _Color.a;
 
 				clip(c - _SliceAmount);
 

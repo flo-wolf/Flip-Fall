@@ -146,7 +146,8 @@ namespace FlipFall.Background
 
         private void FixedUpdate()
         {
-            onMeshUpdate.Invoke(UpdateMesh());
+            StartCoroutine(cUpdateMesh());
+            onMeshUpdate.Invoke(waveMesh);
 
             if (!generateWaves && bgAmplitude > 5)
             {
@@ -155,7 +156,7 @@ namespace FlipFall.Background
             }
         }
 
-        private Mesh UpdateMesh()
+        private IEnumerator cUpdateMesh()
         {
             if (waveMesh != null && generateWaves)
             {
@@ -228,7 +229,7 @@ namespace FlipFall.Background
                 triangles.Clear();
             }
 
-            return waveMesh;
+            yield break;
         }
 
         private Vector3 CalculateBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)

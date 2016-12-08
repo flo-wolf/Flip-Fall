@@ -1,4 +1,5 @@
-﻿using FlipFall.Levels;
+﻿using FlipFall.LevelObjects;
+using FlipFall.Levels;
 using FlipFall.UI;
 using System;
 using System.Collections.Generic;
@@ -17,19 +18,19 @@ namespace FlipFall.Levels
     [Serializable]
     public class PortalData
     {
+        public int portalID;
+        public int linkedPortalID;
         public Position2 position;
-        public float shotDelay;
-        public float startupDelay;
-        public float shotSpeed;
-        public bool constantFire;
+        public Portal.PortalType portalType;
 
-        public PortalData(Position2 pos)
+        public bool active;
+
+        public PortalData(Position2 pos, int id)
         {
+            portalID = id;
+            portalType = Portal.PortalType.oneway;
             position = pos;
-            shotDelay = 1F;
-            startupDelay = 0F;
-            shotSpeed = 1F;
-            constantFire = true;
+            active = true;
         }
     }
 }

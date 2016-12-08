@@ -182,7 +182,7 @@ namespace FlipFall.Levels
                     generatedLevel.speedStrips.Add(speedStrip);
                 }
 
-                // add portals
+                // add portals...
                 foreach (PortalData pd in levelData.objectData.portalData)
                 {
                     // create turret gameobject
@@ -192,8 +192,30 @@ namespace FlipFall.Levels
                     portal.transform.localPosition = portalPos;
 
                     // assign values
+                    portal.portalID = pd.portalID;
+                    portal.linkedPortalID = pd.linkedPortalID;
+                    portal.active = pd.active;
 
                     generatedLevel.portals.Add(portal);
+                }
+
+                // ... and link them with one another - if there is no fitting counterpart, delete them
+                foreach (Portal p in generatedLevel.portals)
+                {
+                    // get the portal that matches the linked id
+                    Portal linkPortal = generatedLevel.portals.Find(x => x.portalID == p.linkedPortalID);
+
+                    // link both portals
+                    if (linkPortal != null)
+                    {
+                        p.linkedPortal = linkPortal;
+                        linkPortal.linkedPortal = p;
+                    }
+                    // no matching portal was found, linking not possible. Set this portal to inactive.
+                    else
+                    {
+                        p.active = false;
+                    }
                 }
 
                 // create movearea
@@ -260,7 +282,7 @@ namespace FlipFall.Levels
             return false;
         }
 
-        // used to round movearea vertices to 0.01
+        // used to round movearea vertices to 0.001, means three decimals after the comma
         private Vector3 Round(Vector3 v)
         {
             float x = float.Parse(v.x.ToString("F3"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);

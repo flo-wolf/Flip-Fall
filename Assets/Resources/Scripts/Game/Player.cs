@@ -76,9 +76,9 @@ namespace FlipFall
         public bool charging = false;
         private Vector2 chargeVelocity;
         private bool firstChargeDone = false;
-        private bool teleporting = false;
+        public static bool teleporting = false;
 
-        private static List<Collider2D> colliderList = new List<Collider2D>();
+        // the collider of the movearea mesh
         private static PolygonCollider2D levelCollider;
 
         private static Mesh levelMesh;
@@ -172,7 +172,6 @@ namespace FlipFall
         {
             if (collider.tag == Constants.moveAreaTag && IsAlive())
             {
-                colliderList.Add(collider);
             }
             else if (collider.tag == Constants.finishTag && IsAlive())
             {
@@ -188,15 +187,16 @@ namespace FlipFall
 
                 //cannot get the contact point, otherise the trigger needs a rigidbody for collision data
                 Die(transform.position);
-                colliderList.Clear();
                 Game.SetGameState(Game.GameState.deathscreen);
             }
             else if (collider.tag == Constants.portalTag && teleporting == false && IsAlive())
             {
                 Debug.Log("TriggerEnter - Portal - Collider: " + collider.gameObject);
-                PortalHit(collider.gameObject.GetComponent<Portal>());
-
-                teleporting = true;
+                Portal portal = collider.gameObject.GetComponent<Portal>();
+                if (portal != null)
+                {
+                    portal.Enter();
+                }
             }
         }
 
@@ -205,6 +205,8 @@ namespace FlipFall
         {
             if (collider.gameObject.tag == Constants.portalTag && teleporting)
             {
+                Portal portal = collider.gameObject.GetComponent<Portal>();
+                portal.Exit();
                 teleporting = false;
                 //PortalExit(collider.gameObject.GetComponent<Portal>());
             }
@@ -237,27 +239,6 @@ namespace FlipFall
             return transform.position;
         }
 
-        private Vector3 teleportVelocityMemory;
-
-        private void PortalHit(Portal portal)
-        {
-            if (portal != null && portal.active && portal != destinationPortal)
-            {
-                if (portal.twinPortal.active && portal.active)
-                {
-                    destinationPortal = portal.twinPortal;
-                    startPortal = portal;
-                    teleportVelocityMemory = rBody.velocity;
-                    //rBody.velocity = Vector3.zero;
-                    //onPlayerAction.Invoke(PlayerAction.teleport);
-                    transform.position = portal.twinPortal.transform.position;
-                    //StartCoroutine(cPlayerTeleport(portal.twinPortal.transform.position, teleportDuration));
-                }
-            }
-            teleporting = false;
-            colliderList.Clear();
-        }
-
         private IEnumerator cPlayerTeleport(Vector3 pos, float duration)
         {
             yield return new WaitForSeconds(duration);
@@ -266,26 +247,8 @@ namespace FlipFall
             yield break;
         }
 
-        private void PortalExit(Portal portal)
-        {
-            if (portal != startPortal)
-            {
-                if (portal.portalType == Portal.PortalType.oneway)
-                    portal.twinPortal.active = false;
-                else
-                {
-                    portal.twinPortal.active = true;
-                    portal.active = true;
-                }
-
-                destinationPortal = null;
-                startPortal = null;
-            }
-        }
-
         public void Spawn()
         {
-            colliderList.Clear();
             deathPos = Vector3.zero;
             trailParticles.Clear();
             trailParticles.Simulate(0.0f, true, true);

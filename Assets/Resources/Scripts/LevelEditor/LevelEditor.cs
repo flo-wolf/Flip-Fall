@@ -123,7 +123,7 @@ namespace FlipFall.Editor
                 foreach (Portal p in level.portals)
                 {
                     Position2 pPosition = new Position2(p.transform.localPosition.x, p.transform.localPosition.y);
-                    PortalData pd = new PortalData(pPosition);
+                    PortalData pd = new PortalData(pPosition, p.portalID);
                     l.objectData.portalData.Add(pd);
                 }
 
