@@ -124,6 +124,8 @@ namespace FlipFall.Editor
                 {
                     Position2 pPosition = new Position2(p.transform.localPosition.x, p.transform.localPosition.y);
                     PortalData pd = new PortalData(pPosition, p.portalID);
+                    pd.portalID = p.portalID;
+                    pd.linkedPortalID = p.linkedPortalID;
                     l.objectData.portalData.Add(pd);
                 }
 

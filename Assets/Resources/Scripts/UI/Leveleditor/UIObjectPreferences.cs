@@ -12,9 +12,9 @@ using UnityEngine.UI;
 /// Colotrils what preference menus get to be shown and handles the preference saving/discarding
 /// </summary>
 
-public class UIObjectlPreferences : MonoBehaviour
+public class UIObjectPreferences : MonoBehaviour
 {
-    public static UIObjectlPreferences _instance;
+    public static UIObjectPreferences _instance;
     public static LevelData preferenceData;
     public static bool menuOpen;
     private static Animator animator;
@@ -69,6 +69,11 @@ public class UIObjectlPreferences : MonoBehaviour
                     return _instance.turretMenu;
 
                 case LevelObject.ObjectType.portal:
+                    UIPortalMenu.Activate(LevelEditor.CreateLevelData());
+                    UIPreferenceMenu.onPreferenceChange.Invoke(_instance.portalMenu);
+                    animator.ResetTrigger("showPortal");
+                    animator.SetTrigger("showPortal");
+                    menuOpen = true;
                     return _instance.portalMenu;
 
                 case LevelObject.ObjectType.attractor:
@@ -144,6 +149,11 @@ public class UIObjectlPreferences : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public static void PortalHasLink(bool hasLink)
+    {
+        animator.SetBool("portalHasLink", hasLink);
     }
 
     // obsolete

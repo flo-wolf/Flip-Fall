@@ -207,7 +207,6 @@ namespace FlipFall
             {
                 Portal portal = collider.gameObject.GetComponent<Portal>();
                 portal.Exit();
-                teleporting = false;
                 //PortalExit(collider.gameObject.GetComponent<Portal>());
             }
         }

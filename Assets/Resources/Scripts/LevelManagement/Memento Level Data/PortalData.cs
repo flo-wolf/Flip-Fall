@@ -27,7 +27,8 @@ namespace FlipFall.Levels
 
         public PortalData(Position2 pos, int id)
         {
-            portalID = id;
+            portalID = id = -1;
+            linkedPortalID = -1;
             portalType = Portal.PortalType.oneway;
             position = pos;
             active = true;

@@ -70,7 +70,7 @@ namespace FlipFall.Editor
 #endif
 #if UNITY_ANDROID
             // No items or verticies get curretly dragged and no menu is open, thus listen for input
-            if (!vertexDragged && !UIObjectlPreferences.menuOpen)
+            if (!vertexDragged && !UIObjectPreferences.menuOpen)
             {
                 // If there are two touches on the device manage the editor view (zooming/moving)
                 if (Input.touchCount == 2)

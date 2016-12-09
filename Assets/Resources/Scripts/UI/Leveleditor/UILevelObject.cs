@@ -66,7 +66,7 @@ namespace FlipFall.UI
         // this toogle got changed
         public void SelectClick(Toggle t)
         {
-            if (!UIObjectlPreferences.menuOpen)
+            if (!UIObjectPreferences.menuOpen)
             {
                 if (amount > 0 && t.isOn)
                 {

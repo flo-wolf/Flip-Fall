@@ -66,7 +66,7 @@ public class UISpeedStripMenu : UIPreferenceMenu
             float lowerThanThis = 11.25F;
             for (float i = 0; i <= 360; i += 22.5F)
             {
-                if (v < lowerThanThis)
+                if (v <= lowerThanThis)
                 {
                     v = i;
                     break;

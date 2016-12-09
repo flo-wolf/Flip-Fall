@@ -1,4 +1,5 @@
 ﻿using FlipFall;
+using FlipFall.Editor;
 using FlipFall.Theme;
 using System;
 using System.Collections;
@@ -31,8 +32,8 @@ namespace FlipFall.LevelObjects
         //if PortalType == limitedTravel
         public int travelMax;
 
-        public int portalID;
-        public int linkedPortalID;
+        public int portalID = -1;
+        public int linkedPortalID = -1;
 
         public Portal linkedPortal;
         public bool active;
@@ -119,6 +120,27 @@ namespace FlipFall.LevelObjects
                 startPortal = null;
             }
             Player.teleporting = false;
+        }
+
+        // link another portal to this one
+        public void Link(Portal p)
+        {
+            linkedPortal = p;
+            linkedPortalID = p.portalID;
+            linkedPortal.linkedPortalID = portalID;
+            linkedPortal.linkedPortal = this;
+        }
+
+        // unlick whatever portal is linked
+        public void Unlink()
+        {
+            if (linkedPortal != null)
+            {
+                linkedPortal.linkedPortalID = -1;
+                linkedPortal.linkedPortal = null;
+                linkedPortalID = -1;
+                linkedPortal = null;
+            }
         }
     }
 }

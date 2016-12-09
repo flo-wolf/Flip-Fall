@@ -77,6 +77,8 @@ namespace FlipFall.Levels
                         p.transform.parent = LevelPlacer.generatedLevel.transform;
                         Vector2 pPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         p.transform.position = pPos;
+                        p.portalID = GetFreePortalID(0);
+                        p.linkedPortalID = -1;
                         portals.Add(p);
                         ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
                         UndoManager.AddUndoPoint();
@@ -122,6 +124,7 @@ namespace FlipFall.Levels
 
                     case LevelObject.ObjectType.portal:
                         portals.Remove((Portal)levelObj);
+                        levelObj.GetComponent<Portal>().Unlink();
                         break;
 
                     case LevelObject.ObjectType.speedStrip:
@@ -141,6 +144,23 @@ namespace FlipFall.Levels
             {
                 Debug.LogError("LevelPlacer needed to add an object to the level.");
             }
+        }
+
+        // returns a free portal id that is not yet used within the current level
+        private int GetFreePortalID(int i)
+        {
+            foreach (Portal p in portals)
+            {
+                if (p.portalID == i)
+                    i = GetFreePortalID(i + 1);
+                else
+                    break;
+
+                if (i > portals.Count)
+                    break;
+            }
+            Debug.Log(i);
+            return i;
         }
     }
 }

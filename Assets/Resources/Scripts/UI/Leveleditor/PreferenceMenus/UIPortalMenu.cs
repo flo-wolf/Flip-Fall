@@ -1,19 +1,44 @@
-﻿using FlipFall.LevelObjects;
+﻿using FlipFall.Editor;
+using FlipFall.LevelObjects;
+using FlipFall.Levels;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIPortalMenu : UIPreferenceMenu
 {
-    public LevelObject.ObjectType objectType;
+    public static UIPortalMenu _instance;
+    private static bool started = false;
 
-    // Use this for initialization
+    public LevelObject.ObjectType objectType = LevelObject.ObjectType.portal;
+    private static LevelData editData;
+
+    private static Portal portal;
+
     private void Start()
     {
+        _instance = this;
+        onPreferenceChange.AddListener(PreferenceChanged);
     }
 
-    // Update is called once per frame
-    private void Update()
+    public static void Activate(LevelData levelData)
     {
+        editData = levelData;
+        started = true;
+        portal = LevelEditor.selectedObject.gameObject.GetComponent<Portal>();
+
+        if (portal.linkedPortal != null)
+            UIObjectPreferences.PortalHasLink(true);
+        else
+            UIObjectPreferences.PortalHasLink(false);
+    }
+
+    private void PreferenceChanged(UIPreferenceMenu menu)
+    {
+        if (menu != _instance && gameObject.activeSelf == true)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
