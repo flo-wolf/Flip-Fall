@@ -19,6 +19,8 @@ public class UIObjectPreferences : MonoBehaviour
     public static bool menuOpen;
     private static Animator animator;
 
+    public static LevelObject.ObjectType openedMenuType;
+
     public UIPreferenceMenu spawnMenu;
     public UIPreferenceMenu finishMenu;
     public UIPreferenceMenu turretMenu;
@@ -66,6 +68,7 @@ public class UIObjectPreferences : MonoBehaviour
                     animator.SetTrigger("showTurret");
                     Debug.Log("treeehehee " + _instance.turretMenu);
                     menuOpen = true;
+                    openedMenuType = LevelObject.ObjectType.turret;
                     return _instance.turretMenu;
 
                 case LevelObject.ObjectType.portal:
@@ -74,6 +77,7 @@ public class UIObjectPreferences : MonoBehaviour
                     animator.ResetTrigger("showPortal");
                     animator.SetTrigger("showPortal");
                     menuOpen = true;
+                    openedMenuType = LevelObject.ObjectType.portal;
                     return _instance.portalMenu;
 
                 case LevelObject.ObjectType.attractor:
@@ -82,6 +86,7 @@ public class UIObjectPreferences : MonoBehaviour
                     animator.ResetTrigger("showAttractor");
                     animator.SetTrigger("showAttractor");
                     menuOpen = true;
+                    openedMenuType = LevelObject.ObjectType.attractor;
                     return _instance.attractorMenu;
 
                 case LevelObject.ObjectType.speedStrip:
@@ -91,6 +96,7 @@ public class UIObjectPreferences : MonoBehaviour
                     animator.ResetTrigger("hideSpeedStrip");
                     animator.SetTrigger("showSpeedStrip");
                     menuOpen = true;
+                    openedMenuType = LevelObject.ObjectType.speedStrip;
                     return _instance.speedStripMenu;
 
                 case LevelObject.ObjectType.finish:
@@ -154,6 +160,23 @@ public class UIObjectPreferences : MonoBehaviour
     public static void PortalHasLink(bool hasLink)
     {
         animator.SetBool("portalHasLink", hasLink);
+    }
+
+    public static void SelectPortalLink()
+    {
+        animator.SetTrigger("hideAll");
+        animator.ResetTrigger("selectPortalLink");
+        animator.SetTrigger("selectPortalLink");
+        LevelEditor.editorMode = LevelEditor.EditorMode.portalLink;
+    }
+
+    public static void PortalLinkSelected()
+    {
+        UIPortalMenu.Activate(LevelEditor.CreateLevelData());
+        animator.SetTrigger("showPortal");
+        animator.ResetTrigger("portalLinkSelected");
+        animator.SetTrigger("portalLinkSelected");
+        LevelEditor.editorMode = LevelEditor.EditorMode.edit;
     }
 
     // obsolete

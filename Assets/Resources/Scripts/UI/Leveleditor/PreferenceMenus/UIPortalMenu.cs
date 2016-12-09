@@ -15,6 +15,7 @@ public class UIPortalMenu : UIPreferenceMenu
     private static LevelData editData;
 
     private static Portal portal;
+    private static Portal newLinkPortal;
 
     private void Start()
     {
@@ -32,6 +33,20 @@ public class UIPortalMenu : UIPreferenceMenu
             UIObjectPreferences.PortalHasLink(true);
         else
             UIObjectPreferences.PortalHasLink(false);
+    }
+
+    // prepare for selecting a portal
+    public void SelectPortalButton()
+    {
+        UIObjectPreferences.SelectPortalLink();
+    }
+
+    // the portal to be linked has been selected
+    public static void SelectLinkPortal(Portal p)
+    {
+        newLinkPortal = p;
+        portal.Link(p);
+        UIObjectPreferences.PortalLinkSelected();
     }
 
     private void PreferenceChanged(UIPreferenceMenu menu)

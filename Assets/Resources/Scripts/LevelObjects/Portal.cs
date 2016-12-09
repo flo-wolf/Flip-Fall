@@ -125,10 +125,15 @@ namespace FlipFall.LevelObjects
         // link another portal to this one
         public void Link(Portal p)
         {
-            linkedPortal = p;
-            linkedPortalID = p.portalID;
-            linkedPortal.linkedPortalID = portalID;
-            linkedPortal.linkedPortal = this;
+            if (p != null && p.portalID != portalID)
+            {
+                linkedPortal = p;
+                linkedPortalID = p.portalID;
+                linkedPortal.linkedPortalID = portalID;
+                linkedPortal.linkedPortal = this;
+            }
+            else
+                Debug.LogError("nah");
         }
 
         // unlick whatever portal is linked

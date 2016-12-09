@@ -213,6 +213,29 @@ namespace FlipFall.Editor
                 }
 #endif
             }
+
+            // lets handle special preference input when a menu is open (yaaay)
+            else if (UIObjectPreferences.menuOpen)
+            {
+                if (UIObjectPreferences.openedMenuType == LevelObject.ObjectType.portal)
+                {
+                    if (Input.touchCount == 1)
+                    {
+                        Touch touch = Input.GetTouch(0);
+                        // touch click = > handle selection/ vertex adding
+                        if (touch.phase == TouchPhase.Began)
+                        {
+                            Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
+                            ClickHandler(position);
+                        }
+                    }
+                    else if (Input.GetMouseButtonDown(0))
+                    {
+                        Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        ClickHandler(position);
+                    }
+                }
+            }
         }
 
         // fire a raycast at the given worldposition and get the levelobject at that postion
@@ -335,6 +358,21 @@ namespace FlipFall.Editor
                     // return to selection mode and deselect the inventory item
                     LevelEditor.SetSelectedObject(LevelPlacer.generatedLevel.AddObject(objectType, snapPos));
                     UILevelObject.onItemSelect.Invoke(null);
+                }
+            }
+            else if (LevelEditor.editorMode == LevelEditor.EditorMode.portalLink)
+            {
+                if (Time.time - doubleClickTime < doubleClickDelay && doubleClickTime > 0)
+                {
+                    LevelObject levelObject = GetLevelObjectAt(position);
+                    if (levelObject != null)
+                    {
+                        if (levelObject.objectType == LevelObject.ObjectType.portal)
+                        {
+                            Portal p = levelObject.GetComponent<Portal>();
+                            UIPortalMenu.SelectLinkPortal(p);
+                        }
+                    }
                 }
             }
             doubleClickTime = Time.time;

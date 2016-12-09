@@ -17,7 +17,7 @@ namespace FlipFall.Editor
         // move: move the current selected object. If the object is the movearea, vertices will get moved
         // tool: depending on the selection each selected object can have it's own tool
         //       the tool mode tool can have its own sub-modes
-        public enum EditorMode { select, edit, place }
+        public enum EditorMode { select, edit, place, portalLink }
 
         public static EditorMode editorMode = EditorMode.select;
 

@@ -204,18 +204,19 @@ namespace FlipFall.Levels
                 {
                     // get the portal that matches the linked id
                     Portal linkPortal = generatedLevel.portals.Find(x => x.portalID == p.linkedPortalID);
+                    p.Link(linkPortal);
 
-                    // link both portals
-                    if (linkPortal != null)
-                    {
-                        p.linkedPortal = linkPortal;
-                        linkPortal.linkedPortal = p;
-                    }
-                    // no matching portal was found, linking not possible. Set this portal to inactive.
-                    else
-                    {
-                        p.active = false;
-                    }
+                    //// link both portals
+                    //if (linkPortal != null)
+                    //{
+                    //    p.linkedPortal = linkPortal;
+                    //    linkPortal.linkedPortal = p;
+                    //}
+                    //// no matching portal was found, linking not possible. Set this portal to inactive.
+                    //else
+                    //{
+                    //    p.active = false;
+                    //}
                 }
 
                 // create movearea
