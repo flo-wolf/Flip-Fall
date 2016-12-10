@@ -8,7 +8,7 @@ namespace FlipFall.LevelObjects
     [Serializable]
     public class LevelObject : MonoBehaviour
     {
-        public enum ObjectType { moveArea, spawn, finish, turret, portal, attractor, speedStrip, spike }
+        public enum ObjectType { moveArea, spawn, finish, turret, portal, attractor, speedStrip, spike, bouncer }
         public ObjectType objectType;
 
         public GameObject OutlineGameObject;

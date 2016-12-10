@@ -31,6 +31,7 @@ namespace FlipFall.Levels
         public List<Turret> turrets;
         public List<SpeedStrip> speedStrips;
         public List<Portal> portals;
+        public List<Bouncer> bouncers;
 
         private void Awake()
         {
@@ -94,6 +95,17 @@ namespace FlipFall.Levels
                         ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
                         UndoManager.AddUndoPoint();
                         return s;
+
+                    case LevelObject.ObjectType.bouncer:
+                        Bouncer b = (Bouncer)Instantiate(LevelPlacer._instance.bouncerPrefab, Vector3.zero, Quaternion.identity);
+                        b.transform.parent = LevelPlacer.generatedLevel.transform;
+                        Vector2 bPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
+                        b.transform.position = bPos;
+                        b.transform.rotation = Quaternion.Euler(0, 0, 0);
+                        bouncers.Add(b);
+                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        UndoManager.AddUndoPoint();
+                        return b;
 
                     default:
                         //Debug.Log("Wasnt able to add the levelobject to the LevelDataMono of type " + lo.objectType);

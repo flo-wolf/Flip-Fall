@@ -84,7 +84,7 @@ namespace FlipFall.LevelObjects
         public void Enter()
         {
             Player.teleporting = true;
-            if (active && this != exitPortal)
+            if (active && this != exitPortal && exitPortal != null)
             {
                 if (linkedPortal.active)
                 {
@@ -106,7 +106,7 @@ namespace FlipFall.LevelObjects
         // the player exits this portal
         public void Exit()
         {
-            if (this != startPortal)
+            if (this != startPortal && startPortal != null)
             {
                 if (portalType == Portal.PortalType.oneway)
                     linkedPortal.active = false;

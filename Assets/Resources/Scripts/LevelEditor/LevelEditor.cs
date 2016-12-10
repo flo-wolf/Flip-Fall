@@ -139,6 +139,15 @@ namespace FlipFall.Editor
                     l.objectData.speedStripData.Add(sd);
                 }
 
+                foreach (Bouncer b in level.bouncers)
+                {
+                    Position2 bPosition = new Position2(b.transform.localPosition.x, b.transform.localPosition.y);
+                    BouncerData bd = new BouncerData(bPosition);
+                    bd.rotation = new Position3(b.transform.rotation.eulerAngles.x, b.transform.rotation.eulerAngles.y, b.transform.rotation.eulerAngles.z);
+                    bd.forceAdd = (int)b.forceAdd;
+                    l.objectData.bouncerData.Add(bd);
+                }
+
                 return l;
             }
             return null;

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a4146965247789043a57221118aa0dd8
-timeCreated: 1481233466
+timeCreated: 1481387949
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -571,8 +571,8 @@ TextureImporter:
       name: impulse_icons_Sprites_49
       rect:
         serializedVersion: 2
-        x: 89
-        y: 1096
+        x: 26
+        y: 602
         width: 166
         height: 149
       alignment: 0
@@ -584,10 +584,10 @@ TextureImporter:
       name: impulse_icons_Sprites_50
       rect:
         serializedVersion: 2
-        x: 285
-        y: 1078
-        width: 146
-        height: 179
+        x: 231
+        y: 591
+        width: 129
+        height: 158
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -623,10 +623,10 @@ TextureImporter:
       name: impulse_icons_Sprites_52
       rect:
         serializedVersion: 2
-        x: 447
-        y: 1079
-        width: 194
-        height: 177
+        x: 384
+        y: 596
+        width: 196
+        height: 156
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1039,10 +1039,10 @@ TextureImporter:
       name: impulse_icons_Sprites_47
       rect:
         serializedVersion: 2
-        x: 365
-        y: 475
-        width: 567
-        height: 131
+        x: 420
+        y: 493
+        width: 547
+        height: 104
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1078,10 +1078,10 @@ TextureImporter:
       name: impulse_icons_Sprites_71
       rect:
         serializedVersion: 2
-        x: 4
-        y: 725
+        x: 14
+        y: 753
         width: 926
-        height: 131
+        height: 133
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1091,8 +1091,8 @@ TextureImporter:
       name: impulse_icons_Sprites_72
       rect:
         serializedVersion: 2
-        x: 6
-        y: 857
+        x: 20
+        y: 885
         width: 719
         height: 135
       alignment: 0
@@ -1104,10 +1104,10 @@ TextureImporter:
       name: impulse_icons_Sprites_73
       rect:
         serializedVersion: 2
-        x: 22
-        y: 992
-        width: 981
-        height: 89
+        x: 10
+        y: 1025
+        width: 867
+        height: 132
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

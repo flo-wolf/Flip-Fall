@@ -45,6 +45,7 @@ namespace FlipFall.Levels
         public Turret turretPrefab;
         public Portal portalPrefab;
         public SpeedStrip speedStripPrefab;
+        public Bouncer bouncerPrefab;
 
         private void OnEnable()
         {
@@ -115,6 +116,7 @@ namespace FlipFall.Levels
                 generatedLevel.portals = new List<Portal>();
                 generatedLevel.speedStrips = new List<SpeedStrip>();
                 generatedLevel.attractors = new List<Attractor>();
+                generatedLevel.bouncers = new List<Bouncer>();
 
                 // add spawn
                 Spawn spawn = (Spawn)Instantiate(spawnPrefab, Vector3.zero, Quaternion.identity);
@@ -134,7 +136,7 @@ namespace FlipFall.Levels
                 // add turrets
                 foreach (TurretData td in levelData.objectData.turretData)
                 {
-                    // create turret gameobject
+                    // create gameobject
                     Turret turret = (Turret)Instantiate(turretPrefab, Vector3.zero, Quaternion.identity);
                     turret.transform.parent = generatedLevel.transform;
                     Vector2 turretPos = new Vector3(td.position.x, td.position.y, levelObjectZ);
@@ -154,7 +156,7 @@ namespace FlipFall.Levels
                 // add attractors
                 foreach (AttractorData ad in levelData.objectData.attractorData)
                 {
-                    // create turret gameobject
+                    // create gameobject
                     Attractor attractor = (Attractor)Instantiate(attractorPrefab, Vector3.zero, Quaternion.identity);
                     attractor.transform.parent = generatedLevel.transform;
                     Vector2 attractorPos = new Vector3(ad.position.x, ad.position.y, levelObjectZ);
@@ -172,7 +174,7 @@ namespace FlipFall.Levels
                 // add speedstrips
                 foreach (SpeedStripData sd in levelData.objectData.speedStripData)
                 {
-                    // create turret gameobject
+                    // create gameobject
                     SpeedStrip speedStrip = (SpeedStrip)Instantiate(speedStripPrefab, Vector3.zero, Quaternion.identity);
                     speedStrip.transform.parent = generatedLevel.transform;
                     Vector2 speedStripPos = new Vector3(sd.position.x, sd.position.y, levelObjectZ);
@@ -182,10 +184,22 @@ namespace FlipFall.Levels
                     generatedLevel.speedStrips.Add(speedStrip);
                 }
 
+                // add bouncers
+                foreach (BouncerData bd in levelData.objectData.bouncerData)
+                {
+                    Bouncer bouncer = (Bouncer)Instantiate(bouncerPrefab, Vector3.zero, Quaternion.identity);
+                    bouncer.transform.parent = generatedLevel.transform;
+                    Vector2 bouncerPos = new Vector3(bd.position.x, bd.position.y, levelObjectZ);
+                    bouncer.transform.localPosition = bouncerPos;
+                    bouncer.transform.rotation = Quaternion.Euler(bd.rotation.x, bd.rotation.y, bd.rotation.z);
+                    bouncer.forceAdd = bd.forceAdd;
+                    generatedLevel.bouncers.Add(bouncer);
+                }
+
                 // add portals...
                 foreach (PortalData pd in levelData.objectData.portalData)
                 {
-                    // create turret gameobject
+                    // create gameobject
                     Portal portal = (Portal)Instantiate(portalPrefab, Vector3.zero, Quaternion.identity);
                     portal.transform.parent = generatedLevel.transform;
                     Vector2 portalPos = new Vector3(pd.position.x, pd.position.y, levelObjectZ);

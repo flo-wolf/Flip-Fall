@@ -28,6 +28,7 @@ public class UIObjectPreferences : MonoBehaviour
     public UIPreferenceMenu spikeMenu;
     public UIPreferenceMenu attractorMenu;
     public UIPreferenceMenu speedStripMenu;
+    public UIPreferenceMenu bouncerMenu;
 
     private void Start()
     {
@@ -99,6 +100,15 @@ public class UIObjectPreferences : MonoBehaviour
                     openedMenuType = LevelObject.ObjectType.speedStrip;
                     return _instance.speedStripMenu;
 
+                case LevelObject.ObjectType.bouncer:
+                    UIBouncerMenu.Activate(LevelEditor.CreateLevelData());
+                    UIPreferenceMenu.onPreferenceChange.Invoke(_instance.bouncerMenu);
+                    animator.ResetTrigger("showBouncer");
+                    animator.SetTrigger("showBouncer");
+                    menuOpen = true;
+                    openedMenuType = LevelObject.ObjectType.bouncer;
+                    return _instance.bouncerMenu;
+
                 case LevelObject.ObjectType.finish:
                     return _instance.finishMenu;
 
@@ -152,6 +162,9 @@ public class UIObjectPreferences : MonoBehaviour
 
                 case LevelObject.ObjectType.spawn:
                     return spawnMenu;
+
+                case LevelObject.ObjectType.bouncer:
+                    return bouncerMenu;
             }
         }
         return null;

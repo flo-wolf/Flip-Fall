@@ -26,6 +26,8 @@ namespace FlipFall.Levels
         // SpeedStrips
         public List<SpeedStripData> speedStripData;
 
+        public List<BouncerData> bouncerData;
+
         public LevelObjectData()
         {
             spawnPosition = new Position2(20, 100);
@@ -34,6 +36,7 @@ namespace FlipFall.Levels
             portalData = new List<PortalData>();
             speedStripData = new List<SpeedStripData>();
             attractorData = new List<AttractorData>();
+            bouncerData = new List<BouncerData>();
         }
     }
 }

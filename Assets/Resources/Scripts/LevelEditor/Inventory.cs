@@ -30,6 +30,7 @@ namespace FlipFall.Progress
             levelObjects.Add(LevelObject.ObjectType.turret, 5);
             levelObjects.Add(LevelObject.ObjectType.portal, 5);
             levelObjects.Add(LevelObject.ObjectType.attractor, 5);
+            levelObjects.Add(LevelObject.ObjectType.bouncer, 5);
         }
 
         // adds a value to the given entry in the inventory, if it doesnt exist, it gets created. Can be used to substract.
