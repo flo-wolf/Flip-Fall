@@ -1,4 +1,5 @@
 ﻿using FlipFall;
+using FlipFall.Levels;
 using FlipFall.Theme;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,8 +9,10 @@ namespace FlipFall.LevelObjects
 {
     public class Bouncer : LevelObject
     {
-        // added force to the
-        public int forceAdd = 0;
+        // value between 0 and 5 => 0 = material with bouncines of 0.5; 1 = 1; 2 = 1.5; 3 = 2; 4 = 2.5; 5 = 3
+        public int bounciness = 0;
+        public PhysicsMaterial2D bounceMaterial;
+
         private float colorFadeInDuration = 0.1F; //add sound
         private float colorFadeBackDuration = 0.5F;
 
@@ -22,10 +25,19 @@ namespace FlipFall.LevelObjects
 
         private Material mat;
 
+        private BoxCollider2D boxColl;
+
         private void Start()
         {
             objectType = ObjectType.bouncer;
             mat = GetComponent<MeshRenderer>().material;
+            boxColl = GetComponent<BoxCollider2D>();
+
+            boxColl.enabled = false;
+            SetBounciness(bounciness);
+            boxColl.enabled = true;
+
+            Debug.Log(bounceMaterial);
 
             if (mat != null)
             {
@@ -88,6 +100,37 @@ namespace FlipFall.LevelObjects
                 yield return 0;
             }
             yield break;
+        }
+
+        public void SetBounciness(int b)
+        {
+            bounciness = b;
+            switch (b)
+            {
+                case 0:
+                    boxColl.sharedMaterial = LevelPlacer._instance.bounce05;
+                    break;
+
+                case 1:
+                    boxColl.sharedMaterial = LevelPlacer._instance.bounce1;
+                    break;
+
+                case 2:
+                    boxColl.sharedMaterial = LevelPlacer._instance.bounce15;
+                    break;
+
+                case 3:
+                    boxColl.sharedMaterial = LevelPlacer._instance.bounce2;
+                    break;
+
+                case 4:
+                    boxColl.sharedMaterial = LevelPlacer._instance.bounce25;
+                    break;
+
+                case 5:
+                    boxColl.sharedMaterial = LevelPlacer._instance.bounce3;
+                    break;
+            }
         }
     }
 }

@@ -23,20 +23,17 @@ public class UIBouncerMenu : UIPreferenceMenu
         _instance = this;
         onPreferenceChange.AddListener(PreferenceChanged);
 
-        rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
-
-        bouncer = LevelEditor.selectedObject.GetComponent<Bouncer>();
-
-        if (bouncer != null)
+        if (LevelEditor.selectedObject.objectType == objectType && rotationSlider.IsActive() && bounceForceSlider.IsActive())
         {
-            bounceForceSlider.value = bouncer.forceAdd;
+            rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
+
+            bouncer = LevelEditor.selectedObject.GetComponent<Bouncer>();
+
+            if (bouncer != null)
+            {
+                bounceForceSlider.value = bouncer.bounciness;
+            }
         }
-
-        started = true;
-    }
-
-    private void OnDisable()
-    {
         started = false;
     }
 
@@ -49,16 +46,16 @@ public class UIBouncerMenu : UIPreferenceMenu
 
             if (bouncer != null)
             {
-                _instance.bounceForceSlider.value = bouncer.forceAdd;
+                _instance.bounceForceSlider.value = bouncer.bounciness;
             }
         }
         editData = levelData;
-        started = true;
+        started = false;
     }
 
     public void RotationSliderChanged(Slider s)
     {
-        if (started)
+        if (s.IsActive() && started)
         {
             float v = s.value;
 
@@ -83,15 +80,18 @@ public class UIBouncerMenu : UIPreferenceMenu
             rotation = Quaternion.Euler(0, 0, v);
             LevelEditor.selectedObject.transform.rotation = rotation;
         }
+        started = true;
         //transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
     }
 
     public void BounceForceSliderChanged(Slider s)
     {
-        int v = (int)s.value;
-
-        if (bouncer != null)
-            bouncer.forceAdd = v;
+        if (started)
+        {
+            if (bouncer != null)
+                bouncer.SetBounciness((int)s.value);
+        }
+        started = true;
     }
 
     private void PreferenceChanged(UIPreferenceMenu menu)

@@ -144,7 +144,7 @@ namespace FlipFall.Editor
                     Position2 bPosition = new Position2(b.transform.localPosition.x, b.transform.localPosition.y);
                     BouncerData bd = new BouncerData(bPosition);
                     bd.rotation = new Position3(b.transform.rotation.eulerAngles.x, b.transform.rotation.eulerAngles.y, b.transform.rotation.eulerAngles.z);
-                    bd.forceAdd = (int)b.forceAdd;
+                    bd.bounciness = b.bounciness;
                     l.objectData.bouncerData.Add(bd);
                 }
 

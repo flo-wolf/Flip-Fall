@@ -19,12 +19,12 @@ namespace FlipFall.Levels
     {
         public Position2 position;
         public Position3 rotation;
-        public int forceAdd;
+        public int bounciness;
 
         public BouncerData(Position2 pos)
         {
             position = pos;
-            forceAdd = 0;
+            bounciness = 0;
         }
     }
 }

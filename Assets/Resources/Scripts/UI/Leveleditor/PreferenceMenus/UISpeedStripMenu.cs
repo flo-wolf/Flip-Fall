@@ -23,21 +23,19 @@ public class UISpeedStripMenu : UIPreferenceMenu
         _instance = this;
         onPreferenceChange.AddListener(PreferenceChanged);
 
-        rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
-
-        speedStrip = LevelEditor.selectedObject.GetComponent<SpeedStrip>();
-
-        if (speedStrip != null)
+        if (LevelEditor.selectedObject.objectType == objectType && rotationSlider.IsActive() && pushSlider.IsActive())
         {
-            pushSlider.value = speedStrip.accelSpeed;
+            rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
+
+            speedStrip = LevelEditor.selectedObject.GetComponent<SpeedStrip>();
+
+            if (speedStrip != null)
+            {
+                pushSlider.value = speedStrip.accelSpeed;
+            }
+
+            started = false;
         }
-
-        started = true;
-    }
-
-    private void OnDisable()
-    {
-        started = false;
     }
 
     public static void Activate(LevelData levelData)
@@ -53,7 +51,7 @@ public class UISpeedStripMenu : UIPreferenceMenu
             }
         }
         editData = levelData;
-        started = true;
+        started = false;
     }
 
     public void RotationSliderChanged(Slider s)
@@ -83,6 +81,7 @@ public class UISpeedStripMenu : UIPreferenceMenu
             rotation = Quaternion.Euler(0, 0, v);
             LevelEditor.selectedObject.transform.rotation = rotation;
         }
+        started = true;
         //transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
     }
 

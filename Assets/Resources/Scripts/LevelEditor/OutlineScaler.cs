@@ -42,16 +42,21 @@ namespace FlipFall.Editor
         private void ScaleSize()
         {
             // assuming x and y are the same, we take the x value for further calculations
-            float parentSize = lastParentSize.x;
+            float parentSizeX = lastParentSize.x;
+            float parentSizeY = lastParentSize.y;
 
             // solve for x: (parentSize/x = fixedSize) => 1 + 1/x = desired size of the outline
             // example: parentsize 100, fixedSize 4
             // => 100/x=4 => x=25 => 1/25=0,04 => 1 + 0,04=1,04 => thats our outline size
-            float x = parentSize / fixedSize;
+            float x = parentSizeX / fixedSize;
             x = 1 / x;
+            float outlineSizeX = 1 + x;
 
-            float outlineSize = 1 + x;
-            transform.localScale = new Vector3(outlineSize, outlineSize, transform.localScale.z);
+            float y = parentSizeY / fixedSize;
+            y = 1 / y;
+            float outlineSizeY = 1 + y;
+
+            transform.localScale = new Vector3(outlineSizeX, outlineSizeY, transform.localScale.z);
         }
     }
 }

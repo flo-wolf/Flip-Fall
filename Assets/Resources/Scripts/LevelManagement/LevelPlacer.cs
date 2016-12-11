@@ -47,6 +47,14 @@ namespace FlipFall.Levels
         public SpeedStrip speedStripPrefab;
         public Bouncer bouncerPrefab;
 
+        [Header("Bouncer Materials")]
+        public PhysicsMaterial2D bounce05;
+        public PhysicsMaterial2D bounce1;
+        public PhysicsMaterial2D bounce15;
+        public PhysicsMaterial2D bounce2;
+        public PhysicsMaterial2D bounce25;
+        public PhysicsMaterial2D bounce3;
+
         private void OnEnable()
         {
             placingParent = this.transform;
@@ -192,7 +200,7 @@ namespace FlipFall.Levels
                     Vector2 bouncerPos = new Vector3(bd.position.x, bd.position.y, levelObjectZ);
                     bouncer.transform.localPosition = bouncerPos;
                     bouncer.transform.rotation = Quaternion.Euler(bd.rotation.x, bd.rotation.y, bd.rotation.z);
-                    bouncer.forceAdd = bd.forceAdd;
+                    bouncer.bounciness = bd.bounciness;
                     generatedLevel.bouncers.Add(bouncer);
                 }
 
