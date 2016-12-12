@@ -43,7 +43,7 @@ namespace FlipFall.UI
             }
         }
 
-        private void SceneChanging(Main.Scene scene)
+        private void SceneChanging(Main.ActiveScene scene)
         {
             animator.SetTrigger("fadeout");
         }
@@ -51,7 +51,7 @@ namespace FlipFall.UI
         public void HomeButtonClicked()
         {
             SoundManager.ButtonClicked();
-            Main.SetScene(Main.Scene.home);
+            Main.SetScene(Main.ActiveScene.home);
         }
 
         private void ProductBought(UIProduct product)

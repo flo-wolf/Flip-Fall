@@ -48,9 +48,9 @@ namespace FlipFall.Cam
             Main.onSceneChange.AddListener(SceneChanged);
         }
 
-        public void SceneChanged(Main.Scene s)
+        public void SceneChanged(Main.ActiveScene s)
         {
-            if (s == Main.Scene.editor)
+            if (s == Main.ActiveScene.editor)
             {
             }
         }

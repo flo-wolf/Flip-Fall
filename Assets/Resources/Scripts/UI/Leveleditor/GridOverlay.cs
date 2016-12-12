@@ -53,7 +53,7 @@ namespace FlipFall.Editor
             Main.onSceneChange.AddListener(SceneChanged);
         }
 
-        private void SceneChanged(Main.Scene s)
+        private void SceneChanged(Main.ActiveScene s)
         {
             StartCoroutine(cFadeOut());
         }

@@ -38,9 +38,9 @@ namespace FlipFall.UI
             Main.onSceneChange.AddListener(SceneChanged);
         }
 
-        private void SceneChanged(Main.Scene s)
+        private void SceneChanged(Main.ActiveScene s)
         {
-            if (s == Main.Scene.game)
+            if (s == Main.ActiveScene.game)
             {
                 animator.SetTrigger("fadeout");
             }
@@ -119,7 +119,7 @@ namespace FlipFall.UI
             UndoManager.RestoreSavePoint();
 
             DeleteShow(false);
-            Main.SetScene(Main.Scene.editor);
+            Main.SetScene(Main.ActiveScene.editor);
         }
 
         public void LeaveSave()
@@ -128,7 +128,7 @@ namespace FlipFall.UI
             animator.SetTrigger("leaveSave");
             LevelEditor.SaveLevel();
             DeleteShow(false);
-            Main.SetScene(Main.Scene.editor);
+            Main.SetScene(Main.ActiveScene.editor);
         }
 
         public void LeaveAbort()

@@ -293,7 +293,7 @@ namespace FlipFall.Levels
                 }
 
                 // set the movearea as the selected object
-                if (Main.currentScene == Main.Scene.editor)
+                if (Main.currentScene == Main.ActiveScene.editor)
                 {
                     LevelEditor.SetSelectedObject(generatedLevel.moveArea);
                 }

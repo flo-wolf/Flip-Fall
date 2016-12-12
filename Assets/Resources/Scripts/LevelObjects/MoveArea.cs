@@ -23,7 +23,7 @@ namespace FlipFall.LevelObjects
             StartCoroutine(cReverseDissolveLevel(LevelManager._instance.DissolveLevelDuration));
         }
 
-        private void SceneChanged(Main.Scene s)
+        private void SceneChanged(Main.ActiveScene s)
         {
             DissolveLevel();
         }

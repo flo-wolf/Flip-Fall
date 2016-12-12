@@ -215,7 +215,7 @@ namespace FlipFall.Editor
         {
             editLevel = CreateLevelData();
             Game.gameType = Game.GameType.testing;
-            Main.SetScene(Main.Scene.game);
+            Main.SetScene(Main.ActiveScene.game);
             return true;
         }
 

@@ -24,8 +24,8 @@ namespace FlipFall
         /// <summary>
         /// Indicates which scene is curretly active -  switch with SetScene()
         /// </summary>
-        public enum Scene { welcome, home, levelselection, tutorial, game, settings, editor, shop, achievements, credits, gopro }
-        public static Scene currentScene;
+        public enum ActiveScene { welcome, home, levelselection, tutorial, game, settings, editor, shop, achievements, credits, gopro }
+        public static ActiveScene currentScene;
 
         public float sceneSwitchDelay = 0.5F;
 
@@ -61,7 +61,7 @@ namespace FlipFall
                 Admob.Instance().initAdmob("ca-app-pub-2906510767249222/2074269594", "ca-app-pub-2906510767249222/2353471190");//admob id with format ca-app-pub-279xxxxxxxx/xxxxxxxx
                 //Admob.Instance().setTesting(true);
 
-                currentScene = Scene.home;
+                currentScene = ActiveScene.home;
 
 #if UNITY_ANDROID
                 Social.localUser.Authenticate((bool success) =>
@@ -91,58 +91,58 @@ namespace FlipFall
             }
         }
 
-        public static void SetScene(Scene newScene)
+        public static void SetScene(ActiveScene newScene)
         {
             ProgressManager.SaveProgressData();
             currentScene = newScene;
             onSceneChange.Invoke(newScene);
             switch (newScene)
             {
-                case Scene.welcome:
+                case ActiveScene.welcome:
                     if (SceneManager.GetActiveScene().name != "Welcome")
                         _instance.StartCoroutine(_instance.cSetScene("Welcome"));
                     break;
 
-                case Scene.home:
+                case ActiveScene.home:
                     _instance.StartCoroutine(_instance.cSetScene("Home"));
                     break;
 
-                case Scene.shop:
+                case ActiveScene.shop:
                     if (SceneManager.GetActiveScene().name != "Shop")
                         _instance.StartCoroutine(_instance.cSetScene("Shop"));
                     break;
 
-                case Scene.levelselection:
+                case ActiveScene.levelselection:
                     if (SceneManager.GetActiveScene().name != "Levelselection")
                         _instance.StartCoroutine(_instance.cSetScene("Levelselection"));
                     break;
 
-                case Scene.tutorial:
+                case ActiveScene.tutorial:
                     if (SceneManager.GetActiveScene().name != "Tutorial")
                         _instance.StartCoroutine(_instance.cSetScene("Tutorial"));
                     break;
 
-                case Scene.gopro:
+                case ActiveScene.gopro:
                     if (SceneManager.GetActiveScene().name != "GoPro")
                         _instance.StartCoroutine(_instance.cSetScene("GoPro"));
                     break;
 
-                case Scene.game:
+                case ActiveScene.game:
                     if (SceneManager.GetActiveScene().name != "Game")
                         _instance.StartCoroutine(_instance.cSetScene("Game"));
                     break;
 
-                case Scene.settings:
+                case ActiveScene.settings:
                     if (SceneManager.GetActiveScene().name != "Settings")
                         _instance.StartCoroutine(_instance.cSetScene("Settings"));
                     break;
 
-                case Scene.credits:
+                case ActiveScene.credits:
                     if (SceneManager.GetActiveScene().name != "Credits")
                         _instance.StartCoroutine(_instance.cSetScene("Credits"));
                     break;
 
-                case Scene.achievements:
+                case ActiveScene.achievements:
                     if (SceneManager.GetActiveScene().name != "Achievements")
                     {
 #if UNITY_EDITOR
@@ -163,7 +163,7 @@ namespace FlipFall
                     }
                     break;
 
-                case Scene.editor:
+                case ActiveScene.editor:
                     //if (ProgressManager.GetProgress().proVersion)
                     //{
                     if (SceneManager.GetActiveScene().name != "EditorSelection" && SceneManager.GetActiveScene().name != "Game")
@@ -177,8 +177,11 @@ namespace FlipFall
 
         private IEnumerator cSetScene(string sceneName)
         {
-            AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName);
+            Scene oldScene = SceneManager.GetActiveScene();
+            Scene newScene = SceneManager.GetSceneByName(sceneName);
+            AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
             ao.allowSceneActivation = false;
+
             yield return new WaitForSeconds(sceneSwitchDelay);
 
             // Ad management
@@ -219,6 +222,24 @@ namespace FlipFall
 
             //display the scene
             ao.allowSceneActivation = true;
+            //SceneManager.UnloadSceneAsync(oldScene);
+            //SceneManager.SetActiveScene(newScene);
+
+            //Debug.Log("LOOOOOOOOOOOOOOOOOOOl");
+
+            //Scene nextScene = SceneManager.GetSceneByName(sceneName);
+            //if (nextScene.IsValid())
+            //{
+            //    //yield return new WaitForEndOfFrame();
+            //
+            //    SceneManager.SetActiveScene(nextScene);
+            //}
+
+            //SceneManager.SetActiveScene(newScene);
+
+            //SceneManager.UnloadSceneAsync(oldScene.buildIndex);
+
+            //SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
 
             yield break;
         }
@@ -229,7 +250,7 @@ namespace FlipFall
 
             // show default achievements ui, placeholder
             Social.ShowAchievementsUI();
-            SetScene(Scene.home);
+            SetScene(ActiveScene.home);
 
             yield break;
         }
@@ -247,17 +268,17 @@ namespace FlipFall
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    if (currentScene == Scene.home)
+                    if (currentScene == ActiveScene.home)
                         Application.Quit();
-                    else if (currentScene == Scene.game)
-                        SetScene(Scene.levelselection);
+                    else if (currentScene == ActiveScene.game)
+                        SetScene(ActiveScene.levelselection);
                     else
-                        SetScene(Scene.home);
+                        SetScene(ActiveScene.home);
                 }
 #if UNITY_EDITOR
                 else if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    if (currentScene == Scene.levelselection && UILevelselectionManager._instance != null)
+                    if (currentScene == ActiveScene.levelselection && UILevelselectionManager._instance != null)
                     {
                         UILevelselectionManager._instance.PlayLevel();
                     }
@@ -295,7 +316,7 @@ namespace FlipFall
 
         public class StartupEvent : UnityEvent { }
 
-        public class SceneChangeEvent : UnityEvent<Scene> { }
+        public class SceneChangeEvent : UnityEvent<ActiveScene> { }
 
         public class AchievementEvent : UnityEvent { }
     }

@@ -59,7 +59,7 @@ namespace FlipFall
             Main.onSceneChange.AddListener(SceneChanged);
         }
 
-        private void SceneChanged(Main.Scene s)
+        private void SceneChanged(Main.ActiveScene s)
         {
             ProgressManager.GetProgress().lastPlayedLevelID = LevelManager.GetActiveID();
         }
@@ -92,11 +92,11 @@ namespace FlipFall
                             ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
                         }
                         onGameStateChange.Invoke(gs);
-                        Main.SetScene(Main.Scene.levelselection);
+                        Main.SetScene(Main.ActiveScene.levelselection);
                     }
                     else if (gameType == GameType.testing)
                     {
-                        Main.SetScene(Main.Scene.editor);
+                        Main.SetScene(Main.ActiveScene.editor);
                     }
                     break;
 
@@ -126,7 +126,7 @@ namespace FlipFall
 
                         UILevelselectionManager.enterType = UILevelselectionManager.EnterType.finished;
 
-                        Main.SetScene(Main.Scene.levelselection);
+                        Main.SetScene(Main.ActiveScene.levelselection);
                         onGameStateChange.Invoke(gs);
 
                         //Unlock the next level, if possible
@@ -136,7 +136,7 @@ namespace FlipFall
                     }
                     else if (gameType == GameType.testing)
                     {
-                        Main.SetScene(Main.Scene.editor);
+                        Main.SetScene(Main.ActiveScene.editor);
                     }
 
                     break;

@@ -63,7 +63,7 @@ namespace FlipFall.Audio
             fxVolume = newVolume;
         }
 
-        public void SceneChanged(Main.Scene s)
+        public void SceneChanged(Main.ActiveScene s)
         {
             musicSource.volume = ProgressManager.GetProgress().settings.musicVolume;
             fxVolume = ProgressManager.GetProgress().settings.fxVolume;

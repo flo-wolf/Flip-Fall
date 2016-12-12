@@ -62,7 +62,7 @@ namespace FlipFall.UI
                 animator.SetTrigger("fadein");
         }
 
-        private void SceneChanged(Main.Scene s)
+        private void SceneChanged(Main.ActiveScene s)
         {
             FadeOut();
             createdByLevelswitch = false;

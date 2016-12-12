@@ -16,6 +16,7 @@ namespace FlipFall.Background
         public class WaveMeshUpdateEvent : UnityEvent<Mesh> { }
 
         // toggle audio wave gathering
+        public float unitsBetweenPoints = 1;
         public float wavePeak = 0.2F;
         public float lPeak = 0.1F;
         public float uPeak = 0.2F;
@@ -29,12 +30,17 @@ namespace FlipFall.Background
         public static float bgAmplitude = 1F;
 
         // length of each horizonpart
-        public static int bgSize = 32;
+        public static int bgWidth;
 
         public static float waveStopDuration = 1F;
 
         private float newestAudioValue = 0F;
         private float lerpedAudioValue = 0F;
+
+        private float heightS;
+        private float widthS;
+
+        public Camera backgroundCam;
 
         // final mesh, applied to all WaveSetters added to HorizonPart-GameObjects
         public static Mesh waveMesh;
@@ -73,16 +79,32 @@ namespace FlipFall.Background
                 started = true;
             }
 
+            Vector3 tmpPos = backgroundCam.WorldToScreenPoint(transform.position);
+            Vector2 topRightCorner = new Vector2(1, 1);
+            Vector2 edgeVector = backgroundCam.ViewportToWorldPoint(topRightCorner);
+
+            heightS = backgroundCam.orthographicSize * 2.0f;
+            widthS = heightS * backgroundCam.aspect;
+            Debug.Log("widthS " + widthS);
+            bgWidth = (int)((widthS / unitsBetweenPoints) + unitsBetweenPoints);
+            Debug.Log("bgStep " + bgWidth);
+
             bgAmplitude = ProgressManager.GetProgress().settings.backgroundSpeed;
             if (bgAmplitude < 5)
             {
-                StopAllCoroutines();
-                StartCoroutine(cStopLerp(waveStopDuration));
+                //StopAllCoroutines();
+                //StartCoroutine(cStopLerp(waveStopDuration));
             }
 
             UISettingsManager.onHorizonSpeedChange.AddListener(HorizonSpeedChanged);
+            Main.onSceneChange.AddListener(SceneChangeStop);
 
             onMeshUpdate.Invoke(Prewarm());
+        }
+
+        private void OnLevelWasLoaded()
+        {
+            StartCoroutine(cStartLerp(Main._instance.sceneSwitchDelay));
         }
 
         // EventListener, UISettingsManager.onHorizonSpeedChange
@@ -96,12 +118,18 @@ namespace FlipFall.Background
             }
         }
 
+        public static void SceneChangeStop(Main.ActiveScene s)
+        {
+            _instance.StartCoroutine(_instance.cStopLerp(Main._instance.sceneSwitchDelay));
+        }
+
         private IEnumerator cStopLerp(float duration)
         {
+            Debug.Log("STOP LERP + duration " + duration);
             float t = 0;
             while (t < 1.0f)
             {
-                t += Time.deltaTime * (Time.timeScale / duration);
+                t += Time.deltaTime * (Time.timeScale / (duration));
 
                 bgAmplitude = Mathf.SmoothStep(bgAmplitude, 0, t);
                 yield return 0;
@@ -112,21 +140,37 @@ namespace FlipFall.Background
             yield break;
         }
 
+        private IEnumerator cStartLerp(float duration)
+        {
+            generateWaves = true;
+            Debug.Log("START LERP + duration " + duration);
+            float t = 0;
+            while (t < 1.0f)
+            {
+                t += Time.deltaTime * (Time.timeScale / duration);
+
+                bgAmplitude = Mathf.SmoothStep(0, ProgressManager.GetProgress().settings.backgroundSpeed, t);
+                yield return 0;
+            }
+
+            yield break;
+        }
+
         private Mesh Prewarm()
         {
             waveMesh.Clear();
 
             // Generate 64 random points for the top (i.e. the actual wave)
-            points = new Vector3[bgSize];
+            points = new Vector3[bgWidth];
             for (int i = 0; i < points.Length; i++)
             {
-                points[i] = new Vector3(0.5f * i, height, 0f);
+                points[i] = new Vector3(unitsBetweenPoints * i, height, 0f);
             }
 
             lastPoints = points;
 
             //add buttom curves and fill verticie and triangle arrays
-            int resolution = 29;
+            int resolution = 20;
             for (int i = 0; i < resolution; i++)
             {
                 float t = (float)i / (float)(resolution - 1);
@@ -163,13 +207,13 @@ namespace FlipFall.Background
                 waveMesh.Clear();
 
                 // Generate 64 random points for the top (i.e. the actual wave)
-                points = new Vector3[bgSize];
+                points = new Vector3[bgWidth];
                 for (int i = 0; i < points.Length; i++)
                 {
                     // if there are no lastPoints to lerp from create random points
                     if (lastPoints == null)
                     {
-                        points[i] = new Vector3(0.5f * (float)i, Random.Range(lPeak, uPeak), 0f);
+                        points[i] = new Vector3(unitsBetweenPoints * (float)i, Random.Range(lPeak, uPeak), 0f);
                     }
                     else
                     {
@@ -212,7 +256,7 @@ namespace FlipFall.Background
                 lastPoints = points;
 
                 // Number of points to draw, how smooth the curve is. has to be smaller than points.Legth+3.
-                int resolution = 29;
+                int resolution = 20;
                 for (int i = 0; i < resolution; i++)
                 {
                     float t = (float)i / (float)(resolution - 1);

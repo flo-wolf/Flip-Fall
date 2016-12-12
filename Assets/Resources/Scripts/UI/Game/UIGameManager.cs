@@ -47,7 +47,7 @@ namespace FlipFall.UI
             UIGameTimer.Show();
         }
 
-        public void SceneChanged(Main.Scene sc)
+        public void SceneChanged(Main.ActiveScene sc)
         {
             animator.SetTrigger("fadeout");
             timerAnimaton.Play("uiLevelselectionFadeOut");
@@ -68,7 +68,7 @@ namespace FlipFall.UI
 
         public void HomeBtnClicked(Button b)
         {
-            Main.SetScene(Main.Scene.home);
+            Main.SetScene(Main.ActiveScene.home);
             onButtonClick.Invoke(b);
         }
 

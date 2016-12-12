@@ -34,7 +34,7 @@ namespace FlipFall.UI
             Main.onSceneChange.AddListener(SceneChanging);
         }
 
-        private void SceneChanging(Main.Scene scene)
+        private void SceneChanging(Main.ActiveScene scene)
         {
             animator.ResetTrigger("fadein");
             animator.ResetTrigger("fadeout");
@@ -44,7 +44,7 @@ namespace FlipFall.UI
         public void HomeButtonClicked()
         {
             SoundManager.ButtonClicked();
-            Main.SetScene(Main.Scene.home);
+            Main.SetScene(Main.ActiveScene.home);
         }
 
         public void RateButtonClicked()

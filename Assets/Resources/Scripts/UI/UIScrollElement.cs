@@ -36,7 +36,7 @@ namespace FlipFall.UI
             canBeAnimated = true;
         }
 
-        private void SceneChanged(Main.Scene scene)
+        private void SceneChanged(Main.ActiveScene scene)
         {
             if (isFadedIn)
             {

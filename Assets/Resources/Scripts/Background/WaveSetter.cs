@@ -27,6 +27,10 @@ namespace FlipFall.Background
             mf = GetComponent<MeshFilter>();
 
             WaveGenerator.onMeshUpdate.AddListener(MeshUpdated);
+
+            transform.localScale = new Vector3(WaveGenerator.bgWidth, transform.localScale.y, transform.localScale.z);
+
+            transform.position = new Vector3(WaveGenerator._instance.backgroundCam.ViewportToWorldPoint(Vector3.zero).x, transform.position.y, transform.position.z);
         }
 
         private void MeshUpdated(Mesh m)

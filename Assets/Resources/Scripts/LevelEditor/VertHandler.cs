@@ -169,7 +169,7 @@ namespace FlipFall.Editor
             selectedHandles = new List<Handle>();
         }
 
-        private void SceneChanged(Main.Scene s)
+        private void SceneChanged(Main.ActiveScene s)
         {
             showHandles = false;
         }

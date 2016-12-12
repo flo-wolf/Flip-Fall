@@ -77,11 +77,11 @@ namespace FlipFall.Audio
             soundPlayer.PlayMusic(backgroundSound);
         }
 
-        private void SceneChanging(Main.Scene scene)
+        private void SceneChanging(Main.ActiveScene scene)
         {
             switch (scene)
             {
-                case Main.Scene.game:
+                case Main.ActiveScene.game:
                     break;
 
                 default:

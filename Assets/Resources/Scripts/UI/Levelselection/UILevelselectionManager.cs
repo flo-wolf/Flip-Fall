@@ -86,11 +86,11 @@ namespace FlipFall.UI
             activeUILevel = newLevelID;
         }
 
-        private void SceneChanging(Main.Scene scene)
+        private void SceneChanging(Main.ActiveScene scene)
         {
             animator.SetTrigger("fadeout");
 
-            if (scene == Main.Scene.game)
+            if (scene == Main.ActiveScene.game)
             {
                 //currentUILevel = UILevelPlacer.LoadUILevel(ProgressManager.GetProgress().lastUnlockedLevel);
                 //UpdateLevelView();
@@ -195,7 +195,7 @@ namespace FlipFall.UI
         {
             unlockNextLevel = false;
             SoundManager.ButtonClicked();
-            Main.SetScene(Main.Scene.home);
+            Main.SetScene(Main.ActiveScene.home);
         }
 
         public void PlayLevel()
@@ -210,7 +210,7 @@ namespace FlipFall.UI
                 {
                     LevelManager.SetLevel(activeUILevel);
                     SoundManager.PlayCamTransitionSound();
-                    Main.SetScene(Main.Scene.game);
+                    Main.SetScene(Main.ActiveScene.game);
                 }
             }
 

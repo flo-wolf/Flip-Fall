@@ -12,7 +12,7 @@ namespace FlipFall.LevelObjects
         private void Start()
         {
             anim = GetComponent<Animation>();
-            if (anim != null && Main.currentScene == Main.Scene.game)
+            if (anim != null && Main.currentScene == Main.ActiveScene.game)
             {
                 anim.Play("spawnFadeOut");
             }

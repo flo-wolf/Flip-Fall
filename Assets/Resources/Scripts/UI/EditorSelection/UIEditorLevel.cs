@@ -50,7 +50,7 @@ public class UIEditorLevel : MonoBehaviour
         {
             LevelEditor.editLevel = levelData;
             SoundManager.ButtonClicked();
-            Main.SetScene(Main.Scene.editor);
+            Main.SetScene(Main.ActiveScene.editor);
         }
         else
         {
