@@ -156,7 +156,7 @@ namespace FlipFall
                             }
                             else
                             {
-                                SetScene(Scene.home);
+                                SetScene(ActiveScene.home);
                             }
                         });
 #endif
