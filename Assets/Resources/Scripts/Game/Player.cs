@@ -369,12 +369,35 @@ namespace FlipFall
         // Switch the players x-velocity
         public void Reflect()
         {
-            // currently moving to the right => switch to the left
-            if (rBody.velocity.x > 0)
-                rBody.velocity = new Vector2(-directionSwitchForce, rBody.velocity.y);
-            // currently moving to the left => switch to the right
+            bool newMovement = true;
+
+            // old movement - always replace the force by a default force on each reflect
+            if (!newMovement)
+            {
+                // currently moving to the right => switch to the left
+                if (rBody.velocity.x > 0)
+                    rBody.velocity = new Vector2(-directionSwitchForce, rBody.velocity.y);
+                // currently moving to the left => switch to the right
+                else
+                    rBody.velocity = new Vector2(directionSwitchForce, rBody.velocity.y);
+            }
+            // keep the force and just flip it when its bigger than the default value
             else
-                rBody.velocity = new Vector2(directionSwitchForce, rBody.velocity.y);
+            {
+                // currently moving to the right => switch to the left
+                if (rBody.velocity.x > 0)
+                    if (rBody.velocity.x > directionSwitchForce)
+                        rBody.velocity = new Vector2(-rBody.velocity.x, rBody.velocity.y);
+                    else
+                        rBody.velocity = new Vector2(-directionSwitchForce, rBody.velocity.y);
+                // currently moving to the left => switch to the right
+                else {
+                    if (rBody.velocity.x < -directionSwitchForce)
+                        rBody.velocity = new Vector2(-rBody.velocity.x, rBody.velocity.y);
+                    else
+                        rBody.velocity = new Vector2(directionSwitchForce, rBody.velocity.y);
+                }
+            }
 
             SwitchFacingDirection();
             onPlayerAction.Invoke(PlayerAction.reflect);
@@ -415,19 +438,35 @@ namespace FlipFall
         // delay between charge call and actual charge beginn
         private IEnumerator cChargeDelay()
         {
-            rBody.gravityScale = 0f;
-            rBody.velocity = new Vector2(rBody.velocity.x, 0f);
+            rBody.gravityScale = 0F;
+            rBody.velocity = new Vector2(rBody.velocity.x, 0);
             onPlayerAction.Invoke(PlayerAction.charge);
             yield return new WaitForSeconds(chargeDelayAfterClik);
-            Charge();
+            charging = true;
             yield break;
         }
 
         //Spieleraktion - Gravitationsabbruch, Figur wird auf der Ebene gehalten und beschleunigt
-        public void Charge()
-        {
-            charging = true;
-        }
+        //public void Charge()
+        //{
+        //    StartCoroutine(charge());
+        //}
+
+        //private IEnumerator charge()
+        //{
+        //    float duration = 0.5F;
+        //    float t = 0;
+        //    while (t < 1.0f)
+        //    {
+        //        t += Time.deltaTime * (Time.timeScale / chargeDelayAfterClik);
+        //        rBody.gravityScale = Mathf.Lerp(rBody.gravityScale, 0, t);
+        //        //.velocity = new Vector2(rBody.velocity.x, Mathf.SmoothStep(rBody.velocity.y, 0, t));
+        //        yield return 0;
+        //    }
+
+        //    charging = true;
+        //    yield break;
+        //}
 
         //Spieleraktion - Erneutes Hinzufügen der Gravitation
         public void Decharge()

@@ -36,7 +36,7 @@ namespace FlipFall.LevelObjects
         public int linkedPortalID = -1;
 
         public Portal linkedPortal;
-        public bool active;
+        public bool active = true;
         //public bool possibleExit;
 
         // the portal the player currently travels from, aka start portal
@@ -84,7 +84,7 @@ namespace FlipFall.LevelObjects
         public void Enter()
         {
             Player.teleporting = true;
-            if (active && this != exitPortal && exitPortal != null)
+            if (active && this != exitPortal && linkedPortal != null)
             {
                 if (linkedPortal.active)
                 {

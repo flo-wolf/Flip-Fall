@@ -26,6 +26,9 @@ namespace FlipFall.UI
 
         private bool chargeOnLeftSide = true;
 
+        private bool leftHold = false;
+        private bool rightHold = false;
+
         private void Awake()
         {
             if (_instance != null && _instance != this)
@@ -89,7 +92,7 @@ namespace FlipFall.UI
                 else
                 {
                     animator.SetTrigger("resume");
-                    Time.timeScale = 1;
+                    Time.timeScale = Game._instance.timestep;
                     //pauseAnimator.SetBool("fadeout", true);
                     //StartCoroutine(cPauseResumeSwitch(pauseBtn, resumeBtn));
                     Game.SetGameState(Game.GameState.playing);
@@ -135,6 +138,7 @@ namespace FlipFall.UI
         {
             if (player.IsAlive() && !IsPaused())
             {
+                leftHold = true;
                 player.ReflectToLeft();
             }
         }
@@ -144,8 +148,9 @@ namespace FlipFall.UI
         {
             if (player.IsAlive())
             {
-                if (player.charging)
+                if (player.charging && !rightHold)
                 {
+                    leftHold = false;
                     player.Decharge();
                 }
             }
@@ -156,6 +161,7 @@ namespace FlipFall.UI
         {
             if (player.IsAlive() && !IsPaused())
             {
+                rightHold = true;
                 player.ReflectToRight();
             }
         }
@@ -165,8 +171,9 @@ namespace FlipFall.UI
         {
             if (player.IsAlive() && !IsPaused())
             {
-                if (player.charging)
+                if (player.charging && !leftHold)
                 {
+                    rightHold = false;
                     player.Decharge();
                 }
             }

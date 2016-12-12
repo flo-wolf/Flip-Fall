@@ -30,6 +30,8 @@ namespace FlipFall
         //delay time between the players death and the deathscreen
         public static float deathDelay = 1.5F;
 
+        public float timestep = 0.8F;
+
         //delay time between the switch of the gameState form deathscreen to levelselection
         public static float deathTolevelselectionDelay = 0.0F;
 
@@ -37,6 +39,7 @@ namespace FlipFall
 
         private void Awake()
         {
+            Time.timeScale = timestep;
             if (_instance != null && _instance != this)
             {
                 Destroy(this.gameObject);
