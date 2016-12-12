@@ -30,8 +30,11 @@ namespace FlipFall.Editor
 
         public static bool changesAreSaved;
 
+        public static bool inventoryDragged = false;
+
         private void Start()
         {
+            inventoryDragged = false;
             changesAreSaved = true;
 
             if (_instance != null && _instance != this)
@@ -145,6 +148,7 @@ namespace FlipFall.Editor
                     BouncerData bd = new BouncerData(bPosition);
                     bd.rotation = new Position3(b.transform.rotation.eulerAngles.x, b.transform.rotation.eulerAngles.y, b.transform.rotation.eulerAngles.z);
                     bd.bounciness = b.bounciness;
+                    bd.width = b.width;
                     l.objectData.bouncerData.Add(bd);
                 }
 

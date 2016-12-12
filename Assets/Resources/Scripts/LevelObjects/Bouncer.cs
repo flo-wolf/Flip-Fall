@@ -11,6 +11,7 @@ namespace FlipFall.LevelObjects
     {
         // value between 0 and 5 => 0 = material with bouncines of 0.5; 1 = 1; 2 = 1.5; 3 = 2; 4 = 2.5; 5 = 3
         public int bounciness = 0;
+        public int width = 4;
         public PhysicsMaterial2D bounceMaterial;
 
         private float colorFadeInDuration = 0.1F; //add sound
@@ -35,6 +36,7 @@ namespace FlipFall.LevelObjects
 
             boxColl.enabled = false;
             SetBounciness(bounciness);
+            SetWidth(width);
             boxColl.enabled = true;
 
             Debug.Log(bounceMaterial);
@@ -102,6 +104,7 @@ namespace FlipFall.LevelObjects
             yield break;
         }
 
+        // sets the physicsmaterial depending on an input integer of 0-5, which gets set by the bouncer preferences window slider
         public void SetBounciness(int b)
         {
             bounciness = b;
@@ -129,6 +132,78 @@ namespace FlipFall.LevelObjects
 
                 case 5:
                     boxColl.sharedMaterial = LevelPlacer._instance.bounce3;
+                    break;
+            }
+        }
+
+        // sets the objects width (default 50) depending on an integer value set by the width slider in the bouncer preferences
+        public void SetWidth(int b)
+        {
+            width = b;
+            switch (b)
+            {
+                case 0:
+                    transform.localScale = new Vector3(10, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 1:
+                    transform.localScale = new Vector3(20, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 2:
+                    transform.localScale = new Vector3(40, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 3:
+                    transform.localScale = new Vector3(60, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 4:
+                    transform.localScale = new Vector3(80, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 5:
+                    transform.localScale = new Vector3(100, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 6:
+                    transform.localScale = new Vector3(120, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 7:
+                    transform.localScale = new Vector3(140, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 8:
+                    transform.localScale = new Vector3(160, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 9:
+                    transform.localScale = new Vector3(180, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 10:
+                    transform.localScale = new Vector3(200, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 11:
+                    transform.localScale = new Vector3(220, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 12:
+                    transform.localScale = new Vector3(240, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 13:
+                    transform.localScale = new Vector3(260, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 14:
+                    transform.localScale = new Vector3(280, transform.localScale.y, transform.localScale.x);
+                    break;
+
+                case 15:
+                    transform.localScale = new Vector3(300, transform.localScale.y, transform.localScale.x);
                     break;
             }
         }

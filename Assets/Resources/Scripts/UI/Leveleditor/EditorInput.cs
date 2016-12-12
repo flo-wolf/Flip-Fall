@@ -73,7 +73,7 @@ namespace FlipFall.Editor
             if (!vertexDragged && !UIObjectPreferences.menuOpen)
             {
                 // If there are two touches on the device manage the editor view (zooming/moving)
-                if (Input.touchCount == 2)
+                if (Input.touchCount == 2 && UILevelEditor._instance.inventoryScrollRect.velocity.x == 0)
                 {
                     // Store both touches.
                     Touch touchZero = Input.GetTouch(0);
@@ -132,7 +132,7 @@ namespace FlipFall.Editor
                     else if (touch.phase == TouchPhase.Moved)
                     {
                         // an object is selected, and it is not the movearea
-                        if (objectDragged && LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)
+                        if (objectDragged && LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea && UILevelEditor._instance.inventoryScrollRect.velocity.x == 0)
                         {
                             Vector3 position = Camera.main.ScreenToWorldPoint(touch.position);
                             //position.y = Screen.height - position.y;
@@ -163,7 +163,7 @@ namespace FlipFall.Editor
                 }
 #if UNITY_EDITOR
                 // both mouse buttons are held down => drag the editor view
-                else if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
+                else if (Input.GetMouseButton(0) && Input.GetMouseButton(1) && UILevelEditor._instance.inventoryScrollRect.velocity.x == 0)
                 {
                     Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     Vector3 deltaPos = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * 40f;
@@ -177,7 +177,7 @@ namespace FlipFall.Editor
                     ClickHandler(position);
                 }
                 // one mouse button is held down (aka "dragged") => try to move selected objects
-                else if (Input.GetMouseButton(0))
+                else if (Input.GetMouseButton(0) && UILevelEditor._instance.inventoryScrollRect.velocity.x == 0)
                 {
                     // an object is selected, and it is not the movearea
                     if (LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType != LevelObject.ObjectType.moveArea)

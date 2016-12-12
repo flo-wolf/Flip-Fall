@@ -15,6 +15,7 @@ public class UIBouncerMenu : UIPreferenceMenu
     private static LevelData editData;
     public Slider rotationSlider;
     public Slider bounceForceSlider;
+    public Slider widthSlider;
 
     private static Bouncer bouncer;
 
@@ -26,11 +27,11 @@ public class UIBouncerMenu : UIPreferenceMenu
         if (LevelEditor.selectedObject.objectType == objectType && rotationSlider.IsActive() && bounceForceSlider.IsActive())
         {
             rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
-
             bouncer = LevelEditor.selectedObject.GetComponent<Bouncer>();
 
             if (bouncer != null)
             {
+                widthSlider.value = bouncer.width;
                 bounceForceSlider.value = bouncer.bounciness;
             }
         }
@@ -46,6 +47,7 @@ public class UIBouncerMenu : UIPreferenceMenu
 
             if (bouncer != null)
             {
+                _instance.widthSlider.value = bouncer.width;
                 _instance.bounceForceSlider.value = bouncer.bounciness;
             }
         }
@@ -90,6 +92,15 @@ public class UIBouncerMenu : UIPreferenceMenu
         {
             if (bouncer != null)
                 bouncer.SetBounciness((int)s.value);
+        }
+        started = true;
+    }
+
+    public void WidthSliderChanged(Slider s)
+    {
+        if (started)
+        {
+            bouncer.SetWidth((int)s.value);
         }
         started = true;
     }

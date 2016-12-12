@@ -143,6 +143,10 @@ namespace FlipFall.Levels
                         speedStrips.Remove((SpeedStrip)levelObj);
                         break;
 
+                    case LevelObject.ObjectType.bouncer:
+                        bouncers.Remove((Bouncer)levelObj);
+                        break;
+
                     default:
                         //Debug.Log("Wasnt able to add the levelobject to the LevelDataMono of type " + lo.objectType);
                         break;

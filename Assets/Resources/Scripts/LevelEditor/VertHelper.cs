@@ -1,4 +1,5 @@
 ﻿using FlipFall.Levels;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace FlipFall.Editor
             bool inside = IsInsideMesh(m, currentPos, localSnapPos);
             bool crossing = !IsHandlerPositionValid(localOldPos, localSnapPos);
 
+            // we are trying to snap a mesh's vertex to the grid, not a levelObject
             if (vertexSnapping == true)
             {
                 if (crossing)
@@ -91,6 +93,7 @@ namespace FlipFall.Editor
                     VertHandler.selectionTriangleVerts[ind] = localnewPos;
                 }
             }
+
             // levelObject snapping - the suggested snap position is outside the moveArea, which is not valid -> snap inside
             else if (!inside)
             {
@@ -258,9 +261,11 @@ namespace FlipFall.Editor
             Vector3[] vertices = m.vertices;
             int[] triangles = m.triangles;
             Vector2 point = oldPos;
+            p.z = 0;
 
             bool inside = false;
 
+            // cycle through all triangles in the mesh and check if the point p is inside any of the triangles; if so, return true
             for (int c = 0; c < triangles.Length; c += 3)
             {
                 Vector2[] pPoints = new Vector2[3];
@@ -275,17 +280,39 @@ namespace FlipFall.Editor
                     inside = false;
                     for (int i = 0, j = pPoints.Length - 1; i < pPoints.Length; j = i++)
                     {
+                        // check if point is within the triangle - doesnt include edge cases
                         if ((pPoints[i].y > p.y) != (pPoints[j].y > p.y) &&
                              p.x < (pPoints[j].x - pPoints[i].x) * (p.y - pPoints[i].y) / (pPoints[j].y - pPoints[i].y) + pPoints[i].x)
                         {
                             inside = !inside;
                         }
+                        // if the above returned true, check the edges
+                        if (!inside && (IsOnLine(pPoints[0], pPoints[1], p) || (IsOnLine(pPoints[1], pPoints[2], p)) || (IsOnLine(pPoints[2], pPoints[0], p))))
+                            return true;
                     }
                     if (inside)
                         return inside;
                 }
             }
             return inside;
+        }
+
+        public static bool IsOnLine(Vector3 start, Vector3 end, Vector3 check)
+        {
+            //bool onLine = (checkPoint.y - endPoint1.y) / (endPoint2.y - endPoint1.y)
+            //    == (checkPoint.x - endPoint1.x) / (endPoint2.x - endPoint1.x);
+
+            var reference = Math.Atan2(start.y - end.y, start.x - end.x);
+            var aTanTest = Math.Atan2(start.y - check.y, start.x - check.x);
+
+            //  check from line segment end perspective
+            if (reference == aTanTest)
+            {
+                reference = Math.Atan2(end.y - start.y, end.x - start.x);
+                aTanTest = Math.Atan2(end.y - check.y, end.x - check.x);
+            }
+
+            return reference == aTanTest;
         }
 
         // check if point c is on the left of a line drawn between a and b

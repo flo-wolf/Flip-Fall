@@ -21,6 +21,7 @@ namespace FlipFall.UI
         public static UILevelEditor _instance;
 
         public Animator animator;
+        public ScrollRect inventoryScrollRect;
 
         private bool unsavedLeaveRequest = false;
         private bool saveRequest = false;

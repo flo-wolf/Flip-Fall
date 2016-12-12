@@ -201,6 +201,7 @@ namespace FlipFall.Levels
                     bouncer.transform.localPosition = bouncerPos;
                     bouncer.transform.rotation = Quaternion.Euler(bd.rotation.x, bd.rotation.y, bd.rotation.z);
                     bouncer.bounciness = bd.bounciness;
+                    bouncer.width = bd.width;
                     generatedLevel.bouncers.Add(bouncer);
                 }
 
