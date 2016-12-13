@@ -89,6 +89,7 @@ namespace FlipFall.UI
         private void SceneChanging(Main.ActiveScene scene)
         {
             animator.SetTrigger("fadeout");
+            animator.SetTrigger("fadeout");
 
             if (scene == Main.ActiveScene.game)
             {

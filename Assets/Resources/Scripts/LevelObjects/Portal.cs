@@ -28,6 +28,7 @@ namespace FlipFall.LevelObjects
         public enum PortalType { oneway, tunnel, limitedTravel };
 
         public PortalType portalType;
+        public GameObject linkedOutline;
 
         //if PortalType == limitedTravel
         public int travelMax;
@@ -57,6 +58,7 @@ namespace FlipFall.LevelObjects
 
         private void Start()
         {
+            linkedOutline.SetActive(false);
             objectType = ObjectType.portal;
             activeMemory = active;
             Game.onGameStateChange.AddListener(GameStateChanged);
@@ -127,6 +129,7 @@ namespace FlipFall.LevelObjects
         {
             if (p != null && p.portalID != portalID)
             {
+                p.linkedOutline.SetActive(true);
                 linkedPortal = p;
                 linkedPortalID = p.portalID;
                 linkedPortal.linkedPortalID = portalID;
@@ -141,6 +144,7 @@ namespace FlipFall.LevelObjects
         {
             if (linkedPortal != null)
             {
+                linkedPortal.linkedOutline.SetActive(false);
                 linkedPortal.linkedPortalID = -1;
                 linkedPortal.linkedPortal = null;
                 linkedPortalID = -1;

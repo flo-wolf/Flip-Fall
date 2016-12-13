@@ -40,7 +40,24 @@ namespace FlipFall.LevelObjects
                         mOutline.renderQueue = m.renderQueue - 1;
                     }
                 }
+                if (objectType == ObjectType.portal)
+                {
+                    Portal p = GetComponent<Portal>();
+                    if (p.linkedPortal != null)
+                    {
+                        p.linkedPortal.linkedOutline.SetActive(true);
+                    }
+                }
                 OutlineGameObject.SetActive(true);
+            }
+            else if (objectType == ObjectType.portal)
+            {
+                OutlineGameObject.SetActive(false);
+                Portal p = GetComponent<Portal>();
+                if (p.linkedPortal != null)
+                {
+                    p.linkedPortal.linkedOutline.SetActive(false);
+                }
             }
             else if (objectType != ObjectType.moveArea)
                 OutlineGameObject.SetActive(false);
