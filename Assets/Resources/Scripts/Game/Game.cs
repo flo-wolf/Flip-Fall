@@ -85,14 +85,14 @@ namespace FlipFall
 
                     if (gameType == GameType.story)
                     {
-                        if (ProgressManager.GetProgress().highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                        if (ProgressManager.GetProgress().highscores.highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
                         {
-                            ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                            ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
                         }
                         else
                         {
-                            ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), -1);
-                            ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                            ProgressManager.GetProgress().highscores.EnterHighscore(LevelManager.GetActiveID(), -1);
+                            ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
                         }
                         onGameStateChange.Invoke(gs);
                         Main.SetScene(Main.ActiveScene.levelselection);
@@ -112,15 +112,15 @@ namespace FlipFall
                     {
                         // Highscore Management
                         int oldStars = 0;
-                        if (ProgressManager.GetProgress().highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                        if (ProgressManager.GetProgress().highscores.highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
                         {
-                            oldStars = ProgressManager.GetProgress().highscores.Find(x => x.levelId == LevelManager.GetActiveID()).starCount;
+                            oldStars = ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == LevelManager.GetActiveID()).starCount;
                         }
 
                         Highscore newHighscore = null;
                         if (LevelManager.GetActiveID() == ProgressManager.GetProgress().lastPlayedLevelID)
                         {
-                            newHighscore = ProgressManager.GetProgress().EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
+                            newHighscore = ProgressManager.GetProgress().highscores.EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
                         }
 
                         UILevelPlacer.CalcStarsToUnlock(oldStars, newHighscore);

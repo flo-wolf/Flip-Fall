@@ -42,7 +42,7 @@ namespace FlipFall.UI
         {
             animator = GetComponent<Animator>();
 
-            highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
+            highscore = ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == id);
             if (highscore != null && highscore.starCount >= 0)
             {
                 starScore = highscore.starCount;
@@ -75,7 +75,7 @@ namespace FlipFall.UI
 
         public void UpdateUILevel()
         {
-            highscore = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
+            highscore = ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == id);
             //levelNumberText.text = id.ToString();
 
             UpdateFails(highscore);
@@ -253,7 +253,7 @@ namespace FlipFall.UI
                 topMilSec = topMilSec.Substring(topMilSec.IndexOf(".") + 1);
                 topTimeMilText.text = topMilSec;
 
-                Highscore h = ProgressManager.GetProgress().highscores.Find(x => x.levelId == id);
+                Highscore h = ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == id);
                 if (h != null && h.bestTime > 0)
                 {
                     double bestTime = h.bestTime;

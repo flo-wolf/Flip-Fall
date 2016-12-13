@@ -20,8 +20,11 @@ namespace FlipFall.Progress
     [Serializable]
     public class ProgressData
     {
+        public string warning;
+        public string checksum;
+
         // level highscores and stars
-        public List<Highscore> highscores;
+        public Highscores highscores;
 
         public static WalletUpdateEvent onWalletUpdate = new WalletUpdateEvent();
 
@@ -31,15 +34,13 @@ namespace FlipFall.Progress
         // bought/unlocked items
         public Unlocks unlocks;
 
-        // reached achievements
-        public Achievements achievements;
-
         public int lastUnlockedLevel;
         public int lastPlayedLevelID;
 
         // amount of currently owned stars
         public int starsOwned;
         public int starsSpent;
+
         public int starsEarned;
 
         // pro version owned? => no ads, editor access
@@ -49,8 +50,9 @@ namespace FlipFall.Progress
 
         public ProgressData()
         {
+            warning = "Editing this file corrupts it and will cause a new file to be created with all the progress lost.";
             settings = new Settings();
-            highscores = new List<Highscore>();
+            highscores = new Highscores();
             unlocks = new Unlocks();
 
             lastUnlockedLevel = 1;
@@ -61,18 +63,41 @@ namespace FlipFall.Progress
             lastPlayedLevelID = 1;
         }
 
-        public int GetStarsEarned()
+        public string GenerateChecksum()
         {
-            // get from google and use this as validation
-            int total = 0;
-            for (int i = 0; i < highscores.Count; i++)
+            string jsonProgress =
+                "Katzenfutter"
+                + JsonUtility.ToJson(highscores)
+                + JsonUtility.ToJson(unlocks)
+                + lastUnlockedLevel
+                + lastPlayedLevelID
+                + starsOwned
+                + starsSpent
+                + starsEarned
+                + proVersion
+                + SystemInfo.deviceUniqueIdentifier;
+            return Md5Sum(jsonProgress);
+        }
+
+        // creates an MD5 Hash out of an input string
+        public string Md5Sum(string strToEncrypt)
+        {
+            System.Text.UTF8Encoding ue = new System.Text.UTF8Encoding();
+            byte[] bytes = ue.GetBytes(strToEncrypt);
+
+            // encrypt bytes
+            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] hashBytes = md5.ComputeHash(bytes);
+
+            // Convert the encrypted bytes back to a string (base 16)
+            string hashString = "";
+
+            for (int i = 0; i < hashBytes.Length; i++)
             {
-                if (highscores[i].starCount > 0)
-                {
-                    total += highscores[i].starCount;
-                }
+                hashString += System.Convert.ToString(hashBytes[i], 16).PadLeft(2, '0');
             }
-            return total;
+
+            return hashString.PadLeft(32, '0');
         }
 
         public int GetStarsSpent()
@@ -156,55 +181,6 @@ namespace FlipFall.Progress
         {
             starsOwned += stars;
             onWalletUpdate.Invoke();
-        }
-
-        //Updates existing highscores (if the score is better) or creates a new one if it doesnt exist already
-        public Highscore EnterHighscore(int id, double time)
-        {
-            Highscore hs;
-            //doesnt exist
-            if (!highscores.Any(x => x.levelId == id))
-            {
-                hs = new Highscore(id, time);
-                AddStarsToWallet(hs.starCount);
-                highscores.Add(hs);
-                Debug.Log("[ProgresssData]: Creating new Highscore of level " + id);
-            }
-            //exists, thus try to edit this one
-            else
-            {
-                hs = highscores.Find(x => x.levelId == id);
-                int oldStars;
-                oldStars = hs.starCount;
-                if (oldStars < 0)
-                    oldStars = 0;
-                hs.PlaceTime(time);
-                int newStars = hs.starCount;
-                AddStarsToWallet(newStars - oldStars);
-                Debug.Log("[ProgresssData]: Updating existing Highscore of level " + id);
-            }
-            return hs;
-        }
-
-        public Highscore GetHighscore(int id)
-        {
-            if (highscores.Count < 0 || !highscores.Any(x => x.levelId == id))
-            {
-                return null;
-            }
-            else
-            {
-                foreach (Highscore h in highscores)
-                {
-                    if (h.levelId == id)
-                    {
-                        //Highscore found
-                        return h;
-                    }
-                }
-            }
-            Debug.LogError("[ProgressData] You try to load a Highscore that doesnt exist!");
-            return null;
         }
     }
 }

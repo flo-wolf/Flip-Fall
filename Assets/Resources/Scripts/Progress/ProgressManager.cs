@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,6 +21,7 @@ namespace FlipFall.Progress
 
         [SerializeField]
         private static ProgressData progress = new ProgressData();
+        public static bool progressChanged = false;
 
         public static ProgressChangeEvent onProgressChange = new ProgressChangeEvent();
 
@@ -53,6 +55,7 @@ namespace FlipFall.Progress
 
         public static void LoadProgressData()
         {
+            ProgressData progressLoading;
             string savePath;
 #if UNITY_ANDROID && !UNITY_EDITOR
             savePath = SavePathAndroid;
@@ -62,24 +65,27 @@ namespace FlipFall.Progress
 
             if (File.Exists(savePath))
             {
-                var fs = new FileStream(savePath, FileMode.Open);
                 try
                 {
-                    var bf = new BinaryFormatter();
-                    SetProgress(bf.Deserialize(fs) as ProgressData);
-                    if (progress.highscores.Count > 0)
+                    progressLoading = JsonUtility.FromJson<ProgressData>(File.ReadAllText(savePath, Encoding.UTF8));
+
+                    // check object integrity - aka were objects added or removed - not effected by object attribute changes
+                    string loadedChecksum = progressLoading.checksum;
+                    if (loadedChecksum == progressLoading.GenerateChecksum())
                     {
-                        Debug.Log("[ProgressManager]: LoadProgressData()");
+                        Debug.Log("Progress checksums are the same, have fun!");
+                        progress = progressLoading;
+                    }
+                    else
+                    {
+                        Debug.LogError("Progress checksums mismatching. Someone tried to mess with the it!");
+                        SaveProgressData();
                     }
                 }
                 catch (SerializationException e)
                 {
-                    Debug.LogError("[ProgressManager]: Failed to deserialize. Reason: " + e.Message);
+                    Debug.LogError("[LevelLoader]: Failed to deserialize progress. Reason: " + e.Message);
                     throw;
-                }
-                finally
-                {
-                    fs.Close();
                 }
                 IsLoaded = true;
             }
@@ -102,24 +108,32 @@ namespace FlipFall.Progress
 
             //LevelManager.onLevelChange.AddListener(LevelStateChanged);
 
-            FileStream file;
             if (!File.Exists(savePath))
             {
+                FileStream file;
                 file = File.Create(savePath);
+
+                using (StreamWriter sw = new StreamWriter(file))
+                {
+                    progress.checksum = progress.GenerateChecksum();
+
+                    string jsonLevelData = JsonUtility.ToJson(progress);
+                    // dont overwrite, just add - there is nothing to overwrite anyways
+                    sw.Write(jsonLevelData);
+                }
+                file.Close();
             }
+            // the file does exist, overwrite its contents
             else
             {
-                file = new FileStream(savePath, FileMode.Open);
-            }
+                using (StreamWriter sw = new StreamWriter(savePath, false))
+                {
+                    progress.checksum = progress.GenerateChecksum();
 
-            var bf = new BinaryFormatter();
-            if (progress.GetHighscore(progress.lastPlayedLevelID) != null)
-            {
-                Debug.Log("[ProgressManager]: SaveProgressData() besttime of level " + progress.lastPlayedLevelID + ": " + progress.GetHighscore(progress.lastPlayedLevelID).bestTime);
+                    string jsonProgress = JsonUtility.ToJson(progress);
+                    sw.Write(jsonProgress);
+                }
             }
-
-            bf.Serialize(file, progress);
-            file.Close();
         }
 
         public static void LevelStateChanged(int levelID)
@@ -129,10 +143,10 @@ namespace FlipFall.Progress
 
         public static void ClearHighscore(int _id)
         {
-            if (progress.highscores.Any(x => x.levelId == _id))
+            if (progress.highscores.highscores.Any(x => x.levelId == _id))
             {
                 //var model = (Scoreboard)progress.scoreboards.FirstOrDefault(x => x.levelId == _id);
-                progress.highscores.Remove(progress.highscores.Find(x => x.levelId == _id));
+                progress.highscores.highscores.Remove(progress.highscores.highscores.Find(x => x.levelId == _id));
             }
         }
     }
