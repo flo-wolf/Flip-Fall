@@ -212,6 +212,38 @@ namespace FlipFall.Editor
             return testSnap;
         }
 
+        // check if a point in a triangle is on the correct side and not on the half that is connected to a mesh
+        // usefull for adding vertixes, all points in local space
+        public static bool IsPointOpposingMesh(Vector3 checkPoint, Vector3 upCorner, Vector3 lowCorner, Mesh m)
+        {
+            //check whether or not the side on which the new vertex should be placed is not positioned towards the mesh => dont allow overlapping-mesh-trinagles
+            Vector3 selectionMiddlePos = new Vector3((upCorner.x + lowCorner.x) / 2, (upCorner.y + lowCorner.y) / 2, upCorner.z);
+            Vector3 selectionDirection = (upCorner - lowCorner).normalized;
+
+            // directional vectors pointing in 90° angles from the direction of the line between both selections
+            Vector3 leftMiddleCheck = Quaternion.AngleAxis(90, Vector3.forward) * selectionDirection;
+            Vector3 rightMiddleCheck = Quaternion.AngleAxis(-90, Vector3.forward) * selectionDirection;
+
+            // actual checking positions to the left and right of the middle of the line
+            Vector3 leftMiddleCheckPos = selectionMiddlePos + leftMiddleCheck;
+            Vector3 rightMiddleCheckPos = selectionMiddlePos + rightMiddleCheck;
+
+            bool leftCheckInsideMesh = VertHelper.IsInsideMesh(m, Vector3.zero, leftMiddleCheckPos);
+            bool rightCheckInsideMesh = VertHelper.IsInsideMesh(m, Vector3.zero, rightMiddleCheckPos);
+
+            // one of these two poisions is not inside a mesh => allowed direction
+            // get which direction the to-be-added position is facing
+            VertHelper.Side sideToAdd = VertHelper.SideCheck(lowCorner, upCorner, checkPoint);
+            if (!leftCheckInsideMesh && sideToAdd == VertHelper.Side.left || !rightCheckInsideMesh && sideToAdd == VertHelper.Side.right)
+            {
+                return true;
+            }
+            return false;
+            //Debug.Log("sideToAdd " + sideToAdd + " leftCheckInsideMesh " + leftCheckInsideMesh + " rightCheckInsideMesh " + rightCheckInsideMesh);
+            //Debug.Log("leftMiddleCheckPos " + leftMiddleCheckPos + " rightMiddleCheckPos " + rightMiddleCheckPos);
+            //Debug.Log("1: " + selectedPosUp + " 2: " + selectedPosDown + " checkPos: " + selectionMiddlePos);
+        }
+
         // prevent verticies from crossing the line between the two opposing verticies in a triangle, which would create swapped meshes
         public static bool IsHandlerPositionValid(Vector3 oldPos, Vector3 destination)
         {
@@ -234,7 +266,7 @@ namespace FlipFall.Editor
                 if (oldPos == p1)
                 {
                     // the destination position is on the other side of the line
-                    if (IsLeft(p2, p3, p1) != IsLeft(p2, p3, destination))
+                    if (SideCheck(p2, p3, p1) != SideCheck(p2, p3, destination))
                     {
                         return false;
                     }
@@ -242,13 +274,13 @@ namespace FlipFall.Editor
                 else if (oldPos == p2)
                 {
                     // the destination position is on the other side of the line
-                    if (IsLeft(p1, p3, p2) != IsLeft(p1, p3, destination))
+                    if (SideCheck(p1, p3, p2) != SideCheck(p1, p3, destination))
                         return false;
                 }
                 else if (oldPos == p3)
                 {
                     // the destination position is on the other side of the line
-                    if (IsLeft(p1, p2, p3) != IsLeft(p1, p2, destination))
+                    if (SideCheck(p1, p2, p3) != SideCheck(p1, p2, destination))
                         return false;
                 }
             }
@@ -297,6 +329,7 @@ namespace FlipFall.Editor
             return inside;
         }
 
+        // check is a point is directly on a line between to other points
         public static bool IsOnLine(Vector3 start, Vector3 end, Vector3 check)
         {
             //bool onLine = (checkPoint.y - endPoint1.y) / (endPoint2.y - endPoint1.y)
@@ -315,10 +348,20 @@ namespace FlipFall.Editor
             return reference == aTanTest;
         }
 
-        // check if point c is on the left of a line drawn between a and b
-        public static bool IsLeft(Vector3 a, Vector3 b, Vector3 c)
+        public enum Side { left, right, middle };
+
+        // check if point check is on the left of a line drawn between a and b
+        public static Side SideCheck(Vector3 a, Vector3 b, Vector3 check)
         {
-            return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) > 0;
+            float side = ((b.x - a.x) * (check.y - a.y) - (b.y - a.y) * (check.x - a.x));
+
+            // left
+            if (side > 0)
+                return Side.left;
+            else if (side < 0)
+                return Side.right;
+            else
+                return Side.middle;
         }
 
         // returns all vertices that are part of a triangle from an input vertex.

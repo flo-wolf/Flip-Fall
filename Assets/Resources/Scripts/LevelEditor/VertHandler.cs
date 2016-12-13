@@ -226,17 +226,18 @@ namespace FlipFall.Editor
             Debug.Log("VertexAdd at " + pos);
             if (showHandles && LevelPlacer.generatedLevel != null && handlesShown)
             {
-                // two verticies are selected, everything ready for expanding the mesh
+                // two verticies are selected
                 if (selectedHandles.Count == 2)
                 {
-                    // get the currect verticies
                     Mesh m = new Mesh();
                     m = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
 
                     Vector3 localPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(pos);
 
+                    // everything ready for expanding the mesh
                     if (!VertHelper.IsInsideMesh(m, Vector3.zero, localPos))
                     {
+                        // get the currect verticies
                         verts = m.vertices;
                         Vector3[] newVerts = new Vector3[verts.Length + 1];
                         for (int i = 0; i < verts.Length; i++)
@@ -247,78 +248,93 @@ namespace FlipFall.Editor
                         pos.z = 0;
                         Vector3 localSnapPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(pos);
 
-                        // add the new position to the vertex arrays
-                        newVerts[verts.Length] = localSnapPos;
+                        // get both selected vertex positions
+                        Vector3 selectedPosUp = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[0].transform.position);
+                        Vector3 selectedPosDown = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[1].transform.position);
 
-                        // get the triangles
-                        int[] triangles = new int[m.triangles.Length + 3];
-                        for (int s = 0; s < m.triangles.Length; s++)
+                        // the first position is not above the second => switch them, otherwise left/right checks fail
+                        if (selectedPosUp.y < selectedPosDown.y)
                         {
-                            triangles[s] = m.triangles[s];
+                            Vector3 upSave = selectedPosUp;
+                            selectedPosUp = selectedPosDown;
+                            selectedPosDown = upSave;
                         }
 
-                        // add a new triangle by referencing the two selected verticies plus the new one
-                        // add selected verticies into a temporary storage
-                        int[] newIndicies = new int[3];
-                        newIndicies[0] = newVerts.Length - 1;
-                        for (int i = 0; i < newVerts.Length; i++)
+                        if (VertHelper.IsPointOpposingMesh(localSnapPos, selectedPosUp, selectedPosDown, m))
                         {
-                            // the interated vertex fits to the first selected handler
-                            if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[0].transform.position) == newVerts[i])
+                            // add the new position to the vertex arrays
+                            newVerts[verts.Length] = localSnapPos;
+
+                            // get the triangles
+                            int[] triangles = new int[m.triangles.Length + 3];
+                            for (int s = 0; s < m.triangles.Length; s++)
                             {
-                                newIndicies[1] = i;
+                                triangles[s] = m.triangles[s];
                             }
-                            // the interated vertex fits to the second selected handler
-                            else if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[1].transform.position) == newVerts[i])
+
+                            // add a new triangle by referencing the two selected verticies plus the new one
+                            // add selected verticies into a temporary storage
+                            int[] newIndicies = new int[3];
+                            newIndicies[0] = newVerts.Length - 1;
+                            for (int i = 0; i < newVerts.Length; i++)
                             {
-                                newIndicies[2] = i;
+                                // the interated vertex fits to the first selected handler
+                                if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[0].transform.position) == newVerts[i])
+                                {
+                                    newIndicies[1] = i;
+                                }
+                                // the interated vertex fits to the second selected handler
+                                else if (LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(selectedHandles[1].transform.position) == newVerts[i])
+                                {
+                                    newIndicies[2] = i;
+                                }
                             }
+
+                            // sort the triangle verticies in a clockwise order to ensure the triangle faces our direction and wont get rendered backwards
+                            Vector3[] triangleVerts = new Vector3[3];
+                            triangleVerts[0] = newVerts[newIndicies[0]];
+                            triangleVerts[1] = newVerts[newIndicies[1]];
+                            triangleVerts[2] = newVerts[newIndicies[2]];
+                            // calculate the center of the triangle
+                            Vector2 center = (triangleVerts[0] + triangleVerts[1] + triangleVerts[2]) / 3;
+                            Array.Sort(triangleVerts, new ClockwiseComparer(center));
+                            for (int i = 0; i < newVerts.Length; i++)
+                            {
+                                // the interated vertex fits to the first selected handler
+                                if (triangleVerts[0] == newVerts[i])
+                                {
+                                    newIndicies[0] = i;
+                                }
+                                // the interated vertex fits to the second selected handler
+                                else if (triangleVerts[1] == newVerts[i])
+                                {
+                                    newIndicies[1] = i;
+                                }
+                                else if (triangleVerts[2] == newVerts[i])
+                                {
+                                    newIndicies[2] = i;
+                                }
+                            }
+
+                            // add the sorted indicies to the triangles array
+                            triangles[m.triangles.Length] = newIndicies[0];
+                            triangles[m.triangles.Length + 1] = newIndicies[1];
+                            triangles[m.triangles.Length + 2] = newIndicies[2];
+
+                            // update the mesh
+                            m.vertices = newVerts;
+                            m.triangles = triangles;
+                            m.RecalculateBounds();
+                            m.RecalculateNormals();
+                            mesh = m;
+                            LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = m;
+
+                            // recalculate handles
+                            selectedHandles = new List<Handle>();
+                            DestroyHandles();
+                            Start();
+                            return true;
                         }
-
-                        // sort the triangle verticies in a clockwise order to ensure the triangle faces our direction and wont get rendered backwards
-                        Vector3[] triangleVerts = new Vector3[3];
-                        triangleVerts[0] = newVerts[newIndicies[0]];
-                        triangleVerts[1] = newVerts[newIndicies[1]];
-                        triangleVerts[2] = newVerts[newIndicies[2]];
-                        // calculate the center of the triangle
-                        Vector2 center = (triangleVerts[0] + triangleVerts[1] + triangleVerts[2]) / 3;
-                        Array.Sort(triangleVerts, new ClockwiseComparer(center));
-                        for (int i = 0; i < newVerts.Length; i++)
-                        {
-                            // the interated vertex fits to the first selected handler
-                            if (triangleVerts[0] == newVerts[i])
-                            {
-                                newIndicies[0] = i;
-                            }
-                            // the interated vertex fits to the second selected handler
-                            else if (triangleVerts[1] == newVerts[i])
-                            {
-                                newIndicies[1] = i;
-                            }
-                            else if (triangleVerts[2] == newVerts[i])
-                            {
-                                newIndicies[2] = i;
-                            }
-                        }
-
-                        // add the sorted indicies to the triangles array
-                        triangles[m.triangles.Length] = newIndicies[0];
-                        triangles[m.triangles.Length + 1] = newIndicies[1];
-                        triangles[m.triangles.Length + 2] = newIndicies[2];
-
-                        // update the mesh
-                        m.vertices = newVerts;
-                        m.triangles = triangles;
-                        m.RecalculateBounds();
-                        m.RecalculateNormals();
-                        mesh = m;
-                        LevelPlacer.generatedLevel.moveArea.meshFilter.mesh = m;
-
-                        // recalculate handles
-                        selectedHandles = new List<Handle>();
-                        DestroyHandles();
-                        Start();
-                        return true;
                     }
                 }
             }
