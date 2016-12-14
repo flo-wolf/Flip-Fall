@@ -16,6 +16,9 @@ namespace FlipFall.UI
 {
     public class UIScrollElement : MonoBehaviour
     {
+        public enum ElementType { editorLevel, product }
+        public ElementType elementType = ElementType.product;
+
         // Fading Animation
         public Animation anim;
 
@@ -30,7 +33,7 @@ namespace FlipFall.UI
         // Use this for initialization
         private void Awake()
         {
-            isFadedIn = false;
+            //isFadedIn = false;
             //anim.Play("scrollElementFadein");
             Main.onSceneChange.AddListener(SceneChanged);
             canBeAnimated = true;
@@ -40,7 +43,7 @@ namespace FlipFall.UI
         {
             if (isFadedIn)
             {
-                print("fadeOut scene cha nged");
+                //print("fadeOut scene changed");
                 FadeOut();
             }
             canBeAnimated = false;
@@ -51,8 +54,17 @@ namespace FlipFall.UI
         {
             if (canBeAnimated && !isFadedIn)
             {
+                if (elementType == ElementType.editorLevel)
+                {
+                    anim.Play("scrollElementFadein");
+                }
+                else if (UIScrollFade.IsInside(this.transform.position))
+                {
+                    anim["productFade"].speed = 1;
+                    anim["productFade"].time = 0F;
+                    anim.Play("productFade");
+                }
                 isFadedIn = true;
-                anim.Play("scrollElementFadein");
             }
         }
 
@@ -62,7 +74,16 @@ namespace FlipFall.UI
             if (canBeAnimated && isFadedIn)
             {
                 isFadedIn = false;
-                anim.Play("scrollElementFadeout");
+                if (elementType == ElementType.editorLevel)
+                {
+                    anim.Play("scrollElementFadeout");
+                }
+                else
+                {
+                    anim["productFade"].speed = -1;
+                    anim["productFade"].time = anim["productFade"].length;
+                    anim.Play("productFade");
+                }
             }
         }
 
@@ -70,8 +91,21 @@ namespace FlipFall.UI
         {
             if (canBeAnimated)
             {
-                anim["scrollElementFadeout"].normalizedTime = 1F;
-                anim.Play("scrollElementFadeout");
+                if (elementType == ElementType.editorLevel)
+                {
+                    //anim["scrollElementFadeout"].normalizedTime = 1F;
+                    anim["scrollElementFadein"].speed = -1;
+                    anim["scrollElementFadein"].time = 0F;
+                    anim.Play("scrollElementFadein");
+                    Debug.Log("instant fadeout");
+                }
+                else
+                {
+                    //anim["productFade"].normalizedTime = 0F;
+                    anim["productFade"].speed = -1;
+                    anim["productFade"].time = 0F;
+                    anim.Play("productFade");
+                }
                 isFadedIn = false;
             }
         }

@@ -23,6 +23,8 @@ namespace FlipFall.UI
         public RectTransform canvasRect;
         public Canvas canvas;
 
+        public bool preventScrollingTooFar = false;
+
         public bool vertical = true;
 
         // ignores the insideArea property and uses the scrollable area of the ScrollRect instead
@@ -59,8 +61,11 @@ namespace FlipFall.UI
         private float upFade;
         private float lowFade;
 
+        private bool started = false;
+
         private void Start()
         {
+            started = false;
             if (_instance == null)
                 _instance = this;
 
@@ -87,6 +92,9 @@ namespace FlipFall.UI
 
         public void UpdateScrollElements()
         {
+            started = false;
+            firstGUIcall = true;
+            firstUpdate = true;
             StartCoroutine(cGetScrollElements());
         }
 
@@ -127,6 +135,7 @@ namespace FlipFall.UI
             for (int i = 0; i < scrollRect.content.childCount; i++)
             {
                 UIScrollElement element = scrollRect.content.GetChild(i).GetComponent<UIScrollElement>();
+                element.isFadedIn = false;
                 if (element != null)
                 {
                     // set the inside value to fit its first position
@@ -135,11 +144,13 @@ namespace FlipFall.UI
 
                     if (!IsInside(element.transform.position))
                     {
+                        if (element.elementType == UIScrollElement.ElementType.editorLevel)
+                            Debug.Log("nicht inside " + element.gameObject.name);
                         // begin fading animations if object is actually outside but still set to inside
                         //element.gameObject.SetActive(false);
                         element.InstantFadeOut();
                     }
-                    else
+                    else if (element.elementType == UIScrollElement.ElementType.product)
                     {
                         element.gameObject.SetActive(true);
                         element.FadeIn();
@@ -150,27 +161,46 @@ namespace FlipFall.UI
                     scrollElements.Add(element);
                 }
             }
-            StartCoroutine(cCorrectInsideSetting());
+            //started = true;
+            //StartCoroutine(cCorrectInsideSetting());
             yield break;
         }
 
-        private void Update()
+        private bool firstUpdate = true;
+        private bool firstGUIcall = true;
+
+        private void OnGUI()
         {
-            // is the user dragging
-            Vector2 vel = scrollRect.velocity;
-            if (vel != Vector2.zero)
+            if (firstGUIcall)
             {
-                if (vel.y > 0)
-                    dragUp = true;
-                else
-                    dragUp = false;
-                StartCoroutine(cCorrectInsideSetting());
+                firstGUIcall = false;
+            }
+            else
+                started = true;
+        }
+
+        private void LateUpdate()
+        {
+            if (started)
+            {
+                // is the user dragging
+                Vector2 vel = scrollRect.velocity;
+                if (vel != Vector2.zero || firstUpdate)
+                {
+                    firstUpdate = false;
+                    if (vel.y > 0)
+                        dragUp = true;
+                    else
+                        dragUp = false;
+                    StartCoroutine(cCorrectInsideSetting());
+                }
             }
         }
 
         // correct the current state of an scrollelement, if it should be faded out(-> outside the inside area) and its not, fade it and vice versa
         private IEnumerator cCorrectInsideSetting()
         {
+            yield return new WaitForEndOfFrame();
             for (int i = 0; i < scrollElements.Count; i++)
             {
                 UIScrollElement element = scrollElements[i];
@@ -181,46 +211,47 @@ namespace FlipFall.UI
                 //    dragDownPossible = false;
 
                 bool inside = IsInside(element.transform.position);
+                //Debug.Log("inside? " + inside + " i " + i + " pos " + element.transform.position);
 
                 if (inside && element.isFadedIn)
                 {
-                    // first product
-                    if (i == 0 && !dragUp)
-                    {
-                        dragDownPossible = true;
-                        dragUpPossible = false;
-                    }
-                    // last product
-                    else if (i == scrollElements.Count - 1 && dragUp)
-                    {
-                        dragUpPossible = false;
-                        dragDownPossible = true;
-                    }
+                    //// first product
+                    //if (i == 0 && !dragUp)
+                    //{
+                    //    dragDownPossible = true;
+                    //    dragUpPossible = false;
+                    //}
+                    //// last product
+                    //else if (i == scrollElements.Count - 1 && dragUp)
+                    //{
+                    //    dragUpPossible = false;
+                    //    dragDownPossible = true;
+                    //}
                 }
 
                 // element is not inside => perform checks if thats correct
                 else if (!inside)
                 {
-                    // first product
-                    if (i == 0 && dragUp && IsInside(scrollElements[scrollElements.Count - 1].transform.position))
-                    {
-                        dragDownPossible = true;
-                        dragUpPossible = false;
-                    }
-                    // last product
-                    else if (i == scrollElements.Count - 1 && !dragUp && IsInside(scrollElements[0].transform.position))
-                    {
-                        dragUpPossible = true;
-                        dragDownPossible = false;
-                    }
+                    //// first product
+                    //if (i == 0 && dragUp && IsInside(scrollElements[scrollElements.Count - 1].transform.position))
+                    //{
+                    //    dragDownPossible = true;
+                    //    dragUpPossible = false;
+                    //}
+                    //// last product
+                    //else if (i == scrollElements.Count - 1 && !dragUp && IsInside(scrollElements[0].transform.position))
+                    //{
+                    //    dragUpPossible = true;
+                    //    dragDownPossible = false;
+                    //}
 
                     // begin fading animations if object is actually outside but still set to inside
-                    else if (element.isFadedIn)
+                    if (element.isFadedIn)
                         element.FadeOut();
                     else
                     {
-                        dragDownPossible = true;
-                        dragUpPossible = true;
+                        //dragDownPossible = true;
+                        //dragUpPossible = true;
                     }
                 }
                 // element is between the fade lines, and outside the inside area
@@ -245,12 +276,17 @@ namespace FlipFall.UI
         }
 
         //checks if a position is inside the scrollArea
-        private bool IsInside(Vector3 position)
+        public static bool IsInside(Vector3 position)
         {
+            //Debug.Log("upInside " + upInside + " lowInside " + lowInside + " position " + position);
             // in between the bounds => inside
-            if (upInside > position.y && lowInside < position.y)
-                //if (upInside > position.y && dragUp || lowInside < position.y && !dragUp)
+            if (_instance.upInside > position.y && _instance.lowInside < position.y)
+            {
+                //Debug.Log("THIS IS ACTUALLY INSIDE " + position);
                 return true;
+            }
+            //if (upInside > position.y && dragUp || lowInside < position.y && !dragUp)
+
             return false;
         }
 
@@ -272,7 +308,7 @@ namespace FlipFall.UI
             if (scrollElements.Any(x => x.isFadedIn == false))
             {
                 // dragging up while dragging up shouldn't be possible
-                if (eventData.delta.y < 0 && !dragDownPossible)
+                if (eventData.delta.y < 0 && !dragDownPossible && preventScrollingTooFar)
                 {
                     scrollRect.StopMovement();
                     scrollRect.enabled = false;
@@ -281,7 +317,7 @@ namespace FlipFall.UI
                     dragStopped = true;
                 }
                 // dragging down while dragging down shouldn't be possible
-                else if (eventData.delta.y > 0 && !dragUpPossible)
+                else if (eventData.delta.y > 0 && !dragUpPossible && preventScrollingTooFar)
                 {
                     scrollRect.StopMovement();
                     scrollRect.vertical = false;
@@ -290,7 +326,7 @@ namespace FlipFall.UI
                     dragStopped = true;
                 }
             }
-            else
+            else if (preventScrollingTooFar)
             {
                 scrollRect.StopMovement();
                 scrollRect.vertical = false;

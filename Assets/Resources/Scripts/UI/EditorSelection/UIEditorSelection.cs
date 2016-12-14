@@ -87,7 +87,9 @@ namespace FlipFall.UI
             LevelData l = LevelManager.NewCustomLevel(LevelManager.GetNextId());
             StartCoroutine(cCreateNewLevel(l));
             uiScrollFade.UpdateScrollElements();
-            // animation
+
+            // adjust content scrollrect size to allow viewing the newsest level
+            UIScrollRectContentResizer.onContentChange.Invoke();
         }
 
         // creates a new levelData and displays it as an UIEditorLevel in the EditorSelection
@@ -107,7 +109,9 @@ namespace FlipFall.UI
             int childCount = root.childCount;
             for (int i = 0; i < childCount; i++)
             {
-                GameObject.DestroyImmediate(root.GetChild(0).gameObject);
+                GameObject go = root.GetChild(0).gameObject;
+                if (go.tag == "UIEditorLevel")
+                    GameObject.DestroyImmediate(go);
             }
         }
     }

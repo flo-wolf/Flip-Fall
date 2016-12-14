@@ -104,6 +104,7 @@ public class UILevelSettings : MonoBehaviour
         UIEditorSelection._instance.LoadUIEditorLevels();
         //UIScrollFade.scrollElements.Remove(editElement);
         //UIScrollFade._instance.UpdateScrollElements();
+        UIScrollRectContentResizer.onContentChange.Invoke();
         StartCoroutine(cDelayedEditorLevelsShow());
     }
 
