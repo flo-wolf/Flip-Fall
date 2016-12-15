@@ -85,6 +85,7 @@ namespace FlipFall.UI
             print("addbtn");
             SoundManager.ButtonClicked();
             LevelData l = LevelManager.NewCustomLevel(LevelManager.GetNextId());
+            UIScrollRectContentResizer.onContentChange.Invoke();
             StartCoroutine(cCreateNewLevel(l));
             uiScrollFade.UpdateScrollElements();
 

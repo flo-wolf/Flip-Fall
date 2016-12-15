@@ -92,9 +92,7 @@ namespace FlipFall.UI
 
         public void UpdateScrollElements()
         {
-            started = false;
-            firstGUIcall = true;
-            firstUpdate = true;
+            StopAllCoroutines();
             StartCoroutine(cGetScrollElements());
         }
 
@@ -131,11 +129,15 @@ namespace FlipFall.UI
         private IEnumerator cGetScrollElements()
         {
             yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+            started = false;
+            firstGUIcall = true;
+            firstUpdate = true;
             scrollElements = new List<UIScrollElement>();
             for (int i = 0; i < scrollRect.content.childCount; i++)
             {
                 UIScrollElement element = scrollRect.content.GetChild(i).GetComponent<UIScrollElement>();
-                element.isFadedIn = false;
+                //element.isFadedIn = false;
                 if (element != null)
                 {
                     // set the inside value to fit its first position
@@ -150,7 +152,7 @@ namespace FlipFall.UI
                         //element.gameObject.SetActive(false);
                         element.InstantFadeOut();
                     }
-                    else if (element.elementType == UIScrollElement.ElementType.product)
+                    else// if (element.elementType == UIScrollElement.ElementType.product)
                     {
                         element.gameObject.SetActive(true);
                         element.FadeIn();
@@ -201,6 +203,8 @@ namespace FlipFall.UI
         private IEnumerator cCorrectInsideSetting()
         {
             yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+
             for (int i = 0; i < scrollElements.Count; i++)
             {
                 UIScrollElement element = scrollElements[i];

@@ -54,8 +54,10 @@ namespace FlipFall.UI
         {
             if (canBeAnimated && !isFadedIn)
             {
-                if (elementType == ElementType.editorLevel)
+                if (elementType == ElementType.editorLevel && UIScrollFade.IsInside(this.transform.position))
                 {
+                    anim["scrollElementFadein"].speed = 1;
+                    anim["scrollElementFadein"].time = 0F;
                     anim.Play("scrollElementFadein");
                 }
                 else if (UIScrollFade.IsInside(this.transform.position))
