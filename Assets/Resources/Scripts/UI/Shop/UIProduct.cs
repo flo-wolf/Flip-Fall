@@ -131,7 +131,7 @@ namespace FlipFall.UI
 
                     unvalidToogleCall = true;
 
-                    if (equipped)
+                    if (equipped || productType == ProductType.supply)
                         equipToggle.isOn = true;
                     else
                         equipToggle.isOn = false;
@@ -165,7 +165,7 @@ namespace FlipFall.UI
                 else if (productType == ProductType.supply)
                 {
                     Debug.Log("Supply bought: " + title);
-                    ProgressManager.GetProgress().unlocks.inventory.Add(supplyToUnlock, 1);
+                    ProgressManager.GetProgress().unlocks.inventory.Add(supplyToUnlock, 2);
                 }
                 onBuy.Invoke(this);
                 UpdateToggles();
@@ -193,8 +193,12 @@ namespace FlipFall.UI
                     ProgressManager.GetProgress().unlocks.SwitchTheme(themeToUnlock);
                     //}
                 }
+                // supply, always keep the toggle on if the product was bought
                 else
-                    Debug.Log("Product couldn't be equipped: " + title);
+                {
+                    equipToggle.isOn = true;
+                }
+                Debug.Log("Product couldn't be equipped: " + title);
 
                 if (equipped)
                 {

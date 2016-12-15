@@ -7,6 +7,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
+/// OBSOLETE: Switched since v0.2.38 from consumables to non-consumable building supplies.
+/// Currently these values are ignored.
+///
 /// This class gets saved in the current progress.
 /// It contains a hashtable of all bought levelObjects that can be placed inside the editor.
 /// The inventroy will get displayed in the editor screen.
@@ -21,70 +24,60 @@ namespace FlipFall.Progress
 
         public class InventoryChangeEvent : UnityEvent { }
 
+        public List<LevelObject.ObjectType> unlockedLevelObjects;
+
         // a table containing the list of available levelObjects aswell as their owned amount
-        public Hashtable levelObjects = new Hashtable();
+        //public Hashtable levelObjects = new Hashtable();
 
         public Inventory()
         {
-            levelObjects.Add(LevelObject.ObjectType.speedStrip, 5);
-            levelObjects.Add(LevelObject.ObjectType.turret, 5);
-            levelObjects.Add(LevelObject.ObjectType.portal, 5);
-            levelObjects.Add(LevelObject.ObjectType.attractor, 5);
-            levelObjects.Add(LevelObject.ObjectType.bouncer, 5);
+            unlockedLevelObjects = new List<LevelObject.ObjectType>();
+            //levelObjects.Add(LevelObject.ObjectType.speedStrip, 5);
+            //levelObjects.Add(LevelObject.ObjectType.turret, 5);
+            //levelObjects.Add(LevelObject.ObjectType.portal, 5);
+            //levelObjects.Add(LevelObject.ObjectType.attractor, 5);
+            //levelObjects.Add(LevelObject.ObjectType.bouncer, 5);
         }
 
         // adds a value to the given entry in the inventory, if it doesnt exist, it gets created. Can be used to substract.
         public void Add(LevelObject.ObjectType type, int value)
         {
             // add the value to the existing value
-            if (levelObjects.Contains(type))
+            if (!unlockedLevelObjects.Contains(type))
             {
-                int oldValue = (int)levelObjects[type];
-                levelObjects[type] = oldValue + value;
+                unlockedLevelObjects.Add(type);
             }
-            // the entry doesnt exist yet, create a new one with a guaranteed positive value
-            else if (value > 0)
-            {
-                levelObjects.Add(type, value);
-            }
-
             onInventoryChange.Invoke();
         }
 
         // removes an entry from the inventory
         public void Remove(LevelObject.ObjectType type)
         {
-            if (levelObjects.Contains(type))
+            if (unlockedLevelObjects.Contains(type))
             {
-                levelObjects.Remove(type);
+                unlockedLevelObjects.Remove(type);
             }
-
             onInventoryChange.Invoke();
         }
 
-        // returns the owned amount of a certian levelObject, if the levelObject is not listed -1 gets returned;
-        public int GetAmount(LevelObject.ObjectType type)
+        public bool Contains(LevelObject.ObjectType type)
         {
-            if (levelObjects.Contains(type))
-            {
-                return (int)levelObjects[type];
-            }
-            else
-                return -1;
+            if (unlockedLevelObjects.Contains(type))
+                return true;
+            return false;
         }
 
         public static Inventory CreateCopy(Inventory inv)
         {
-            Inventory inventory = new Inventory();
-            Hashtable levelObjects = new Hashtable();
-            Hashtable referencedLevelObjects = inv.levelObjects;
+            Inventory inventoryCopy = new Inventory();
+            List<LevelObject.ObjectType> newList = new List<LevelObject.ObjectType>();
 
-            foreach (LevelObject.ObjectType key in referencedLevelObjects.Keys)
+            foreach (LevelObject.ObjectType key in inv.unlockedLevelObjects)
             {
-                levelObjects.Add(key, (int)referencedLevelObjects[key]);
+                newList.Add(key);
             }
-            inventory.levelObjects = levelObjects;
-            return inventory;
+            inventoryCopy.unlockedLevelObjects = newList;
+            return inventoryCopy;
         }
     }
 }

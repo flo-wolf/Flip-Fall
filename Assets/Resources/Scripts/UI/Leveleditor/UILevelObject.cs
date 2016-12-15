@@ -20,10 +20,10 @@ namespace FlipFall.UI
 
         public LevelObject.ObjectType objectType;
         public Toggle selectToogle;
-        public Text amountText;
+        public Image lockedImage;
         public Animation anim;
 
-        private int amount = 0;
+        private bool owned = false;
 
         // Use this for initialization
         private void Start()
@@ -45,21 +45,19 @@ namespace FlipFall.UI
 
         private void UpdateAmount()
         {
-            amount = ProgressManager.GetProgress().unlocks.inventory.GetAmount(objectType);
-            if (amount > 0)
+            owned = ProgressManager.GetProgress().unlocks.inventory.Contains(objectType);
+            Debug.Log("owned " + objectType + "? " + owned);
+            if (owned)
             {
                 selectToogle.interactable = true;
-                amountText.text = amount.ToString();
+                lockedImage.gameObject.SetActive(false);
             }
-            if (amount <= 0)
+            else
             {
-                amountText.text = "0";
+                lockedImage.gameObject.SetActive(true);
                 selectToogle.interactable = false;
                 if (selectToogle.isOn)
-                {
                     selectToogle.isOn = false;
-                }
-                // change icon to gray if amount is zero
             }
         }
 
@@ -68,7 +66,7 @@ namespace FlipFall.UI
         {
             if (!UIObjectPreferences.menuOpen)
             {
-                if (amount > 0 && t.isOn)
+                if (owned && t.isOn)
                 {
                     t.isOn = true;
                     //selectToogle.interactable = false;

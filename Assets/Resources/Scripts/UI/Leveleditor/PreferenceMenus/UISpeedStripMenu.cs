@@ -23,7 +23,7 @@ public class UISpeedStripMenu : UIPreferenceMenu
         _instance = this;
         onPreferenceChange.AddListener(PreferenceChanged);
 
-        if (LevelEditor.selectedObject.objectType == objectType && rotationSlider.IsActive() && pushSlider.IsActive())
+        if (LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType == objectType && rotationSlider.IsActive() && pushSlider.IsActive())
         {
             rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
 

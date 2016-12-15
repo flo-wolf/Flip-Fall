@@ -56,7 +56,7 @@ namespace FlipFall.Progress
             unlocks = new Unlocks();
 
             lastUnlockedLevel = 1;
-            starsOwned = 0;
+            starsOwned = 20;
             starsSpent = 0;
             starsEarned = 0;
             proVersion = false;
