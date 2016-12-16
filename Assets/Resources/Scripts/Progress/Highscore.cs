@@ -81,13 +81,13 @@ namespace FlipFall.Progress
 
             if (t < bestTime || bestTime < 0 && presetTime > 0)
             {
-                bestTime = t;
-                if (t < presetTime)
+                bestTime = float.Parse(t.ToString("F3"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+                if (bestTime < presetTime)
                 {
                     oldStarCount = starCount;
                     SetStarCount(3);
                 }
-                else if (t < presetTime + (presetTime * Constants.twoStarPercantage))
+                else if (bestTime < presetTime + (presetTime * Constants.twoStarPercantage))
                 {
                     oldStarCount = starCount;
                     SetStarCount(2);

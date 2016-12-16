@@ -52,7 +52,7 @@ namespace FlipFall.Progress
             unlocks = new Unlocks();
             storyProgress = new StoryProgress();
 
-            starsOwned = 20;
+            starsOwned = 0;
             starsSpent = 0;
             starsEarned = 0;
             proVersion = false;

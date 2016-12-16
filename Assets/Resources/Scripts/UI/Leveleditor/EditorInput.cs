@@ -57,15 +57,26 @@ namespace FlipFall.Editor
         private void Update()
         {
 #if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.KeypadPlus))
+            if (Input.GetKeyDown(KeyCode.KeypadMinus))
             {
                 if (cam.orthographicSize + keyboardZoomStep <= maxSize)
                     cam.orthographicSize += keyboardZoomStep;
             }
-            else if (Input.GetKeyDown(KeyCode.KeypadMinus))
+            else if (Input.GetKeyDown(KeyCode.KeypadPlus))
             {
                 if (cam.orthographicSize - keyboardZoomStep >= minSize)
                     cam.orthographicSize -= keyboardZoomStep;
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (!UIObjectPreferences.menuOpen)
+                {
+                    if (LevelEditor.TryTestLevel())
+                    {
+                        SoundManager.ButtonClicked();
+                        // animations
+                    }
+                }
             }
 #endif
 #if UNITY_ANDROID
