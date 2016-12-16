@@ -59,7 +59,7 @@ namespace FlipFall.Levels
                         Vector2 turretPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         turret.transform.position = turretPos;
                         turrets.Add(turret);
-                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        // ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
                         UndoManager.AddUndoPoint();
                         return turret;
 
@@ -69,7 +69,7 @@ namespace FlipFall.Levels
                         Vector2 aPos = new Vector3(position.x, position.y, LevelPlacer.levelObjectZ);
                         a.transform.position = aPos;
                         attractors.Add(a);
-                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        //ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
                         UndoManager.AddUndoPoint();
                         return a;
 
@@ -81,7 +81,7 @@ namespace FlipFall.Levels
                         p.portalID = GetFreePortalID(0);
                         p.linkedPortalID = -1;
                         portals.Add(p);
-                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        // ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
                         UndoManager.AddUndoPoint();
                         return p;
 
@@ -92,7 +92,7 @@ namespace FlipFall.Levels
                         s.transform.position = sPos;
                         s.transform.rotation = Quaternion.Euler(0, 0, 180);
                         speedStrips.Add(s);
-                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        // ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
                         UndoManager.AddUndoPoint();
                         return s;
 
@@ -103,7 +103,7 @@ namespace FlipFall.Levels
                         b.transform.position = bPos;
                         b.transform.rotation = Quaternion.Euler(0, 0, 0);
                         bouncers.Add(b);
-                        ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
+                        // ProgressManager.GetProgress().unlocks.inventory.Add(type, -1);
                         UndoManager.AddUndoPoint();
                         return b;
 
@@ -152,7 +152,7 @@ namespace FlipFall.Levels
                         break;
                 }
 
-                ProgressManager.GetProgress().unlocks.inventory.Add(levelObj.objectType, 1);
+                //ProgressManager.GetProgress().unlocks.inventory.Add(levelObj.objectType, 1);
                 DestroyImmediate(levelObj.gameObject);
                 UndoManager.AddUndoPoint();
             }

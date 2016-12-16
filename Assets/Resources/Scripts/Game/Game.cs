@@ -52,11 +52,13 @@ namespace FlipFall
         {
             if (gameType == GameType.story)
             {
-                LevelPlacer.Place(LevelManager.GetActiveLevel());
+                LevelData l = LevelManager.GetActiveStoryLevel();
+                Debug.Log("Game Place " + l);
+                LevelPlacer._instance.Place(l);
             }
             else if (gameType == GameType.testing && LevelPlacer._instance != null)
             {
-                LevelPlacer._instance.PlaceCustom(LevelEditor.editLevel);
+                LevelPlacer._instance.Place(LevelEditor.editLevel);
             }
             SetGameState(GameState.playing);
             Main.onSceneChange.AddListener(SceneChanged);
@@ -64,7 +66,7 @@ namespace FlipFall
 
         private void SceneChanged(Main.ActiveScene s)
         {
-            ProgressManager.GetProgress().lastPlayedLevelID = LevelManager.GetActiveID();
+            ProgressManager.GetProgress().storyProgress.lastPlayedLevelID = LevelManager.activeId;
         }
 
         private void OnApplicationQuit()
@@ -85,14 +87,14 @@ namespace FlipFall
 
                     if (gameType == GameType.story)
                     {
-                        if (ProgressManager.GetProgress().highscores.highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                        if (ProgressManager.GetProgress().highscores.highscores.Any(x => x.levelId == LevelManager.activeId))
                         {
-                            ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                            ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == LevelManager.activeId).fails++;
                         }
                         else
                         {
-                            ProgressManager.GetProgress().highscores.EnterHighscore(LevelManager.GetActiveID(), -1);
-                            ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == LevelManager.GetActiveID()).fails++;
+                            ProgressManager.GetProgress().highscores.EnterHighscore(LevelManager.activeId, -1);
+                            ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == LevelManager.activeId).fails++;
                         }
                         onGameStateChange.Invoke(gs);
                         Main.SetScene(Main.ActiveScene.levelselection);
@@ -112,15 +114,15 @@ namespace FlipFall
                     {
                         // Highscore Management
                         int oldStars = 0;
-                        if (ProgressManager.GetProgress().highscores.highscores.Any(x => x.levelId == LevelManager.GetActiveID()))
+                        if (ProgressManager.GetProgress().highscores.highscores.Any(x => x.levelId == LevelManager.activeId))
                         {
-                            oldStars = ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == LevelManager.GetActiveID()).starCount;
+                            oldStars = ProgressManager.GetProgress().highscores.highscores.Find(x => x.levelId == LevelManager.activeId).starCount;
                         }
 
                         Highscore newHighscore = null;
-                        if (LevelManager.GetActiveID() == ProgressManager.GetProgress().lastPlayedLevelID)
+                        if (LevelManager.activeId == ProgressManager.GetProgress().storyProgress.lastPlayedLevelID)
                         {
-                            newHighscore = ProgressManager.GetProgress().highscores.EnterHighscore(LevelManager.GetActiveID(), UIGameTimer.GetTime());
+                            newHighscore = ProgressManager.GetProgress().highscores.EnterHighscore(LevelManager.activeId, UIGameTimer.GetTime());
                         }
 
                         UILevelPlacer.CalcStarsToUnlock(oldStars, newHighscore);
@@ -133,12 +135,13 @@ namespace FlipFall
                         onGameStateChange.Invoke(gs);
 
                         //Unlock the next level, if possible
-                        if (ProgressManager.GetProgress().TryUnlockNextLevel(LevelManager.GetActiveID()))
+                        if (ProgressManager.GetProgress().storyProgress.TryUnlockNextLevel(LevelManager.activeId))
                         {
                         }
                     }
                     else if (gameType == GameType.testing)
                     {
+                        LevelEditor.editLevel.presetTime = UIGameTimer.GetTime();
                         Main.SetScene(Main.ActiveScene.editor);
                     }
 

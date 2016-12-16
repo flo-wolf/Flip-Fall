@@ -156,7 +156,7 @@ namespace FlipFall.Editor
                 }
             }
 
-            if (VertHandler.quickDragHandle != null)
+            if (VertHandler.quickDragHandle != null && VertHandler.selectedHandles.Count == 0)
             {
                 newPos = quickDragBefore - dragDelta;
                 Mesh m = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;

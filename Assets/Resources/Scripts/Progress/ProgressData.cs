@@ -34,19 +34,15 @@ namespace FlipFall.Progress
         // bought/unlocked items
         public Unlocks unlocks;
 
-        public int lastUnlockedLevel;
-        public int lastPlayedLevelID;
+        public StoryProgress storyProgress;
 
         // amount of currently owned stars
         public int starsOwned;
         public int starsSpent;
-
         public int starsEarned;
 
         // pro version owned? => no ads, editor access
         public bool proVersion;
-
-        //add: unlocks, achievements, stats etc...
 
         public ProgressData()
         {
@@ -54,13 +50,12 @@ namespace FlipFall.Progress
             settings = new Settings();
             highscores = new Highscores();
             unlocks = new Unlocks();
+            storyProgress = new StoryProgress();
 
-            lastUnlockedLevel = 1;
             starsOwned = 20;
             starsSpent = 0;
             starsEarned = 0;
             proVersion = false;
-            lastPlayedLevelID = 1;
         }
 
         public string GenerateChecksum()
@@ -69,8 +64,7 @@ namespace FlipFall.Progress
                 "Katzenfutter"
                 + JsonUtility.ToJson(highscores)
                 + JsonUtility.ToJson(unlocks)
-                + lastUnlockedLevel
-                + lastPlayedLevelID
+                + JsonUtility.ToJson(storyProgress)
                 + starsOwned
                 + starsSpent
                 + starsEarned
@@ -105,76 +99,6 @@ namespace FlipFall.Progress
             // get from google
             int spent = 0;
             return spent;
-        }
-
-        /// <param name="id">Current level, used for comparison if next level can be unlocked</param>
-        public bool TryUnlockNextLevel(int id)
-        {
-            if (lastUnlockedLevel <= id && lastUnlockedLevel + 1 <= Constants.lastLevel)
-            {
-                // first level finished
-                if (lastUnlockedLevel == 1)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQDA", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-
-                // first turret level
-                if (lastUnlockedLevel == 6)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQBw", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-
-                // first attractor level finished
-                if (lastUnlockedLevel == 10)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQBg", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-
-                // first speedstrip level finished
-                else if (lastUnlockedLevel == 12)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQCA", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-
-                // first portal level finished
-                else if (lastUnlockedLevel == 7)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQEQ", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-                else if (lastUnlockedLevel == Constants.lastLevel)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQAQ", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-
-                lastUnlockedLevel++;
-                UILevelselectionManager.unlockNextLevel = true;
-                return true;
-            }
-            return false;
         }
 
         public void AddStarsToWallet(int stars)

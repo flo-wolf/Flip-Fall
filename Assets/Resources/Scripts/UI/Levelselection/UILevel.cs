@@ -242,7 +242,7 @@ namespace FlipFall.UI
 
             if (UILevelMatchesLevel())
             {
-                double topTime = LevelManager.prefabLevels.Find(x => x.id == id).presetTime;
+                double topTime = LevelManager.GetStoryLevel(id).presetTime;
 
                 // Preset top time seconds
                 string topSec = ((int)topTime).ToString();
@@ -280,7 +280,7 @@ namespace FlipFall.UI
 
         public bool UILevelMatchesLevel()
         {
-            if (LevelManager.LevelExists(id, false))
+            if (LevelManager.GetStoryLevel(id) != null)
             {
                 return true;
             }

@@ -62,7 +62,7 @@ namespace FlipFall.UI
             for (int i = 2; i >= -2; i--)
             {
                 int y = -i;
-                if (UILevelMatchesLevel(id + i) && !placedLevelNumbers.Any(x => x.id == (id + i)) && !placedLevelNumbers.Any(x => x.position == i) && ProgressManager.GetProgress().lastUnlockedLevel >= id + i)
+                if (UILevelMatchesLevel(id + i) && !placedLevelNumbers.Any(x => x.id == (id + i)) && !placedLevelNumbers.Any(x => x.position == i) && ProgressManager.GetProgress().storyProgress.lastUnlockedLevel >= id + i)
                 {
                     //Debug.Log("matches: " + i);
                     UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), Vector3.zero, Quaternion.identity);
@@ -72,7 +72,7 @@ namespace FlipFall.UI
                     nbr.gameObject.transform.localPosition = Vector3.zero;
                     placedLevelNumbers.Add(nbr);
                 }
-                else if (UILevelMatchesLevel(id + y) && !placedLevelNumbers.Any(x => x.id == (id + y)) && !placedLevelNumbers.Any(x => x.position == y) && ProgressManager.GetProgress().lastUnlockedLevel >= id + y)
+                else if (UILevelMatchesLevel(id + y) && !placedLevelNumbers.Any(x => x.id == (id + y)) && !placedLevelNumbers.Any(x => x.position == y) && ProgressManager.GetProgress().storyProgress.lastUnlockedLevel >= id + y)
                 {
                     //Debug.Log("matches: " + y);
                     UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), Vector3.zero, Quaternion.identity);
@@ -89,7 +89,7 @@ namespace FlipFall.UI
         {
             if (position < 3 && position > -3)
             {
-                if (UILevelMatchesLevel(id) && !placedLevelNumbers.Any(x => x.id == id) && ProgressManager.GetProgress().lastUnlockedLevel >= id)
+                if (UILevelMatchesLevel(id) && !placedLevelNumbers.Any(x => x.id == id) && ProgressManager.GetProgress().storyProgress.lastUnlockedLevel >= id)
                 {
                     UILevelNumber nbr = (UILevelNumber)Instantiate(uiLevelNumberPrefab.GetComponent<UILevelNumber>(), Vector3.zero, Quaternion.identity);
                     nbr.position = position;
@@ -103,7 +103,7 @@ namespace FlipFall.UI
 
         public static bool UILevelMatchesLevel(int ID)
         {
-            if (LevelManager.LevelExists(ID, false))
+            if (LevelManager.GetStoryLevel(ID) != null)
                 return true;
             return false;
         }

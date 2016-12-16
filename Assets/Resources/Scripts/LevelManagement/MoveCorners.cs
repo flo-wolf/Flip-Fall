@@ -30,7 +30,7 @@ public class MoveCorners : MonoBehaviour
     {
         if (LevelPlacer.placedLevel != null)
         {
-            Level l = LevelManager.GetLevel();
+            //Level l = LevelManager.GetLevel();
             //MeshFilter[] meshFilters = l.GetComponentsInChildren<MeshFilter>();
             //Mesh[] meshes = new Mesh[meshFilters.Length];
 

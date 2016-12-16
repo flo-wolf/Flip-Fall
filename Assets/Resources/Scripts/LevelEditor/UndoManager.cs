@@ -119,7 +119,7 @@ namespace FlipFall.Editor
             {
                 ProgressManager.GetProgress().unlocks.SetInventory(undoPoint.inventory);
                 VertHandler._instance.DestroyHandles();
-                LevelPlacer._instance.PlaceCustom(undoPoint.levelData);
+                LevelPlacer._instance.Place(undoPoint.levelData);
                 LevelEditor.editLevel = undoPoint.levelData;
                 return true;
             }

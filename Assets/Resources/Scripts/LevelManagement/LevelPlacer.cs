@@ -66,36 +66,8 @@ namespace FlipFall.Levels
             _instance = this;
         }
 
-        public static Level Place(Level level)
-        {
-            Level t = null;
-            if (level != null && !IsPlaced(level.id))
-            {
-                DestroyChildren(placingParent);
-                t = (Level)Instantiate(level, new Vector3(-0f, -2.0f, 7.8f), Quaternion.identity);
-                //t = (Level)PrefabUtility.InstantiatePrefab(level);
-
-                t.gameObject.transform.parent = placingParent;
-
-                Vector3 spawnPosition = t.GetComponentInChildren<Spawn>().transform.position;
-                Vector3 levelPosition = t.gameObject.transform.transform.position;
-                Vector3 levelToSpawn = (spawnPosition - levelPosition);
-                //t.gameObject.transform.transform.position = placingParent.transform.position + levelToSpawn;
-                t.gameObject.transform.transform.position = placingParent.transform.position;
-
-                Debug.Log("[LevelPlacer]: Place(): Level " + level.id + " placed.");
-
-                placedLevel = t;
-            }
-            else
-            {
-                Debug.Log("[LevelPlacer]: Place(): Cant place Level " + level.id + ", it already exists in the scene!");
-            }
-            return t;
-        }
-
         // generate a level based on the input leveldata and assign it as placedLevel, ready for referencing
-        public bool PlaceCustom(LevelData levelData)
+        public bool Place(LevelData levelData)
         {
             if (levelData != null)
             {

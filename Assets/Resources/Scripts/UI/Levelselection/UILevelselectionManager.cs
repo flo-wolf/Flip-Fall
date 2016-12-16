@@ -52,7 +52,7 @@ namespace FlipFall.UI
                 return;
             }
             _instance = this;
-            activeUILevel = ProgressManager.GetProgress().lastPlayedLevelID;
+            activeUILevel = ProgressManager.GetProgress().storyProgress.lastPlayedLevelID;
 
             if (enterType != EnterType.none)
             {
@@ -109,12 +109,13 @@ namespace FlipFall.UI
         // display the next UILevel - if it exists and if it is unlocked, then place it
         public static bool NextLevel()
         {
-            if (activeUILevel + 1 <= ProgressManager.GetProgress().lastUnlockedLevel)
+            Debug.Log("NEXTLVL - LevelManager.GetLastStoryLevel() " + LevelManager.GetLastStoryLevel());
+            if (activeUILevel + 1 <= ProgressManager.GetProgress().storyProgress.lastUnlockedLevel && activeUILevel + 1 <= LevelManager.GetLastStoryLevel())
             {
                 unlockNextLevel = false;
-                Debug.Log("ProgressManager.GetProgress().lastUnlockedLevel " + ProgressManager.GetProgress().lastUnlockedLevel);
+                Debug.Log("ProgressManager.GetProgress().lastUnlockedLevel " + ProgressManager.GetProgress().storyProgress.lastUnlockedLevel);
                 activeUILevel++;
-                ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
+                ProgressManager.GetProgress().storyProgress.lastPlayedLevelID = activeUILevel;
 
                 UILevelPlacer.newUnlocks = UILevel.StarsToUnlock.none;
                 UILevelPlacer.PlaceUILevel(activeUILevel, true);
@@ -143,11 +144,12 @@ namespace FlipFall.UI
         // display the last UILevel - if it exists and if it is unlocked, then place it
         public static bool LastLevel()
         {
-            if (activeUILevel - 1 >= Constants.firstLevel)
+            int firstStoryLevel = LevelManager.GetFirstStoryLevel();
+            if (activeUILevel - 1 >= firstStoryLevel && firstStoryLevel >= 0)
             {
                 unlockNextLevel = false;
                 activeUILevel--;
-                ProgressManager.GetProgress().lastPlayedLevelID = activeUILevel;
+                ProgressManager.GetProgress().storyProgress.lastPlayedLevelID = activeUILevel;
 
                 UILevelPlacer.newUnlocks = UILevel.StarsToUnlock.none;
                 UILevelPlacer.placedLevel.FadeOut();
@@ -207,7 +209,7 @@ namespace FlipFall.UI
             if (!nextLevelGetsUnlocked && !playPressed)
             {
                 SoundManager.ButtonClicked();
-                if (LevelManager.LevelExists(activeUILevel, false))
+                if (LevelManager.GetStoryLevel(activeUILevel) != null)
                 {
                     LevelManager.SetLevel(activeUILevel);
                     SoundManager.PlayCamTransitionSound();

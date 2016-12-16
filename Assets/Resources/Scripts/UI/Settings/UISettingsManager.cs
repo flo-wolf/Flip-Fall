@@ -131,12 +131,12 @@ namespace FlipFall.UI
         }
 
         //THIS COULD LEAD TO PROBLEMS, if so change lastlevel to last level able to find under prefabs/levels
-        public void UnlockAllButtonClicked()
-        {
-            ProgressManager.GetProgress().lastUnlockedLevel = LevelManager.lastID;
-            SoundManager.ButtonClicked();
-            testSaveAnimation.Play("buttonClick");
-        }
+        //public void UnlockAllButtonClicked()
+        //{
+        //    ProgressManager.GetProgress().storyProgress.lastUnlockedLevel = LevelManager._instance;
+        //    SoundManager.ButtonClicked();
+        //    testSaveAnimation.Play("buttonClick");
+        //}
 
         public void ResetProgress()
         {

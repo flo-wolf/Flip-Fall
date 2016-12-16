@@ -48,7 +48,7 @@ namespace FlipFall.Editor
 
             if (editLevel != null)
             {
-                LevelPlacer._instance.PlaceCustom(editLevel);
+                LevelPlacer._instance.Place(editLevel);
                 UndoManager.AddSavePoint(editLevel);
             }
         }

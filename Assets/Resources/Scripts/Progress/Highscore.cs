@@ -51,7 +51,7 @@ namespace FlipFall.Progress
         {
             if (bestTime > 0)
             {
-                double presetTime = LevelManager.GetActiveLevel().presetTime;
+                double presetTime = LevelManager.GetActiveStoryLevel().presetTime;
                 if (bestTime < presetTime)
                 {
                     SetStarCount(3);
@@ -76,7 +76,7 @@ namespace FlipFall.Progress
 
         public void PlaceTime(double t)
         {
-            double presetTime = LevelManager.GetActiveLevel().presetTime;
+            double presetTime = LevelManager.GetActiveStoryLevel().presetTime;
             int oldStarCount = 0;
 
             if (t < bestTime || bestTime < 0 && presetTime > 0)

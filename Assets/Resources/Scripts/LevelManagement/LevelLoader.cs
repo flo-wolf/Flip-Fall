@@ -22,21 +22,7 @@ namespace FlipFall.Levels
 
         public static string SavePath = "CustomLevels/";
         public static string SavePathAndroid = Application.persistentDataPath + "/";
-        public static string saveExtention = ".levelData";
-
-        public static List<Level> LoadPrefabLevels()
-        {
-            int min = Constants.firstLevel;
-            int max = Constants.lastLevel;
-            int levelsLoadingLength = max - min + 1;
-
-            List<Level> levelsLoading = new List<Level>();
-            for (int i = min; i <= max; i++)
-            {
-                levelsLoading.Add(LoadPrefabLevel(i));
-            }
-            return levelsLoading;
-        }
+        public static string saveExtention = ".json";
 
         public static List<LevelData> LoadCustomLevels()
         {
@@ -61,6 +47,25 @@ namespace FlipFall.Levels
                     string filename = fi.Name.Replace(saveExtention, "");
                     dataLoading.Add(LoadCustomLevel(filename));
                 }
+            }
+            return dataLoading;
+        }
+
+        // load and return all LevelData contained in the resources folder named "StoryLevels"
+        public static List<LevelData> LoadStoryLevels()
+        {
+            string path;
+#if UNITY_ANDROID && !UNITY_EDITOR
+            path = SavePathAndroid;
+#else
+            path = SavePath;
+#endif
+            List<LevelData> dataLoading = new List<LevelData>();
+
+            TextAsset[] storyFiles = Resources.LoadAll<TextAsset>("StoryLevels");
+            foreach (TextAsset t in storyFiles)
+            {
+                dataLoading.Add(JsonUtility.FromJson<LevelData>(t.text));
             }
             return dataLoading;
         }
@@ -103,7 +108,7 @@ namespace FlipFall.Levels
 #else
                 savePath = SavePath;
 #endif
-                savePath = savePath + levelData.id + ".levelData";
+                savePath = savePath + levelData.id + ".json";
 
                 //LevelManager.onLevelChange.AddListener(LevelStateChanged);
 
@@ -158,7 +163,7 @@ namespace FlipFall.Levels
 #else
                 savePath = SavePath;
 #endif
-                savePath = savePath + levelData.id + ".levelData";
+                savePath = savePath + levelData.id + ".json";
 
                 if (File.Exists(savePath))
                 {
@@ -180,7 +185,7 @@ namespace FlipFall.Levels
 #else
             savePath = SavePath;
 #endif
-            savePath = savePath + filename + ".levelData";
+            savePath = savePath + filename + ".json";
 
             if (File.Exists(savePath))
             {
@@ -239,14 +244,5 @@ namespace FlipFall.Levels
         //    }
         //    return currentHighest;
         //}
-
-        public static void SaveLevel(Level level)
-        {
-#if UNITY_EDITOR
-            Object prefab = UnityEditor.EditorUtility.CreateEmptyPrefab("Assets/Resources/Prefabs/" + level.id + ".prefab");
-            UnityEditor.EditorUtility.ReplacePrefab(LevelManager.GetActiveLevel().gameObject, prefab, UnityEditor.ReplacePrefabOptions.ReplaceNameBased);
-            //activelevel
-#endif
-        }
     }
 }

@@ -96,15 +96,8 @@ namespace FlipFall
         private void Start()
         {
             // load the referenced position check data
-            if (Game.gameType == Game.GameType.testing)
-            {
-                levelMesh = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
-            }
-            else if (Game.gameType == Game.GameType.story)
-            {
-                bounds = LevelPlacer.placedLevel.moveBounds;
-                levelCollider = LevelPlacer.placedLevel.polyCollider;
-            }
+
+            levelMesh = LevelPlacer.generatedLevel.moveArea.meshFilter.mesh;
 
             circleCollider = GetComponent<CircleCollider2D>();
             ReloadSpawnPoint();
@@ -152,16 +145,8 @@ namespace FlipFall
 
         private void ReloadSpawnPoint()
         {
-            if (Game.gameType == Game.GameType.story)
-            {
-                spawn = LevelPlacer.placedLevel.spawn;
-                spawnPosition = spawn.transform.position;
-            }
-            else if (Game.gameType == Game.GameType.testing)
-            {
-                spawn = LevelPlacer.generatedLevel.spawn;
-                spawnPosition = spawn.transform.position;
-            }
+            spawn = LevelPlacer.generatedLevel.spawn;
+            spawnPosition = spawn.transform.position;
 
             spawnPosition.z = Constants.playerZ;
             facingLeft = spawn.facingLeftOnSpawn;
@@ -290,10 +275,8 @@ namespace FlipFall
                 deathPos = transform.position;
 
             // start level dissolve effect
-            if (Game.gameType == Game.GameType.story)
-                LevelPlacer.placedLevel.DissolveLevel();
-            else if (Game.gameType == Game.GameType.testing)
-                LevelPlacer.generatedLevel.moveArea.DissolveLevel();
+
+            LevelPlacer.generatedLevel.moveArea.DissolveLevel();
 
             Vector3 deathParticlePos = new Vector3(deathPos.x, deathPos.y, Constants.playerZ);
             deathParticles.gameObject.transform.position = deathParticlePos;
@@ -319,10 +302,7 @@ namespace FlipFall
             });
 
             // start level dissolve effect
-            if (Game.gameType == Game.GameType.story)
-                LevelPlacer.placedLevel.DissolveLevel();
-            else if (Game.gameType == Game.GameType.testing)
-                LevelPlacer.generatedLevel.moveArea.DissolveLevel();
+            LevelPlacer.generatedLevel.moveArea.DissolveLevel();
 
             trailParticlesEmit.enabled = false;
             trailParticles.Stop();
@@ -552,30 +532,14 @@ namespace FlipFall
 
                 //Debug.Log("checkPos " + checkPos);
                 Vector3 isInsideCheckPos = Vector3.zero;
-                if (Game.gameType == Game.GameType.testing)
+                isInsideCheckPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(checkPos);
+                if (VertHelper.IsInsideMesh(levelMesh, Vector3.zero, isInsideCheckPos))
                 {
-                    isInsideCheckPos = LevelPlacer.generatedLevel.moveArea.transform.InverseTransformPoint(checkPos);
-                    if (VertHelper.IsInsideMesh(levelMesh, Vector3.zero, isInsideCheckPos))
-                    {
-                        counter++;
-                    }
-                    else
-                    {
-                        deathPos = checkPos;
-                    }
+                    counter++;
                 }
-                else if (Game.gameType == Game.GameType.story)
+                else
                 {
-                    isInsideCheckPos = LevelPlacer.placedLevel.polyCollider.transform.InverseTransformPoint(checkPos);
-                    isInsideCheckPos.z = transform.position.z;
-                    if (IsInside(levelCollider, isInsideCheckPos))
-                    {
-                        counter++;
-                    }
-                    else
-                    {
-                        deathPos = checkPos;
-                    }
+                    deathPos = checkPos;
                 }
             }
 

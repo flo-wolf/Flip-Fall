@@ -93,8 +93,6 @@ namespace FlipFall.Progress
             {
                 SaveProgressData();
             }
-
-            Debug.Log("[ProgressManager]: LoadProgressData() loaded. LastPlayedLevel: " + progress.lastPlayedLevelID);
         }
 
         public static void SaveProgressData()
@@ -138,7 +136,7 @@ namespace FlipFall.Progress
 
         public static void LevelStateChanged(int levelID)
         {
-            progress.lastPlayedLevelID = levelID;
+            progress.storyProgress.lastPlayedLevelID = levelID;
         }
 
         public static void ClearHighscore(int _id)

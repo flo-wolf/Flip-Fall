@@ -41,7 +41,7 @@ namespace FlipFall.Levels
         public LevelData(int _id)
         {
             id = _id;
-            presetTime = -1;
+            presetTime = 99;
             title = "Custom Level";
             author = "FlipFall";
             moveVerticies = new Position2[0];
