@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a4146965247789043a57221118aa0dd8
-timeCreated: 1481712223
+timeCreated: 1482092942
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -79,6 +79,7 @@ TextureImporter:
     21300144: impulse_icons_Sprites_72
     21300146: impulse_icons_Sprites_73
     21300148: impulse_icons_Sprites_74
+    21300150: impulse_icons_Sprites_75
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -156,10 +157,10 @@ TextureImporter:
       name: impulse_icons_Sprites_0
       rect:
         serializedVersion: 2
-        x: 40
-        y: 1885
-        width: 72
-        height: 124
+        x: 2
+        y: 1881
+        width: 113
+        height: 140
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -910,10 +911,10 @@ TextureImporter:
       name: impulse_icons_Sprites_61
       rect:
         serializedVersion: 2
-        x: 1889
-        y: 1747
-        width: 129
-        height: 110
+        x: 1863
+        y: 1731
+        width: 126
+        height: 132
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1122,6 +1123,19 @@ TextureImporter:
         y: 1879
         width: 94
         height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_Sprites_75
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1737
+        width: 112
+        height: 120
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

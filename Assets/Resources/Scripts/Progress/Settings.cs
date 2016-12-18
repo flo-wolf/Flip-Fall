@@ -20,10 +20,10 @@ namespace FlipFall.Progress
 
         public Settings()
         {
-            backgroundSpeed = 15F;
+            backgroundSpeed = 8F;
             chargeOnLeftSide = true;
             fxVolume = 1F;
-            musicVolume = 0.2F;
+            musicVolume = 0.1F;
             imageEffects = true;
         }
     }

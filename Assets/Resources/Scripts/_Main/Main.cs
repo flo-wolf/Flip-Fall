@@ -287,8 +287,33 @@ namespace FlipFall
             }
         }
 
+        public static void RequestRewardedVideo()
+        {
+            Admob.Instance().loadRewardedVideo("ca-app-pub-2906510767249222/6294034790");
+        }
+
+        public static bool ShowRewardedVideo()
+        {
+            if (Admob.Instance().isRewardedVideoReady())
+            {
+                Admob.Instance().showRewardedVideo();
+                return true;
+            }
+            else
+            {
+                RequestRewardedVideo();
+                if (Admob.Instance().isRewardedVideoReady())
+                {
+                    Admob.Instance().showRewardedVideo();
+                    return true;
+                }
+            }
+            return false;
+        }
+
         //banner: ca-app-pub-2906510767249222/2074269594
         //interstitial: ca-app-pub-2906510767249222/2353471190
+        // rewarded video: ca-app-pub-2906510767249222/6294034790
         public static void RequestInterstitial()
         {
             Admob.Instance().loadInterstitial();

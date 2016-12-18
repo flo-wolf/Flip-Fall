@@ -23,6 +23,7 @@ public class UIBouncerMenu : UIPreferenceMenu
     {
         _instance = this;
         onPreferenceChange.AddListener(PreferenceChanged);
+        started = false;
 
         if (LevelEditor.selectedObject != null && LevelEditor.selectedObject.objectType == objectType && rotationSlider.IsActive() && bounceForceSlider.IsActive())
         {
@@ -35,11 +36,11 @@ public class UIBouncerMenu : UIPreferenceMenu
                 bounceForceSlider.value = bouncer.bounciness;
             }
         }
-        started = false;
     }
 
     public static void Activate(LevelData levelData)
     {
+        started = false;
         if (_instance != null)
         {
             _instance.rotationSlider.value = (int)LevelEditor.selectedObject.transform.rotation.eulerAngles.z;
@@ -52,7 +53,6 @@ public class UIBouncerMenu : UIPreferenceMenu
             }
         }
         editData = levelData;
-        started = false;
     }
 
     public void RotationSliderChanged(Slider s)
@@ -91,7 +91,7 @@ public class UIBouncerMenu : UIPreferenceMenu
         if (started)
         {
             if (bouncer != null)
-                bouncer.SetBounciness((int)s.value);
+                bouncer.SetBounciness((int)Mathf.Round(s.value));
         }
         started = true;
     }
@@ -100,7 +100,7 @@ public class UIBouncerMenu : UIPreferenceMenu
     {
         if (started)
         {
-            bouncer.SetWidth((int)s.value);
+            bouncer.SetWidth((int)Mathf.Round(s.value));
         }
         started = true;
     }
