@@ -54,6 +54,7 @@ namespace FlipFall.Levels
                 List<LevelData> foundStoryLevels = LevelLoader.LoadStoryLevels();
                 foreach (LevelData l in foundStoryLevels)
                 {
+                    l.levelChecksum = l.GenerateLevelChecksum();
                     if (storyHashes.Contains(l.levelChecksum))
                         storyLevels.Add(l);
                 }
