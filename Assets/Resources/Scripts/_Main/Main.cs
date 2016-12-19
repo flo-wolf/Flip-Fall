@@ -6,6 +6,7 @@ using GooglePlayGames.BasicApi;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Advertisements;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
@@ -287,28 +288,14 @@ namespace FlipFall
             }
         }
 
-        public static void RequestRewardedVideo()
-        {
-            Admob.Instance().loadRewardedVideo("ca-app-pub-2906510767249222/6294034790");
-        }
+        public static string zoneId = "rewardedVideo";
 
         public static bool ShowRewardedVideo()
         {
-            if (Admob.Instance().isRewardedVideoReady())
-            {
-                Admob.Instance().showRewardedVideo();
-                return true;
-            }
-            else
-            {
-                RequestRewardedVideo();
-                if (Admob.Instance().isRewardedVideoReady())
-                {
-                    Admob.Instance().showRewardedVideo();
-                    return true;
-                }
-            }
-            return false;
+            ShowOptions options = new ShowOptions();
+            options.resultCallback = HandleShowResult;
+            Advertisement.Show(zoneId, options);
+            return true;
         }
 
         //banner: ca-app-pub-2906510767249222/2074269594
@@ -316,27 +303,52 @@ namespace FlipFall
         // rewarded video: ca-app-pub-2906510767249222/6294034790
         public static void RequestInterstitial()
         {
-            Admob.Instance().loadInterstitial();
+            if (!ProgressManager.GetProgress().proVersion)
+            {
+                Admob.Instance().loadInterstitial();
+            }
         }
 
         public static bool ShowInterstitial()
         {
-            Debug.Log("SHOWINTERSTITIAL");
-            if (Admob.Instance().isInterstitialReady())
+            if (!ProgressManager.GetProgress().proVersion)
             {
-                Admob.Instance().showInterstitial();
-                return true;
-            }
-            else
-            {
-                RequestInterstitial();
+                Debug.Log("SHOWINTERSTITIAL");
                 if (Admob.Instance().isInterstitialReady())
                 {
                     Admob.Instance().showInterstitial();
                     return true;
                 }
+                else
+                {
+                    RequestInterstitial();
+                    if (Admob.Instance().isInterstitialReady())
+                    {
+                        Admob.Instance().showInterstitial();
+                        return true;
+                    }
+                }
             }
             return false;
+        }
+
+        private static void HandleShowResult(ShowResult result)
+        {
+            switch (result)
+            {
+                case ShowResult.Finished:
+                    Debug.Log("Video completed. User rewarded some credits.");
+                    ProgressManager.GetProgress().starsOwned += 1;
+                    break;
+
+                case ShowResult.Skipped:
+                    Debug.LogWarning("Video was skipped.");
+                    break;
+
+                case ShowResult.Failed:
+                    Debug.LogError("Video failed to show.");
+                    break;
+            }
         }
 
         public class StartupEvent : UnityEvent { }

@@ -75,6 +75,7 @@ namespace FlipFall.Progress
                     {
                         Debug.Log("Progress checksums are the same, have fun!");
                         progress = progressLoading;
+                        progress.proVersion = InAppBilling.ProIsOwned();
                     }
                     else
                     {

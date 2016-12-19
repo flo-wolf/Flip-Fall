@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 52d166cc722ba6d43ac1ea66696f66a6
-timeCreated: 1481390546
+timeCreated: 1482184948
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -25,6 +25,11 @@ TextureImporter:
     21300036: impulse_icons_ProductIcons_18
     21300038: impulse_icons_ProductIcons_19
     21300040: impulse_icons_ProductIcons_20
+    21300042: impulse_icons_ProductIcons_21
+    21300044: impulse_icons_ProductIcons_22
+    21300046: impulse_icons_ProductIcons_23
+    21300048: impulse_icons_ProductIcons_24
+    21300050: impulse_icons_ProductIcons_25
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -323,10 +328,10 @@ TextureImporter:
       name: impulse_icons_ProductIcons_17
       rect:
         serializedVersion: 2
-        x: 1080
-        y: 252
-        width: 934
-        height: 454
+        x: 1032
+        y: 179
+        width: 1006
+        height: 445
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -336,10 +341,10 @@ TextureImporter:
       name: impulse_icons_ProductIcons_18
       rect:
         serializedVersion: 2
-        x: 1009
-        y: 16
-        width: 1007
-        height: 224
+        x: 1047
+        y: 14
+        width: 992
+        height: 163
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -366,6 +371,71 @@ TextureImporter:
         y: 1924
         width: 101
         height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_ProductIcons_21
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 374
+        width: 720
+        height: 176
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_ProductIcons_22
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 153
+        width: 991
+        height: 212
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_ProductIcons_23
+      rect:
+        serializedVersion: 2
+        x: 962
+        y: 632
+        width: 1074
+        height: 319
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_ProductIcons_24
+      rect:
+        serializedVersion: 2
+        x: 1004
+        y: 968
+        width: 1009
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: impulse_icons_ProductIcons_25
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 558
+        width: 868
+        height: 175
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

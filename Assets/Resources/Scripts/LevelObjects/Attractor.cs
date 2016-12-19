@@ -65,7 +65,7 @@ namespace FlipFall.LevelObjects
             // reset shader input
             attractorMaterial.SetColor("_Color", ThemeManager.theme.attractorUntrackedColor);
             attractorMaterial.SetColor("_AttractedColor", ThemeManager.theme.attractorColor);
-            attractorMaterial.SetFloat("_PlayerDistance", pullRadius * 10);
+            attractorMaterial.SetFloat("_PlayerDistance", pullRadius * 100);
             attractorMaterial.SetFloat("_AttractorRadius", pullRadius);
             //attractorMaterial.SetVector("_AttractorCenter", center);
 

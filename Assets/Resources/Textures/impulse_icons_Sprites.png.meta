@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a4146965247789043a57221118aa0dd8
-timeCreated: 1482092942
+timeCreated: 1482175844
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -170,9 +170,9 @@ TextureImporter:
       name: impulse_icons_Sprites_1
       rect:
         serializedVersion: 2
-        x: 124
+        x: 146
         y: 1881
-        width: 148
+        width: 126
         height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -473,58 +473,6 @@ TextureImporter:
         y: 1509
         width: 232
         height: 209
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: impulse_icons_Sprites_40
-      rect:
-        serializedVersion: 2
-        x: 28
-        y: 1265
-        width: 232
-        height: 220
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: impulse_icons_Sprites_41
-      rect:
-        serializedVersion: 2
-        x: 264
-        y: 1265
-        width: 232
-        height: 216
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: impulse_icons_Sprites_42
-      rect:
-        serializedVersion: 2
-        x: 520
-        y: 1261
-        width: 228
-        height: 216
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: impulse_icons_Sprites_43
-      rect:
-        serializedVersion: 2
-        x: 756
-        y: 1269
-        width: 232
-        height: 216
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

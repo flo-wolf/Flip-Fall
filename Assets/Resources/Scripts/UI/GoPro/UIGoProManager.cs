@@ -58,6 +58,12 @@ namespace FlipFall.UI
             Main.SetScene(Main.ActiveScene.home);
         }
 
+        public void RewardedVideoButton()
+        {
+            SoundManager.ButtonClicked();
+            Main.ShowRewardedVideo();
+        }
+
         public void ProButtonClicked()
         {
             // pro not bought yet
@@ -72,9 +78,10 @@ namespace FlipFall.UI
             SoundManager.ButtonClicked();
         }
 
+        // in app billing listener when pro gets bought
         private void ProBought()
         {
-            Debug.Log("SUCCESSFULKL BUY");
+            Debug.Log("SUCCESSFULL PRO BUY");
             animator.ResetTrigger("buy");
             animator.SetTrigger("buy");
         }

@@ -104,25 +104,24 @@ namespace FlipFall.UI
             SoundManager.ButtonClicked();
         }
 
-        public void RewardedVideoButton()
-        {
-            animator.SetTrigger("rewardedVideo");
-            SoundManager.ButtonClicked();
-            Main.RequestRewardedVideo();
-            Main.ShowRewardedVideo();
-        }
-
         public void ShareButton()
         {
-            animator.SetTrigger("share");
+            Debug.Log("share");
             SoundManager.ButtonClicked();
-            shareText();
+            ShareText();
+        }
+
+        public void RateButton()
+        {
+            Debug.Log("rate");
+            SoundManager.ButtonClicked();
+            Application.OpenURL("market://details?id=com.florianwolf.flipfall");
         }
 
         private string subject = "Flip Fall";
-        private string body = "Try to beat this. https://play.google.com/store/apps/details?id=com.florianwolf.flipfall";
+        private string body = "Beat this. https://play.google.com/store/apps/details?id=com.florianwolf.flipfall";
 
-        public void shareText()
+        public void ShareText()
         {
 #if UNITY_EDITOR
             // do nothing in unity
@@ -146,7 +145,7 @@ namespace FlipFall.UI
             AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
 
             //start the activity by sending the intent data
-            AndroidJavaObject jChooser = intentClass.CallStatic<AndroidJavaObject>("createChooser", intentObject, "Share Via");
+            AndroidJavaObject jChooser = intentClass.CallStatic<AndroidJavaObject>("createChooser", intentObject, "1 share = 1 worldpeace");
             currentActivity.Call("startActivity", jChooser);
 #endif
         }

@@ -19,7 +19,7 @@ namespace FlipFall.UI
 
         public void Start()
         {
-            levelNumberText.text = id.ToString();
+            levelNumberText.text = (id + 1).ToString();
             animator = GetComponent<Animator>();
 
             if (position == 6 || animator == null)

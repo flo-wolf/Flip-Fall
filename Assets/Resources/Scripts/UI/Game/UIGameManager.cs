@@ -148,7 +148,7 @@ namespace FlipFall.UI
         {
             if (player.IsAlive())
             {
-                if (player.charging && !rightHold)
+                if (player.charging)
                 {
                     leftHold = false;
                     player.Decharge();
@@ -171,7 +171,7 @@ namespace FlipFall.UI
         {
             if (player.IsAlive() && !IsPaused())
             {
-                if (player.charging && !leftHold)
+                if (player.charging)
                 {
                     rightHold = false;
                     player.Decharge();
