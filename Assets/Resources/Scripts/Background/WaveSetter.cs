@@ -25,7 +25,6 @@ namespace FlipFall.Background
             mr = GetComponent<MeshRenderer>();
             mr.sortingOrder = id;
             mf = GetComponent<MeshFilter>();
-
             WaveGenerator.onMeshUpdate.AddListener(MeshUpdated);
 
             transform.localScale = new Vector3(WaveGenerator.bgWidth, transform.localScale.y, transform.localScale.z);

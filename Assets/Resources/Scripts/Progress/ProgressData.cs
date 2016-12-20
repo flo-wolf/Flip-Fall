@@ -49,6 +49,7 @@ namespace FlipFall.Progress
             warning = "Editing this file corrupts it and will cause a new file to be created with all the progress lost.";
             settings = new Settings();
             highscores = new Highscores();
+
             unlocks = new Unlocks();
             storyProgress = new StoryProgress();
 

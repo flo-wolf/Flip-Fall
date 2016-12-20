@@ -52,6 +52,7 @@ namespace FlipFall.Progress
             if (bestTime > 0)
             {
                 double presetTime = LevelManager.GetActiveStoryLevel().presetTime;
+                Debug.Log("UpdateStarCount: besttime: " + bestTime + " presetTime: " + presetTime);
                 if (bestTime < presetTime)
                 {
                     SetStarCount(3);

@@ -247,7 +247,7 @@ namespace FlipFall.UI
                 topTime = float.Parse(topTime.ToString("F2"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
 
                 // Preset top time seconds
-                string topSec = Mathf.Round((float)topTime).ToString();
+                string topSec = ((int)topTime).ToString();
                 topTimeSecText.text = topSec;
 
                 // top time milseconds
@@ -259,10 +259,12 @@ namespace FlipFall.UI
                 if (h != null && h.bestTime > 0)
                 {
                     double bestTime = h.bestTime;
+                    bestTime = float.Parse(bestTime.ToString("F2"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
                     //Debug.Log("UpdateTexts() h.bestTime " + bestTime);
 
                     // Personal best seconds
-                    string bestTimeString = Mathf.Round((float)bestTime).ToString();
+                    string bestTimeString = ((int)bestTime).ToString();
+                    //string bestTimeString = Mathf.Round((float)bestTime).ToString();
                     timeSecText.text = bestTimeString;
 
                     //Debug.Log("UpdateTexts() bestTimeString " + bestTimeString);

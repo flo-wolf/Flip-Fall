@@ -44,6 +44,8 @@ namespace FlipFall
         public static int adEveryTest = 8;
         public static bool adInQue = false;
 
+        public static bool switchingScene = false;
+
         private void Awake()
         {
             if (!started)
@@ -94,60 +96,63 @@ namespace FlipFall
 
         public static void SetScene(ActiveScene newScene)
         {
-            ProgressManager.SaveProgressData();
-            currentScene = newScene;
-            onSceneChange.Invoke(newScene);
-            switch (newScene)
+            if (!switchingScene)
             {
-                case ActiveScene.welcome:
-                    if (SceneManager.GetActiveScene().name != "Welcome")
-                        _instance.StartCoroutine(_instance.cSetScene("Welcome"));
-                    break;
+                switchingScene = true;
+                ProgressManager.SaveProgressData();
+                currentScene = newScene;
+                onSceneChange.Invoke(newScene);
+                switch (newScene)
+                {
+                    case ActiveScene.welcome:
+                        if (SceneManager.GetActiveScene().name != "Welcome")
+                            _instance.StartCoroutine(_instance.cSetScene("Welcome"));
+                        break;
 
-                case ActiveScene.home:
-                    _instance.StartCoroutine(_instance.cSetScene("Home"));
-                    break;
-
-                case ActiveScene.shop:
-                    if (SceneManager.GetActiveScene().name != "Shop")
-                        _instance.StartCoroutine(_instance.cSetScene("Shop"));
-                    break;
-
-                case ActiveScene.levelselection:
-                    if (SceneManager.GetActiveScene().name != "Levelselection")
-                        _instance.StartCoroutine(_instance.cSetScene("Levelselection"));
-                    break;
-
-                case ActiveScene.tutorial:
-                    if (SceneManager.GetActiveScene().name != "Tutorial")
-                        _instance.StartCoroutine(_instance.cSetScene("Tutorial"));
-                    break;
-
-                case ActiveScene.gopro:
-                    if (SceneManager.GetActiveScene().name != "GoPro")
-                        _instance.StartCoroutine(_instance.cSetScene("GoPro"));
-                    break;
-
-                case ActiveScene.game:
-                    if (SceneManager.GetActiveScene().name != "Game")
-                        _instance.StartCoroutine(_instance.cSetScene("Game"));
-                    break;
-
-                case ActiveScene.settings:
-                    if (SceneManager.GetActiveScene().name != "Settings")
-                        _instance.StartCoroutine(_instance.cSetScene("Settings"));
-                    break;
-
-                case ActiveScene.credits:
-                    if (SceneManager.GetActiveScene().name != "Credits")
-                        _instance.StartCoroutine(_instance.cSetScene("Credits"));
-                    break;
-
-                case ActiveScene.achievements:
-                    if (SceneManager.GetActiveScene().name != "Achievements")
-                    {
-#if UNITY_EDITOR
+                    case ActiveScene.home:
                         _instance.StartCoroutine(_instance.cSetScene("Home"));
+                        break;
+
+                    case ActiveScene.shop:
+                        if (SceneManager.GetActiveScene().name != "Shop")
+                            _instance.StartCoroutine(_instance.cSetScene("Shop"));
+                        break;
+
+                    case ActiveScene.levelselection:
+                        if (SceneManager.GetActiveScene().name != "Levelselection")
+                            _instance.StartCoroutine(_instance.cSetScene("Levelselection"));
+                        break;
+
+                    case ActiveScene.tutorial:
+                        if (SceneManager.GetActiveScene().name != "Tutorial")
+                            _instance.StartCoroutine(_instance.cSetScene("Tutorial"));
+                        break;
+
+                    case ActiveScene.gopro:
+                        if (SceneManager.GetActiveScene().name != "GoPro")
+                            _instance.StartCoroutine(_instance.cSetScene("GoPro"));
+                        break;
+
+                    case ActiveScene.game:
+                        if (SceneManager.GetActiveScene().name != "Game")
+                            _instance.StartCoroutine(_instance.cSetScene("Game"));
+                        break;
+
+                    case ActiveScene.settings:
+                        if (SceneManager.GetActiveScene().name != "Settings")
+                            _instance.StartCoroutine(_instance.cSetScene("Settings"));
+                        break;
+
+                    case ActiveScene.credits:
+                        if (SceneManager.GetActiveScene().name != "Credits")
+                            _instance.StartCoroutine(_instance.cSetScene("Credits"));
+                        break;
+
+                    case ActiveScene.achievements:
+                        if (SceneManager.GetActiveScene().name != "Achievements")
+                        {
+#if UNITY_EDITOR
+                            _instance.StartCoroutine(_instance.cSetScene("Home"));
 #elif UNITY_ANDROID
                         Social.localUser.Authenticate((bool success) =>
                         {
@@ -161,18 +166,19 @@ namespace FlipFall
                             }
                         });
 #endif
-                    }
-                    break;
+                        }
+                        break;
 
-                case ActiveScene.editor:
-                    //if (ProgressManager.GetProgress().proVersion)
-                    //{
-                    if (SceneManager.GetActiveScene().name != "EditorSelection" && SceneManager.GetActiveScene().name != "Game")
-                        _instance.StartCoroutine(_instance.cSetScene("EditorSelection"));
-                    else
-                        _instance.StartCoroutine(_instance.cSetScene("Leveleditor"));
-                    // }
-                    break;
+                    case ActiveScene.editor:
+                        //if (ProgressManager.GetProgress().proVersion)
+                        //{
+                        if (SceneManager.GetActiveScene().name != "EditorSelection" && SceneManager.GetActiveScene().name != "Game")
+                            _instance.StartCoroutine(_instance.cSetScene("EditorSelection"));
+                        else
+                            _instance.StartCoroutine(_instance.cSetScene("Leveleditor"));
+                        // }
+                        break;
+                }
             }
         }
 
@@ -223,6 +229,7 @@ namespace FlipFall
 
             //display the scene
             ao.allowSceneActivation = true;
+            switchingScene = false;
             //SceneManager.UnloadSceneAsync(oldScene);
             //SceneManager.SetActiveScene(newScene);
 
