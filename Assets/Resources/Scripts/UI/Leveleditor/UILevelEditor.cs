@@ -5,6 +5,7 @@ using FlipFall.LevelObjects;
 using FlipFall.Levels;
 using FlipFall.Progress;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,6 +26,7 @@ namespace FlipFall.UI
 
         private bool unsavedLeaveRequest = false;
         private bool saveRequest = false;
+        private bool helpShown = false;
 
         public void Awake()
         {
@@ -136,6 +138,29 @@ namespace FlipFall.UI
             animator.SetTrigger("leaveAbort");
         }
 
+        public void HelpButton()
+        {
+            helpShown = !helpShown;
+            if (helpShown)
+            {
+                animator.ResetTrigger("showInstructions");
+                animator.SetTrigger("showInstructions");
+                StartCoroutine(cResetHelpTrigger());
+            }
+            else
+            {
+                animator.ResetTrigger("hideInstructions");
+                animator.SetTrigger("hideInstructions");
+            }
+        }
+
+        private IEnumerator cResetHelpTrigger()
+        {
+            yield return new WaitForSeconds(0.1F);
+            animator.ResetTrigger("showInstructions");
+            yield break;
+        }
+
         public void TestButton()
         {
             if (!UIObjectPreferences.menuOpen)
@@ -146,10 +171,6 @@ namespace FlipFall.UI
                     // animations
                 }
             }
-        }
-
-        public void HelpButton()
-        {
         }
 
         // show or hide the delete button
