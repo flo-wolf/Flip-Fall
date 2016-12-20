@@ -15,7 +15,7 @@ namespace FlipFall.Editor
         public static float fixedSize = 4F;
 
         // the parent object this object should scale to
-        private Transform parentTransform;
+        public Transform parentTransform;
 
         // the last size of the parentTransform, prevents the scaling when not needed
         private Vector3 lastParentSize;
@@ -23,7 +23,8 @@ namespace FlipFall.Editor
         private void Start()
         {
             // get the parents transform
-            parentTransform = transform.parent.transform;
+            if (parentTransform == null)
+                parentTransform = transform.parent.transform;
             lastParentSize = parentTransform.localScale;
             ScaleSize();
         }

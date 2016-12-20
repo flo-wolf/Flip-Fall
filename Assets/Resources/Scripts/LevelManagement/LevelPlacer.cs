@@ -279,7 +279,7 @@ namespace FlipFall.Levels
         }
 
         // used to round movearea vertices to 0.001, means three decimals after the comma
-        private Vector3 Round(Vector3 v)
+        public static Vector3 Round(Vector3 v)
         {
             float x = float.Parse(v.x.ToString("F3"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
             float y = float.Parse(v.y.ToString("F3"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);

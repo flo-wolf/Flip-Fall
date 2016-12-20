@@ -73,7 +73,7 @@ namespace FlipFall.Editor
                 // save level info
                 l.author = level.levelData.author;
                 l.id = level.levelData.id;
-                l.presetTime = level.levelData.presetTime;
+                l.presetTime = DoubleToTwoDecimals(level.levelData.presetTime);
                 l.title = level.levelData.title;
                 l.custom = level.levelData.custom;
 
@@ -105,9 +105,9 @@ namespace FlipFall.Editor
                     Position2 turretPosition = new Position2(t.transform.localPosition.x, t.transform.localPosition.y);
                     TurretData td = new TurretData(turretPosition);
                     td.rotation = new Position3(t.transform.rotation.eulerAngles.x, t.transform.rotation.eulerAngles.y, t.transform.rotation.eulerAngles.z);
-                    td.shotDelay = t.shotDelay;
-                    td.shotSpeed = t.shotSpeed;
-                    td.startupDelay = t.startupDelay;
+                    td.shotDelay = FloatToTwoDecimals(t.shotDelay);
+                    td.shotSpeed = FloatToTwoDecimals(t.shotSpeed);
+                    td.startupDelay = FloatToTwoDecimals(t.startupDelay);
                     td.constantFire = t.constantFire;
                     l.objectData.turretData.Add(td);
                 }
@@ -155,6 +155,18 @@ namespace FlipFall.Editor
                 return l;
             }
             return null;
+        }
+
+        public static double DoubleToTwoDecimals(double v)
+        {
+            v = double.Parse(v.ToString("F2"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            return v;
+        }
+
+        public static float FloatToTwoDecimals(float v)
+        {
+            v = float.Parse(v.ToString("F2"), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            return v;
         }
 
         // change the current selected object and controll outline/handler/delete button display

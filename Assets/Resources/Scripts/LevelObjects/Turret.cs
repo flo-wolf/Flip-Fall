@@ -10,7 +10,9 @@ namespace FlipFall.LevelObjects
     public class Turret : LevelObject
     {
         private ParticleSystem shotPS;
-        private Animation shotAnimation;
+        public Animation shotAnimation;
+        public MeshRenderer barrelMeshRenderer;
+        public GameObject barrelOutline;
 
         // implement thoe by changing the particle system accordingly.
         public float shotDelay = 1F;
@@ -25,7 +27,6 @@ namespace FlipFall.LevelObjects
         private void Start()
         {
             objectType = ObjectType.turret;
-            shotAnimation = GetComponent<Animation>();
             shotPS = GetComponent<ParticleSystem>();
 
             MeshRenderer mr = GetComponent<MeshRenderer>();
@@ -33,6 +34,7 @@ namespace FlipFall.LevelObjects
             {
                 shotPS.gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", ThemeManager.theme.turretColor);
                 mr.material.SetColor("_Color", ThemeManager.theme.turretColor);
+                barrelMeshRenderer.material.SetColor("_Color", ThemeManager.theme.turretColor);
             }
             else
                 Debug.LogError("No MeshRenderer attached to the Turret, can't set the color.");
@@ -75,7 +77,8 @@ namespace FlipFall.LevelObjects
             //shotPS.Stop();
             SoundManager.TurretShot(new Vector3(transform.position.x, transform.position.y, Constants.playerZ));
             shotPS.Play();
-            shotAnimation["turretShooting"].time = shotDelay / 1.5F;
+            shotAnimation["turretShooting"].time = 0F;
+            shotAnimation["turretShooting"].speed = shotDelay * 2;
             shotAnimation.Play("turretShooting");
         }
     }

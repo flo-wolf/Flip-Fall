@@ -15,7 +15,7 @@ namespace FlipFall.Theme
     {
         public static ThemeManager _instance;
 
-        public enum Skin { unset, burgundy, forrest, rainbow, sunset, silver, gold, darkness, ocean, toxic, blooddrop, royal, riptide, coconut }
+        public enum Skin { unset, burgundy, forrest, rainbow, sunset, silver, gold, darkness, ocean, toxic, blooddrop, cherry, riptide, coconut }
 
         //skin currently active
         public static Skin skin = Skin.unset;

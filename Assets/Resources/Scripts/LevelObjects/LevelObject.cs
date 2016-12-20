@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace FlipFall.LevelObjects
 {
@@ -48,6 +49,14 @@ namespace FlipFall.LevelObjects
                         p.linkedPortal.linkedOutline.SetActive(true);
                     }
                 }
+                else if (objectType == ObjectType.turret)
+                {
+                    Turret t = GetComponent<Turret>();
+                    if (t.barrelOutline != null)
+                    {
+                        t.barrelOutline.SetActive(true);
+                    }
+                }
                 OutlineGameObject.SetActive(true);
             }
             else if (objectType == ObjectType.portal)
@@ -57,6 +66,15 @@ namespace FlipFall.LevelObjects
                 if (p.linkedPortal != null)
                 {
                     p.linkedPortal.linkedOutline.SetActive(false);
+                }
+            }
+            else if (objectType == ObjectType.turret)
+            {
+                OutlineGameObject.SetActive(false);
+                Turret t = GetComponent<Turret>();
+                if (t.barrelOutline != null)
+                {
+                    t.barrelOutline.SetActive(false);
                 }
             }
             else if (objectType != ObjectType.moveArea)
