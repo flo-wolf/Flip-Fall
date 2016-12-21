@@ -228,6 +228,13 @@ namespace FlipFall.Editor
             editLevel = CreateLevelData();
             Game.gameType = Game.GameType.testing;
             Main.SetScene(Main.ActiveScene.game);
+
+            // Constructor
+            Social.ReportProgress("CgkIqIqqjZYFEAIQAQ", 100.0f, (bool success) =>
+            {
+                if (success)
+                    Main.onAchievementUnlock.Invoke();
+            });
             return true;
         }
 

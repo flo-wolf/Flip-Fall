@@ -84,6 +84,13 @@ namespace FlipFall.UI
             Debug.Log("SUCCESSFULL PRO BUY");
             animator.ResetTrigger("buy");
             animator.SetTrigger("buy");
+
+            // Supporter
+            Social.ReportProgress("CgkIqIqqjZYFEAIQBQ", 100.0f, (bool success) =>
+            {
+                if (success)
+                    Main.onAchievementUnlock.Invoke();
+            });
         }
 
         private static bool IsProUnlocked()

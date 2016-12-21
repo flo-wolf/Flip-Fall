@@ -254,9 +254,9 @@ namespace FlipFall
         {
             Debug.Log("DEATHPOS: " + pos + " playerpos " + transform.position + " deathpos " + deathPos);
 
+            // Death is my Hobby
             PlayGamesPlatform.Instance.IncrementAchievement("CgkIqIqqjZYFEAIQCg", 1, (bool success) =>
             {
-                // handle success or failure
             });
 
             SetPlayerState(PlayerState.dead);

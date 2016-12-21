@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GooglePlayGames;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,16 @@ namespace FlipFall.Progress
                 int newStars = hs.starCount;
                 ProgressManager.GetProgress().AddStarsToWallet(newStars - oldStars);
                 Debug.Log("[ProgresssData]: Updating existing Highscore of level " + id);
+            }
+
+            if (time >= 45F)
+            {
+                // slow but steady
+                Social.ReportProgress("CgkIqIqqjZYFEAIQCA ", 100.0f, (bool success) =>
+                {
+                    if (success)
+                        Main.onAchievementUnlock.Invoke();
+                });
             }
             return hs;
         }

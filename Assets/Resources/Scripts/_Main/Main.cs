@@ -255,7 +255,7 @@ namespace FlipFall
         private IEnumerator cSetSceneAchievement()
         {
             yield return new WaitForSeconds(sceneSwitchDelay);
-
+            switchingScene = false;
             // show default achievements ui, placeholder
             Social.ShowAchievementsUI();
             SetScene(ActiveScene.home);
@@ -346,6 +346,10 @@ namespace FlipFall
                 case ShowResult.Finished:
                     Debug.Log("Video completed. User rewarded some credits.");
                     ProgressManager.GetProgress().starsOwned += 1;
+                    // Video Junkie
+                    PlayGamesPlatform.Instance.IncrementAchievement("CgkIqIqqjZYFEAIQEQ", 1, (bool success) =>
+                    {
+                    });
                     break;
 
                 case ShowResult.Skipped:

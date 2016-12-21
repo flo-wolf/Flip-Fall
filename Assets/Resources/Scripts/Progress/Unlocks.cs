@@ -105,9 +105,34 @@ namespace FlipFall.Progress
                     productInfos.Find(x => x.id == _id).owned = true;
                     EquipProduct(_id);
 
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQCw", 100.0f, (bool success) =>
+                    // Khajiit has Wares
+                    Social.ReportProgress("CgkIqIqqjZYFEAIQBg", 100.0f, (bool success) =>
                     {
+                        if (success)
+                            Main.onAchievementUnlock.Invoke();
                     });
+
+                    bool everythingBought = true;
+
+                    // check if all 15 pruducts are bought to unlock the shoplifter achievement
+                    foreach (ProductInfo p in productInfos)
+                    {
+                        if (p.owned == false)
+                        {
+                            everythingBought = false;
+                            break;
+                        }
+                    }
+
+                    if (everythingBought)
+                    {
+                        // Shoplifter
+                        Social.ReportProgress("CgkIqIqqjZYFEAIQEA", 100.0f, (bool success) =>
+                        {
+                            if (success)
+                                Main.onAchievementUnlock.Invoke();
+                        });
+                    }
                     return true;
                 }
                 return false;

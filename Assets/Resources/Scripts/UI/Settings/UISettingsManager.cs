@@ -153,6 +153,13 @@ namespace FlipFall.UI
                 ProgressManager.ClearProgress();
                 SoundManager.ButtonClicked();
                 requestActive = false;
+
+                // Reset Button
+                Social.ReportProgress("CgkIqIqqjZYFEAIQFg", 100.0f, (bool success) =>
+                {
+                    if (success)
+                        Main.onAchievementUnlock.Invoke();
+                });
             }
         }
 

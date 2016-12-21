@@ -24,58 +24,10 @@ namespace FlipFall.Progress
         {
             if (lastUnlockedLevel <= id && lastUnlockedLevel + 1 <= LevelManager.GetLastStoryLevel())
             {
-                // first level finished
-                if (lastUnlockedLevel == 1)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQDA", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-
-                // first turret level
-                if (lastUnlockedLevel == 6)
+                // First Steps
+                if (lastUnlockedLevel == 0)
                 {
                     Social.ReportProgress("CgkIqIqqjZYFEAIQBw", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-
-                // first attractor level finished
-                if (lastUnlockedLevel == 10)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQBg", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-
-                // first speedstrip level finished
-                else if (lastUnlockedLevel == 12)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQCA", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-
-                // first portal level finished
-                else if (lastUnlockedLevel == 7)
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQEQ", 100.0f, (bool success) =>
-                    {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
-                    });
-                }
-                else if (lastUnlockedLevel == LevelManager.GetLastStoryLevel())
-                {
-                    Social.ReportProgress("CgkIqIqqjZYFEAIQAQ", 100.0f, (bool success) =>
                     {
                         if (success)
                             Main.onAchievementUnlock.Invoke();
