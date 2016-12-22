@@ -49,6 +49,7 @@ namespace FlipFall.LevelObjects
         {
             objectType = ObjectType.attractor;
             attractors.Clear();
+            attractorMaterial.SetColor("_Color", ThemeManager.theme.attractorUntrackedColor);
         }
 
         public void Start()
