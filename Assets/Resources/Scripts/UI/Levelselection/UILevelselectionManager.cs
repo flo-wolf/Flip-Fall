@@ -3,6 +3,7 @@ using FlipFall.Audio;
 using FlipFall.Levels;
 using FlipFall.Progress;
 using FlipFall.UI;
+using GooglePlayGames;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +30,25 @@ namespace FlipFall.UI
         public static UILevelSwitchEvent onUILevelSwitch = new UILevelSwitchEvent();
 
         public class UILevelSwitchEvent : UnityEvent<int> { }
+
+        // google play leaderboard ids
+        public static readonly string[] leaderboards = {
+            "CgkIqIqqjZYFEAIQFw", // 1
+            "CgkIqIqqjZYFEAIQGA", // 2
+            "CgkIqIqqjZYFEAIQGQ", // 3
+            "CgkIqIqqjZYFEAIQGg", // 4
+            "CgkIqIqqjZYFEAIQGw", // 5
+            "CgkIqIqqjZYFEAIQHA", // 6
+            "CgkIqIqqjZYFEAIQHQ", // 7
+            "CgkIqIqqjZYFEAIQHg", // 8
+            "CgkIqIqqjZYFEAIQHw", // 9
+            "CgkIqIqqjZYFEAIQIA", // 10
+            "CgkIqIqqjZYFEAIQIQ", // 11
+            "CgkIqIqqjZYFEAIQIg", // 12
+            "CgkIqIqqjZYFEAIQIw", // 13
+            "CgkIqIqqjZYFEAIQJA", // 14
+            "CgkIqIqqjZYFEAIQJQ" // 15
+        };
 
         //References
         public Animator animator;
@@ -219,6 +239,12 @@ namespace FlipFall.UI
 
             playPressed = true;
             // else - animate failure
+        }
+
+        public void OpenLeaderboard()
+        {
+            Debug.Log("Open Leaderboard " + activeUILevel);
+            PlayGamesPlatform.Instance.ShowLeaderboardUI(leaderboards[activeUILevel]);
         }
 
         public static UILevel GetUILevel(int id)

@@ -65,7 +65,7 @@ namespace FlipFall.Audio
             //UILevelselectionManager.onUILevelSwitch.AddListener(UILevelSwitched);
             UILevelDrag.onBounceBack.AddListener(PlayLevelSwitchSound);
             Main.onSceneChange.AddListener(SceneChanging);
-            Main.onAchievementUnlock.AddListener(AchievementUnlocked);
+            //Main.onAchievementUnlock.AddListener(AchievementUnlocked);
             UIProduct.onBuy.AddListener(ProductPurchased);
             UIProduct.onBuyFail.AddListener(BuyFail);
             UIProduct.onEquip.AddListener(ProductEquipped);

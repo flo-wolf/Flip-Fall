@@ -1,4 +1,5 @@
-﻿using GooglePlayGames;
+﻿using FlipFall.UI;
+using GooglePlayGames;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,9 +44,15 @@ namespace FlipFall.Progress
                 Debug.Log("[ProgresssData]: Updating existing Highscore of level " + id);
             }
 
+            // enter score to leaderboard
+            string leaderboard = UILevelselectionManager.leaderboards[id];
+            Social.ReportScore((long)(time * 1000), leaderboard, (bool success) =>
+            {
+            });
+
             if (time >= 45F)
             {
-                // slow but steady
+                // slow but steady achievement
                 Social.ReportProgress("CgkIqIqqjZYFEAIQCA ", 100.0f, (bool success) =>
                 {
                     if (success)

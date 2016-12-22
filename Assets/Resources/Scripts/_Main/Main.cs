@@ -41,8 +41,10 @@ namespace FlipFall
         // ads
         public static int adCooldownCounter = 0;
         public static int adEveryFinish = 4;
+        public static int adEveryFail = 8;
         public static int adEveryTest = 8;
         public static bool adInQue = false;
+        public static int watchedAds = 0;
 
         public static bool switchingScene = false;
 
@@ -193,20 +195,49 @@ namespace FlipFall
 
             // Ad management
             // a level was just won - check if displaying an ad is possible
-            if (sceneName == "Levelselection" && UILevelselectionManager.enterType == UILevelselectionManager.EnterType.finished)
+            if (sceneName == "Levelselection")
             {
-                adCooldownCounter++;
-                if (adCooldownCounter % adEveryFinish == 0 || adInQue)
+                if (UILevelselectionManager.enterType == UILevelselectionManager.EnterType.finished)
                 {
-                    if (ShowInterstitial())
+                    adCooldownCounter++;
+                    if (adCooldownCounter % adEveryFinish == 0 || adInQue)
                     {
-                        adCooldownCounter = 0;
-                        adInQue = false;
+                        if (ShowInterstitial())
+                        {
+                            adCooldownCounter = 0;
+                            watchedAds += 1;
+                            adInQue = false;
+                        }
+                        else
+                        {
+                            adInQue = true;
+                        }
                     }
-                    else
+                }
+                if (UILevelselectionManager.enterType == UILevelselectionManager.EnterType.failed)
+                {
+                    adCooldownCounter++;
+                    if (adCooldownCounter % adEveryFail == 0 || adInQue)
                     {
-                        adInQue = true;
+                        if (ShowInterstitial())
+                        {
+                            adCooldownCounter = 0;
+                            watchedAds += 1;
+                            adInQue = false;
+                        }
+                        else
+                        {
+                            adInQue = true;
+                        }
                     }
+                }
+
+                if (watchedAds >= 8)
+                {
+                    adEveryFinish++;
+                    adEveryFail++;
+                    adEveryTest++;
+                    watchedAds = 0;
                 }
             }
             else if (sceneName == "Leveleditor" && Game.gameType == Game.GameType.testing)
@@ -218,12 +249,21 @@ namespace FlipFall
                     if (ShowInterstitial())
                     {
                         adCooldownCounter = 0;
+                        watchedAds += 1;
                         adInQue = false;
                     }
                     else
                     {
                         adInQue = true;
                     }
+                }
+
+                if (watchedAds >= 8)
+                {
+                    adEveryFinish++;
+                    adEveryFail++;
+                    adEveryTest++;
+                    watchedAds = 0;
                 }
             }
 

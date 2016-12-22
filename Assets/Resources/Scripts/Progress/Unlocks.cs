@@ -108,8 +108,8 @@ namespace FlipFall.Progress
                     // Khajiit has Wares
                     Social.ReportProgress("CgkIqIqqjZYFEAIQBg", 100.0f, (bool success) =>
                     {
-                        if (success)
-                            Main.onAchievementUnlock.Invoke();
+                        //if (success)
+                        //Main.onAchievementUnlock.Invoke();
                     });
 
                     bool everythingBought = true;
@@ -127,9 +127,9 @@ namespace FlipFall.Progress
                     if (everythingBought)
                     {
                         // Shoplifter
-                        Social.ReportProgress("CgkIqIqqjZYFEAIQEA", 100.0f, (bool success) =>
+                        Social.ReportProgress("CgkIqIqqjZYFEAIQEA", 100.0f, (bool _success) =>
                         {
-                            if (success)
+                            if (_success)
                                 Main.onAchievementUnlock.Invoke();
                         });
                     }
