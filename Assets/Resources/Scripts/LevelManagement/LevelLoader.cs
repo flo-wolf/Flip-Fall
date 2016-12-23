@@ -48,7 +48,18 @@ namespace FlipFall.Levels
                     dataLoading.Add(LoadCustomLevel(filename));
                 }
             }
+            dataLoading.Sort((IComparer<LevelData>)new SortLevelsById());
             return dataLoading;
+        }
+
+        private class SortLevelsById : IComparer<LevelData>
+        {
+            int IComparer<LevelData>.Compare(LevelData _objA, LevelData _objB)
+            {
+                int t1 = _objA.id;
+                int t2 = _objB.id;
+                return t1.CompareTo(t2);
+            }
         }
 
         // load and return all LevelData contained in the resources folder named "StoryLevels"

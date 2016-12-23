@@ -65,7 +65,7 @@ namespace FlipFall.Levels
         // get the next id
         public static int GetNextId()
         {
-            int newId = 505;
+            int newId = 1;
             // if there are custom levels and the default id is occupied find an un-occupied id and use it
             if (customLevels.Count > 0 && customLevels.Any(x => x.id == newId))
             {
@@ -84,6 +84,7 @@ namespace FlipFall.Levels
         public static LevelData NewCustomLevel(int id)
         {
             LevelData l = new LevelData(id);
+            l.title = id.ToString("D3");
 
             customLevels.Add(l);
             LevelLoader.SaveCustomLevel(l);

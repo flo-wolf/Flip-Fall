@@ -22,6 +22,8 @@ namespace FlipFall.Levels
     {
         public static LevelUpdateEvent onLevelUpdate = new LevelUpdateEvent();
 
+        public string levelChecksum;
+
         public int id;                  // identification
         public bool custom;             // was this level user created and is it thus editable?
         public double presetTime;       // best time
@@ -35,8 +37,6 @@ namespace FlipFall.Levels
         public LevelObjectData objectData;
 
         public string objectChecksum;
-
-        public string levelChecksum;
 
         public LevelData(int _id)
         {

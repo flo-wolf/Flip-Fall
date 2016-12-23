@@ -59,6 +59,7 @@ namespace FlipFall.Progress
                         Main.onAchievementUnlock.Invoke();
                 });
             }
+            ProgressManager.SaveProgressData();
             return hs;
         }
 
