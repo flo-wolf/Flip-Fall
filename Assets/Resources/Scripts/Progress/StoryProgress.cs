@@ -36,6 +36,7 @@ namespace FlipFall.Progress
 
                 lastUnlockedLevel++;
                 UILevelselectionManager.unlockNextLevel = true;
+                ProgressManager.SaveProgressData();
                 return true;
             }
             return false;

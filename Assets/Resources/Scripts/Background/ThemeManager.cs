@@ -136,6 +136,7 @@ namespace FlipFall.Theme
                         CamColorSetter.BgColorUpdate();
 
                         Debug.Log("Skin " + skin + " was set");
+                        ProgressManager.SaveProgressData();
                         break;
                     }
                 }

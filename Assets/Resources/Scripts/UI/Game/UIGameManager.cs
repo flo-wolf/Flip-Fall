@@ -179,6 +179,18 @@ namespace FlipFall.UI
             }
         }
 
+        // the right contols-half got released
+        public void PointerExit()
+        {
+            if (player.IsAlive() && !IsPaused())
+            {
+                if (player.charging)
+                {
+                    player.Decharge();
+                }
+            }
+        }
+
         /* Old Controls
         // the left contols-half got clicked
         public void LeftHalfClicked()

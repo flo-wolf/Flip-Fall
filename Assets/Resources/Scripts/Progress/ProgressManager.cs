@@ -35,6 +35,7 @@ namespace FlipFall.Progress
         {
             progress = pd;
             onProgressChange.Invoke(progress);
+            ProgressManager.SaveProgressData();
         }
 
         public static ProgressData GetProgress()
@@ -72,7 +73,10 @@ namespace FlipFall.Progress
 
                     // check object integrity - aka were objects added or removed - not effected by object attribute changes
                     string loadedChecksum = progressLoading.checksum;
-                    if (loadedChecksum == progressLoading.GenerateChecksum())
+                    string generatedChecksum = progressLoading.GenerateChecksum();
+                    Debug.Log("loadedChecksum " + loadedChecksum);
+                    Debug.Log("generatedChecksum " + generatedChecksum);
+                    if (loadedChecksum == generatedChecksum)
                     {
                         Debug.Log("Progress checksums are the same, have fun!");
                         progress = progressLoading;
@@ -99,6 +103,7 @@ namespace FlipFall.Progress
 
         public static void SaveProgressData()
         {
+            Debug.Log("SaveProgresData");
             string savePath;
 #if UNITY_ANDROID && !UNITY_EDITOR
             savePath = SavePathAndroid;
@@ -116,6 +121,7 @@ namespace FlipFall.Progress
                 using (StreamWriter sw = new StreamWriter(file))
                 {
                     progress.checksum = progress.GenerateChecksum();
+                    Debug.Log("Save checksum " + progress.checksum);
 
                     string jsonLevelData = JsonUtility.ToJson(progress);
                     // dont overwrite, just add - there is nothing to overwrite anyways
@@ -129,6 +135,7 @@ namespace FlipFall.Progress
                 using (StreamWriter sw = new StreamWriter(savePath, false))
                 {
                     progress.checksum = progress.GenerateChecksum();
+                    Debug.Log("Save checksum " + progress.checksum);
 
                     string jsonProgress = JsonUtility.ToJson(progress);
                     sw.Write(jsonProgress);

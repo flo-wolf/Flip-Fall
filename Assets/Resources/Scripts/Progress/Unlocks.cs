@@ -87,6 +87,7 @@ namespace FlipFall.Progress
                 if (_equiped)
                     EquipProduct(_id);
             }
+            ProgressManager.SaveProgressData();
             //onProductInfoChange.Invoke();
         }
 
@@ -133,6 +134,7 @@ namespace FlipFall.Progress
                                 Main.onAchievementUnlock.Invoke();
                         });
                     }
+                    ProgressManager.SaveProgressData();
                     return true;
                 }
                 return false;

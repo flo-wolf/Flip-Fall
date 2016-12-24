@@ -106,11 +106,16 @@ namespace FlipFall.LevelObjects
                     // calculate direction from player to center of this
                     forceDirection = center - new Vector2(Player._instance.transform.position.x, Player._instance.transform.position.y);
 
-                    // apply force on player towards center of this
-                    playerRb.AddForce(forceDirection.normalized * maxPullForce * Time.fixedDeltaTime * pullAmplifier);
-
                     // calculate distance to the center of this
                     dist = Mathf.Abs(Vector3.Distance(Player._instance.transform.position, transform.position));
+
+                    // calculate an amplifier value based on the distance to the center
+                    float distAmp = Mathf.InverseLerp(pullRadius, 0, dist);
+
+                    Debug.Log("distAmp " + distAmp);
+
+                    // apply force on player towards center of this
+                    playerRb.AddForce(forceDirection.normalized * maxPullForce * Time.fixedDeltaTime * pullAmplifier * distAmp);
                 }
 
                 // update shader
