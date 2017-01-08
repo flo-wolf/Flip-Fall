@@ -418,11 +418,11 @@ namespace FlipFall
         // delay between charge call and actual charge beginn
         private IEnumerator cChargeDelay()
         {
+            charging = true;
             rBody.gravityScale = 0F;
             rBody.velocity = new Vector2(rBody.velocity.x, 0);
             onPlayerAction.Invoke(PlayerAction.charge);
             yield return new WaitForSeconds(chargeDelayAfterClik);
-            charging = true;
             yield break;
         }
 

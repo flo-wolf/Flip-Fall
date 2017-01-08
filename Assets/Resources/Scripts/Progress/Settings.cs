@@ -17,6 +17,7 @@ namespace FlipFall.Progress
         public float musicVolume;
         public bool imageEffects;
         public float backgroundSpeed;
+        public int cameraZoomStep;
 
         public Settings()
         {
@@ -24,6 +25,7 @@ namespace FlipFall.Progress
             chargeOnLeftSide = true;
             fxVolume = 1F;
             musicVolume = 0.1F;
+            cameraZoomStep = 2;
             imageEffects = true;
         }
     }

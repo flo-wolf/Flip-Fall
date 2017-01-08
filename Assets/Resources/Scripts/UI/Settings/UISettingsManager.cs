@@ -35,6 +35,7 @@ namespace FlipFall.UI
         public Slider fxSlider;
         public Slider musicSlider;
         public Slider bgAmplitudeSlider;
+        public Slider cameraZoomSlider;
 
         // theme toggles
         private Toggle[] toggles;
@@ -44,6 +45,7 @@ namespace FlipFall.UI
         // Use this for initialization
         private void Start()
         {
+            SetSliders();
             if (_instance != null && _instance != this)
             {
                 Destroy(this.gameObject);
@@ -53,8 +55,6 @@ namespace FlipFall.UI
 
             // if there are other different toggles this wont work, define horizontoggle root object -  search for horizontoggles
             toggles = GetComponentsInChildren<Toggle>();
-
-            SetSliders();
             Main.onSceneChange.AddListener(SceneChanging);
             ProgressManager.onProgressChange.AddListener(ProgressChanged);
             UpdateToggles();
@@ -122,7 +122,7 @@ namespace FlipFall.UI
             fxSlider.value = ProgressManager.GetProgress().settings.fxVolume;
             musicSlider.value = ProgressManager.GetProgress().settings.musicVolume;
             bgAmplitudeSlider.value = ProgressManager.GetProgress().settings.backgroundSpeed;
-
+            cameraZoomSlider.value = ProgressManager.GetProgress().settings.cameraZoomStep;
             onMusicVolumeChange.Invoke(musicSlider.value);
         }
 
@@ -197,6 +197,14 @@ namespace FlipFall.UI
         {
             onMusicVolumeChange.Invoke(s.value);
             ProgressManager.GetProgress().settings.musicVolume = s.value;
+        }
+
+        // zoom steps 1-5
+        public void CameraZoomSliderChanged(Slider s)
+        {
+            Debug.Log("CHANGED CAMERA ZOOM " + s.value);
+            int i = (int)s.value;
+            ProgressManager.GetProgress().settings.cameraZoomStep = i;
         }
 
         public void SpeedSliderChanged(Slider s)

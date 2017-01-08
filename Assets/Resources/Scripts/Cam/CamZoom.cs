@@ -1,4 +1,5 @@
 ﻿using FlipFall;
+using FlipFall.Progress;
 using System.Collections;
 using UnityEngine;
 
@@ -31,11 +32,37 @@ namespace FlipFall.Cam
         private void Awake()
         {
             _instance = this;
+            SetZoomStep();
         }
 
         private void Start()
         {
             size = cams[0].orthographicSize;
+        }
+
+        public void SetZoomStep()
+        {
+            int step = ProgressManager.GetProgress().settings.cameraZoomStep;
+            switch (step)
+            {
+                // minimal zooming => nausia prevention
+                case 1:
+                    maxZoom = 180;
+                    minZoom = 120;
+                    break;
+
+                // default zooming
+                case 2:
+                    maxZoom = 200;
+                    minZoom = 80;
+                    break;
+
+                // max zooming
+                case 3:
+                    maxZoom = 250;
+                    minZoom = 50;
+                    break;
+            }
         }
 
         //zooms in from the current camera size to the minimum camera size

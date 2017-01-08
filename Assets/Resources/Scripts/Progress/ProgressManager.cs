@@ -76,17 +76,17 @@ namespace FlipFall.Progress
                     string generatedChecksum = progressLoading.GenerateChecksum();
                     Debug.Log("loadedChecksum " + loadedChecksum);
                     Debug.Log("generatedChecksum " + generatedChecksum);
-                    if (loadedChecksum == generatedChecksum)
-                    {
-                        Debug.Log("Progress checksums are the same, have fun!");
-                        progress = progressLoading;
-                        progress.proVersion = InAppBilling.ProIsOwned();
-                    }
-                    else
-                    {
-                        Debug.LogError("Progress checksums mismatching. Someone tried to mess with the it!");
-                        SaveProgressData();
-                    }
+                    //if (loadedChecksum == generatedChecksum)
+                    //{
+                    Debug.Log("Progress checksums are the same, have fun!");
+                    progress = progressLoading;
+                    progress.proVersion = InAppBilling.ProIsOwned();
+                    //}
+                    //else
+                    // {
+                    Debug.LogError("Progress checksums mismatching. Someone tried to mess with the it!");
+                    //    SaveProgressData();
+                    //}
                 }
                 catch (SerializationException e)
                 {
