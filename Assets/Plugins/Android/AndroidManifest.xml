@@ -9,7 +9,7 @@ required for displaying ads.
     android:versionName="1.0"
     android:versionCode="1">
   <uses-sdk android:minSdkVersion="9"
-      android:targetSdkVersion="23" />
+      android:targetSdkVersion="26" />
   <!-- Google Mobile Ads Permissions -->
 
   <!-- Uncomment to add billing for in-app purchase ads -->
